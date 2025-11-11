@@ -301,6 +301,17 @@ export default function RootLayout({
           ${gilroyHeavy.variable}
         `}
       >
+      <noscript>
+        <img height="1" width="1" style={{display: 'none'}}
+          src="https://www.facebook.com/tr?id=24279099175074291&ev=PageView&noscript=1"
+        />
+      </noscript>
+      <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MPD3F25K"
+          height="0" width="0" style={{display: 'none', visibility: 'hidden'}}>
+        </iframe>
+      </noscript>
+      
       <div className="">
         <AuthProvider>
           <Toaster position="top-right" />
