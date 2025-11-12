@@ -57,6 +57,57 @@ Allow: *.webp
 Allow: *.jpg
 Allow: *.png
 Allow: *.svg`;
+  } else if (host.includes('fraterny.com')) {
+    // robots.txt content for fraterny.com
+    robotsTxt = `# Fraterny.com - Robots.txt for SEO Optimization
+# Website: https://fraterny.com
+# Generated: ${new Date().toISOString().split('T')[0]}
+
+# Host specification
+Host: fraterny.com
+
+# Allow all web crawlers with crawl delay
+User-agent: *
+Allow: /
+Crawl-delay: 1
+
+# Specific bot instructions
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Sitemap locations
+Sitemap: https://fraterny.com/sitemap.xml
+Sitemap: https://fraterny.com/sitemap-enhanced.xml
+
+# Prevent crawling of private routes
+Disallow: /auth/
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /node_modules/
+
+# Prevent crawling of tracking URLs and parameters
+Disallow: /*?*utm_*
+Disallow: /*?*fbclid=*
+Disallow: /*?*gclid=*
+Disallow: /*?*msclkid=*
+Disallow: /*?*ref=*
+
+# Allow crawling of important static assets
+Allow: /assets/
+Allow: /images/
+Allow: /static/
+Allow: *.css
+Allow: *.js
+Allow: *.webp
+Allow: *.jpg
+Allow: *.png
+Allow: *.svg`;
   } else {
     // robots.txt content for fraterny.in (default)
     robotsTxt = `# Fraterny.in - Robots.txt for SEO Optimization

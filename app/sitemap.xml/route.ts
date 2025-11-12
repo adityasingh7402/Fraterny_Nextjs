@@ -5,7 +5,12 @@ export async function GET(request: NextRequest) {
   const currentDate = new Date().toISOString().split('T')[0];
   
   // Determine which domain
-  const domain = host.includes('fraterny.us') ? 'https://fraterny.us' : 'https://fraterny.in';
+  let domain = 'https://fraterny.in'; // default
+  if (host.includes('fraterny.us')) {
+    domain = 'https://fraterny.us';
+  } else if (host.includes('fraterny.com')) {
+    domain = 'https://fraterny.com';
+  }
   
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
