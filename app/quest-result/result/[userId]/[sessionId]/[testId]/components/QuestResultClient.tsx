@@ -907,7 +907,7 @@ export function QuestResultClient({
         </SectionFrame> */}
 
         {/* Books Section */}
-         <SectionFrame
+         {/* <SectionFrame
           id="books"
           title="Books You'd Love If You Give Them a Chance"
           sub="3 high-yield picks"
@@ -931,17 +931,17 @@ export function QuestResultClient({
                       setSelectedBook(book);
                       setBookModalOpen(true);
                     }}>
-                    {/* Book Card */}
+                   
                     <div
                       className="w-40 h-48 relative rounded-lg shadow-[0px_8px_20px_0px_rgba(12,69,240,0.22)] flex items-center justify-center"
                       style={{ backgroundColor: backgrounds[i] }}
                     >
                       <BookOpen className="h-20 w-20 text-white" />
                       <BookmarkPlus className="absolute right-2 bottom-2 h-6 w-6 text-white/70" />
-                      {/* <img src="/i-card.png" alt="Prediction Card" className="absolute right-2 bottom-2 h-6 w-6 text-white/70" /> */}
+                      
                     </div>
 
-                    {/* Book Text */}
+                   
                     <div className="w-36 text-center">
                       <div className="text-neutral-950 text-lg font-bold font-['Inter'] leading-normal">
                         {book.title}
@@ -955,7 +955,7 @@ export function QuestResultClient({
               })}
             </div>
           </div>
-        </SectionFrame>
+        </SectionFrame> */}
 
         {/* Work Section */}
         <SectionFrame
