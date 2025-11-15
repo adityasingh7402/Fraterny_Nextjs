@@ -1,5 +1,11 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import Script  from 'next/script';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+};
 
 export const metadata: Metadata = {
   title: 'Quest Mode — Your Psychological File | Fraterny',
@@ -39,7 +45,7 @@ export const metadata: Metadata = {
     siteName: 'Fraterny',
     images: [
       {
-        url: 'https://fraterny.in/og-image2.png',
+        url: 'https://fraterny.in/favicon-32x32.png',
         width: 1200,
         height: 630,
         alt: 'Quest — Private Psychological File by Fraterny',
@@ -50,17 +56,12 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Quest Mode — Your Psychological File | Fraterny',
     description: 'Compose a private psychological file from your words. Preview a precise fragment free; access the full edition when ready.',
-    images: ['https://fraterny.in/og-image2.png'],
+    images: ['https://fraterny.in/favicon-32x32.png'],
     creator: '@frat_erny',
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-  },
   icons: {
-    icon: '/og-image2.png',
-    apple: '/og-image2.png',
+    icon: '/favicon-32x32.png',
+    apple: '/favicon-32x32.png',
   },
 };
 const jsonLd = {
