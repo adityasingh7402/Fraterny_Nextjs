@@ -32,7 +32,7 @@ function QuestFooter() {
                 <div className='flex-col gap-2 '>
                     <h2 className='text-[#0284c7] text-2xl pb-2'>Fraterny</h2>
                     <div className='flex flex-col gap-1'>
-                        <Link href="/quest" className="text-[#292929] text-sm font-normal font-['Inter'] leading-tight">Home</Link>
+                        <Link href="/quest/quest-mode" className="text-[#292929] text-sm font-normal font-['Inter'] leading-tight">Home</Link>
                         <Link href="https://www.instagram.com/quest.fraterny/" className="text-[#292929] text-sm font-normal font-['Inter'] leading-tight">Instagram</Link>
                         <Link href="https://www.linkedin.com/company/fraterny/" className="text-[#292929] text-sm font-normal font-['Inter'] leading-tight">LinkedIn</Link>
                         <Link href="/blog" className="text-[#292929] text-sm font-normal font-['Inter'] leading-tight">Blog</Link>
@@ -45,7 +45,7 @@ function QuestFooter() {
                         <Link href="/terms-and-conditions" className="text-[#292929] text-sm font-normal font-['Inter'] leading-tight">Terms  & Conditions</Link>
                         <Link href="mailto:quest@fratery.in?subject=Refund Request" className="text-[#292929] text-sm font-normal font-['Inter'] leading-tight">Refund</Link>
                         <Link href="mailto:quest@fratery.in?subject=Internship Opportunity" className="text-[#292929] text-sm font-normal font-['Inter'] leading-tight">Internships</Link>
-                        <Link href="/assessment" className="text-[#292929] text-sm font-normal font-['Inter'] leading-tight">Start Test</Link>
+                        <Link href="/quest/begin" className="text-[#292929] text-sm font-normal font-['Inter'] leading-tight">Start Test</Link>
                     </div>
                 </div>
 

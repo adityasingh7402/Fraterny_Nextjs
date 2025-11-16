@@ -11,7 +11,7 @@ import { AuthenticityTags } from '../components/AuthenticityTags';
 import { RankingResponse } from '../responses/RankingResponse';
 import { getWordValidationStatus, getWordValidationMessage } from '../utils/questValidation';
 import { googleAnalytics } from '@/lib/services/googleAnalytics';
-import { useAuth } from '../../auth/cotexts/AuthContext';
+import { useAuth } from '@/app/auth/cotexts/AuthContext';
 import { CityAutocomplete } from '../responses/CityAutocomplete';
 import { useQuestionTiming } from '../hooks/useQuestionTiming';
 import { X, Info  } from 'lucide-react';

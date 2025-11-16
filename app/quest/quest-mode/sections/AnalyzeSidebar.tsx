@@ -7,7 +7,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Home, LayoutDashboard, LogOut, User, X, Luggage} from 'lucide-react';
 import { NotepadText, HelpCircle, Mail  } from 'lucide-react';
-import { useAuth } from '../../../auth/cotexts/AuthContext';
+import { useAuth } from '@/app/auth/cotexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import {useIsMobile} from '../utils/use-mobile';
 
@@ -177,7 +177,7 @@ export const AnalyzeSidebar: React.FC<AnalyzeSidebarProps> = ({
     // Implement logout logic
     try {
       await signOut(); // Your logout function
-      router.push('/quest');
+      router.push('/quest/quest-mode');
     } catch (error) {
       console.error('Logout failed:', error);
     }
@@ -194,7 +194,7 @@ export const AnalyzeSidebar: React.FC<AnalyzeSidebarProps> = ({
   };
 
   const handleHome = () => {
-    router.push('/quest');
+    router.push('/quest/quest-mode');
     onClose();
   };
 
@@ -214,7 +214,7 @@ export const AnalyzeSidebar: React.FC<AnalyzeSidebarProps> = ({
             onClose();
           } :
           item.id === 'test' ? () => {
-            router.push('/assessment');
+            router.push('/quest/begin');
             onClose();
           } :
           item.id === 'dashboard' ? () => {

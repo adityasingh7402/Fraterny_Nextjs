@@ -210,7 +210,7 @@ const Footer = () => {
             >
               {[
                 { href: "/experience", text: "FratVilla" },
-                { href: "/quest", text: "Quest" },
+                { href: "/quest/quest-mode", text: "Quest" },
                 { href: "/process", text: "Process" },
                 { href: "/faq", text: "FAQ" }
               ].map((link, index) => (
@@ -343,7 +343,7 @@ const Footer = () => {
             variants={footerAnimation.childVariants}
           >
             <motion.a 
-              href="/quest" 
+              href="/quest/begin" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="px-8 py-3 bg-white text-cyan-700 rounded-lg hover:bg-opacity-90 transition-colors font-gilroy-bold shadow-md hover:shadow-lg"

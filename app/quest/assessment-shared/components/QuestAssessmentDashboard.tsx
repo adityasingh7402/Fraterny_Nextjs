@@ -28,9 +28,9 @@ import { googleAnalytics } from '@/lib/services/googleAnalytics';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 
-// Import payment functions from quest-result
-import { fetchDynamicPricing, startPaymentStatusPolling } from '@/app/quest-result/result/[userId]/[sessionId]/[testId]/utils/paymentHelpers';
-import type { PaymentGateway } from '@/app/quest-result/result/[userId]/[sessionId]/[testId]/utils/types';
+// Import payment functions from quest reflection
+import { fetchDynamicPricing, startPaymentStatusPolling } from '@/app/quest/reflection/[userId]/[sessionId]/[testId]/utils/paymentHelpers';
+import type { PaymentGateway } from '@/app/quest/reflection/[userId]/[sessionId]/[testId]/utils/types';
 
 
 // Design tokens for UpsellSheet
@@ -278,12 +278,12 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
   // Handle menu actions
   const handleView = (testData: DashboardTest) => {
     setOpenMenuId(null);
-    router.push(`/quest-result/result/${testData.userid}/${testData.sessionid}/${testData.testid}`);
+    router.push(`/quest/reflection/${testData.userid}/${testData.sessionid}/${testData.testid}`);
   };
 
   const handleFeedback = (testData: DashboardTest) => {
     setOpenMenuId(null);
-    router.push(`/quest-result/result/${testData.userid}/${testData.sessionid}/${testData.testid}`);
+    router.push(`/quest/reflection/${testData.userid}/${testData.sessionid}/${testData.testid}`);
   };
 
   const handleDelete = (testData: DashboardTest) => {
@@ -338,7 +338,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
   };
 
   const handleAssessmentClick = (testData: DashboardTest) => {
-    router.push(`/quest-result/result/${testData.userid}/${testData.sessionid}/${testData.testid}`);
+    router.push(`/quest/reflection/${testData.userid}/${testData.sessionid}/${testData.testid}`);
   };
 
   // Handle payment and PDF actions
@@ -532,7 +532,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
             <h3 className="text-lg font-gilroy-semibold text-gray-900 mb-2">Error Loading Results</h3>
             <p className="text-gray-600 font-gilroy-regular mb-4">{error}</p>
             <button
-              onClick={() => router.push('/quest')}
+              onClick={() => router.push('/quest/quest-mode')}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-gilroy-semibold"
             >
               Back to Quest
@@ -566,7 +566,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
             <h3 className="text-lg font-gilroy-semibold text-gray-900 mb-2">No Results Found</h3>
             <p className="text-gray-600 font-gilroy-regular mb-6">You haven't completed any Results yet.</p>
             <button
-              onClick={() => router.push('/assessment')}
+            onClick={() => router.push('/quest/begin')}
               className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-gilroy-semibold"
             >
               Take Your First Assessment

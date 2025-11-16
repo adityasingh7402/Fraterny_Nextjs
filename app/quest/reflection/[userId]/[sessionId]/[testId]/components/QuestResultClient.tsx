@@ -150,7 +150,7 @@ export function QuestResultClient({
           console.error('❌ Failed to save session:', error);
           toast.error('Failed to save your results. Please try again.');
         }
-        const newUrl = `/quest-result/result/${user.id}/${sessionId}/${testId}`;
+        const newUrl = `/quest/reflection/${user.id}/${sessionId}/${testId}`;
         router.push(newUrl);
         return; // Exit early, will re-run after redirect
       }

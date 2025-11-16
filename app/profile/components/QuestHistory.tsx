@@ -237,7 +237,7 @@ export function QuestHistory({ className = '' }: QuestHistoryProps) {
         }
       } else {
         // Payment not done - router.push to result page
-        router.push(`/quest-result/result/${latestAssessment.userid}/${latestAssessment.sessionid}/${latestAssessment.testid}`);
+        router.push(`/quest/reflection/${latestAssessment.userid}/${latestAssessment.sessionid}/${latestAssessment.testid}`);
         return;
       }
     };
