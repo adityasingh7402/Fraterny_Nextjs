@@ -12,7 +12,7 @@ export interface NavLink {
 // Main navigation links (Header - Desktop & Mobile)
 export const MAIN_NAV_LINKS: NavLink[] = [
   { name: 'FratVilla', href: '/experience' },
-  { name: 'Quest', href: '/quest' },
+  { name: 'Quest', href: '/quest/quest-mode' },
   { name: 'Blog', href: '/blog' },
   { name: 'FAQ', href: '/faq' },
 ];
@@ -20,7 +20,7 @@ export const MAIN_NAV_LINKS: NavLink[] = [
 // Footer navigation links
 export const FOOTER_NAV_LINKS: NavLink[] = [
   { name: 'FratVilla', href: '/experience' },
-  { name: 'Quest', href: '/quest' },
+  { name: 'Quest', href: '/quest/quest-mode' },
   { name: 'Process', href: '/process' },
   { name: 'FAQ', href: '/faq' },
 ];

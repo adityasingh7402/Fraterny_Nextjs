@@ -297,7 +297,7 @@ const QuestPaymentDashboard: React.FC<QuestPaymentDashboardProps> = ({ className
             <h3 className="text-lg font-gilroy-semibold text-gray-900 mb-2">Error Loading Payment History</h3>
             <p className="text-gray-600 font-gilroy-regular mb-4">{error}</p>
             <button
-              onClick={() => router.push('/quest')}
+              onClick={() => router.push('/quest/quest-mode')}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-gilroy-semibold"
             >
               Back to Quest

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../../auth/cotexts/AuthContext';
+import { useAuth } from '@/app/auth/cotexts/AuthContext';
 import axios from 'axios';
 import { QuestContext } from '../contexts/QuestContext';
 import { 
@@ -15,7 +15,7 @@ import {
 } from '../types/types';
 import questSections, { getAllQuestions, getQuestionsBySection } from '../questions/questions';
 import { googleAnalytics } from '@/lib/services/googleAnalytics';
-import { getDeviceIdentifier } from '../../../ip-finder/deviceFingerprint';
+import { getDeviceIdentifier } from '@/ip-finder/deviceFingerprint';
 
 interface QuestProviderProps {
   children: React.ReactNode;
@@ -709,11 +709,11 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
       }
     }
     
-    // const targetUrl = `/quest-result/processing/${userId}/${sessionId}/${testid}`;
+    // const targetUrl = `/quest/processing/${userId}/${sessionId}/${testid}`;
     // navigate(targetUrl);
 
     const navigationData = {
-      targetUrl: `/quest-result/processing/${userId}/${sessionId}/${testid}`,
+      targetUrl: `/quest/processing/${userId}/${sessionId}/${testid}`,
       userId,
       sessionId,
       testid
@@ -792,7 +792,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
       // Note: localStorage cleanup moved to results page
       
       const navigationData = {
-        targetUrl: `/quest-result/processing/${userId}/${sessionId}/${testid}`,
+        targetUrl: `/quest/processing/${userId}/${sessionId}/${testid}`,
         userId,
         sessionId,
         testid

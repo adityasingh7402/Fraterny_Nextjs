@@ -7,7 +7,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { getWordValidationStatus } from '../utils/questValidation';
 import { HonestyTag } from '../types/types';
 import { toast } from 'sonner';
-import { useAuth } from '../../auth/cotexts/AuthContext';
+import { useAuth } from '@/app/auth/cotexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import IncompleteQuestionsModal from '../components/IncompleteQuestionsModal';
 

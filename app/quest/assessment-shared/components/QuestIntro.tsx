@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { useQuest } from '../hooks/useQuest';
 import { ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
-import { useIsMobile } from '../../(quest)/quest/utils/use-mobile';
+import { useIsMobile } from '../../quest-mode/utils/use-mobile';
 import Link from 'next/link';
 import Image from 'next/image';
 import { clearQuestTags } from '../utils/questStorage';
@@ -73,7 +73,7 @@ export function QuestIntro({
     <section className='bg-sky-800 flex flex-col justify-between h-dvh overflow-hidden'>
 
       <div className='flex items-start pt-4 justify-center invert h-1/3'>
-        <Image src = './Vector.svg' alt = '' width={isMobile ? 120 : 50} height={isMobile ? 60 : 50} />
+        <Image src='/Vector.svg' alt='Quest Logo' width={isMobile ? 120 : 200} height={isMobile ? 60 : 100} />
       </div>
 
       <div className=' pl-5 xs:pr-0 py-2'>

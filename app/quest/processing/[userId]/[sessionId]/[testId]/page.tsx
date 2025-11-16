@@ -4,8 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
-import { getDeviceIdentifier } from '../../../../../../ip-finder/deviceFingerprint';
-import { useAuth } from '../../../../../auth/cotexts/AuthContext';
+import { getDeviceIdentifier } from '@/ip-finder/deviceFingerprint';
+import { useAuth } from '@/app/auth/cotexts/AuthContext';
 
 // TypeScript interfaces for recovery API
 interface RecoverySession {
@@ -153,7 +153,7 @@ export function QuestProcessing({ className = '', gifSrc = '/analysis1.gif' }: Q
             
             setTimeout(() => {
               if (isActive) {
-                router.push(`/quest-result/result/${userId}/${sessionId}/${testId}`);
+                router.push(`/quest/reflection/${userId}/${sessionId}/${testId}`);
               }
             }, 2000);
             
@@ -277,7 +277,7 @@ export function QuestProcessing({ className = '', gifSrc = '/analysis1.gif' }: Q
             setIsRecoveryPolling(false);
             setIsPolling(false); // Stop original polling too
             
-            const resultUrl = `/quest-result/result/${recoveredSessionData?.userId}/${recoveredSessionData?.sessionId}/${recoveredTestId}`;
+            const resultUrl = `/quest/reflection/${recoveredSessionData?.userId}/${recoveredSessionData?.sessionId}/${recoveredTestId}`;
             console.log('🎯 [RECOVERY] Navigating to results:', resultUrl);
             window.location.href = resultUrl;
             return true;

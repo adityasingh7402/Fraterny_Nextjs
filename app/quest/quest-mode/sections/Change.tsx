@@ -22,7 +22,7 @@ const Change = () => {
             />
         </div>
         <div className='w-full'/>
-        <Link href="/assessment">
+        <Link href="/quest/begin">
           <button className='flex py-4 p-2 text-white text-[24px] w-full items-center justify-center rounded-full bg-gradient-to-br from-sky-800 to-sky-400 border-2 border-blue-950 tracking-[-1.8px]'
           >
             <span  className= 'text-white text-2xl font-normal font-gilroy-semibold' style={{ letterSpacing: '-8%' }}>
