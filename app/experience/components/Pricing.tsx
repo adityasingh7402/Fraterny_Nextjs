@@ -11,7 +11,7 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 // import { useReactQueryWebsiteSettings } from '@/hooks/useReactQueryWebsiteSettings';
 import ResponsiveImage from '@/components/ui/ResponsiveImage';
 import { toast } from 'sonner';
-import useSectionRevealAnimation from '@/app/assessment/hooks/useSectionRevealAnimation';
+import useSectionRevealAnimation from '@/app/quest/assessment-shared/hooks/useSectionRevealAnimation';
 import PricingSection from './PricingSection';
 import axios from 'axios';
 

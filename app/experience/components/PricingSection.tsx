@@ -3,7 +3,7 @@
 
 import { motion } from 'framer-motion';
 import { Users, Hotel, Coffee, Award } from 'lucide-react';
-import useSectionRevealAnimation from '@/app/assessment/hooks/useSectionRevealAnimation';
+import useSectionRevealAnimation from '@/app/quest/assessment-shared/hooks/useSectionRevealAnimation';
 import { LucideIcon } from 'lucide-react';
 
 // TypeScript interfaces
