@@ -14,8 +14,12 @@ function BeginPageContent() {
   const { startQuest } = useQuest();
 
   const handleStart = async () => {
+    // Mark that user has accepted terms
+    localStorage.setItem('fraterny_terms_accepted', 'true');
+    
     // Start the quest session first (this initializes or restores from localStorage)
     await startQuest();
+    
     // Then navigate to introspect page
     router.push('/quest/introspect');
   };
