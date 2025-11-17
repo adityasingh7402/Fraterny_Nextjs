@@ -16,6 +16,7 @@ import {
   Download,
   Clock,
   Eye,
+  User,
   MessageCircle,
   Trash2,
   AlertTriangle
@@ -27,6 +28,7 @@ import axios from 'axios';
 import { googleAnalytics } from '@/lib/services/googleAnalytics';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
+import { Cluster, clusters, Archetype } from '@/app/archeotype/archeotype';
 
 // Import payment functions from quest reflection
 import { fetchDynamicPricing, startPaymentStatusPolling } from '@/app/quest/reflection/[userId]/[sessionId]/[testId]/utils/paymentHelpers';
@@ -140,6 +142,8 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
   const stopPollingRef = React.useRef<(() => void) | null>(null);
   const router = useRouter();
   const userId  = user?.id;
+  const [archetypeData, setArchetypeData] = useState<{ cluster: Cluster; archetype: Archetype } | null>(null);
+  const [archetypeLoading, setArchetypeLoading] = useState(false);
 
   // Format date helper function
   const formatDate = (dateString: string): string => {
@@ -274,6 +278,52 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
       }
     };
   }, []);
+
+  // Fetch archetype data based on latest assessment
+  useEffect(() => {
+    const fetchArchetypeData = async () => {
+      if (data.length === 0) {
+        setArchetypeLoading(false);
+        return;
+      }
+
+      const latestAssessment = data[0]; // Latest assessment (already sorted)
+      
+      try {
+        setArchetypeLoading(true);
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/report/${latestAssessment.userid}/${latestAssessment.sessionid}/${latestAssessment.testid}`
+        );
+
+        let resultsData = response.data.results;
+        if (typeof resultsData === 'string') {
+          resultsData = JSON.parse(resultsData);
+        }
+
+        const archetypeName = resultsData?.['Mind Card']?.personality_type || resultsData?.['Mind Card']?.name;
+        
+        if (archetypeName) {
+          for (const cluster of clusters) {
+            const foundArchetype = cluster.archetypes.find(
+              arch => arch.name.toLowerCase() === archetypeName.toLowerCase()
+            );
+            if (foundArchetype) {
+              setArchetypeData({ cluster, archetype: foundArchetype });
+              break;
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch archetype data:', error);
+      } finally {
+        setArchetypeLoading(false);
+      }
+    };
+
+    if (data.length > 0) {
+      fetchArchetypeData();
+    }
+  }, [data]);
 
   // Handle menu actions
   const handleView = (testData: DashboardTest) => {
@@ -543,9 +593,285 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
     );
   }
 
+  // Render Archetype Cards Section
+const renderArchetypeSection = () => {
+  if (archetypeLoading) {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 font-gilroy-bold">Loading your insights...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!archetypeData) {
+    return (
+      <div className="bg-white rounded-xl shadow-md p-6 text-center mb-6">
+        <Brain className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+        <p className="text-gray-600 font-gilroy-regular mb-4">
+          Complete an assessment to discover your archetype
+        </p>
+        <button
+          onClick={() => router.push('/quest/begin')}
+          className="px-6 py-3 bg-gradient-to-br from-cyan-600 to-blue-800 hover:from-cyan-600 hover:to-blue-800 text-white font-gilroy-bold rounded-lg transition-all duration-200 transform hover:scale-105"
+        >
+          Start Quest
+        </button>
+      </div>
+    );
+  }
+
+  const latestAssessment = data[0];
+
+  return (
+    <div className="relative mb-6">
+      <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 scrollbar-hide">
+        {/* Card 1: SELF */}
+        <div className="flex-shrink-0 w-full snap-center h-[600px]">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="bg-gradient-to-br from-white to-blue-50 rounded-3xl overflow-hidden border border-blue-100 h-full flex flex-col"
+          >
+            <div className="relative h-56 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 z-10"></div>
+              <motion.img 
+                src={archetypeData.cluster.img} 
+                alt={archetypeData.cluster.name}
+                className="w-full h-full object-cover transform scale-105"
+              />
+              <div className="absolute top-4 right-4 z-20">
+                <motion.div 
+                  initial={{ x: 20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="inline-flex items-center gap-2.5 px-4 py-2 bg-gradient-to-br from-cyan-600 to-blue-800 rounded-full shadow-lg"
+                >
+                  <User className="w-4 h-4 text-white" />
+                  <span className="text-[11px] font-gilroy-bold text-white uppercase tracking-[0.08em] leading-none">How You See Yourself</span>
+                </motion.div>
+              </div>
+              <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600"></div>
+            </div>
+            
+            <div className="px-6 pt-5 pb-7 relative flex-1 flex flex-col">
+              <div>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.1 }}
+                  className="inline-flex items-center gap-2.5 mb-2 px-5 py-2.5 bg-gradient-to-br from-cyan-600 to-blue-800 text-white font-gilroy-bold text-xs rounded-full uppercase tracking-wider shadow-lg backdrop-blur-sm border border-white/20"
+                >
+                  {archetypeData.cluster.name}
+                </motion.div>
+                
+                <motion.h2 
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className="text-[28px] font-gilroy-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-blue-900 mb-4 leading-tight tracking-tight"
+                >
+                  {archetypeData.archetype.name}
+                </motion.h2>
+              </div>
+              
+              <motion.div 
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="text-gray-600 font-gilroy-regular text-base leading-[1.7] tracking-wide"
+              >
+                {archetypeData.archetype.contexts.self}
+              </motion.div>
+              
+              <div className="flex items-center gap-3 mt-6 pt-5 border-t border-blue-100">
+                <div className="flex-1 h-[2px] bg-gradient-to-r from-blue-300 to-transparent rounded-full"></div>
+                <Brain className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                <div className="flex-1 h-[2px] bg-gradient-to-l from-blue-300 to-transparent rounded-full"></div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Card 2: WORLD */}
+        {/* <div className="flex-shrink-0 w-full snap-center h-[600px]">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="bg-gradient-to-br from-white to-purple-50 rounded-3xl overflow-hidden border border-purple-100 relative h-full flex flex-col"
+          >
+            <div className="relative h-56 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 z-10"></div>
+              <img 
+                src={archetypeData.cluster.img} 
+                alt={archetypeData.cluster.name}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute top-4 right-4 z-20">
+                <div className="bg-gradient-to-r from-[#003366] to-[#004A7F] text-white px-5 py-2.5 font-gilroy-regular text-xs rounded-full uppercase tracking-wider shadow-lg backdrop-blur-sm border border-white/20">
+                  {archetypeData.cluster.name}
+                </div>
+              </div>
+              <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-fuchsia-600"></div>
+            </div>
+            
+            <div className="px-6 pt-5 pb-7 relative flex-1 flex flex-col">
+              <div className="relative z-30">
+                <div className="inline-flex items-center gap-2.5 mb-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full shadow-lg">
+                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 104 0 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-[11px] font-gilroy-bold text-white uppercase tracking-[0.08em] leading-none">How World Sees You</span>
+                </div>
+                
+                <h2 className="text-[28px] font-gilroy-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-purple-900 mb-4 leading-tight tracking-tight">
+                  {archetypeData.archetype.name}
+                </h2>
+              </div>
+              
+              <div className="text-gray-600 font-gilroy-regular text-base leading-[1.7] tracking-wide flex-1" style={{ filter: latestAssessment?.ispaymentdone === 'success' ? 'none' : 'blur(8px)' }}>
+                {archetypeData.archetype.contexts.world}
+              </div>
+              
+              {latestAssessment?.ispaymentdone === 'success' ? (
+                <div className="mt-4 pt-4 border-t border-purple-100">
+                  <button
+                    onClick={() => handlePaidReport(latestAssessment)}
+                    disabled={latestAssessment?.quest_status === 'working'}
+                    className={`w-full px-6 py-3 bg-gradient-to-r ${
+                      latestAssessment?.quest_status === 'generated' 
+                        ? 'from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600' 
+                        : 'from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600'
+                    } text-white text-base font-gilroy-bold rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100`}
+                  >
+                    {latestAssessment?.quest_status === 'generated' ? (
+                      <>
+                        <Download className="w-5 h-5" />
+                        <span>Download PDF Report</span>
+                      </>
+                    ) : (
+                      <>
+                        <Clock className="w-5 h-5" />
+                        <span>PDF Processing...</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              ) : (
+                <div className="absolute inset-x-0 bottom-0 top-32 flex items-center justify-center bg-white/5 backdrop-blur-[2px]">
+                  <button
+                    onClick={() => {
+                      setSelectedAssessment(latestAssessment);
+                      setUpsellOpen(true);
+                    }}
+                    className="px-6 py-3 bg-gradient-to-br from-cyan-600 to-blue-800 hover:from-cyan-600 hover:to-blue-800 text-white text-base font-gilroy-bold rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2"
+                  >
+                    <Lock className="w-5 h-5" />
+                    <span>Get Complete Analysis</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        </div> */}
+
+        {/* Card 3: ASPIRE */}
+        {/* <div className="flex-shrink-0 w-full snap-center h-[600px]">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="bg-gradient-to-br from-white to-green-50 rounded-3xl overflow-hidden border border-green-100 relative h-full flex flex-col"
+          >
+            <div className="relative h-56 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 z-10"></div>
+              <img 
+                src={archetypeData.cluster.img} 
+                alt={archetypeData.cluster.name}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute top-4 right-4 z-20">
+                <div className="bg-gradient-to-r from-[#003366] to-[#004A7F] text-white px-5 py-2.5 font-gilroy-bold text-xs rounded-full uppercase tracking-wider shadow-lg backdrop-blur-sm border border-white/20">
+                  {archetypeData.cluster.name}
+                </div>
+              </div>
+              <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 via-emerald-500 to-teal-600"></div>
+            </div>
+            
+            <div className="px-6 pt-5 pb-7 relative flex-1 flex flex-col">
+              <div className="relative z-30">
+                <div className="inline-flex items-center gap-2.5 mb-2 px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full shadow-lg">
+                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                  </svg>
+                  <span className="text-[11px] font-gilroy-bold text-white uppercase tracking-[0.08em] leading-none">What You Aspire To Be</span>
+                </div>
+                
+                <h2 className="text-[28px] font-gilroy-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-green-900 mb-4 leading-tight tracking-tight">
+                  {archetypeData.archetype.name}
+                </h2>
+              </div>
+              
+              <div className="text-gray-600 font-gilroy-regular text-base leading-[1.7] tracking-wide flex-1" style={{ filter: latestAssessment?.ispaymentdone === 'success' ? 'none' : 'blur(8px)' }}>
+                {archetypeData.archetype.contexts.aspire}
+              </div>
+              
+              {latestAssessment?.ispaymentdone === 'success' ? (
+                <div className="mt-4 pt-4 border-t border-green-100">
+                  <button
+                    onClick={() => handlePaidReport(latestAssessment)}
+                    disabled={latestAssessment?.quest_status === 'working'}
+                    className={`w-full px-6 py-3 bg-gradient-to-r ${
+                      latestAssessment?.quest_status === 'generated' 
+                        ? 'from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600' 
+                        : 'from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600'
+                    } text-white text-base font-gilroy-bold rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100`}
+                  >
+                    {latestAssessment?.quest_status === 'generated' ? (
+                      <>
+                        <Download className="w-5 h-5" />
+                        <span>Download PDF Report</span>
+                      </>
+                    ) : (
+                      <>
+                        <Clock className="w-5 h-5" />
+                        <span>PDF Processing...</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              ) : (
+                <div className="absolute inset-x-0 bottom-0 top-32 flex items-center justify-center bg-white/5 backdrop-blur-[2px]">
+                  <button
+                    onClick={() => {
+                      setSelectedAssessment(latestAssessment);
+                      setUpsellOpen(true);
+                    }}
+                    className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white text-base font-gilroy-bold rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2"
+                  >
+                    <Lock className="w-5 h-5" />
+                    <span>Get Complete Analysis</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        </div> */}
+      </div>
+    </div>
+  );
+};
+
   return (
     <div className="relative bg-gray-50 font-gilroy-regular">
       <div className="relative z-10">
+
+         {renderArchetypeSection()}
+
         {/* Header */}
         <header className="bg-gradient-to-br from-cyan-600 to-blue-800 rounded-xl shadow-sm sticky top-0 z-10">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -558,6 +884,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
 
         {/* Main Content */}
         <main className="">
+
           <div className="w-full py-4">
         {data.length === 0 ? (
           // Empty state

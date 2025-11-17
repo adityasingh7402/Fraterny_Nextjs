@@ -3,9 +3,23 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Gem } from 'lucide-react';
 import { tokens, CTA_HEIGHT } from '../utils/constants';
 import { DualGatewayPricingData } from '../utils/types';
+
+async function shareText(title: string, text: string): Promise<boolean> {
+  try {
+    if (navigator.share) {
+      await navigator.share({ title, text });
+      return true;
+    }
+  } catch { }
+  try {
+    await navigator.clipboard.writeText(`${title}\n\n${text}`);
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 interface StickyCTAProps {
   onOpen: () => void;
@@ -20,6 +34,21 @@ export const StickyCTA: React.FC<StickyCTAProps> = ({
   percentile, 
   qualityScore 
 }) => {
+
+  const onShare = async () => {
+  const title = `I just took Quest and got a Depth Score of ${qualityScore ?? '85'}/100 🪞`;
+
+  const share =
+    `Quest gave me a breakdown of my inner patterns: the things I overlook, the things I carry, and the things that quietly drive my decisions using my own thoughts.\n\n` +
+    `If you’ve been wanting clearer self-understanding (emotionally or logically), this is genuinely worth trying.\n\n` +
+    `Here’s the link if you are intereseted in trying structured journaling and positive psychology.:\n` +
+    `https://fraterny.com/quest/quest-mode`;
+
+  await shareText(title, share);
+};
+  
+
+
   return (
     <div
       className="fixed bottom-0 left-0 right-0 z-50"
@@ -52,7 +81,7 @@ export const StickyCTA: React.FC<StickyCTAProps> = ({
 
         {/* Right Section - CTA Button */}
         <motion.button
-          onClick={onOpen}
+          onClick={onShare}
           whileTap={{ scale: 0.98 }}
           className="font-gilroy-regular tracking-tight flex items-center justify-center rounded-xl px-6 py-2 text-lg font-bold text-white whitespace-nowrap"
           style={{
@@ -63,7 +92,7 @@ export const StickyCTA: React.FC<StickyCTAProps> = ({
           }}
           aria-label="Unlock Full Report"
         >
-          Unlock Report
+          Share Quest
         </motion.button>
       </div>
     </div>

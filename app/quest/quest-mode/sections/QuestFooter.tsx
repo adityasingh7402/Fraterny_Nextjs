@@ -45,7 +45,7 @@ function QuestFooter() {
                         <Link href="/terms-and-conditions" className="text-[#292929] text-sm font-normal font-['Inter'] leading-tight">Terms  & Conditions</Link>
                         <Link href="mailto:quest@fratery.in?subject=Refund Request" className="text-[#292929] text-sm font-normal font-['Inter'] leading-tight">Refund</Link>
                         <Link href="mailto:quest@fratery.in?subject=Internship Opportunity" className="text-[#292929] text-sm font-normal font-['Inter'] leading-tight">Internships</Link>
-                        <Link href="/quest/begin" className="text-[#292929] text-sm font-normal font-['Inter'] leading-tight">Start Test</Link>
+                        <Link href="/quest/begin" className="text-[#292929] text-sm font-normal font-['Inter'] leading-tight">Begin</Link>
                     </div>
                 </div>
 

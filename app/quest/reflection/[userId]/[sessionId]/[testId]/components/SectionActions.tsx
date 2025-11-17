@@ -56,8 +56,6 @@ export const SectionActions: React.FC<SectionActionsProps> = ({ title, share, te
       if (reacted === "up") reaction = "like";
       if (reacted === "down") reaction = "dislike";
 
-      console.log("Sending feedback:", { sessionId, testId, feedback, sectionId });
-
       const reactions = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/quest/feedback`, {
         sessionId,
         testId,
@@ -66,7 +64,6 @@ export const SectionActions: React.FC<SectionActionsProps> = ({ title, share, te
         sectionId: sectionId
       });
 
-      console.log("Feedback response:", reactions);
       toast.success("Thank you for the feedback", {
         position: "top-right"
       });

@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import {useIsMobile} from '../utils/use-mobile';
+import { ChevronDown } from 'lucide-react';
 
 // Lazy load sections for better performance
 const Hero = dynamic(() => import('./index').then(mod => ({ default: mod.Hero })), {
@@ -466,22 +467,20 @@ const scrollToSection = (sectionId: string) => {
         )}
 
         {/* Navigation indicator */}
-        {/* <div className={`fixed bottom-4 right-4 z-50 flex flex-col gap-2 ${isMobile ? '' : 'hidden'}`}>
-          {[0, 1, 2, 3].map((index) => (
-            <button
-              key={index}
+        <div className={`fixed bottom-6 right-6 z-50 ${isMobile ? '' : 'hidden'} ${current === 3 ? 'hidden' : 'opacity-100' } transition-opacity duration-300`}>
+          <button
               onClick={() => {
                 if (!isTransitioning) {
+                  const nextIndex = (current + 1) % 4;
                   setIsTransitioning(true);
-                  setCurrent(index);
+                  setCurrent(nextIndex);
                 }
               }}
-              className={`w-2 h-2 rounded-full transition-colors ${
-                current === index ? 'bg-blue-600' : 'bg-gray-200'
-              }`}
-            />
-          ))}
-        </div> */}
+              className={`flex items-center justify-center text-white w-6 h-6 rounded-full ${current === 1 ? 'bg-black' : 'bg-white/20'} hover:bg-white/30 transition-all duration-200 group`}
+            >
+              <ChevronDown className="text-white w-3 h-3 transform group-hover:translate-y-1 transition-all duration-200" />
+            </button>
+        </div>
         
       </div>
   );

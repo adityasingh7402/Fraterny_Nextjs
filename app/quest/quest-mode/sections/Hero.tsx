@@ -94,7 +94,7 @@ const Hero: React.FC<HeroProps> = ({
         <Link href="/quest/begin">
           <div className=''>
             <div className="w-40 h-14 mix-blend-luminosity bg-gradient-to-br from-white/20 to-white/20 rounded-[30px] border-2 border-white flex items-center justify-center" >
-                <div className="justify-center text-white text-2xl font-gilroy-bold">Start Test</div>
+                <div className="justify-center text-white text-2xl font-gilroy-bold">Begin</div>
             </div>
           </div>
         </Link>

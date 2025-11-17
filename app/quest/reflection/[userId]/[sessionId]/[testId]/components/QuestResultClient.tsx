@@ -34,7 +34,8 @@ import { toast } from 'sonner';
 import { useAuth } from '@/app/auth/cotexts/AuthContext';
 import { googleAnalytics } from '@/lib/services/googleAnalytics';
 import { fetchDynamicPricing, checkExistingPaymentStatus, startPaymentStatusPolling } from '../utils/paymentHelpers';
-import { log } from 'console';
+import Testimonials from '@/app/quest/quest-mode/sections/Testimonials';
+import { TextGenerateEffect } from '@/components/ui/text-generate-effect';
 
 interface QuestResultClientProps {
   initialData: ResultData | null;
@@ -360,7 +361,6 @@ export function QuestResultClient({
       });
 
       setActiveIndex(currentIndex);
-
       // Show feedback popup after 2 seconds when user reaches subjects section (index 3)
       if (currentIndex >= 3 && !hasTriggeredFeedback) {
         setHasTriggeredFeedback(true);
@@ -623,7 +623,6 @@ export function QuestResultClient({
     };
   }) || [];
 
-  console.log(resultData.user_id);
   
   
 
@@ -716,7 +715,7 @@ export function QuestResultClient({
                       ];
 
                       return (
-                        <div onClick={() => handleCardClick(i)} key={stat.label} className={`relative w-60 h-60 ${colors[i].bg} rounded-[10px] overflow-hidden`}>
+                        <motion.div onClick={() => handleCardClick(i)} key={stat.label} layoutId={`insight-card-${i}`} className={`relative w-60 h-60 ${colors[i].bg} rounded-[10px] overflow-hidden`}>
 
                           {/* Title */}
                           <div className="absolute left-[20px] top-[30px] opacity-70 mix-blend-hard-light text-white text-3xl font-normal font-gilroy-bold leading-9">
@@ -744,7 +743,7 @@ export function QuestResultClient({
                               <ChevronsUp className="h-8 w-8 text-white" />
                             </motion.div>
                           </div>
-                        </div>
+                        </motion.div>
                       );
                     })}
                   </div>
@@ -970,7 +969,8 @@ export function QuestResultClient({
         >
           <div className="flex h-full flex-col items-center justify-center text-center">
             <div className="rounded-2xl bg-white/10 p-4 text-2xl leading-6">
-              <div className="font-gilroy-regular mb-10 text-left leading-snug">{actionItem}</div>
+              {/* <div className="font-gilroy-regular mb-10 text-left leading-snug">{actionItem}</div> */}
+              <div className='font-gilroy-regular mb-10 text-left text-white leading-snug'><TextGenerateEffect words={actionItem} /></div>
               <div className="opacity-95 text-xl font-gilroy-semibold">One small step could change your direction forever.</div>
             </div>
           </div>
@@ -979,8 +979,8 @@ export function QuestResultClient({
         {/* PDF Section */}
         <SectionFrame
           id="pdf-report"
-          title="Your Complete PDF Report"
-          sub="35+ Pages of Deep Analysis"
+          title="Private Intelligence File"
+          sub="Made from your words"
           shareText="Check out my complete personality analysis from Fraterny!"
           themeKey="pdf-report"
           customClass="pt-16 relative"
@@ -1004,8 +1004,12 @@ export function QuestResultClient({
               }}
               pricing={pricing}
             />
+            <Testimonials headerText='What others said' />
           </div>
+
+          
         </SectionFrame>
+
       </div>
 
       {/* Progress Rail */}

@@ -7,7 +7,7 @@ import { User } from '../utils/types';
 
 
 const getAuthBannerColors = (sectionIndex: number) => {
-  const sectionKeys = ["emotional", "mind", "findings", "subjects", "quotes", "films", "books", /* "astrology", */ "work", "pdf-report"];
+  const sectionKeys = ["emotional", "mind", "findings", "subjects", "work", "pdf-report"];
   const currentSection = sectionKeys[sectionIndex];
 
   switch (currentSection) {
@@ -15,7 +15,6 @@ const getAuthBannerColors = (sectionIndex: number) => {
     case "subjects":
     case "books":
     case "pdf-report":
-      // Light sections - use dark colors
       return {
         logoFilter: "invert(0)", // Dark logo
         buttonBg: "rgba(0,0,0,0.8)", // Dark button background
@@ -29,7 +28,6 @@ const getAuthBannerColors = (sectionIndex: number) => {
     // case "astrology":
     case "work":
     default:
-      // Dark sections - use light colors
       return {
         logoFilter: "invert(1)", // White logo
         buttonBg: "rgba(255,255,255,0.2)", // Light button background
@@ -51,7 +49,7 @@ export const AuthBanner: React.FC<AuthBannerProps> = ({ onSignIn, onPayment, use
   const colors = getAuthBannerColors(activeIndex);
 
   const getGlassBackground = (index: number) => {
-    const sectionKeys = ["emotional", "mind", "findings", "subjects", "quotes", "films", "books", /* "astrology", */ "work", "pdf-report"];
+    const sectionKeys = ["emotional", "mind", "findings", "subjects", "work", "pdf-report"];
     const currentSection = sectionKeys[index];
 
     if (currentSection === "quotes" || currentSection === "subjects" || currentSection === "books" || currentSection === "pdf-report") {
@@ -78,7 +76,7 @@ export const AuthBanner: React.FC<AuthBannerProps> = ({ onSignIn, onPayment, use
           height={56}
           className="transition-all duration-300 cursor-pointer hover:opacity-80"
           style={{ filter: colors.logoFilter }}
-          onClick={() => window.location.href = '/quest'}
+          onClick={() => window.location.href = '/quest/quest-mode'}
         />
         <button
           onClick={onSignIn}
