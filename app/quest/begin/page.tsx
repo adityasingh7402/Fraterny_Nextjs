@@ -1,29 +1,32 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
+import { useRouter } from 'next/navigation';
 import { QuestProvider } from '../assessment-shared/provider/QuestProvider';
 import { QuestIntro } from '../assessment-shared/components/QuestIntro';
-import { QuestAssessment } from '../assessment-shared/components/QuestAssessment';
+import { useQuest } from '../assessment-shared/hooks/useQuest';
 
 /**
- * Quest Begin page - Combined Hero/Intro and Questions
- * Keeps both in same QuestProvider to maintain session
+ * Quest Begin page - Hero/Intro page that navigates to introspect
  */
-export default function QuestBeginPage() {
-  const [showQuestions, setShowQuestions] = useState(false);
+function BeginPageContent() {
+  const router = useRouter();
+  const { startQuest } = useQuest();
 
-  const handleStart = () => {
-    // Show questions instead of navigating
-    setShowQuestions(true);
+  const handleStart = async () => {
+    // Start the quest session first (this initializes or restores from localStorage)
+    await startQuest();
+    // Then navigate to introspect page
+    router.push('/quest/introspect');
   };
 
+  return <QuestIntro onStart={handleStart} />;
+}
+
+export default function QuestBeginPage() {
   return (
     <QuestProvider>
-      {!showQuestions ? (
-        <QuestIntro onStart={handleStart} />
-      ) : (
-        <QuestAssessment />
-      )}
+      <BeginPageContent />
     </QuestProvider>
   );
 }
