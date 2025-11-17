@@ -71,8 +71,6 @@ const BrowserPopup: React.FC<BrowserPopupProps> = ({ onClose }) => {
               left: 0,
               right: 0,
               bottom: 0,
-              minHeight: '100vh',
-              minHeight: '100dvh',
               width: '100vw',
               display: 'flex',
               alignItems: 'center',
@@ -88,7 +86,7 @@ const BrowserPopup: React.FC<BrowserPopupProps> = ({ onClose }) => {
             >
               <div className="relative overflow-hidden rounded-3xl">
                 {/* Gradient background effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-cyan-400/20 to-blue-600/20" />
+                <div className="absolute inset-0 bg-linear-to-br from-blue-500/20 via-cyan-400/20 to-blue-600/20" />
                 
                 {/* Glassmorphism container */}
                 <div className="relative bg-white/10 backdrop-blur-xl border border-white/20 p-8">
@@ -104,8 +102,8 @@ const BrowserPopup: React.FC<BrowserPopupProps> = ({ onClose }) => {
                   {/* Icon and Alert */}
                   <div className="flex flex-col items-center mb-6">
                     <div className="relative mb-4">
-                      <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full blur-xl opacity-50" />
-                      <div className="relative bg-gradient-to-br from-blue-400 to-cyan-400 p-4 rounded-full">
+                      <div className="absolute inset-0 bg-linear-to-br from-blue-400 to-cyan-400 rounded-full blur-xl opacity-50" />
+                      <div className="relative bg-linear-to-br from-blue-400 to-cyan-400 p-4 rounded-full">
                         <Globe size={32} className="text-white" />
                       </div>
                     </div>
@@ -130,9 +128,9 @@ const BrowserPopup: React.FC<BrowserPopupProps> = ({ onClose }) => {
                       onClick={handleOpenBrowser}
                       className="relative group overflow-hidden rounded-2xl"
                     >
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-400 transition-transform group-hover:scale-110" />
-                      <div className="relative bg-gradient-to-r from-blue-500/90 to-cyan-400/90 backdrop-blur-sm px-6 py-4 flex items-center justify-center gap-3">
-                        <span className="text-white font-[600] text-xl font-gilroy-bold">
+                      <div className="absolute inset-0 bg-linear-to-r from-blue-500 to-cyan-400 transition-transform group-hover:scale-110" />
+                      <div className="relative bg-linear-to-r from-blue-500/90 to-cyan-400/90 backdrop-blur-sm px-6 py-4 flex items-center justify-center gap-3">
+                        <span className="text-white font-semibold text-xl font-gilroy-bold">
                           Open Browser
                         </span>
                         <ExternalLink size={20} className="text-white" />
