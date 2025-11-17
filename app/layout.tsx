@@ -103,15 +103,15 @@ const gilroyHeavy = localFont({
 })
 
 export const metadata: Metadata = {
-  title: "Fraterny - Social Network for Developers",
-  description: "Join Fraterny, the professional social network for developers. Connect, collaborate, and grow with fellow software engineers worldwide.",
-  keywords: "developers network, software engineering community, professional networking, tech collaboration, coding community",
+  title: "Fraterny - Experience the Change in You",
+  description: "Fraterny offers hyper-personalized identity evolution, mindset reframing and performance truth based on proven psychological frameworks.",
+  keywords: "psychology,luxury,transformation,fraterny,quest,fratvilla",
   
   authors: [{ name: "Fraterny" }],
   creator: "Fraterny",
   publisher: "Fraterny",
   
-  metadataBase: new URL('https://fraterny.in'), // Replace with your actual domain
+  metadataBase: new URL('https://fraterny.com'), // Replace with your actual domain
   
   alternates: {
     canonical: '/',
@@ -130,8 +130,8 @@ export const metadata: Metadata = {
   },
   
   openGraph: {
-    title: "Fraterny - Social Network for Developers",
-    description: "Join Fraterny, the professional social network for developers. Connect, collaborate, and grow with fellow software engineers worldwide.",
+    title: "Fraterny - Experience the Change in You",
+    description: "Fraterny offers hyper-personalized identity evolution, mindset reframing and performance truth based on proven psychological frameworks.",
     type: "website",
     locale: "en_US",
     url: '/',
@@ -141,15 +141,15 @@ export const metadata: Metadata = {
         url: '/favicon-32x32.png', // Place your OG image in public folder
         width: 1200,
         height: 630,
-        alt: 'Fraterny - Social Network for Developers',
+        alt: 'Fraterny - Embracer the Growth Mindset',
       },
     ],
   },
   
   twitter: {
     card: "summary_large_image",
-    title: "Fraterny - Social Network for Developers",
-    description: "Join Fraterny, the professional social network for developers. Connect, collaborate, and grow with fellow software engineers worldwide.",
+    title: "Fraterny - Experience the Change in You",
+    description: "Fraterny offers hyper-personalized identity evolution, mindset reframing and performance truth based on proven psychological frameworks.",
     images: ['/favicon-32x32.png'], // Place your Twitter image in public folder
     creator: '@fraterny', // Add your Twitter handle
   },
@@ -184,8 +184,8 @@ export default function RootLayout({
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'Fraterny',
-    description: 'Professional social network for developers',
-    url: 'https://fraterny.in',
+    description: 'Fraterny - Experience the Change in You',
+    url: 'https://fraterny.com',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
@@ -195,9 +195,9 @@ export default function RootLayout({
       'query-input': 'required name=search_term_string',
     },
     sameAs: [
-      'https://twitter.com/fraterny',
+        'https://x.com/frat_erny',
       'https://linkedin.com/company/fraterny',
-      'https://github.com/fraterny',
+      'https://www.instagram.com/quest.fraterny/',
     ],
   };
 
@@ -205,18 +205,18 @@ export default function RootLayout({
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'Fraterny',
-    description: 'Social Network for Developers',
-    url: 'https://fraterny.in',
-    logo: 'https://fraterny.in/logo.png',
+    description: 'Fraterny - Experience the Change in You',
+    url: 'https://fraterny.com',
+    logo: 'https://www.fraterny.com/og-image.png',
     contactPoint: {
       '@type': 'ContactPoint',
-      email: 'contact@fraterny.in',
-      contactType: 'Customer Service',
+      email: 'support@fraterny.com',
+      contactType: 'Fraterny Support',
     },
     sameAs: [
-      'https://twitter.com/fraterny',
+      'https://x.com/frat_erny',
       'https://linkedin.com/company/fraterny',
-      'https://github.com/fraterny',
+      'https://www.instagram.com/quest.fraterny/',
     ],
   };
 
