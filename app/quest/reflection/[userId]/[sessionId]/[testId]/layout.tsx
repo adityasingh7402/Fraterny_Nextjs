@@ -10,17 +10,25 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-
   return {
     title: 'Your Quest Results | Personality Assessment',
     description: 'View your personalized Quest assessment results with detailed insights into your personality, strengths, and recommendations.',
+    
+    // Favicon (browser tab icon)
+    icons: {
+      icon: '/Questfavicon.ico',
+      shortcut: '/Questfavicon.ico',
+      apple: '/apple-touch-icon.png',
+    },
+    
+    // Social media preview images
     openGraph: {
       title: 'Quest Assessment Results',
       description: 'Discover your personalized personality insights',
       type: 'website',
       images: [
         {
-          url: '/og-image.png',
+          url: '/og-image.png', // Create this as 1200x630 PNG
           width: 1200,
           height: 630,
           alt: 'Quest Results',
@@ -31,10 +39,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: 'summary_large_image',
       title: 'Quest Assessment Results',
       description: 'Discover your personalized personality insights',
-      images: ['/og-image.png'],
+      images: ['/twitter-image.png'], // Can be same as og-image.png
     },
     robots: {
-      index: false, // Don't index individual result pages for privacy
+      index: false,
       follow: true,
     },
   };
