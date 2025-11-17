@@ -22,6 +22,17 @@ const nextConfig: NextConfig = {
     } : false,
   },
   
+  // Redirects for SEO
+  async redirects() {
+    return [
+      {
+        source: '/quest',
+        destination: '/quest/quest-mode',
+        permanent: true, // 301 redirect
+      },
+    ];
+  },
+  
   // Headers for caching static assets
   async headers() {
     return [
