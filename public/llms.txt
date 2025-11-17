@@ -1,0 +1,73 @@
+# Fraterny - Social Network & Quest Platform
+
+> Professional social network for developers with introspection quest features
+> Built with Next.js 16, React 19, Supabase, TypeScript
+
+## Quick Overview
+
+**Domain**: https://fraterny.com
+**Tech Stack**: Next.js App Router, Supabase Auth/DB, TailwindCSS, Framer Motion
+**Key Features**: User authentication, Quest system, Blog, Payment integration, Admin dashboard
+
+## Project Structure
+
+```
+/app                    # Next.js app router pages
+  /auth                 # Authentication (login, signup)
+  /quest                # Quest introspection system
+  /blog                 # Blog with CMS
+  /admin                # Admin dashboard
+  /api                  # API routes
+  /profile              # User profiles
+  /payment-gateway      # Payment integration
+  
+/components             # Reusable React components
+/lib                    # Utilities & configurations
+/supabase               # Supabase client & types
+/utils                  # Helper functions
+/public                 # Static assets
+```
+
+## Core Technologies
+
+- **Framework**: Next.js 16 (App Router)
+- **UI**: Radix UI, TailwindCSS, Framer Motion
+- **Database**: Supabase (PostgreSQL)
+- **Auth**: Supabase Auth
+- **Forms**: React Hook Form + Zod
+- **State**: React Query, Context API
+
+## Key Routes
+
+- `/` - Homepage
+- `/auth/*` - Authentication flows
+- `/quest/*` - Quest introspection experience
+- `/blog/*` - Blog posts
+- `/experience` - Platform experience
+- `/profile/*` - User profiles
+- `/admin/*` - Admin panel
+
+## Environment Setup
+
+Required environment variables:
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+
+## Development
+
+```bash
+npm run dev      # Start dev server (port 3000)
+npm run build    # Production build
+npm run start    # Start production server
+```
+
+## SEO Files
+
+- `/robots.txt` - Search engine crawling rules
+- `/sitemap.xml` - Site structure for indexing
+- `/google-site-verification.html` - Google Search Console verification
+
+---
+Generated: 2025-11-17
+For AI assistants helping with Fraterny development
