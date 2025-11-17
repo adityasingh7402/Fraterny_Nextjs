@@ -26,7 +26,7 @@ const testimonials: Testimonial[] = [
   },
   {
     id: 3,
-    text: "Astrology section made me question everything I was doing",
+    text: "Unique findings section made me question everything I was doing",
     tag: "Scary",
     color: "green"
   },
@@ -55,7 +55,7 @@ const getColorClasses = (color: string) => {
   return colorMap[color as keyof typeof colorMap] || colorMap.blue;
 };
 
-const Testimonials = () => {
+const Testimonials = ({headerText = 'Testimonials.'}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   
 
@@ -93,7 +93,7 @@ useEffect(() => {
     <div className='p-4 mt-5 flex flex-col gap-4'>
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="justify-start text-neutral-950 text-4xl font-normal font-gilroy-medium">Testimonials.</div>
+        <div className="justify-start text-neutral-950 text-4xl font-normal font-gilroy-medium">{headerText}</div>
       </div>
 
       <div className='relative overflow-hidden'>

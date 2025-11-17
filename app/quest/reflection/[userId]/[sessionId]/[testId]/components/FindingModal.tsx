@@ -27,10 +27,10 @@ export const FindingModal: React.FC<FindingModalProps> = ({ finding, onClose, se
       <motion.div className="fixed inset-0 z-[70]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
         <div className="absolute inset-0 bg-black/50" onClick={onClose} />
         <motion.div
-          className="absolute inset-x-4 top-1/2 -translate-y-1/2 mx-auto max-w-[350px] max-h-[calc(100vh-4rem)] min-h-[280px] rounded-[20px] bg-[#7dc3e4] flex flex-col"
-          initial={{ y: "50%", opacity: 0, scale: 0.9 }}
-          animate={{ y: "-50%", opacity: 1, scale: 1 }}
-          exit={{ y: "50%", opacity: 0, scale: 0.9 }}
+          className="fixed inset-x-4 top-1/2 -translate-y-1/2 mx-auto max-w-[350px] max-h-[calc(100vh-4rem)] rounded-[20px] bg-[#7dc3e4] flex flex-col"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.9 }}
           transition={{ type: "spring", stiffness: 300, damping: 25 }}
         >
           <button

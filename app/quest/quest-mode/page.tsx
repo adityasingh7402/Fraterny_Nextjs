@@ -5,8 +5,6 @@ import { useSearchParams } from 'next/navigation';
 import ScreenContainer from './sections/ScreenContainer'
 import MotionProvider from './animations/MotionProvider';
 import { getDeviceInfo, getIP, getLocation } from '@/utils/userInfo';
-// import { setMeta } from '../../utils/seo';
-// import { clearDynamicMetaTags } from '../../utils/seo';
 
 const QuestLandingPage: React.FC = () => {
   const searchParams = useSearchParams();
@@ -86,7 +84,7 @@ const QuestLandingPage: React.FC = () => {
         onAnalyzeClick={handleAnalyzeClick}
         className=""
         onNavigateToSection={(screen, section) => {
-          console.log('🎯 Page level navigation called:', { screen, section });
+          console.log('🎯 Navigating to section:', { screen, section });
         }}
       />
     </MotionProvider>

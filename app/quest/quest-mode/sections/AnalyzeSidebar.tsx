@@ -105,7 +105,7 @@ const getMenuItems = (isAuthenticated: boolean, user: any): MenuItemConfig[] => 
     // },
     {
       id: 'test',
-      label: 'Start Test',
+      label: 'Begin',
       icon: <NotepadText className="w-5 h-5" />,
       action: () => {}, // Will be replaced in component
       variant: 'primary' as const

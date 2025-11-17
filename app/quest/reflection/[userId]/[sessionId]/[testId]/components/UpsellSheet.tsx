@@ -101,9 +101,9 @@ export const UpsellSheet: React.FC<UpsellSheetProps> = ({ open, onClose, onPayme
                 <X className="h-5 w-5" color={tokens.textDark} />
               </button>
               <div className="pt-6 text-[26px] font-gilroy-regular leading-8" style={{ color: tokens.textDark }}>
-                Download your 35+ page <span className="font-gilroy-black">Personalised PDF Report</span>
+                Own your private <br /><span className="font-gilroy-black text-4xl"> Intelligence File </span>
               </div>
-              <div className="mb-3 text-[14px] font-gilroy-regular" style={{ color: tokens.muted }}> Powered by Fraterny's advanced AI model </div>
+              <div className="mb-3 text-[14px] font-gilroy-regular" style={{ color: tokens.muted }}> Powered by your own words </div>
             </div>
 
             {/* Scrollable Content */}
@@ -112,11 +112,11 @@ export const UpsellSheet: React.FC<UpsellSheetProps> = ({ open, onClose, onPayme
               overscrollBehavior: 'contain'
             }}>
               <ul className="grid gap-2 pb-4">
-                {["A Deep-Dive Mindset Analysis", "Detailed Mental Blueprint", "Personalized Content Operating System ", "You VS Future You", "Curated Action & Growth Plan"].map((t, i) => (
+                {["A Deep-Dive Mindset Understanding", "Detailed Psychology Mindmap", "Personalized Content Operating System ", "You VS Future You", "Curated Action & Growth Plan"].map((t, i) => (
                   <li key={i} className="flex items-center gap-2 text-[14px] font-gilroy-semibold">
                     <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: i === 0 ? "#FF3B6B" : tokens.accent }} />
                     <span className={i === 0 ? "font-[700]" : ""} style={{ color: tokens.textDark }}>
-                      {i === 0 ? <span style={{ color: "#FF3B6B" }}>A Deep-Dive Mindset Analysis</span> : t}
+                      {i === 0 ? <span style={{ color: "#FF3B6B" }}>A Deep-Dive Mindset Understanding</span> : t}
                     </span>
                   </li>
                 ))}
@@ -133,9 +133,9 @@ export const UpsellSheet: React.FC<UpsellSheetProps> = ({ open, onClose, onPayme
                   <span className="text-[24px] font-gilroy-regular font-[400] text-white">
                     {pricing.isLoading ? '...' : (selectedGateway === 'razorpay' ? pricing.razorpay.main : pricing.paypal.main)}
                   </span>
-                  <span className="text-[18px] font-gilroy-regular line-through text-gray-800">
+                  {/* <span className="text-[18px] font-gilroy-regular line-through text-gray-800">
                     {pricing.isLoading ? '...' : (selectedGateway === 'razorpay' ? pricing.razorpay.original : pricing.paypal.original)}
-                  </span>
+                  </span> */}
                 </div>
               </motion.div>
 

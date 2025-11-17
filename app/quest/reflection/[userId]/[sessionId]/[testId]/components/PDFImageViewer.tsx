@@ -3,6 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { FileText } from 'lucide-react';
+import Testimonials from '@/app/quest/quest-mode/sections/Testimonials';
 // import { DualGatewayPricingData } from '../../../../../components/pricing/DualGatewayPricingData';
 
 
@@ -164,16 +165,16 @@ export const PDFImageViewer: React.FC<PDFImageViewerProps> = ({ paymentSuccess, 
                 <span className="text-4xl font-gilroy-bold text-white">
                   {pricing.isLoading ? '...' : pricing.razorpay.main}
                 </span>
-                <span className="text-xl font-gilroy-regular line-through text-white/70">
+                {/* <span className="text-xl font-gilroy-regular line-through text-white/70">
                   {pricing.isLoading ? '...' : pricing.razorpay.original}
-                </span>
+                </span> */}
               </div>
             )}
 
             {/* 35+ Pages PDF Label - Always visible */}
             <div className="flex items-center justify-center gap-1 text-sm text-white/90 mb-4">
               <FileText className="h-4 w-4 text-white/90" />
-              <span className="font-gilroy-regular">35+ Pages PDF</span>
+              <span className="font-gilroy-regular">Your Mind Printed</span>
             </div>
 
             {/* Centered Button */}
@@ -214,9 +215,10 @@ export const PDFImageViewer: React.FC<PDFImageViewerProps> = ({ paymentSuccess, 
                   }}
                   aria-label="Unlock full PDF report"
                 >
-                  Unlock Full PDF Report
+                  Get a Personal Artifact
                 </motion.button>
               )}
+
             </div>
           </div>
         </div>
