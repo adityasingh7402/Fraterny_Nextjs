@@ -68,7 +68,7 @@ const BrowserPopup: React.FC<BrowserPopupProps> = ({ onClose }) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: "spring", duration: 0.5 }}
-            className="fixed inset-x-4 top-16 -translate-y-1/2 max-w-md mx-auto z-[9999] md:inset-x-auto md:left-1/2 md:-translate-x-1/2"
+            className="fixed inset-x-4 top-56 -translate-y-1/2 max-w-md mx-auto z-[9999] md:inset-x-auto md:left-1/2 md:-translate-x-1/2"
           >
             <div className="relative overflow-hidden rounded-3xl">
               {/* Gradient background effect */}

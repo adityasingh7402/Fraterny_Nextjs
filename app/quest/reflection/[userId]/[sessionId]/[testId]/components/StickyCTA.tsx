@@ -41,7 +41,7 @@ export const StickyCTA: React.FC<StickyCTAProps> = ({
   const share =
     `Quest gave me a breakdown of my inner patterns: the things I overlook, the things I carry, and the things that quietly drive my decisions using my own thoughts.\n\n` +
     `If you’ve been wanting clearer self-understanding (emotionally or logically), this is genuinely worth trying.\n\n` +
-    `Here’s the link if you are intereseted in trying structured journaling and positive psychology.:\n` +
+    `Here’s the link if you are intereseted in trying structured journaling and positive psychology:\n` +
     `https://fraterny.com/quest/quest-mode`;
 
   await shareText(title, share);
