@@ -16,8 +16,8 @@ import { toast } from 'sonner';
 import { clusters, Archetype, Cluster } from '../../archeotype/archeotype'
 // import { PaymentService, sessionManager } from '@/services/payments';
 import { googleAnalytics } from '../../../lib/services/googleAnalytics'
-import QuestAssessmentDashboard from '../../assessment/components/QuestAssessmentDashboard';
-import QuestPaymentDashboard from '../../assessment/components/QuestPaymentDashboard';
+import QuestAssessmentDashboard from '../../quest/assessment-shared/components/QuestAssessmentDashboard';
+import QuestPaymentDashboard from '../../quest/assessment-shared/components/QuestPaymentDashboard';
 
 // Data types matching backend API
 interface DashboardApiResponse {

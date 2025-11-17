@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import useSectionRevealAnimation from '@/app/assessment/hooks/useSectionRevealAnimation';
+import useSectionRevealAnimation from '@/app/quest/assessment-shared/hooks/useSectionRevealAnimation';
 
 const features = [
     {
