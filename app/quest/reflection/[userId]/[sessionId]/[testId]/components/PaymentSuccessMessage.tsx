@@ -14,9 +14,9 @@ export const PaymentSuccessMessage: React.FC<PaymentSuccessMessageProps> = ({ us
 
   const handleDashboardClick = () => {
     if (userId) {
-      router.push(`/quest-dashboard/${userId}`);
+      router.push(`/profile?tab=history`);
     } else {
-      router.push('/quest-dashboard');
+      router.push('/profile?tab=overview');
     }
   };
 

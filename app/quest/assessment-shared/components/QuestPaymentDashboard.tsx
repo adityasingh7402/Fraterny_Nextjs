@@ -375,12 +375,12 @@ const QuestPaymentDashboard: React.FC<QuestPaymentDashboardProps> = ({ className
                       </div>
                     </div>
 
-                    <div className="text-right">
+                    {/* <div className="text-right">
                       <p className={`font-gilroy-semibold ${statusInfo.textColor}`}>
                         {formatCurrency(payment.amount ? payment.amount / 100 : null, payment.IsIndia, payment.gateway)}
                       </p>
                       <p className="text-xs font-gilroy-regular text-gray-400">{statusInfo.statusText}</p>
-                    </div>
+                    </div> */}
                   </div>
                 </motion.div>
               );
