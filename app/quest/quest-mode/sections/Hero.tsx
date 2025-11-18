@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {useIsMobile} from '../utils/use-mobile';
 import Link from 'next/link';
 import BrowserPopup from '../utils/BrowserPopup';
@@ -23,7 +23,19 @@ const Hero: React.FC<HeroProps> = ({
   };
 
   const isMobile = useIsMobile();
+  const [isClient, setIsClient] = useState(false);
+
+  // Prevent hydration mismatch by only rendering after client-side mount
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   
+  // Show invisible placeholder during hydration to prevent flash
+  if (!isClient) {
+    return (
+      <div className="w-screen h-screen quest-background-hero" />
+    );
+  }
 
   if (isMobile) {
     return(

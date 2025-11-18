@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import {useIsMobile} from '../utils/use-mobile';
 import { ChevronDown } from 'lucide-react';
+import { useAnimationReady } from '../hooks/useAnimationReady';
 
 // Lazy load sections for better performance
 const Hero = dynamic(() => import('./index').then(mod => ({ default: mod.Hero })), {
@@ -61,6 +62,7 @@ const ScreenContainer: React.FC<ScreenContainerProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const analyzeScrollRef = useRef<HTMLDivElement>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const isAnimationReady = useAnimationReady();
 
   const handleMenuClick = () => {
   setIsSidebarOpen(true);
@@ -375,33 +377,35 @@ const scrollToSection = (sectionId: string) => {
         </Suspense>
         
         {/* Screen 1 - Hero */}
-        {current === 0 && (
-          <motion.div
-            key="screen1"
-            className='h-screen quest-background-hero'
-            variants={animationVariants}
-            initial="invisible"
-            animate="visible"
-            exit="invisible"
-          >
-            <Suspense fallback={<div className="w-full h-screen flex items-center justify-center"><div className="animate-pulse">Loading...</div></div>}>
-              <Hero
-                onAnalyzeClick={handleAnalyzeClick}
-                className=" z-30"
-              />
-            </Suspense>
-          </motion.div>
-        )}
+        <AnimatePresence mode="wait">
+          {current === 0 && (
+            <motion.div
+              key="screen1"
+              className='h-screen quest-background-hero'
+              variants={animationVariants}
+              initial={isAnimationReady ? "invisible" : false}
+              animate={isAnimationReady ? "visible" : "visible"}
+              exit="invisible"
+            >
+              <Suspense fallback={<div className="w-full h-screen flex items-center justify-center"><div className="animate-pulse">Loading...</div></div>}>
+                <Hero
+                  onAnalyzeClick={handleAnalyzeClick}
+                  className=" z-30"
+                />
+              </Suspense>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Screen 2 - Statistics */}
-        {current === 1 && (
-          <AnimatePresence>
+        <AnimatePresence mode="wait">
+          {current === 1 && (
             <motion.div
               key="screen2"
               className='h-screen'
               variants={animationVariants}
-              initial="invisible"
-              animate="visible"
+              initial={isAnimationReady ? "invisible" : false}
+              animate={isAnimationReady ? "visible" : "visible"}
               exit="invisible"
             >
               <Suspense fallback={<div className="w-full h-screen"></div>}>
@@ -410,61 +414,67 @@ const scrollToSection = (sectionId: string) => {
                   className="relative z-30"
                   onLogoClick={handleLogoClick}
                   onMenuClick={handleMenuClick}
+                  isReady={isAnimationReady}
                 />
               </Suspense>
             </motion.div>
-          </AnimatePresence>
-        )}
+          )}
+        </AnimatePresence>
 
         {/* Screen 3 - Benefits */}
-        {current === 2 && (
-          <motion.div
-            key="screen3"
-            className='h-screen'
-            variants={animationVariants}
-            initial="invisible"
-            animate="visible"
-            exit="invisible"
-          >
-            <Suspense fallback={<div className="w-full h-screen"></div>}>
-              <BenefitsSection
-                animationState="visible"
-                className="relative z-30"
-                onLogoClick={handleLogoClick}
-                onMenuClick={handleMenuClick}
-              />
-            </Suspense>
-          </motion.div>
-        )}
-
-        {/* Screen 4 - Analyze (Scrollable with proper navigation) */}
-        {current === 3 && (
-          <motion.div
-            key="screen4"
-            className='h-screen overflow-hidden relative '
-            variants={animationVariants}
-            initial="invisible"
-            animate="visible"
-            exit="invisible"
-          >
-            <div
-              ref={analyzeScrollRef}
-              className="h-full overflow-y-auto overflow-x-hidden"
-              style={{
-                WebkitOverflowScrolling: 'touch'
-              } as React.CSSProperties}
+        <AnimatePresence mode="wait">
+          {current === 2 && (
+            <motion.div
+              key="screen3"
+              className='h-screen'
+              variants={animationVariants}
+              initial={isAnimationReady ? "invisible" : false}
+              animate={isAnimationReady ? "visible" : "visible"}
+              exit="invisible"
             >
               <Suspense fallback={<div className="w-full h-screen"></div>}>
-                <AnalyzeSection
+                <BenefitsSection
                   animationState="visible"
                   className="relative z-30"
                   onLogoClick={handleLogoClick}
-                  onNavigateToSection={navigateToSection}
+                  onMenuClick={handleMenuClick}
+                  isReady={isAnimationReady}
                 />
               </Suspense>
-            </div>
-          </motion.div>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Screen 4 - Analyze (Scrollable with proper navigation) */}
+        <AnimatePresence mode="wait">
+          {current === 3 && (
+            <motion.div
+              key="screen4"
+              className='h-screen overflow-hidden relative '
+              variants={animationVariants}
+              initial={isAnimationReady ? "invisible" : false}
+              animate={isAnimationReady ? "visible" : "visible"}
+              exit="invisible"
+            >
+              <div
+                ref={analyzeScrollRef}
+                className="h-full overflow-y-auto overflow-x-hidden"
+                style={{
+                  WebkitOverflowScrolling: 'touch'
+                } as React.CSSProperties}
+              >
+                <Suspense fallback={<div className="w-full h-screen"></div>}>
+                  <AnalyzeSection
+                    animationState="visible"
+                    className="relative z-30"
+                    onLogoClick={handleLogoClick}
+                    onNavigateToSection={navigateToSection}
+                  />
+                </Suspense>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Navigation indicator */}
         <div className={`fixed bottom-6 right-6 z-50 ${isMobile ? '' : 'hidden'} ${current === 3 ? 'hidden' : 'opacity-100' } transition-opacity duration-300`}>
