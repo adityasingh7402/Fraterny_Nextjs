@@ -15,6 +15,7 @@ interface StatisticsSectionProps {
   onContinueClick?: () => void;
   onLogoClick?: () => void;
   onMenuClick?: () => void;
+  isReady?: boolean;
 }
 
 // Simple animation variants
@@ -35,7 +36,8 @@ const StatisticsSection: React.FC<StatisticsSectionProps> = ({
   className = '',
   onContinueClick,
   onLogoClick,
-  onMenuClick
+  onMenuClick,
+  isReady = true
 }) => {
   const [hasRippled, setHasRippled] = useState(false);
   
@@ -68,12 +70,12 @@ const StatisticsSection: React.FC<StatisticsSectionProps> = ({
 
         <motion.div
           className="z-50"
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
+          initial={isReady ? { y: -20, opacity: 0 } : false}
+          animate={isReady ? { y: 0, opacity: 1 } : { y: 0, opacity: 1 }}
           transition={{ 
             duration: 0.8,
             ease: "easeOut",
-            delay: 0.4  
+            delay: isReady ? 0.4 : 0
           }}
         >
           <img 
@@ -100,23 +102,23 @@ const StatisticsSection: React.FC<StatisticsSectionProps> = ({
       <div className=''>
         <motion.div 
           variants={animationVariants} 
-          initial="invisible" 
-          animate="visible"
-          className="text-center justify-start text-white text-xl font-normal font-gilroy-regular">You’d be shocked to know,<br/>Harvard researchers suggest that
+          initial={isReady ? "invisible" : false}
+          animate={isReady ? "visible" : "visible"}
+          className="text-center justify-start text-white text-xl font-normal font-gilroy-regular">You'd be shocked to know,<br/>Harvard researchers suggest that
         </motion.div>
       </div>
 
       <div className=''>
         <motion.div 
           variants={animationVariants} 
-          initial="invisible" 
-          animate="visible"
+          initial={isReady ? "invisible" : false}
+          animate={isReady ? "visible" : "visible"}
           className="text-center justify-start text-white text-5xl font-normal font-gilroy-semibold">95%
         </motion.div>
         <motion.div 
         variants={animationVariants} 
-        initial="invisible" 
-        animate="visible"
+        initial={isReady ? "invisible" : false}
+        animate={isReady ? "visible" : "visible"}
         className="text-center justify-start"><span className="text-white text-2xl font-normal font-gilroy-regular">of people believe<br/>they are </span><span className="text-white text-2xl font-gilroy-bold font-bold">self-aware<br/></span><span className="text-white text-2xl font-normal font-gilroy-regular">but only</span>
         </motion.div>
       </div>
@@ -125,14 +127,14 @@ const StatisticsSection: React.FC<StatisticsSectionProps> = ({
         <div className='flex flex-col gap-1'>
         <motion.div 
         variants={animationVariants} 
-          initial="invisible" 
-          animate="visible"
+          initial={isReady ? "invisible" : false}
+          animate={isReady ? "visible" : "visible"}
         className="text-center justify-start text-white text-5xl font-normal font-gilroy-semibold">10-15%</motion.div>
 
         <motion.div
           variants={animationVariants} 
-          initial="invisible" 
-          animate="visible"
+          initial={isReady ? "invisible" : false}
+          animate={isReady ? "visible" : "visible"}
           className="text-center justify-start text-white text-2xl font-normal font-gilroy-regular">
             actually are
         </motion.div>
@@ -143,8 +145,8 @@ const StatisticsSection: React.FC<StatisticsSectionProps> = ({
       <div className='w-full flex justify-center mt-[-5px]'>
         <motion.div
           variants={animationVariants} 
-          initial="invisible" 
-          animate="visible"
+          initial={isReady ? "invisible" : false}
+          animate={isReady ? "visible" : "visible"}
           className='w-20'
         >
           <motion.button

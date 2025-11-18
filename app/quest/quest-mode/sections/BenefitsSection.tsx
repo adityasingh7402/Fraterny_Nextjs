@@ -15,6 +15,7 @@ interface BenefitsSectionProps {
   onScreenTransition?: () => void;
   onLogoClick?: () => void;
   onMenuClick?: () => void;
+  isReady?: boolean;
 }
 
 // Simple animation variants
@@ -35,7 +36,8 @@ const BenefitsSection: React.FC<BenefitsSectionProps> = ({
     className = '',
   onScreenTransition: _onScreenTransition,
   onLogoClick: _onLogoClick,
-  onMenuClick
+  onMenuClick,
+  isReady = true
 }) => {
   // const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     
@@ -65,12 +67,12 @@ const BenefitsSection: React.FC<BenefitsSectionProps> = ({
           </motion.div>
           <motion.div
             className="z-50"
-            initial={{ y: 0, opacity: 1 }}
-            animate={{ y: 0, opacity: 1 }}
+            initial={isReady ? { y: -20, opacity: 0 } : false}
+            animate={isReady ? { y: 0, opacity: 1 } : { y: 0, opacity: 1 }}
             transition={{ 
               duration: 0.8,
               ease: "easeOut",
-              delay: 0.4  // Start after text fades out
+              delay: isReady ? 0.4 : 0
             }}
           >
             <img 
@@ -82,8 +84,8 @@ const BenefitsSection: React.FC<BenefitsSectionProps> = ({
           </motion.div>
           <motion.span 
             variants={animationVariants} 
-            initial="invisible" 
-            animate="visible"
+            initial={isReady ? "invisible" : false}
+            animate={isReady ? "visible" : "visible"}
             onClick={onMenuClick}
             className="cursor-pointer p-2 rounded-lg hover:bg-white/10 transition-colors z-[50]"
             whileTap={{ scale: 0.95 }}
@@ -101,8 +103,8 @@ const BenefitsSection: React.FC<BenefitsSectionProps> = ({
 
           <motion.div 
           variants={animationVariants}
-          initial="invisible"
-          animate="visible"
+          initial={isReady ? "invisible" : false}
+          animate={isReady ? "visible" : "visible"}
           className='flex flex-col gap-4 z-50 w-[96%]'>
 
           <div className='flex justify-between items-center'>
@@ -115,8 +117,8 @@ const BenefitsSection: React.FC<BenefitsSectionProps> = ({
 
           <motion.div 
           variants={animationVariants}
-          initial="invisible"
-          animate="visible"
+          initial={isReady ? "invisible" : false}
+          animate={isReady ? "visible" : "visible"}
           className='flex flex-col gap-4 z-50 w-[96%]'>
 
           <div className='flex justify-between items-center'>
@@ -130,8 +132,8 @@ const BenefitsSection: React.FC<BenefitsSectionProps> = ({
 
           <motion.div 
           variants={animationVariants}
-          initial="invisible"
-          animate="visible"
+          initial={isReady ? "invisible" : false}
+          animate={isReady ? "visible" : "visible"}
           className='flex flex-col gap-4 z-50 w-[96%]'>
 
           <div className='flex justify-between items-center'>
