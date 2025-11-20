@@ -373,15 +373,15 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
       if (question && question.sectionId) {
         const questionIndex = allQuestions.findIndex(q => q.id === questionId) + 1;
         
-        googleAnalytics.trackQuestionComplete({
-          session_id: sessionId,
-          question_id: questionId,
-          section_id: question.sectionId,
-          user_state: userState,
-          question_index: questionIndex,
-          response_length: response?.length || 0,
-          time_on_question: questionResponse.totalViewTimeSeconds || 0
-        });
+        // googleAnalytics.trackQuestionComplete({
+        //   session_id: sessionId,
+        //   question_id: questionId,
+        //   section_id: question.sectionId,
+        //   user_state: userState,
+        //   question_index: questionIndex,
+        //   response_length: response?.length || 0,
+        //   time_on_question: questionResponse.totalViewTimeSeconds || 0
+        // });
       }
       
     } catch (err) {
@@ -672,12 +672,12 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
     const totalDuration = (Date.now() - startTime) / 1000; // in seconds
     const questionsCompleted = session?.responses ? Object.keys(session.responses).length : 0;
 
-    googleAnalytics.trackQuestComplete({
-      session_id: sessionId,
-      user_state: userState,
-      total_duration: totalDuration,
-      questions_completed: questionsCompleted
-    });
+    // googleAnalytics.trackQuestComplete({
+    //   session_id: sessionId,
+    //   user_state: userState,
+    //   total_duration: totalDuration,
+    //   questions_completed: questionsCompleted
+    // });
     
     // Track affiliate questionnaire completion
     const referredBy = submissionData.referred_by;

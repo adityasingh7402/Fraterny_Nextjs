@@ -45,7 +45,6 @@ export function QuestNavigation({
     sections,           // ADD this
     currentSectionId,
     finishQuest,
-    trackQuestionView,
     stopQuestionTracking,
     goToQuestion,
     hasAttemptedFinishWithIncomplete,
