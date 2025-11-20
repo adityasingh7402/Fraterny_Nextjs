@@ -179,12 +179,6 @@ async function openRazorpayModal(
                 cancel_reason: 'user_dismissed',
                 amount: orderData.amount
               });
-
-              googleAnalytics.trackMetaPixelPaymentCancelled({
-                session_id: orderData.paymentSessionId,
-                amount: orderData.amount / 100,
-                currency: orderData.currency
-              });
               
               resolve({
                 success: false,
@@ -322,33 +316,6 @@ async function completeRazorpayPayment(
     const urlParams = new URLSearchParams(window.location.search);
     const gclid = urlParams.get('gclid') || sessionStorage.getItem('gclid') || localStorage.getItem('gclid');
 
-    if (gclid) {
-      googleAnalytics.trackGoogleAdsConversion({
-        session_id: sessionData.originalSessionId,
-        payment_id: paymentData.razorpay_payment_id,
-        amount: orderData.amount / 100,
-        currency: orderData.currency
-      });
-    }
-
-    if (googleAnalytics.isRedditTraffic()) {
-      googleAnalytics.trackRedditConversion({
-        session_id: sessionData.originalSessionId,
-        payment_id: paymentData.razorpay_payment_id,
-        amount: orderData.amount / 100,
-        currency: orderData.currency
-      });
-    }
-
-    if (googleAnalytics.isMetaTraffic()) {
-      googleAnalytics.trackMetaPixelPurchase({
-        session_id: sessionData.originalSessionId,
-        payment_id: paymentData.razorpay_payment_id,
-        amount: orderData.amount / 100,
-        currency: orderData.currency
-      });
-    }
-
     console.log('✅ Razorpay payment flow completed successfully');
   } catch (error) {
     console.error('❌ Error completing Razorpay payment:', error);
@@ -380,12 +347,7 @@ export async function processRazorpayPayment(
 
     // Track Meta Pixel initiate checkout (COMMENTED OUT)
     const { googleAnalytics } = await import('../../../lib/services/googleAnalytics');
-    googleAnalytics.trackMetaPixelInitiateCheckout({
-      session_id: sessionId,
-      test_id: testId,
-      amount: orderData.amount / 100,
-      currency: orderData.currency
-    });
+
 
     // Step 4: Open Razorpay modal
     const paymentResult = await openRazorpayModal(orderData, userInfo);

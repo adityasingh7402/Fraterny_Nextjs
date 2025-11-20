@@ -205,7 +205,7 @@ useEffect(() => {
 useEffect(() => {
     if (question?.id && isActive) {
       // Existing internal tracking
-      trackQuestionView(question.id);
+      // trackQuestionView(question.id);
       
       // NEW: GA4 tracking
       const userState = user ? 'logged_in' : 'anonymous';
@@ -217,16 +217,16 @@ useEffect(() => {
       const sectionQuestionIndex = sectionQuestions.findIndex(q => q.id === question.id) + 1 || 1;
       
       // Only track if we have required data
-      if (question.sectionId && question.sectionId.trim() !== '') {
-        googleAnalytics.trackQuestionView({
-          session_id: sessionId,
-          question_id: question.id,
-          section_id: question.sectionId,
-          user_state: userState,
-          question_index: questionIndex,
-          section_question_index: sectionQuestionIndex
-        });
-      }
+      // if (question.sectionId && question.sectionId.trim() !== '') {
+      //   googleAnalytics.trackQuestionView({
+      //     session_id: sessionId,
+      //     question_id: question.id,
+      //     section_id: question.sectionId,
+      //     user_state: userState,
+      //     question_index: questionIndex,
+      //     section_question_index: sectionQuestionIndex
+      //   });
+      // }
     }
   }, [question?.id, isActive, session?.id, user, allQuestions, sections]);
 

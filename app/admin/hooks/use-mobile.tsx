@@ -46,11 +46,6 @@ export function useIsMobile() {
     // Detect actual mobile state after mount
     const initialValue = window.innerWidth < MOBILE_BREAKPOINT;
     if (initialValue !== isMobile) {
-      console.log(`📱 [useIsMobile] Initial detection`, {
-        initialValue,
-        innerWidth: window.innerWidth,
-        timestamp: new Date().toISOString()
-      });
       setIsMobile(initialValue);
     }
 
@@ -60,12 +55,6 @@ export function useIsMobile() {
     const handleChange = () => {
       const newIsMobile = window.innerWidth < MOBILE_BREAKPOINT;
       if (newIsMobile !== isMobile) {
-        console.log(`📱 [useIsMobile] Viewport changed:`, {
-          oldValue: isMobile,
-          newValue: newIsMobile,
-          innerWidth: window.innerWidth,
-          timestamp: new Date().toISOString()
-        });
         setIsMobile(newIsMobile);
       }
     };
