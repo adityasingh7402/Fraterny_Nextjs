@@ -43,7 +43,7 @@ export const PaymentSuccessPopup: React.FC<PaymentSuccessPopupProps> = ({ open, 
             </button>
 
             <p className="text-gray-600 text-xl leading-6 font-gilroy-regular mb-6 pr-8">
-              Payment Recieved. I'm performing an indepth analysis to generate your Personalised PDF. It will be ready in 15 minutes. Please check your dashboard for the latest status.
+              Payment Recieved. I'm performing an indepth analysis to generate your Personalised PDF. It will be ready in 5-10 minutes. Please check your dashboard for the latest status.
             </p>
 
             <button
