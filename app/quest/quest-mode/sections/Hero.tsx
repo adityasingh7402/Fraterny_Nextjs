@@ -1,16 +1,31 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+
+import React from 'react';
+import { motion } from 'framer-motion';
+import img from '../../../../public/Vector.svg';
 import {useIsMobile} from '../utils/use-mobile';
 import Link from 'next/link';
 import BrowserPopup from '../utils/BrowserPopup';
-import { sendGTMEvent } from '@next/third-parties/google';
 
 interface HeroProps {
   onAnalyzeClick?: () => void;
   onScreenTransition?: () => void;
   className?: string;
 }
+
+// Simple animation variants like Code 1
+const animationVariants = {
+  invisible: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.6
+    }
+  }
+};
 
 const Hero: React.FC<HeroProps> = ({ 
   onAnalyzeClick, 
@@ -24,19 +39,7 @@ const Hero: React.FC<HeroProps> = ({
   };
 
   const isMobile = useIsMobile();
-  const [isClient, setIsClient] = useState(false);
-
-  // Prevent hydration mismatch by only rendering after client-side mount
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
   
-  // Show invisible placeholder during hydration to prevent flash
-  if (!isClient) {
-    return (
-      <div className="w-screen h-screen quest-background-hero" />
-    );
-  }
 
   if (isMobile) {
     return(
@@ -46,7 +49,9 @@ const Hero: React.FC<HeroProps> = ({
       
       <section className='w-screen border-2-red-500 h-full relative'>
 
-      <div 
+      <motion.div 
+        layoutId='bg'
+        transition={{ duration: 1.2 }}
         className='absolute z-0 w-[554px] h-[554px] rounded-full'
         style={{
           background: 'radial-gradient(ellipse 50% 50% at 50% 50%, #0C45F0 0%, #41D9FF 51%, #48B9D8 100%)',
@@ -62,17 +67,31 @@ const Hero: React.FC<HeroProps> = ({
       <div className='h-screen w-screen min-h-screen flex flex-col gap-20 relative top-[8%] pl-5'>
 
         <div className=' flex flex-col'>
-          <div className='justify-start text-neutral-950 text-5xl font-normal font-gilroy-regular'>
+          <motion.div 
+            variants={animationVariants} 
+            initial="invisible" 
+            animate="visible"
+            className='justify-start text-neutral-950 text-5xl font-normal font-gilroy-regular'
+          >
             hi there,
-          </div>
+          </motion.div>
 
           <div className='flex gap-2'>
-            <div className="">
+            <motion.div 
+            variants={animationVariants} 
+            initial="invisible" 
+            animate="visible"
+            className=""
+            >
               <div className='justify-start text-neutral-500 text-7xl font-bold font-gilroy-bold'>
                 I'm
               </div>
-            </div>
-            <div className="flex items-center">
+            </motion.div>
+            <motion.div
+              layoutId='logo'
+              transition={{ duration: 1.2 }}
+              className="flex items-center"
+            >
               {/* <img src={img} alt="Logo" className="mt-3" /> */}
               <div>
               <div className='text-7xl font-normal font-gilroy-bold tracking-[-0.5rem]'>
@@ -82,32 +101,48 @@ const Hero: React.FC<HeroProps> = ({
                 BY FRATERNY
               </div>
               </div>
-            </div>
+            </motion.div>
           </div>
 
         </div>
 
         <div className=' flex flex-col gap-0'>
-          <div className='justify-start text-neutral-950 text-4xl font-normal font-gilroy-regular'>
+          <motion.div 
+            variants={animationVariants} 
+            initial="invisible" 
+            animate="visible"
+            className='justify-start text-neutral-950 text-4xl font-normal font-gilroy-regular'
+          >
             I can
-          </div>
-          <div className=''>
+          </motion.div>
+          <motion.div
+            variants={animationVariants}
+            initial="invisible"
+            animate="visible"
+            className=''
+          >
             <span className='justify-start text-neutral-950 text-4xl font-normal font-gilroy-bold'>
               Analyse Your Brain
             </span>
-          </div>
+          </motion.div>
           
+          <motion.div 
+          variants={animationVariants} 
+          initial="invisible" 
+          animate="visible"
+        >
           <div className="justify-start text-neutral-950 text-4xl font-normal font-gilroy-regular">
             in 15 minutes
           </div>
+        </motion.div>
 
         </div>
         
-        {/* Link to /quest/begin for this button */}
-        <Link href="/quest/begin">
+        {/* Link to /assessment for this button */}
+        <Link href="/assessment">
           <div className=''>
             <div className="w-40 h-14 mix-blend-luminosity bg-gradient-to-br from-white/20 to-white/20 rounded-[30px] border-2 border-white flex items-center justify-center" >
-                <div onClick={() => sendGTMEvent({ event: 'buttonClicked', value: 'begin' })} className="justify-center text-white text-2xl font-gilroy-bold">Begin</div>
+                <div className="justify-center text-white text-2xl font-gilroy-bold">Start Test</div>
             </div>
           </div>
         </Link>
@@ -126,12 +161,20 @@ const Hero: React.FC<HeroProps> = ({
       <section className='bg-sky-800 gap-1 h-screen flex flex-col items-center justify-center'>
       <div className=' flex flex-col w-full items-center justify-center'>
         <div className='flex gap-2'>
-          <div className="">
+          <motion.div 
+          initial="invisible" 
+          animate="visible"
+          className=""
+          >
             <div className='justify-center text-neutral-900 text-[200px] font-normal font-gilroy-bold'>
               I'm
             </div>
-          </div>
-          <div className="flex items-center">
+          </motion.div>
+          <motion.div
+            layoutId='logo'
+            transition={{ duration: 1.2 }}
+            className="flex items-center"
+          >
             <div>
             <div className='text-[180px] text-white font-normal font-gilroy-bold tracking-[-0.5rem]'>
               QUEST
@@ -140,7 +183,7 @@ const Hero: React.FC<HeroProps> = ({
               BY FRATERNY
             </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       
       </div>

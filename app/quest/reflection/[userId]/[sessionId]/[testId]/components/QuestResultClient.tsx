@@ -36,6 +36,7 @@ import { googleAnalytics } from '@/lib/services/googleAnalytics';
 import { fetchDynamicPricing, checkExistingPaymentStatus, startPaymentStatusPolling } from '../utils/paymentHelpers';
 import Testimonials from '@/app/quest/quest-mode/sections/Testimonials';
 import { TextGenerateEffect } from '@/components/ui/text-generate-effect';
+import FAQIntrospection from './FAQIntrospection';
 
 interface QuestResultClientProps {
   initialData: ResultData | null;
@@ -1004,7 +1005,8 @@ export function QuestResultClient({
               }}
               pricing={pricing}
             />
-            <Testimonials headerText='What others said' />
+            <Testimonials headerText='' />
+            <FAQIntrospection />
           </div>
 
           
