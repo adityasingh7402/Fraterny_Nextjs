@@ -105,70 +105,70 @@ class GoogleAnalyticsService {
     })
   }
 
-  trackQuestionView(params: {
-    session_id: string
-    question_id: string
-    section_id: string
-    user_state: 'anonymous' | 'logged_in'
-    question_index: number
-    section_question_index: number
-  }): void {
-    this.sendEvent('quest_question_view', {
-      event_category: 'Quest',
-      event_label: `Question View: ${params.question_id}`,
-      session_id: params.session_id,
-      question_id: params.question_id,
-      section_id: params.section_id,
-      user_state: params.user_state,
-      question_index: params.question_index,
-      section_question_index: params.section_question_index
-    })
-  }
+  // trackQuestionView(params: {
+  //   session_id: string
+  //   question_id: string
+  //   section_id: string
+  //   user_state: 'anonymous' | 'logged_in'
+  //   question_index: number
+  //   section_question_index: number
+  // }): void {
+  //   this.sendEvent('quest_question_view', {
+  //     event_category: 'Quest',
+  //     event_label: `Question View: ${params.question_id}`,
+  //     session_id: params.session_id,
+  //     question_id: params.question_id,
+  //     section_id: params.section_id,
+  //     user_state: params.user_state,
+  //     question_index: params.question_index,
+  //     section_question_index: params.section_question_index
+  //   })
+  // }
 
-  trackQuestionComplete(params: {
-    session_id: string
-    question_id: string
-    section_id: string
-    user_state: 'anonymous' | 'logged_in'
-    question_index: number
-    response_length?: number
-    time_on_question?: number
-  }): void {
-    this.sendEvent('quest_question_complete', {
-      event_category: 'Quest',
-      event_label: `Question Complete: ${params.question_id}`,
-      session_id: params.session_id,
-      question_id: params.question_id,
-      section_id: params.section_id,
-      user_state: params.user_state,
-      question_index: params.question_index,
-      response_length: params.response_length || 0,
-      time_on_question: Math.round(params.time_on_question || 0)
-    })
-  }
+  // trackQuestionComplete(params: {
+  //   session_id: string
+  //   question_id: string
+  //   section_id: string
+  //   user_state: 'anonymous' | 'logged_in'
+  //   question_index: number
+  //   response_length?: number
+  //   time_on_question?: number
+  // }): void {
+  //   this.sendEvent('quest_question_complete', {
+  //     event_category: 'Quest',
+  //     event_label: `Question Complete: ${params.question_id}`,
+  //     session_id: params.session_id,
+  //     question_id: params.question_id,
+  //     section_id: params.section_id,
+  //     user_state: params.user_state,
+  //     question_index: params.question_index,
+  //     response_length: params.response_length || 0,
+  //     time_on_question: Math.round(params.time_on_question || 0)
+  //   })
+  // }
 
-  trackQuestComplete(params: {
-    session_id: string
-    user_state: 'anonymous' | 'logged_in'
-    total_duration: number
-    questions_completed: number
-  }): void {
-    this.sendEvent('quest_complete', {
-      event_category: 'Quest',
-      event_label: 'Quest Completed',
-      session_id: params.session_id,
-      user_state: params.user_state,
-      total_duration: Math.round(params.total_duration),
-      questions_completed: params.questions_completed
-    })
+  // trackQuestComplete(params: {
+  //   session_id: string
+  //   user_state: 'anonymous' | 'logged_in'
+  //   total_duration: number
+  //   questions_completed: number
+  // }): void {
+  //   this.sendEvent('quest_complete', {
+  //     event_category: 'Quest',
+  //     event_label: 'Quest Completed',
+  //     session_id: params.session_id,
+  //     user_state: params.user_state,
+  //     total_duration: Math.round(params.total_duration),
+  //     questions_completed: params.questions_completed
+  //   })
 
-    this.sendEvent('quest_conversion', {
-      event_category: 'Conversion',
-      event_label: 'Quest Completed',
-      value: params.questions_completed,
-      currency: 'points'
-    })
-  }
+  //   this.sendEvent('quest_conversion', {
+  //     event_category: 'Conversion',
+  //     event_label: 'Quest Completed',
+  //     value: params.questions_completed,
+  //     currency: 'points'
+  //   })
+  // }
 
   trackQuestAbandon(params: {
     session_id: string
