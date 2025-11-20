@@ -474,23 +474,23 @@ async function completePayPalPayment(
     const urlParams = new URLSearchParams(window.location.search);
     const gclid = urlParams.get('gclid') || sessionStorage.getItem('gclid') || localStorage.getItem('gclid');
 
-    if (gclid) {
-      googleAnalytics.trackGoogleAdsConversion({
-        session_id: sessionId,
-        payment_id: paypalOrderData.id,
-        amount: orderResponse.amount / 100,
-        currency: orderResponse.currency
-      });
-    }
+    // if (gclid) {
+    //   googleAnalytics.trackGoogleAdsConversion({
+    //     session_id: sessionId,
+    //     payment_id: paypalOrderData.id,
+    //     amount: orderResponse.amount / 100,
+    //     currency: orderResponse.currency
+    //   });
+    // }
 
-    if (googleAnalytics.isRedditTraffic()) {
-      googleAnalytics.trackRedditConversion({
-        session_id: sessionId,
-        payment_id: paypalOrderData.id,
-        amount: orderResponse.amount / 100,
-        currency: orderResponse.currency
-      });
-    }
+    // if (googleAnalytics.isRedditTraffic()) {
+    //   googleAnalytics.trackRedditConversion({
+    //     session_id: sessionId,
+    //     payment_id: paypalOrderData.id,
+    //     amount: orderResponse.amount / 100,
+    //     currency: orderResponse.currency
+    //   });
+    // }
 
     console.log('✅ PayPal payment flow completed successfully');
   } catch (error) {
