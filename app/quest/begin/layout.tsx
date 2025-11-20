@@ -69,7 +69,7 @@ const jsonLd = {
     '@type': 'WebSite',
     name: 'Fraterny — Quest Mode',
     description: 'Quest composes confidential psychological files from user-written answers. Preview a fragment; access your full edition when ready.',
-    url: 'https://fraterny.in',
+    url: 'https://fraterny.com',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
@@ -90,8 +90,8 @@ const jsonLd = {
     '@type': 'Organization',
     name: 'Fraterny',
     description: 'Quest by Fraterny composes aesthetic intelligence files—private psychological artifacts built from your words.',
-    url: 'https://fraterny.in',
-    logo: 'https://fraterny.in/logo.png',
+    url: 'https://fraterny.com',
+    logo: 'https://www.fraterny.com/og-image2.png',
     contactPoint: {
       '@type': 'ContactPoint',
       email: 'support@fraterny.com',
