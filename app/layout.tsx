@@ -197,7 +197,7 @@ export default function RootLayout({
     sameAs: [
         'https://x.com/frat_erny',
       'https://linkedin.com/company/fraterny',
-      'https://www.instagram.com/quest.fraterny/',
+      'https://www.instagram.com/join.fraterny/',
     ],
   };
 
@@ -216,7 +216,7 @@ export default function RootLayout({
     sameAs: [
       'https://x.com/frat_erny',
       'https://linkedin.com/company/fraterny',
-      'https://www.instagram.com/quest.fraterny/',
+      'https://www.instagram.com/join.fraterny/',
     ],
   };
 
