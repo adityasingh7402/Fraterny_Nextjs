@@ -7,7 +7,7 @@ import { Menu } from 'lucide-react';
 import Change from './Change';
 import Testimonials from './Testimonials';
 import FaqSection from './FaqSection';
-import img from '../../../../public/Vector.svg';
+
 import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { AnalyzeSidebar } from './AnalyzeSidebar';

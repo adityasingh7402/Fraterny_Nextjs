@@ -3,7 +3,6 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { FileText } from 'lucide-react';
-import Testimonials from '@/app/quest/quest-mode/sections/Testimonials';
 // import { DualGatewayPricingData } from '../../../../../components/pricing/DualGatewayPricingData';
 
 
