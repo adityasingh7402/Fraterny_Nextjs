@@ -91,7 +91,7 @@ const jsonLd = {
     name: 'Fraterny',
     description: 'Quest by Fraterny composes aesthetic intelligence files—private psychological artifacts built from your words.',
     url: 'https://fraterny.com',
-    logo: 'https://www.fraterny.com/og-image.png',
+    logo: 'https://www.fraterny.com/og-image2.png',
     contactPoint: {
       '@type': 'ContactPoint',
       email: 'support@fraterny.com',
