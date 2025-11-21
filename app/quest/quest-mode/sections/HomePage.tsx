@@ -183,9 +183,9 @@ function page() {
 
     if (isMobile) {
     return(
-        <motion.div className='fixed inset-0 max-h-screen overflow-hidden'>
+        <motion.div className='relative h-screen overflow-hidden'>
             <motion.section 
-            className='w-screen max-h-screen border-2-red-500 h-full relative overflow-hidden'>
+            className='w-screen max-h-screen h-screen relative overflow-hidden'>
                 {/* Background Animation */}
                 <AnimatePresence>
                     {screen == 0 &&<motion.div 
