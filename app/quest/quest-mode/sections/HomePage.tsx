@@ -26,6 +26,7 @@ function page() {
 
     const [screen, setScreen] = useState<0|1|2|3>(0)
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isTransitioning, setIsTransitioning] = useState(false);
       
     const handleMenuClick = () => {
     setIsSidebarOpen(true);
@@ -62,9 +63,118 @@ function page() {
         console.log('scroll clicked', screen);
         if (screen === 0 || screen === 1 || screen === 2) {
             setScreen((screen + 1) as 1 | 2 | 3);
+        } else if (screen === 3 && analyzeScrollRef.current) {
+            analyzeScrollRef.current.scrollBy({
+                top: window.innerHeight,
+                behavior: 'smooth'
+            });
         }
-
     }
+
+    // Mouse wheel and touch navigation
+    useEffect(() => {
+        let touchStartY = 0;
+
+        const handleWheel = (event: WheelEvent) => {
+            // For screen 3, handle scroll within the section
+            if (screen === 3 && analyzeScrollRef.current) {
+                const container = analyzeScrollRef.current;
+                const { scrollTop, scrollHeight, clientHeight } = container;
+                const isAtTop = scrollTop <= 5;
+                
+                // Only navigate back if at top and scrolling up
+                if (event.deltaY < 0 && isAtTop && !isTransitioning) {
+                    event.preventDefault();
+                    setIsTransitioning(true);
+                    setScreen(2);
+                }
+                // Allow natural scroll within section
+                return;
+            }
+            
+            // For screens 0, 1, 2 - navigate between screens
+            if (isTransitioning) return;
+            
+            event.preventDefault();
+            const scrollThreshold = 30;
+            
+            if (Math.abs(event.deltaY) < scrollThreshold) return;
+            
+            if (event.deltaY > 0 && screen < 3) {
+                setIsTransitioning(true);
+                setScreen((screen + 1) as 1 | 2 | 3);
+            } else if (event.deltaY < 0 && screen > 0) {
+                setIsTransitioning(true);
+                setScreen((screen - 1) as 0 | 1 | 2);
+            }
+        };
+
+        const handleTouchStart = (event: TouchEvent) => {
+            touchStartY = event.touches[0].clientY;
+        };
+
+        const handleTouchEnd = (event: TouchEvent) => {
+            if (isTransitioning) return;
+            
+            const touchEndY = event.changedTouches[0].clientY;
+            const touchDiff = touchStartY - touchEndY;
+            const minSwipeDistance = 50;
+
+            if (Math.abs(touchDiff) < minSwipeDistance) return;
+
+            // For screen 3, handle scroll within section
+            if (screen === 3 && analyzeScrollRef.current) {
+                const container = analyzeScrollRef.current;
+                const { scrollTop, scrollHeight, clientHeight } = container;
+                const isAtTop = scrollTop === 0;
+                
+                // Only navigate back if at top and swiping down
+                if (touchDiff < 0 && isAtTop) {
+                    setIsTransitioning(true);
+                    setScreen(2);
+                }
+                return;
+            }
+
+            // For screens 0, 1, 2 - navigate between screens
+            if (touchDiff > 0 && screen < 3) {
+                // Swipe up - go to next screen
+                setIsTransitioning(true);
+                setScreen((screen + 1) as 1 | 2 | 3);
+            } else if (touchDiff < 0 && screen > 0) {
+                // Swipe down - go to previous screen
+                setIsTransitioning(true);
+                setScreen((screen - 1) as 0 | 1 | 2);
+            }
+        };
+        
+        window.addEventListener('wheel', handleWheel, { passive: false });
+        window.addEventListener('touchstart', handleTouchStart, { passive: true });
+        window.addEventListener('touchend', handleTouchEnd, { passive: true });
+        
+        return () => {
+            window.removeEventListener('wheel', handleWheel);
+            window.removeEventListener('touchstart', handleTouchStart);
+            window.removeEventListener('touchend', handleTouchEnd);
+        };
+    }, [screen, isTransitioning]);
+    
+    // Reset transition state
+    useEffect(() => {
+        if (isTransitioning) {
+            const timer = setTimeout(() => {
+                setIsTransitioning(false);
+            }, 1000);
+            return () => clearTimeout(timer);
+        }
+    }, [isTransitioning]);
+
+    // Reset screen 3 scroll position when entering
+    useEffect(() => {
+        if (screen === 3 && analyzeScrollRef.current) {
+            analyzeScrollRef.current.scrollTop = 0;
+        }
+    }, [screen]);
 
 
   return (
@@ -202,7 +312,7 @@ function page() {
 
                             </div>
 
-                            <Link href="/assessment">
+                            <Link href="begin">
                             <div className=''>
                                 <div className="w-40 h-14 mix-blend-luminosity bg-gradient-to-br from-white/20 to-white/20 rounded-[30px] border-2 border-white flex items-center justify-center" >
                                     <div className="justify-center text-white text-2xl font-gilroy-bold">Begin</div>
@@ -419,17 +529,7 @@ function page() {
                                 <motion.div>
                                 </motion.div>
                                 
-                                <motion.div
-                                layoutId='logo'
-                                className="z-50"
-                                initial={{ y: 0, opacity: 1 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                transition={{ 
-                                    duration: 0.8,
-                                    ease: "easeOut",
-                                    delay: 0.4  // Start after text fades out
-                                }}
-                                >
+                                <div className="z-50">
                                 <Image 
                                     src='/Vector.svg'
                                     alt="QUEST: Run Quest in 15 minutes. Free test with optional paid PDF. Map thought patterns, get a 35+ page report." 
@@ -437,7 +537,7 @@ function page() {
                                     height={36}
                                     className={`transition-all duration-500 ${isInHeroSection ? 'brightness-0 invert' : 'opacity-0'} ease-out cursor-pointer`}
                                 />
-                                </motion.div>
+                                </div>
 
                                 <motion.div 
                                 className={`flex items-center justify-center cursor-pointer ${isInHeroSection ? 'brightness-0 invert' : 'opacity-0'} p-2 rounded-lg hover:bg-white/10 transition-colors`}
@@ -454,6 +554,9 @@ function page() {
                                 onClose={() => setIsSidebarOpen(false)}
                                 theme="blue"
                                 showMobileOnly={false}
+                                onNavigateToSection={(targetScreen) => {
+                                    setScreen(targetScreen as 0 | 1 | 2 | 3);
+                                }}
                             />
 
 

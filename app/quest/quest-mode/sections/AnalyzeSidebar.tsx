@@ -202,8 +202,7 @@ export const AnalyzeSidebar: React.FC<AnalyzeSidebarProps> = ({
   const menuItems = customMenuItems ? baseMenuItems : baseMenuItems.map(item => ({
   ...item,
   action: item.id === 'home' ? () => {
-            onNavigateToSection?.(0);
-            onClose();
+            window.location.reload();
           } :
           item.id === 'faq' ? () => {
             onNavigateToSection?.(3, 'faq-section');
@@ -241,7 +240,7 @@ export const AnalyzeSidebar: React.FC<AnalyzeSidebarProps> = ({
           {/* Sidebar Panel */}
           {/* Sidebar Panel */}
           <motion.div
-            className={`fixed right-0 top-0 h-full w-60 z-[70] ${
+            className={`fixed right-0 top-0 h-full w-60 z-[9999999] ${
               theme === 'blue' ? 'bg-[#004A7F]' : 'bg-white'
             } shadow-2xl ${className}`}
             variants={sidebarVariants}
