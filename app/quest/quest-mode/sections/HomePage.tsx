@@ -10,6 +10,8 @@ import FaqSection from '../sections/FaqSection';
 import QuestFooter from '../sections/QuestFooter';
 import { AnalyzeSidebar } from '../sections/AnalyzeSidebar';
 import Image from 'next/image';
+import BrowserPopup from '../utils/BrowserPopup';
+import {useIsMobile} from '../utils/use-mobile';
 
 function page() {
     const animationVariants = {
@@ -70,6 +72,8 @@ function page() {
             });
         }
     }
+
+     const isMobile = useIsMobile();
 
     // Mouse wheel and touch navigation
     useEffect(() => {
@@ -177,8 +181,9 @@ function page() {
     }, [screen]);
 
 
-  return (
-        <motion.div className='fixed inset-0 overflow-hidden bg-white'>
+    if (isMobile) {
+    return(
+        <motion.div className='fixed inset-0 max-h-screen overflow-hidden'>
             <motion.section 
             className='w-screen max-h-screen border-2-red-500 h-full relative overflow-hidden'>
                 {/* Background Animation */}
@@ -235,7 +240,7 @@ function page() {
                         animate={{opacity: 1}}
                         exit={{opacity: 0}}
                         transition={{duration: 0.3}}
-                        className=' flex flex-col gap-20 top-[120px] absolute pl-5 h-screen overflow-hidden'>
+                        className=' flex flex-col gap-20 top-[8%] absolute pl-5 h-screen overflow-hidden'>
 
                         <div className=' flex flex-col'>
                         <motion.div 
@@ -540,7 +545,7 @@ function page() {
                                 </div>
 
                                 <motion.div 
-                                className={`flex items-center justify-center cursor-pointer ${isInHeroSection ? 'brightness-0 invert' : 'opacity-0'} p-2 rounded-lg hover:bg-white/10 transition-colors`}
+                                className={`flex items-center justify-center cursor-pointer ${isInHeroSection ? 'brightness-0 invert' : ''} p-2 rounded-lg hover:bg-white/10 transition-colors`}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={handleMenuClick}
                                 >
@@ -666,16 +671,61 @@ function page() {
 
             </motion.section>
 
-            {/* <div className={` bottom-6 right-6 z-50 absolute transition-opacity duration-300`}>
+            <div className={` bottom-6 right-6 z-50 absolute transition-opacity duration-300`}>
             <button
                 onClick={handleScroll}
                 className={`flex items-center justify-center text-white w-6 h-6 rounded-full ${screen === 0 || screen === 3 ? 'bg-white/20' : 'bg-black'} hover:bg-white/30 transition-all duration-200 group`}>
                 <ChevronDown className="text-white w-3 h-3 transform group-hover:translate-y-1 transition-all duration-200" />
                 </button>
-            </div> */}
+            </div>
         </motion.div>
+    )
+    } else {
+
+  return (
+
+        <>
+      <BrowserPopup />
+      
+      <section className='bg-sky-800 gap-1 h-screen flex flex-col items-center justify-center'>
+      <div className=' flex flex-col w-full items-center justify-center'>
+        <div className='flex gap-2'>
+          <motion.div 
+          initial="invisible" 
+          animate="visible"
+          className=""
+          >
+            <div className='justify-center text-neutral-900 text-[200px] font-normal font-gilroy-bold'>
+              I'm
+            </div>
+          </motion.div>
+          <motion.div
+            layoutId='logo'
+            transition={{ duration: 1.2 }}
+            className="flex items-center"
+          >
+            <div>
+            <div className='text-[180px] text-white font-normal font-gilroy-bold tracking-[-0.5rem]'>
+              QUEST
+            </div>
+            <div className='text-[40px] text-neutral-900 font-normal font-gilroy-regular tracking-[0.1rem] pl-28 mt-[-70px]'>
+              BY FRATERNY
+            </div>
+            </div>
+          </motion.div>
+        </div>
+      
+      </div>
+
+      <div className='flex flex-col items-center justify-center w-full pl-5'>
+        <img src="/qr-code.png" alt="QR Code" className="w-40 h-40" />
+        <div className='text-white text-[25px] font-normal font-gilroy-regular mt-2'>Scan the QR code to get started on your mobile.</div>
+      </div>
+    </section>
+    </>
 
   )
+}
 }
 
 export default page
