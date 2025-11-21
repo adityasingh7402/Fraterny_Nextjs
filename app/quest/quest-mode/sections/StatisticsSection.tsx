@@ -15,6 +15,7 @@ interface StatisticsSectionProps {
   onContinueClick?: () => void;
   onLogoClick?: () => void;
   onMenuClick?: () => void;
+  isReady?: boolean;
 }
 
 // Simple animation variants

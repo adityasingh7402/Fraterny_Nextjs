@@ -91,11 +91,6 @@ const BenefitsSection: React.FC<BenefitsSectionProps> = ({
             <Menu className="w-6 h-6 text-white" />
           </motion.span>
         </div>
-      {/* <AnalyzeSidebar
-        isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
-        theme="blue"
-        /> */}
 
         <div className='z-50 pl-5 flex flex-col gap-10 absolute w-full top-[25%]'>
 

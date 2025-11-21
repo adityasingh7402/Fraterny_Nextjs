@@ -46,7 +46,7 @@ const AnalyzeSection: React.FC<AnalyzeSectionProps> = ({
   const heroSectionRef = useRef<HTMLDivElement>(null);
   // const containerRef = useRef<HTMLDivElement>(null);
   const analyzeScrollRef = useRef<HTMLDivElement>(null);
-  // console.log('Current logo state - should be white?', isInHeroSection);
+  console.log('Current logo state - should be white?', isInHeroSection);
   useEffect(() => {
   const container = analyzeScrollRef.current;
   if (!container) {
@@ -71,8 +71,10 @@ const AnalyzeSection: React.FC<AnalyzeSectionProps> = ({
 const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
   const handleMenuClick = () => {
-    setIsSidebarOpen(true);
-  };
+  console.log('Menu clicked, current state:', isSidebarOpen);
+  setIsSidebarOpen(true);
+  console.log('State should now be true');
+};
 
   return (
 
@@ -123,6 +125,7 @@ const [isSidebarOpen, setIsSidebarOpen] = useState(false);
       onClose={() => setIsSidebarOpen(false)}
       theme="blue"
       onNavigateToSection={onNavigateToSection}
+      showMobileOnly={false}
       />
 
       {/* Hero section */}
