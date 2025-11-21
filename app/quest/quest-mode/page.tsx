@@ -2,9 +2,9 @@
 "use client"
 import React, { useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import ScreenContainer from './sections/ScreenContainer'
 import MotionProvider from './animations/MotionProvider';
 import { getDeviceInfo, getIP, getLocation } from '@/utils/userInfo';
+import HomePage from './sections/HomePage';
 
 const QuestLandingPage: React.FC = () => {
   const searchParams = useSearchParams();
@@ -79,14 +79,8 @@ const QuestLandingPage: React.FC = () => {
 
 
   return (
-  <MotionProvider>
-      <ScreenContainer 
-        onAnalyzeClick={handleAnalyzeClick}
-        className=""
-        onNavigateToSection={(screen, section) => {
-          console.log('🎯 Navigating to section:', { screen, section });
-        }}
-      />
+    <MotionProvider>
+      <HomePage />
     </MotionProvider>
   );
 };
