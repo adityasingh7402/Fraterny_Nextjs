@@ -178,10 +178,9 @@ function page() {
 
 
   return (
-    <div>
-        <motion.div className='w-screen h-full relative'>
+        <motion.div className='fixed inset-0 overflow-hidden bg-white'>
             <motion.section 
-            className='w-screen min-h-screen max-h-screen border-2-red-500 h-full relative overflow-hidden'>
+            className='w-screen max-h-screen border-2-red-500 h-full relative overflow-hidden'>
                 {/* Background Animation */}
                 <AnimatePresence>
                     {screen == 0 &&<motion.div 
@@ -236,9 +235,7 @@ function page() {
                         animate={{opacity: 1}}
                         exit={{opacity: 0}}
                         transition={{duration: 0.3}}
-                        
-                        
-                        className=' flex flex-col gap-20 top-[120px] absolute pl-5'>
+                        className=' flex flex-col gap-20 top-[120px] absolute pl-5 h-screen overflow-hidden'>
 
                         <div className=' flex flex-col'>
                         <motion.div 
@@ -348,6 +345,7 @@ function page() {
                                     src='/Vector.svg'
                                     alt="QUEST" 
                                     className="h-[36px] w-auto brightness-0 cursor-pointer"
+                                    onClick={() => setScreen(0)}
                                     />
                                 </motion.div>
 
@@ -469,6 +467,7 @@ function page() {
                                     src='/Vector.svg'
                                     alt="QUEST" 
                                     className="h-[36px] w-auto brightness-0 cursor-pointer"
+                                    onClick={() => setScreen(0)}
                                     />
                                 </motion.div>
                                 
@@ -536,6 +535,7 @@ function page() {
                                     width={90}
                                     height={36}
                                     className={`transition-all duration-500 ${isInHeroSection ? 'brightness-0 invert' : 'opacity-0'} ease-out cursor-pointer`}
+                                    onClick={() => setScreen(0)}
                                 />
                                 </div>
 
@@ -666,15 +666,15 @@ function page() {
 
             </motion.section>
 
-            <div className={` bottom-6 right-6 z-50 absolute transition-opacity duration-300`}>
+            {/* <div className={` bottom-6 right-6 z-50 absolute transition-opacity duration-300`}>
             <button
                 onClick={handleScroll}
                 className={`flex items-center justify-center text-white w-6 h-6 rounded-full ${screen === 0 || screen === 3 ? 'bg-white/20' : 'bg-black'} hover:bg-white/30 transition-all duration-200 group`}>
                 <ChevronDown className="text-white w-3 h-3 transform group-hover:translate-y-1 transition-all duration-200" />
                 </button>
-            </div>
+            </div> */}
         </motion.div>
-    </div>
+
   )
 }
 

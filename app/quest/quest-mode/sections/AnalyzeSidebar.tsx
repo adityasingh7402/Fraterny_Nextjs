@@ -207,6 +207,13 @@ export const AnalyzeSidebar: React.FC<AnalyzeSidebarProps> = ({
           item.id === 'faq' ? () => {
             onNavigateToSection?.(3, 'faq-section');
             onClose();
+            // Scroll to FAQ section after a small delay to ensure screen 3 is loaded
+            setTimeout(() => {
+              const faqSection = document.getElementById('faq-section');
+              if (faqSection) {
+                faqSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            }, 300);
           } :
           item.id === 'contact' ? () => {
             onNavigateToSection?.(3, 'contact-section');

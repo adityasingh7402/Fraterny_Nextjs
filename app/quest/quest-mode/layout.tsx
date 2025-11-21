@@ -110,7 +110,7 @@ export default function QuestLayout({
   children: React.ReactNode;
 }) {
   return (
-      <div>
+      <div className='overflow-hidden'>
         <Script
           id="website-jsonld"
           type="application/ld+json"
