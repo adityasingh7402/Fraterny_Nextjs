@@ -127,14 +127,91 @@
   * {
     @apply border-border outline-ring/50;
   }
+
+  /* Mobile viewport height fix */
+  html {
+    height: 100%;
+    height: -webkit-fill-available;
+  }
+
   body {
     @apply bg-background text-foreground;
-  }
-  html, body {
     min-height: 100vh;
     background-color: #f9fafb;
+    overflow-x: hidden;
   }
-  
+
+  /* Mobile-friendly viewport height classes */
+  .h-screen-mobile {
+    height: 100vh;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+
+  .max-h-screen-mobile {
+    max-height: 100vh;
+    min-height: 100vh;
+  }
+
+  /* Container that prevents browser chrome from appearing */
+  .mobile-container-lock {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    touch-action: none;
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    -webkit-overflow-scrolling: touch;
+    /* Prevent pull-to-refresh */
+    overscroll-behavior-block: none;
+  }
+
+  /* Prevent native scroll on touch devices */
+  .prevent-scroll {
+    touch-action: none;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: auto;
+    position: relative;
+  }
+
+  /* Lock scrolling on body when needed */
+  body.scroll-locked {
+    overflow: hidden !important;
+    position: fixed !important;
+    width: 100% !important;
+    height: 100% !important;
+    touch-action: none !important;
+    overscroll-behavior: none !important;
+  }
+
+  html.scroll-locked {
+    overflow: hidden !important;
+    height: 100% !important;
+    overscroll-behavior: none !important;
+  }
+
+  /* Force stable viewport height on mobile */
+  @media (max-width: 768px) {
+
+    html,
+    body {
+      height: 100vh;
+      min-height: 100vh;
+    }
+
+    html.scroll-locked,
+    body.scroll-locked {
+      height: 100vh !important;
+      min-height: 100vh !important;
+    }
+  }
+
   /* Automatic cursor pointer for all buttons and clickable elements */
   button,
   [role="button"],
@@ -147,7 +224,7 @@
   [onclick] {
     cursor: pointer;
   }
-  
+
   /* Keep default cursor for disabled elements */
   button:disabled,
   [type="button"]:disabled,
@@ -165,7 +242,12 @@
   color: #333;
 }
 
-.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
   color: #0A1A2F;
   font-family: 'Playfair Display', serif;
   font-weight: 600;
@@ -178,7 +260,8 @@
   line-height: 1.6;
 }
 
-.prose ul, .prose ol {
+.prose ul,
+.prose ol {
   margin-left: 1.5em;
   margin-bottom: 1em;
 }
@@ -252,7 +335,8 @@
   color: #374151;
 }
 
-.max-w-none ul, .max-w-none ol {
+.max-w-none ul,
+.max-w-none ol {
   margin-left: 2em;
   margin-bottom: 1.25em;
   line-height: 1.75;
@@ -295,7 +379,7 @@
 }
 
 
-.bg-navy{
+.bg-navy {
   background-color: #f3f3f4;
   color: #0A1A2F;
 }

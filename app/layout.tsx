@@ -67,17 +67,17 @@ export const metadata: Metadata = {
   title: "Fraterny - Experience the Change in You",
   description: "Fraterny offers hyper-personalized identity evolution, mindset reframing and performance truth based on proven psychological frameworks.",
   keywords: "psychology,luxury,transformation,fraterny,quest,fratvilla",
-  
+
   authors: [{ name: "Fraterny" }],
   creator: "Fraterny",
   publisher: "Fraterny",
-  
+
   metadataBase: new URL('https://fraterny.com'), // Replace with your actual domain
-  
+
   alternates: {
     canonical: '/',
   },
-  
+
   robots: {
     index: true,
     follow: true,
@@ -89,7 +89,7 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  
+
   openGraph: {
     title: "Fraterny - Experience the Change in You",
     description: "Fraterny offers hyper-personalized identity evolution, mindset reframing and performance truth based on proven psychological frameworks.",
@@ -106,7 +106,7 @@ export const metadata: Metadata = {
       },
     ],
   },
-  
+
   twitter: {
     card: "summary_large_image",
     title: "Fraterny - Experience the Change in You",
@@ -114,13 +114,13 @@ export const metadata: Metadata = {
     images: ['/favicon-32x32.png'], // Place your Twitter image in public folder
     creator: '@fraterny', // Add your Twitter handle
   },
-  
+
   verification: {
     google: 'your-google-verification-code', // Add after verifying in Google Search Console
     // yandex: 'your-yandex-verification-code',
     // other: 'your-other-verification-code',
   },
-  
+
   icons: {
     icon: [
       { url: '/favicon-32x32.png' },
@@ -131,7 +131,7 @@ export const metadata: Metadata = {
     ],
     shortcut: '/favicon.ico',
   },
-  
+
   manifest: '/manifest.json',
 };
 
@@ -156,7 +156,7 @@ export default function RootLayout({
       'query-input': 'required name=search_term_string',
     },
     sameAs: [
-        'https://x.com/frat_erny',
+      'https://x.com/frat_erny',
       'https://linkedin.com/company/fraterny',
       'https://www.instagram.com/join.fraterny/',
     ],
@@ -184,7 +184,7 @@ export default function RootLayout({
 
 
   return (
-    <html lang="en">
+    <html lang="en" style={{ overscrollBehavior: 'none' }}>
       <head>
         <Script
           id="website-jsonld"
@@ -200,7 +200,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        style={{ backgroundColor: '#f9fafb', minHeight: '100vh' }}
+        style={{ backgroundColor: '#f9fafb', minHeight: '100vh', overscrollBehavior: 'none' }}
         className={`
           bg-gray-50
           ${gilroyRegular.variable}
@@ -213,14 +213,14 @@ export default function RootLayout({
           ${gilroyHeavy.variable}
         `}
       >
-      <GoogleTagManager gtmId="GTM-MPD3F25K" />
+        <GoogleTagManager gtmId="GTM-MPD3F25K" />
 
-      <div className="">
-        <AuthProvider>
-          <Toaster position="top-right" />
-          {children}
-        </AuthProvider>
-      </div>
+        <div className="">
+          <AuthProvider>
+            <Toaster position="top-right" />
+            {children}
+          </AuthProvider>
+        </div>
       </body>
     </html>
   );
