@@ -17,7 +17,7 @@ export default function ProfileLayout({ children }: ProfileLayoutProps) {
   // Client-side redirect when auth state is known and user is not logged in
   useEffect(() => {
     if (authReady && !isLoading && !user) {
-      router.push('/auth');
+      router.push('/');
     }
   }, [authReady, isLoading, user, router]);
 
