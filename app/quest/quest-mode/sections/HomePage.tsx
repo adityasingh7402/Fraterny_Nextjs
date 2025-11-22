@@ -116,8 +116,10 @@ function page() {
 
         const handleTouchStart = (event: TouchEvent) => {
             touchStartY = event.touches[0].clientY;
-            // Prevent any default behavior immediately on touch start for screens 0, 1, 2
+            // Allow touches on interactive elements (links, buttons)
             if (screen !== 3) {
+                const target = event.target as HTMLElement;
+                if (target.closest('a, button, [data-allow-touch]')) return;
                 event.preventDefault();
                 event.stopPropagation();
                 event.stopImmediatePropagation();
@@ -125,8 +127,10 @@ function page() {
         };
 
         const handleTouchMove = (event: TouchEvent) => {
-            // Prevent default scroll behavior for screens 0, 1, 2
+            // Allow touches on interactive elements (links, buttons)
             if (screen !== 3) {
+                const target = event.target as HTMLElement;
+                if (target.closest('a, button, [data-allow-touch]')) return;
                 event.preventDefault();
                 event.stopPropagation();
                 event.stopImmediatePropagation();
@@ -136,8 +140,10 @@ function page() {
         const handleTouchEnd = (event: TouchEvent) => {
             if (isTransitioning) return;
 
-            // Always prevent default on touch end for screens 0, 1, 2
+            // Allow touches on interactive elements (links, buttons)
             if (screen !== 3) {
+                const target = event.target as HTMLElement;
+                if (target.closest('a, button, [data-allow-touch]')) return;
                 event.preventDefault();
                 event.stopPropagation();
             }
@@ -227,8 +233,18 @@ function page() {
             <motion.div
                 ref={containerRef}
                 className={`${screen !== 3 ? 'mobile-container-lock' : 'relative h-screen-mobile overflow-hidden'}`}
-                onTouchStart={(e) => screen !== 3 && e.preventDefault()}
-                onTouchMove={(e) => screen !== 3 && e.preventDefault()}
+                onTouchStart={(e) => {
+                    if (screen === 3) return;
+                    const target = e.target as HTMLElement;
+                    if (target.closest('a, button, [data-allow-touch]')) return;
+                    e.preventDefault();
+                }}
+                onTouchMove={(e) => {
+                    if (screen === 3) return;
+                    const target = e.target as HTMLElement;
+                    if (target.closest('a, button, [data-allow-touch]')) return;
+                    e.preventDefault();
+                }}
             >
                 <motion.section
                     className={`w-full h-full relative overflow-hidden ${screen !== 3 ? 'prevent-scroll' : ''}`}>
@@ -360,7 +376,7 @@ function page() {
 
                                 </div>
 
-                                <Link href="begin">
+                                <Link href="/quest/begin">
                                     <div className=''>
                                         <div className="w-40 h-14 mix-blend-luminosity bg-gradient-to-br from-white/20 to-white/20 rounded-[30px] border-2 border-white flex items-center justify-center" >
                                             <div className="justify-center text-white text-2xl font-gilroy-bold">Begin</div>
