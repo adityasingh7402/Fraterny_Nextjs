@@ -78,6 +78,8 @@ const sectionTheme = (key: string) => {
 export const SectionFrame: React.FC<SectionFrameProps> = ({ id, title, sub, shareText, themeKey, customClass, inputClassName, buttonClassName, children, onToast, sessionId, testId }) => {
   const theme = sectionTheme(themeKey);
   const text = theme.text;
+  const animate = id !== "pdf-report"; // Disable in-view animation for PDF section to avoid blank initial render
+
   return (
     <section
       id={id}
@@ -98,7 +100,13 @@ export const SectionFrame: React.FC<SectionFrameProps> = ({ id, title, sub, shar
         }`}>
           {title}
         </div>
-        <motion.div className="flex-1 overflow-y-auto" variants={sectionVariants} initial="hidden" whileInView="show" viewport={{ amount: 0.25 }}>
+        <motion.div
+          className="flex-1 overflow-y-auto"
+          variants={animate ? sectionVariants : undefined}
+          initial={animate ? "hidden" : false}
+          whileInView={animate ? "show" : undefined}
+          viewport={animate ? { amount: 0.25, once: true } : undefined}
+        >
           {children}
         </motion.div>
         {/* Hide SectionActions in PDF section */}

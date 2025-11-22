@@ -720,7 +720,8 @@ function page() {
                 {/* Visual scroll indicator - non-clickable */}
                 {screen !== 3 && (
                     <div className="bottom-6 right-6 z-50 fixed transition-opacity duration-300 pointer-events-none">
-                        <div className={`flex items-center justify-center text-white w-10 h-10 rounded-full ${screen === 0 ? 'bg-white/30' : 'bg-black/50'} transition-all duration-200 backdrop-blur-sm`}>
+                        {/* Make screen 0 and 2 share the same background, with only the middle (screen 1) different */}
+                        <div className={`flex items-center justify-center text-white w-10 h-10 rounded-full ${screen === 1 ? 'bg-black/50' : 'bg-white/30'} transition-all duration-200 backdrop-blur-sm`}>
                             <ChevronDown className="text-white w-6 h-6" />
                         </div>
                     </div>
