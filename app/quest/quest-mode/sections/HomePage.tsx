@@ -721,7 +721,7 @@ function page() {
                 {screen !== 3 && (
                     <div className="bottom-6 right-6 z-50 fixed transition-opacity duration-300 pointer-events-none">
                         <div className={`flex items-center justify-center text-white w-10 h-10 rounded-full ${screen === 0 ? 'bg-white/30' : 'bg-black/50'} transition-all duration-200 backdrop-blur-sm`}>
-                            <ChevronDown className="text-white w-6 h-6 animate-bounce" />
+                            <ChevronDown className="text-white w-6 h-6" />
                         </div>
                     </div>
                 )}
