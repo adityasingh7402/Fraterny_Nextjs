@@ -1,10 +1,13 @@
 import type { Metadata, Viewport } from 'next';
-import Script  from 'next/script';
+import Script from 'next/script';
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 5,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
+  interactiveWidget: 'resizes-content',
 };
 
 export const metadata: Metadata = {
@@ -65,44 +68,44 @@ export const metadata: Metadata = {
   },
 };
 const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: 'Fraterny — Quest Mode',
-    description: 'Quest composes confidential psychological files from user-written answers. Preview a fragment; access your full edition when ready.',
-    url: 'https://fraterny.com',
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: 'https://fraterny.in/search?q={search_term_string}',
-      },
-      'query-input': 'required name=search_term_string',
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Fraterny — Quest Mode',
+  description: 'Quest composes confidential psychological files from user-written answers. Preview a fragment; access your full edition when ready.',
+  url: 'https://fraterny.com',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: 'https://fraterny.in/search?q={search_term_string}',
     },
-    sameAs: [
-      'https://x.com/frat_erny',
-      'https://linkedin.com/company/fraterny',
-      'https://www.instagram.com/quest.fraterny/',
-    ],
-  };
+    'query-input': 'required name=search_term_string',
+  },
+  sameAs: [
+    'https://x.com/frat_erny',
+    'https://linkedin.com/company/fraterny',
+    'https://www.instagram.com/quest.fraterny/',
+  ],
+};
 
-  const organizationJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'Fraterny',
-    description: 'Quest by Fraterny composes aesthetic intelligence files—private psychological artifacts built from your words.',
-    url: 'https://fraterny.com',
-    logo: 'https://www.fraterny.com/og-image2.png',
-    contactPoint: {
-      '@type': 'ContactPoint',
-      email: 'support@fraterny.com',
-      contactType: 'Support Service',
-    },
-    sameAs: [
-      'https://x.com/frat_erny',
-      'https://linkedin.com/company/fraterny',
-      'https://www.instagram.com/quest.fraterny/',
-    ],
-  };
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Fraterny',
+  description: 'Quest by Fraterny composes aesthetic intelligence files—private psychological artifacts built from your words.',
+  url: 'https://fraterny.com',
+  logo: 'https://www.fraterny.com/og-image2.png',
+  contactPoint: {
+    '@type': 'ContactPoint',
+    email: 'support@fraterny.com',
+    contactType: 'Support Service',
+  },
+  sameAs: [
+    'https://x.com/frat_erny',
+    'https://linkedin.com/company/fraterny',
+    'https://www.instagram.com/quest.fraterny/',
+  ],
+};
 
 export default function QuestLayout({
   children,
@@ -110,20 +113,20 @@ export default function QuestLayout({
   children: React.ReactNode;
 }) {
   return (
-      <div className='overflow-hidden'>
-        <Script
-          id="website-jsonld"
-          type="application/ld+json"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-        <Script
-          id="organization-jsonld"
-          type="application/ld+json"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-        />
-        {children}
-      </div>
+    <div className='overflow-hidden h-full w-full fixed inset-0'>
+      <Script
+        id="website-jsonld"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <Script
+        id="organization-jsonld"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
+      {children}
+    </div>
   );
 }
