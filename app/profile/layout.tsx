@@ -1,6 +1,7 @@
 'use client';
 
-import { redirect } from 'next/navigation';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import ProfileClientLayout from './contexts/profile-client';
 import { useAuth } from '../auth/cotexts/AuthContext';
 import type { ReactNode } from 'react';
@@ -9,18 +10,22 @@ interface ProfileLayoutProps {
   children: ReactNode;
 }
 
-export default function ProfileLayout({
-  children,
-}: ProfileLayoutProps) {
-  // Server-side auth check
-  const { user } = useAuth();
+export default function ProfileLayout({ children }: ProfileLayoutProps) {
+  const { user, authReady, isLoading } = useAuth();
+  const router = useRouter();
 
-  // Redirect on server if not authenticated
-  if (!user) {
-    redirect('/auth');
+  // Client-side redirect when auth state is known and user is not logged in
+  useEffect(() => {
+    if (authReady && !isLoading && !user) {
+      router.push('/auth');
+    }
+  }, [authReady, isLoading, user, router]);
+
+  // While auth is resolving, or we're in the middle of redirecting, don't render the profile shell
+  if (!authReady || isLoading || !user) {
+    return null;
   }
 
-  // Pass user data to client component
   return (
     <ProfileClientLayout user={user}>
       {children}
