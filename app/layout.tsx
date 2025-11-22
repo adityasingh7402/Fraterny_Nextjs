@@ -187,6 +187,15 @@ export default function RootLayout({
     <html lang="en" style={{ overscrollBehavior: 'none' }}>
       <head>
         <Script
+          id="fbq-stub"
+          strategy="beforeInteractive"
+        >{`
+          // Safeguard for Meta Pixel calls from GTM when fbq isn't loaded yet
+          window.fbq = window.fbq || function() {
+            (window.fbq.q = window.fbq.q || []).push(arguments);
+          };
+        `}</Script>
+        <Script
           id="website-jsonld"
           type="application/ld+json"
           strategy="beforeInteractive"
