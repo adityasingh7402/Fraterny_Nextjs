@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import { useQuest } from '../hooks/useQuest';
 import { ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
@@ -9,6 +10,7 @@ import { useIsMobile } from '../../quest-mode/utils/use-mobile';
 import Link from 'next/link';
 import Image from 'next/image';
 import { clearQuestTags } from '../utils/questStorage';
+import { saveDevMode, generateAutoFilledResponses } from '../utils/devModeHelper';
 
 
 interface QuestIntroProps {
@@ -24,10 +26,15 @@ export function QuestIntro({
   onStart,
   className = ''
 }: QuestIntroProps) {
+  const router = useRouter();
   const { startQuest } = useQuest();
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
   const isMobile = useIsMobile();
   const [hasUnfinishedQuest, setHasUnfinishedQuest] = useState(false);
+
+  // Development mode toggles
+  const [skipAgent, setSkipAgent] = useState(false);
+  const [skipInput, setSkipInput] = useState(false);
 
   useEffect(() => {
     // Check on mount
@@ -58,15 +65,66 @@ export function QuestIntro({
       });
       return;
     }
-    if (!hasUnfinishedQuest) {
+
+    // Handle development mode
+    if (skipAgent || skipInput) {
+      const mode = skipAgent ? 'skip_agent' : 'skip_input';
+      saveDevMode(mode);
+
+      if (skipInput) {
+        // Generate auto-filled session
+        const userId = 'temp_user_' + Date.now(); // Temporary user ID
+        const autoFilledSession = generateAutoFilledResponses(userId);
+
+        // Save to localStorage
+        localStorage.setItem('fraterny_quest_session', JSON.stringify(autoFilledSession));
+        console.log('✅ Skip Input mode: Auto-filled all responses');
+
+        toast.success('🎭 Skip Input mode enabled - All questions pre-filled!', {
+          position: "top-right"
+        });
+      } else {
+        toast.success('🎭 Skip Agent mode enabled - Mock results will be shown', {
+          position: "top-right"
+        });
+      }
+    } else {
+      // Normal mode - clear any existing dev mode
+      saveDevMode(null);
+    }
+
+    if (!hasUnfinishedQuest && !skipInput) {
+      // Only clear tags if not resuming and not in skip input mode
       clearQuestTags();
     }
-    await startQuest();
-    if (onStart) onStart();
+
+    if (skipInput) {
+      // Skip Input mode: session is already set, navigate directly to introspect
+      localStorage.setItem('fraterny_terms_accepted', 'true');
+      router.push('/quest/introspect');
+    } else {
+      // Normal mode: let parent handle start (which calls startQuest and navigates)
+      if (onStart) onStart();
+    }
   };
-  
+
   const handleTermsChange = (checked: boolean) => {
     setIsTermsAccepted(checked);
+  };
+
+  // Handle toggle changes - mutually exclusive
+  const handleSkipAgentToggle = (checked: boolean) => {
+    if (checked && skipInput) {
+      setSkipInput(false); // Turn off Skip Input
+    }
+    setSkipAgent(checked);
+  };
+
+  const handleSkipInputToggle = (checked: boolean) => {
+    if (checked && skipAgent) {
+      setSkipAgent(false); // Turn off Skip Agent
+    }
+    setSkipInput(checked);
   };
 
   return (
@@ -80,6 +138,71 @@ export function QuestIntro({
         <div className="justify-start text-white text-4xl font-normal font-gilroy-regular mb-1">Let&apos;s get you</div>
         <div className="justify-start text-white text-6xl font-bold font-gilroy-bold mb-3">Analysed.</div>
         <div className="w-full justify-start text-white text-xl font-normal font-gilroy-regular mb-3">A 15 minute guided self-reflection. The more thoughtful your responses, the deeper the insights.</div>
+
+        {/* Development Mode Toggles */}
+        <div className='mb-3 p-3 bg-white/10 rounded-lg'>
+          <div className='text-white text-sm font-gilroy-medium mb-2'>🎭 Development Mode</div>
+
+          {/* Skip Agent Toggle */}
+          <label className='flex items-center gap-3 mb-2 cursor-pointer'>
+            <div className="relative inline-block w-11 h-6">
+              <input
+                type="checkbox"
+                checked={skipAgent}
+                onChange={(e) => handleSkipAgentToggle(e.target.checked)}
+                className="sr-only"
+              />
+              <motion.div
+                animate={{
+                  backgroundColor: skipAgent ? '#10b981' : '#475569'
+                }}
+                transition={{ duration: 0.2 }}
+                className="w-11 h-6 rounded-full"
+              />
+              <motion.div
+                animate={{
+                  x: skipAgent ? 20 : 2
+                }}
+                transition={{ duration: 0.2 }}
+                className="absolute top-1 left-0 w-4 h-4 bg-white rounded-full shadow"
+              />
+            </div>
+            <span className='text-white text-sm font-gilroy-regular'>
+              Skip Agent (Mock Results)
+            </span>
+          </label>
+
+          {/* Skip Input Toggle */}
+          <label className='flex items-center gap-3 cursor-pointer'>
+            <div className="relative inline-block w-11 h-6">
+              <input
+                type="checkbox"
+                checked={skipInput}
+                onChange={(e) => handleSkipInputToggle(e.target.checked)}
+                className="sr-only"
+              />
+              <motion.div
+                animate={{
+                  backgroundColor: skipInput ? '#10b981' : '#475569'
+                }}
+                transition={{ duration: 0.2 }}
+                className="w-11 h-6 rounded-full"
+              />
+              <motion.div
+                animate={{
+                  x: skipInput ? 20 : 2
+                }}
+                transition={{ duration: 0.2 }}
+                className="absolute top-1 left-0 w-4 h-4 bg-white rounded-full shadow"
+              />
+            </div>
+            <span className='text-white text-sm font-gilroy-regular'>
+              Skip Input (Auto-fill All)
+            </span>
+          </label>
+        </div>
+
+        {/* Terms Checkbox */}
         <label className='flex gap-2 mb-3 cursor-pointer'>
           {/* checkbox code from above */}
           <label className="relative inline-block w-5 h-5 cursor-pointer mt-1">
@@ -120,6 +243,8 @@ export function QuestIntro({
             I agree to the <Link href="/terms-of-use" className="text-white text-xl font-normal font-gilroy-medium underline">Terms and Use</Link> and <Link href="/privacy-policy" className="text-white text-xl font-normal font-gilroy-medium underline">Privacy Policy</Link>
           </div>
         </label>
+
+        {/* Start Button */}
         <div className='w-full pr-3 pb-5'>
           <button
             onClick={handleStart}
