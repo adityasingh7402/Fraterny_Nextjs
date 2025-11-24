@@ -4,12 +4,12 @@ import { validateResultData } from './utils/validations';
 import { MOCK_RESULT_DATA } from './utils/constants';
 
 type Props = {
-     params: Promise<{  // ← params is now a Promise
-       userId: string;
-       sessionId: string;
-       testId: string;
-     }>;
-   };
+  params: Promise<{  // ← params is now a Promise
+    userId: string;
+    sessionId: string;
+    testId: string;
+  }>;
+};
 
 async function getResultData(userId: string, sessionId: string, testId: string) {
   try {
@@ -19,17 +19,23 @@ async function getResultData(userId: string, sessionId: string, testId: string) 
         cache: 'no-store',
       }
     );
-    
+
 
     if (!response.ok) {
       throw new Error('Failed to fetch result data');
     }
 
     const data = await response.json();
-    
-    const validateddata =  validateResultData(data);
+
+    // 🎭 Check for development mode (Skip Agent toggle)
+    if (data.mode === 'development') {
+      console.log('🎭 Development mode detected - returning mock data');
+      return MOCK_RESULT_DATA;
+    }
+
+    const validateddata = validateResultData(data);
     return validateddata;
-    
+
   } catch (error) {
     console.error('Error fetching result data:', error);
     return null;

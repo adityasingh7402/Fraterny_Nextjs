@@ -4,7 +4,7 @@ import { ResultData } from './types';
 export const validateResultData = (data: any): ResultData => {
   // 🎯 Parse results if it's a string
   let parsedResults = data.results;
-  
+
   if (typeof parsedResults === 'string') {
     try {
       parsedResults = JSON.parse(parsedResults);
@@ -30,6 +30,7 @@ export const validateResultData = (data: any): ResultData => {
     pecentile: data.pecentile,
     qualityscore: data.qualityscore,
     referred_by: data.referred_by,
+    mode: data.mode,
     results: {
       "section 1": parsedResults?.["section 1"] || '',
 
