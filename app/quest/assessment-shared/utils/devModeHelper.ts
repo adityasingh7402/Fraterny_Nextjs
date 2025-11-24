@@ -30,10 +30,16 @@ export const generateAutoFilledResponses = (userId: string): QuestSession => {
                 break;
 
             case 'ranking':
-                // Ranking question - use JSON format with ranking and additional input
+                // Ranking question - use correct JSON format
+                const rankingOptions = question.options?.map((opt, index) => ({
+                    id: `option-${index}`,
+                    text: opt
+                })) || [];
+
                 responseValue = JSON.stringify({
-                    ranking: question.options || [],
-                    additionalInput: 'Test'
+                    rankings: rankingOptions,      // ✅ Correct key (plural)
+                    explanation: 'Test',            // ✅ Correct key
+                    isUserRanked: false             // ✅ Auto-generated ranking
                 });
                 break;
 
