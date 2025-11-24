@@ -11,6 +11,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { clearQuestTags } from '../utils/questStorage';
 import { saveDevMode, generateAutoFilledResponses } from '../utils/devModeHelper';
+import { useAuth } from '../../../auth/cotexts/AuthContext';
 
 
 interface QuestIntroProps {
@@ -28,6 +29,7 @@ export function QuestIntro({
 }: QuestIntroProps) {
   const router = useRouter();
   const { startQuest } = useQuest();
+  const { isAdmin } = useAuth();
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
   const isMobile = useIsMobile();
   const [hasUnfinishedQuest, setHasUnfinishedQuest] = useState(false);
@@ -73,7 +75,7 @@ export function QuestIntro({
 
       if (skipInput) {
         // Generate auto-filled session
-        const userId = 'temp_user_' + Date.now(); // Temporary user ID
+        const userId = "anonymous"; // Temporary user ID
         const autoFilledSession = generateAutoFilledResponses(userId);
 
         // Save to localStorage
@@ -139,68 +141,72 @@ export function QuestIntro({
         <div className="justify-start text-white text-6xl font-bold font-gilroy-bold mb-3">Analysed.</div>
         <div className="w-full justify-start text-white text-xl font-normal font-gilroy-regular mb-3">A 15 minute guided self-reflection. The more thoughtful your responses, the deeper the insights.</div>
 
-        {/* Development Mode Toggles */}
-        <div className='mb-3 p-3 bg-white/10 rounded-lg'>
-          <div className='text-white text-sm font-gilroy-medium mb-2'>🎭 Development Mode</div>
 
-          {/* Skip Agent Toggle */}
-          <label className='flex items-center gap-3 mb-2 cursor-pointer'>
-            <div className="relative inline-block w-11 h-6">
-              <input
-                type="checkbox"
-                checked={skipAgent}
-                onChange={(e) => handleSkipAgentToggle(e.target.checked)}
-                className="sr-only"
-              />
-              <motion.div
-                animate={{
-                  backgroundColor: skipAgent ? '#10b981' : '#475569'
-                }}
-                transition={{ duration: 0.2 }}
-                className="w-11 h-6 rounded-full"
-              />
-              <motion.div
-                animate={{
-                  x: skipAgent ? 20 : 2
-                }}
-                transition={{ duration: 0.2 }}
-                className="absolute top-1 left-0 w-4 h-4 bg-white rounded-full shadow"
-              />
-            </div>
-            <span className='text-white text-sm font-gilroy-regular'>
-              Skip Agent (Mock Results)
-            </span>
-          </label>
+        {/* Development Mode Toggles - Admin Only */}
+        {isAdmin && (
+          <div className='mb-3 mr-2 p-3 bg-white/10 rounded-lg'>
+            <div className='text-white text-sm font-gilroy-medium mb-2'>Development Mode</div>
 
-          {/* Skip Input Toggle */}
-          <label className='flex items-center gap-3 cursor-pointer'>
-            <div className="relative inline-block w-11 h-6">
-              <input
-                type="checkbox"
-                checked={skipInput}
-                onChange={(e) => handleSkipInputToggle(e.target.checked)}
-                className="sr-only"
-              />
-              <motion.div
-                animate={{
-                  backgroundColor: skipInput ? '#10b981' : '#475569'
-                }}
-                transition={{ duration: 0.2 }}
-                className="w-11 h-6 rounded-full"
-              />
-              <motion.div
-                animate={{
-                  x: skipInput ? 20 : 2
-                }}
-                transition={{ duration: 0.2 }}
-                className="absolute top-1 left-0 w-4 h-4 bg-white rounded-full shadow"
-              />
-            </div>
-            <span className='text-white text-sm font-gilroy-regular'>
-              Skip Input (Auto-fill All)
-            </span>
-          </label>
-        </div>
+            {/* Skip Agent Toggle */}
+            <label className='flex items-center gap-3 mb-2 cursor-pointer'>
+              <div className="relative inline-block w-11 h-6">
+                <input
+                  type="checkbox"
+                  checked={skipAgent}
+                  onChange={(e) => handleSkipAgentToggle(e.target.checked)}
+                  className="sr-only"
+                />
+                <motion.div
+                  animate={{
+                    backgroundColor: skipAgent ? '#10b981' : '#475569'
+                  }}
+                  transition={{ duration: 0.2 }}
+                  className="w-11 h-6 rounded-full"
+                />
+                <motion.div
+                  animate={{
+                    x: skipAgent ? 20 : 2
+                  }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute top-1 left-0 w-4 h-4 bg-white rounded-full shadow"
+                />
+              </div>
+              <span className='text-white text-sm font-gilroy-regular'>
+                Skip Agent (Mock Results)
+              </span>
+            </label>
+
+            {/* Skip Input Toggle */}
+            <label className='flex items-center gap-3 cursor-pointer'>
+              <div className="relative inline-block w-11 h-6">
+                <input
+                  type="checkbox"
+                  checked={skipInput}
+                  onChange={(e) => handleSkipInputToggle(e.target.checked)}
+                  className="sr-only"
+                />
+                <motion.div
+                  animate={{
+                    backgroundColor: skipInput ? '#10b981' : '#475569'
+                  }}
+                  transition={{ duration: 0.2 }}
+                  className="w-11 h-6 rounded-full"
+                />
+                <motion.div
+                  animate={{
+                    x: skipInput ? 20 : 2
+                  }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute top-1 left-0 w-4 h-4 bg-white rounded-full shadow"
+                />
+              </div>
+              <span className='text-white text-sm font-gilroy-regular'>
+                Skip Input (Auto-fill All)
+              </span>
+            </label>
+          </div>
+        )}
+
 
         {/* Terms Checkbox */}
         <label className='flex gap-2 mb-3 cursor-pointer'>
