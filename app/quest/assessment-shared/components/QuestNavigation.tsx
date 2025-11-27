@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -229,10 +229,14 @@ export function QuestNavigation({
     // Get referred_by from localStorage
     const referredBy = localStorage.getItem('referred_by') || null;
 
+    // Get development mode from localStorage
+    const devMode = localStorage.getItem('quest_dev_mode') || null;
+
     return {
       response: responses,
       user_data: userData,
       referred_by: referredBy,
+      mode: devMode === 'skip_agent' || devMode === 'skip_input' ? 'development' : undefined,
       assessment_metadata: {
         session_id: workingSession?.id || '',
         start_time: startTime,
@@ -393,7 +397,7 @@ export function QuestNavigation({
       return false; // Has real response = finished
     }) || [];
 
-    console.log('🔍 Unfinished questions found:', unfinishedQuestions.map(q => ({ id: q.id, text: q.text?.substring(0, 50) })));
+    console.log('ðŸ” Unfinished questions found:', unfinishedQuestions.map(q => ({ id: q.id, text: q.text?.substring(0, 50) })));
 
     if (unfinishedQuestions.length > 0) {
       const firstUnfinishedQuestion = unfinishedQuestions[0];
@@ -401,7 +405,7 @@ export function QuestNavigation({
       const sectionName = sections?.find(s => s.id === sectionId)?.title || 'Unknown Section';
 
       // DEBUG: Log detailed navigation info
-      console.log('🎯 Navigation Debug:', {
+      console.log('ðŸŽ¯ Navigation Debug:', {
         firstUnfinishedQuestionId: firstUnfinishedQuestion.id,
         sectionId: sectionId,
         sectionName: sectionName
@@ -409,10 +413,10 @@ export function QuestNavigation({
 
       // find index within its section
       const targetSection = sections.find(s => s.id === sectionId);
-      console.log('🎯 Target section questions:', targetSection?.questions.map(q => q.id));
+      console.log('ðŸŽ¯ Target section questions:', targetSection?.questions.map(q => q.id));
 
       const indexInSection = targetSection?.questions.findIndex(q => q.id === firstUnfinishedQuestion.id) ?? 0;
-      console.log('🎯 Calculated indexInSection:', indexInSection, 'for question:', firstUnfinishedQuestion.id);
+      console.log('ðŸŽ¯ Calculated indexInSection:', indexInSection, 'for question:', firstUnfinishedQuestion.id);
 
       return {
         hasUnfinished: true,
@@ -435,10 +439,10 @@ export function QuestNavigation({
 
   const handleNext = async () => {
 
-    //console.log('🔍 [DEBUG-1] handleNext called - Screen width:', window.innerWidth, 'innerHeight:', window.innerHeight);
+    //console.log('ðŸ” [DEBUG-1] handleNext called - Screen width:', window.innerWidth, 'innerHeight:', window.innerHeight);
     // Simple 700ms delay to prevent rapid clicking duplicate answers
     if (nextButtonDisabled) {
-      console.log('⏱️ Next button is disabled, please wait...');
+      console.log('â±ï¸ Next button is disabled, please wait...');
       return;
     }
 
@@ -455,7 +459,7 @@ export function QuestNavigation({
           const saved = localStorage.getItem(`quest_tags_${currentQuestion.id}`);
           if (saved) {
             const tags = JSON.parse(saved);
-            // console.log('🏷️ Navigation found saved tags in localStorage:', { questionId: currentQuestion.id, tags });
+            // console.log('ðŸ·ï¸ Navigation found saved tags in localStorage:', { questionId: currentQuestion.id, tags });
             return tags;
           }
         } catch (error) {
@@ -473,7 +477,7 @@ export function QuestNavigation({
           }
         });
 
-        // console.log('🏷️ Navigation found tags from DOM:', { questionId: currentQuestion.id, selectedTags });
+        // console.log('ðŸ·ï¸ Navigation found tags from DOM:', { questionId: currentQuestion.id, selectedTags });
         return selectedTags;
       };
 
@@ -481,7 +485,7 @@ export function QuestNavigation({
 const getAnonymousModeFromDOM = (): boolean => {
   const allToggles = document.querySelectorAll('[data-anonymous-mode]');
   
-  console.log('🔍 [ANON-READ] Found total toggles:', allToggles.length);
+  console.log('ðŸ” [ANON-READ] Found total toggles:', allToggles.length);
   
   if (allToggles.length === 0) {
     return false;
@@ -490,7 +494,7 @@ const getAnonymousModeFromDOM = (): boolean => {
   // If only 1 toggle, use it (mobile case)
   if (allToggles.length === 1) {
     const isAnonymous = allToggles[0].getAttribute('data-anonymous-mode') === 'true';
-    console.log('🔍 [ANON-READ] Single toggle found:', {
+    console.log('ðŸ” [ANON-READ] Single toggle found:', {
       dataAttribute: allToggles[0].getAttribute('data-anonymous-mode'),
       result: isAnonymous
     });
@@ -502,18 +506,18 @@ const getAnonymousModeFromDOM = (): boolean => {
   allToggles.forEach((toggle, index) => {
     const toggleElement = toggle as HTMLElement;
     const isVisible = toggleElement.offsetParent !== null;
-    console.log(`🔍 [ANON-READ] Toggle #${index}: visible=${isVisible}, data=${toggleElement.getAttribute('data-anonymous-mode')}`);
+    console.log(`ðŸ” [ANON-READ] Toggle #${index}: visible=${isVisible}, data=${toggleElement.getAttribute('data-anonymous-mode')}`);
     if (isVisible) {
       visibleToggle = toggleElement;
     }
   });
   
   // log here visibleToggle result
-  console.log('🔍 [ANON-READ] Visible toggle selected:', visibleToggle);
+  console.log('ðŸ” [ANON-READ] Visible toggle selected:', visibleToggle);
 
   
   const isAnonymous = visibleToggle ? (visibleToggle as any).getAttribute('data-anonymous-mode') === 'true' : false;
-  console.log('🔍 [ANON-READ] Selected visible toggle:', {
+  console.log('ðŸ” [ANON-READ] Selected visible toggle:', {
     found: !!visibleToggle,
     result: isAnonymous
   });
@@ -578,10 +582,10 @@ const getAnonymousModeFromDOM = (): boolean => {
                 [fieldName]: currentTextarea.value,
                 isAnonymous: false
               });
-              console.log('🔥 [NAV-DEBUG] About to call submitResponse');
-                console.log('🔥 [NAV-DEBUG] Question:', currentQuestion.id);
-                console.log('🔥 [NAV-DEBUG] Response being saved:', textOnlyResponse);
-                console.log('🔥 [NAV-DEBUG] IsAnonymousMode from DOM:', isAnonymousMode);
+              console.log('ðŸ”¥ [NAV-DEBUG] About to call submitResponse');
+                console.log('ðŸ”¥ [NAV-DEBUG] Question:', currentQuestion.id);
+                console.log('ðŸ”¥ [NAV-DEBUG] Response being saved:', textOnlyResponse);
+                console.log('ðŸ”¥ [NAV-DEBUG] IsAnonymousMode from DOM:', isAnonymousMode);
               submitResponse(currentQuestion.id, textOnlyResponse, selectedTags);
             }
           } else if (currentQuestion.enableCityAutocomplete) {
@@ -605,14 +609,14 @@ const getAnonymousModeFromDOM = (): boolean => {
         }
       }
       else if (currentQuestion.type === 'number_dropdown') {
-        console.log('🔍 [DEBUG-DROPDOWN] Number dropdown detected - Question ID:', currentQuestion.id);
+        console.log('ðŸ” [DEBUG-DROPDOWN] Number dropdown detected - Question ID:', currentQuestion.id);
         const currentSelect = document.querySelector('select') as HTMLSelectElement;
-        console.log('🔍 [DEBUG-DROPDOWN] Select element found:', currentSelect);
-        console.log('🔍 [DEBUG-DROPDOWN] Selected value:', currentSelect?.value);
+        console.log('ðŸ” [DEBUG-DROPDOWN] Select element found:', currentSelect);
+        console.log('ðŸ” [DEBUG-DROPDOWN] Selected value:', currentSelect?.value);
         
         if (currentSelect && currentSelect.value) {
           const dropdownValue = currentSelect.value;
-          console.log('💾 Saving dropdown value:', dropdownValue);
+          console.log('ðŸ’¾ Saving dropdown value:', dropdownValue);
           
           const selectedTags = getSelectedTagsFromQuestionCard();
           submitResponse(currentQuestion.id, dropdownValue, selectedTags);
@@ -624,7 +628,7 @@ const getAnonymousModeFromDOM = (): boolean => {
         if (selectedRadio) {
           const selectedTags = getSelectedTagsFromQuestionCard();
 
-          console.log('💾 Navigation saving multiple choice response with tags:', {
+          console.log('ðŸ’¾ Navigation saving multiple choice response with tags:', {
             questionId: currentQuestion.id,
             response: selectedRadio.value,
             tags: selectedTags
@@ -663,7 +667,7 @@ const getAnonymousModeFromDOM = (): boolean => {
                 // Get selected tags
                 const selectedTags = getSelectedTagsFromQuestionCard();
 
-                console.log('💾 Navigation saving ranking response with tags:', {
+                console.log('ðŸ’¾ Navigation saving ranking response with tags:', {
                   questionId: currentQuestion.id,
                   data: existingData,
                   tags: selectedTags
@@ -671,11 +675,11 @@ const getAnonymousModeFromDOM = (): boolean => {
 
                 // Save updated response with new explanation and tags
                 submitResponse(currentQuestion.id, JSON.stringify(existingData), selectedTags);
-                console.log('🔍 [DEBUG-5] Ranking data being saved:', JSON.stringify(existingData, null, 2));
+                console.log('ðŸ” [DEBUG-5] Ranking data being saved:', JSON.stringify(existingData, null, 2));
               }
             } catch (e) {
               // Don't create fallback - let user actually provide input
-              console.log('⚠️ Ranking response parsing failed, requiring user input');
+              console.log('âš ï¸ Ranking response parsing failed, requiring user input');
             }
           } else if (explanation) {
             // Only save if user provided explanation (no default ranking)
@@ -699,13 +703,13 @@ const getAnonymousModeFromDOM = (): boolean => {
         const currentDateInput = document.querySelector('input[placeholder*="date of birth"]') as HTMLInputElement ||
           document.querySelector('.MuiInputBase-input') as HTMLInputElement ||
           document.querySelector('input[type="date"]') as HTMLInputElement;
-        console.log('💾 Date input value:', currentDateInput?.value);
-        console.log('💾 Date input value:', currentDateInput?.value);
+        console.log('ðŸ’¾ Date input value:', currentDateInput?.value);
+        console.log('ðŸ’¾ Date input value:', currentDateInput?.value);
         // Add this new one:
-        console.log('🔍 All inputs on page:', document.querySelectorAll('input'));
+        console.log('ðŸ” All inputs on page:', document.querySelectorAll('input'));
         if (currentDateInput && currentDateInput.value) {
           const selectedTags = getSelectedTagsFromQuestionCard();
-          console.log('💾 Navigation saving date response with tags:', {
+          console.log('ðŸ’¾ Navigation saving date response with tags:', {
             questionId: currentQuestion.id,
             response: currentDateInput.value,
             tags: selectedTags
@@ -717,7 +721,7 @@ const getAnonymousModeFromDOM = (): boolean => {
         // For any other question type, still try to save tags if they exist
         const selectedTags = getSelectedTagsFromQuestionCard();
         if (selectedTags.length > 0) {
-          console.log('💾 Navigation saving tags for other question type:', {
+          console.log('ðŸ’¾ Navigation saving tags for other question type:', {
             questionId: currentQuestion.id,
             type: currentQuestion.type,
             tags: selectedTags
@@ -756,7 +760,7 @@ const getAnonymousModeFromDOM = (): boolean => {
         } else if (showFinish) {
           if (onFinish) {
             const unfinishedCheck = checkForUnfinishedQuestions();
-            console.log('🔍 Unfinished questions check:', unfinishedCheck);
+            console.log('ðŸ” Unfinished questions check:', unfinishedCheck);
 
             if (unfinishedCheck.hasUnfinished) {
               toast.error(`Please complete all questions in the section "${unfinishedCheck.sectionName}" before finishing. Unfinished questions: ${unfinishedCheck.count}`
@@ -794,7 +798,7 @@ const getAnonymousModeFromDOM = (): boolean => {
         // Last section, check for unfinished questions first
         if (onFinish) {
           const unfinishedCheck = checkForUnfinishedQuestions();
-          console.log('🔍 Unfinished questions check:', unfinishedCheck);
+          console.log('ðŸ” Unfinished questions check:', unfinishedCheck);
 
           if (unfinishedCheck.hasUnfinished) {
             // Mark that user has attempted to finish with incomplete questions
@@ -853,7 +857,7 @@ const getAnonymousModeFromDOM = (): boolean => {
   const handlePrevious = () => {
     // Simple 700ms delay to prevent rapid clicking duplicate answers
     if (previousButtonDisabled) {
-      console.log('⏱️ Previous button is disabled, please wait...');
+      console.log('â±ï¸ Previous button is disabled, please wait...');
       return;
     }
 
@@ -893,7 +897,7 @@ const getAnonymousModeFromDOM = (): boolean => {
       const getAnonymousModeFromDOM = (): boolean => {
   const allToggles = document.querySelectorAll('[data-anonymous-mode]');
   
-  console.log('🔍 [ANON-READ] Found total toggles:', allToggles.length);
+  console.log('ðŸ” [ANON-READ] Found total toggles:', allToggles.length);
   
   if (allToggles.length === 0) {
     return false;
@@ -902,7 +906,7 @@ const getAnonymousModeFromDOM = (): boolean => {
   // If only 1 toggle, use it (mobile case)
   if (allToggles.length === 1) {
     const isAnonymous = allToggles[0].getAttribute('data-anonymous-mode') === 'true';
-    console.log('🔍 [ANON-READ] Single toggle found:', {
+    console.log('ðŸ” [ANON-READ] Single toggle found:', {
       dataAttribute: allToggles[0].getAttribute('data-anonymous-mode'),
       result: isAnonymous
     });
@@ -914,18 +918,18 @@ const getAnonymousModeFromDOM = (): boolean => {
   allToggles.forEach((toggle, index) => {
     const toggleElement = toggle as HTMLElement;
     const isVisible = toggleElement.offsetParent !== null;
-    console.log(`🔍 [ANON-READ] Toggle #${index}: visible=${isVisible}, data=${toggleElement.getAttribute('data-anonymous-mode')}`);
+    console.log(`ðŸ” [ANON-READ] Toggle #${index}: visible=${isVisible}, data=${toggleElement.getAttribute('data-anonymous-mode')}`);
     if (isVisible) {
       visibleToggle = toggleElement;
     }
   });
   
   // log here visibleToggle result
-  console.log('🔍 [ANON-READ] Visible toggle selected:', visibleToggle);
+  console.log('ðŸ” [ANON-READ] Visible toggle selected:', visibleToggle);
 
   
   const isAnonymous = visibleToggle ? (visibleToggle as any).getAttribute('data-anonymous-mode') === 'true' : false;
-  console.log('🔍 [ANON-READ] Selected visible toggle:', {
+  console.log('ðŸ” [ANON-READ] Selected visible toggle:', {
     found: !!visibleToggle,
     result: isAnonymous
   });
@@ -1034,7 +1038,7 @@ const getAnonymousModeFromDOM = (): boolean => {
     const existingTestId = localStorage.getItem('testid');
 
     if (existingSessionId && existingTestId) {
-      console.log('✅ Found existing submission in localStorage!');
+      console.log('âœ… Found existing submission in localStorage!');
       console.log('   SessionId:', existingSessionId);
       console.log('   TestId:', existingTestId);
 
@@ -1049,7 +1053,7 @@ const getAnonymousModeFromDOM = (): boolean => {
       // Navigate directly to processing page without calling API
       setTimeout(() => {
         const processingUrl = `/quest-result/processing/${userId}/${existingSessionId}/${existingTestId}`;
-        console.log('🧭 Navigating to existing processing:', processingUrl);
+        console.log('ðŸ§­ Navigating to existing processing:', processingUrl);
         router.push(processingUrl);
       }, 1000);
 
@@ -1061,11 +1065,11 @@ const getAnonymousModeFromDOM = (): boolean => {
     setSubmissionError(null);
 
     try {
-      console.log('🚀 Starting quest submission from confirmation...');
+      console.log('ðŸš€ Starting quest submission from confirmation...');
 
       // Format submission data
       const submissionData = formatSubmissionData();
-      console.log('📊 Submission data created:', submissionData);
+      console.log('ðŸ“Š Submission data created:', submissionData);
 
       if (!submissionData) {
         throw new Error('No submission data available');
@@ -1078,7 +1082,7 @@ const getAnonymousModeFromDOM = (): boolean => {
       const result = await finishQuest(submissionData);
 
 
-      console.log('✅ Quest submission completed successfully:', result);
+      console.log('âœ… Quest submission completed successfully:', result);
 
       // Show success state
       setIsSubmitted(true);
@@ -1092,14 +1096,14 @@ const getAnonymousModeFromDOM = (): boolean => {
       setTimeout(() => {
         setShowConfirmation(false);
         if (result?.navigationData?.targetUrl) {
-          console.log('🧭 Navigating to:', result.navigationData.targetUrl);
+          console.log('ðŸ§­ Navigating to:', result.navigationData.targetUrl);
           router.push(result.navigationData.targetUrl);
         }
       }, 1000);
 
     } catch (error: any) {
       setHasStartedSubmission(false);
-      console.error('❌ Submission failed:', error);
+      console.error('âŒ Submission failed:', error);
       const errorMessage = error.response?.data?.message || error.message || 'Submission failed';
       setSubmissionError(errorMessage);
       setIsSubmitted(false);
