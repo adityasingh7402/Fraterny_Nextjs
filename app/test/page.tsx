@@ -13,6 +13,8 @@ import { PDFImageViewer } from '../quest/reflection/[userId]/[sessionId]/[testId
 import FAQIntrospection from '../quest/reflection/[userId]/[sessionId]/[testId]/components/FAQIntrospection';
 import Testimonials from '../quest/quest-mode/sections/Testimonials';
 import { DualGatewayPricingData } from '../quest/reflection/[userId]/[sessionId]/[testId]/utils/types';
+import FAQ from './FAQ';
+import Testimonial from './Testimonial';
 
 function page() {
 
@@ -85,7 +87,7 @@ function page() {
                         <motion.h1 className="mb-5 text-left">
                         <span className="block text-sm uppercase tracking-[0.3em] text-white/70 mb-1">Analysis Complete</span>
                         <span className="block text-5xl font-gilroy-bold tracking-tighter bg-gradient-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent">
-                            Let's explore Your Mind
+                            Quest Reveals About You
                         </span>
                         
                         </motion.h1>
@@ -109,7 +111,7 @@ function page() {
 
                         <div className="mt-6">
                             <h2 className="text-lg font-gilroy-semibold text-white uppercase tracking-[0.1em] mb-2">Primary Pattern</h2>
-                            <p className="text-white/80 text-sm">{mockData.primary_pattern}</p>
+                            <p className="text-white/80 text-md font-gilroy-medium">{mockData.primary_pattern}</p>
                         </div>
                     </div>
                 </SectionFrame>
@@ -159,7 +161,7 @@ function page() {
                                     <div
                                     onClick={() => clickedbuttonId === key ? setClickedButtonId(null) :  setClickedButtonId(key)}
                                     className="text-xl font-gilroy-semibold text-white mb-2 px-2 py-2 w-full flex items-center justify-between">
-                                        {value}
+                                        <span className='flex gap-2 items-center'>{value} { key !== 'signal1_purpose' ? <LockIcon className='text-white size-4' /> : null}</span>
                                         {clickedbuttonId === key ? <ChevronUp size={16} className="ml-2"/> : <ChevronDown size={16} className="ml-2"/>}
                                     </div>
                                     </div>
@@ -208,52 +210,80 @@ function page() {
                 testId={"ghh"}
                 >
                 <div style={{ paddingBottom: CTA_HEIGHT }}>
-                    <div>
+                    {/* <div>
                         <div className='grid grid-cols-2 gap-4'>
                             <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg'>
-                                <p className='font-gilroy-semibold text-black uppercase'>blind spot analysis</p>
+                                <p className='font-gilroy-semibold text-white uppercase'>blind spot analysis</p>
                             </div>
                             <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg'>
-                                <p className='font-gilroy-semibold text-black uppercase'>growth levers</p>
-                               
+                                <p className='font-gilroy-semibold text-white uppercase'>growth levers</p>
+
                             </div>
                             <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg'>
-                                <p className='font-gilroy-semibold text-black uppercase'>relationship dynamics</p>
-                            
+                                <p className='font-gilroy-semibold text-white uppercase'>relationship dynamics</p>
+
                             </div>
                             <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg'>
-                                <p className='font-gilroy-semibold text-black uppercase'>architectural map</p>
+                                <p className='font-gilroy-semibold text-white uppercase'>architectural map</p>
                             </div>
                         </div>
                         <div className='mt-6 uppercase text-sm text-neutral-100 w-full flex items-center justify-center'>
                             file contains 28 additional pages
                         </div>
-                    </div>
+                    </div> */}
 
-                    <div className='bg-transparent rounded-lg mt-6 p-4 h-[300px] flex flex-col items-center justify-center backdrop-blur-3xl border border-white/30 shadow-lg'>
-                        <div className='font-gilroy-bold text-2xl text-center text-neutral-900'>
-                            <p>TAKE OWNERSHIP OF YOUR <br />ARCHITECTURE</p>
+                    <div className='bg-transparent rounded-lg mt-6 p-4 h-[500px] flex flex-col items-center justify-center backdrop-blur-3xl border border-white/30 shadow-lg'>
+                        <div>
+                            <div className='grid grid-cols-2 gap-4 mb-8'>
+                                <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg text-center'>
+                                    <p className='font-gilroy-semibold text-white uppercase'>blind spot analysis</p>
+                                </div>
+                                <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg text-center'>
+                                    <p className='font-gilroy-semibold text-white uppercase'>growth levers</p>
+
+                                </div>
+                                <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg text-center'>
+                                    <p className='font-gilroy-semibold text-white uppercase'>relationship dynamics</p>
+
+                                </div>
+                                <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg text-center'>
+                                    <p className='font-gilroy-semibold text-white uppercase'>architectural map</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='font-gilroy-bold text-2xl text-center text-white'>
+                            <p className='font-gilroy-regular'>TAKE OWNERSHIP OF YOUR <br /> <span className='italic font-gilroy-semibold'>ARCHITECTURE</span></p>
                             <p className='mt-2 text-sm font-gilroy-medium'>Access the full, unredacted dossier tailored to your specific calibration.</p>
                         </div>
                         <div>
-                            <button className='mt-4 bg-blue-600 hover:bg-blue-700 text-white font-gilroy-semibold px-6 py-3 rounded-lg shadow-lg transition-colors'>
-                                Download Full Report
+                            <button className='mt-4 font-gilroy-bold bg-gradient-to-r from-sky-600 to-sky-800 text-white px-6 py-3 rounded-lg shadow-lg transition-colors'>
+                                ACCESS FULL REPORT
                             </button>
+                            {/* <div className='text-center'>
+                                PRICING
+                            </div> */}
+                        </div>
+                        <div className='mt-6 uppercase text-sm text-neutral-100 w-full flex items-center justify-center'>
+                            file contains 28 additional pages
                         </div>
                     </div>
                 </div>
 
-                <div className='flex flex-col items-center justify-center mb-10 gap-4'>
-                    <div className='bg-sky-300/10 rounded-lg p-4 w-full max-w-md border border-sky-300/30 shadow-lg'>
-                        <p className='font-gilroy-semibold text-white text-lg'>"It felt illegal to read this. It articulated things I've felt for 10 years but never said."</p>
+                {/* <div className='flex flex-col items-center justify-center mb-10 gap-4'>
+                    <div className='bg-sky-300/10 rounded-lg p-4 w-full max-w-md border border-sky-300/30 shadow-lg space-y-8'>
+                        <p className='font-gilroy-semibold text-white text-2xl'>"It felt illegal to read this. It articulated things I've felt for 10 years but never said."</p>
                         <p className='font-gilroy-medium text-neutral-300'>— Sarah K. // Architect</p>
                     </div>
 
-                    <div className='bg-sky-300/10 rounded-lg p-4 w-full max-w-md border border-sky-300/30 shadow-lg'>
-                        <p className='font-gilroy-semibold text-white text-lg'>"No fluff. Just pure signal. It didn't try to fix me, it just showed me the map."</p>
+                    <div className='bg-sky-300/10 rounded-lg p-4 w-full max-w-md border border-sky-300/30 shadow-lg space-y-8'>
+                        <p className='font-gilroy-semibold text-white text-2xl'>"No fluff. Just pure signal. It didn't try to fix me, it just showed me the map."</p>
                         <p className='font-gilroy-medium text-neutral-300'>— James R. // Founder</p>
                     </div>
-                </div>
+                </div> */}
+
+                <Testimonial />
+
+                <FAQ className='bg-transparent rounded-lg' />
 
                 
                 </SectionFrame>
