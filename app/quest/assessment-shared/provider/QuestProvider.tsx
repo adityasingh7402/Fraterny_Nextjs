@@ -5,10 +5,10 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/auth/cotexts/AuthContext';
 import axios from 'axios';
 import { QuestContext } from '../contexts/QuestContext';
-import { 
-  Question, 
-  QuestSession, 
-  QuestResult, 
+import {
+  Question,
+  QuestSession,
+  QuestResult,
   QuestionResponse,
   QuestSessionStatus,
   HonestyTag
@@ -56,7 +56,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
       if (autoSaveInterval.current) {
         clearInterval(autoSaveInterval.current);
       }
-      
+
       // Start new timer - save every 5 seconds
       autoSaveInterval.current = setInterval(() => {
         localStorage.setItem('fraterny_quest_session', JSON.stringify(session));
@@ -77,7 +77,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
       if (session && session.responses && Object.keys(session.responses).length > 0) {
         console.log('💾 Browser closing - saving session immediately');
         localStorage.setItem('fraterny_quest_session', JSON.stringify(session));
-        
+
         // NEW: Track quest abandonment in GA4
         if (session.status === 'in_progress') {
           const userState = auth.user ? 'logged_in' : 'anonymous';
@@ -86,7 +86,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
           const questionsCompleted = Object.keys(session.responses).length;
           const currentQuestionIndex = session.currentQuestionIndex || 0;
           const currentQuestion = sectionQuestions[currentQuestionIndex];
-          
+
           if (currentQuestion) {
             googleAnalytics.trackQuestAbandon({
               session_id: session.id,
@@ -106,7 +106,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
       if (document.hidden && session && session.responses && Object.keys(session.responses).length > 0) {
         // console.log('📱 App backgrounded - saving session immediately');
         localStorage.setItem('fraterny_quest_session', JSON.stringify(session));
-        
+
         // NEW: Track quest abandonment in GA4 (for mobile users backgrounding the app)
         if (session.status === 'in_progress') {
           const userState = auth.user ? 'logged_in' : 'anonymous';
@@ -115,7 +115,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
           const questionsCompleted = Object.keys(session.responses).length;
           const currentQuestionIndex = session.currentQuestionIndex || 0;
           const currentQuestion = sectionQuestions[currentQuestionIndex];
-          
+
           if (currentQuestion) {
             googleAnalytics.trackQuestAbandon({
               session_id: session.id,
@@ -141,7 +141,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [session, auth.user, currentSectionId, sectionQuestions]);
-  
+
   // Derived state
   const currentQuestionIndex = session?.currentQuestionIndex || 0;
   const currentQuestion = sectionQuestions[currentQuestionIndex] || null;
@@ -152,10 +152,10 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
     return sectionQuestions.filter(q => session.responses && session.responses[q.id]).length;
   };
 
-  const progress = sectionQuestions.length > 0 
-  ? ((getResponseCountForCurrentSection()) / sectionQuestions.length) * 100 
-  : 0;
-  
+  const progress = sectionQuestions.length > 0
+    ? ((getResponseCountForCurrentSection()) / sectionQuestions.length) * 100
+    : 0;
+
   // Update section questions when current section changes  
   useEffect(() => {
     const newSectionQuestions = getQuestionsBySection(currentSectionId);
@@ -171,15 +171,15 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
       return prev;
     });
   }, [currentSectionId]);
-    
+
   // Generate a session ID (temporary - will be from backend)
   const generateSessionId = () => `session_${Date.now()}`;
-  
+
   // Accumulate time spent on a question from mount/unmount tracking
   const accumulateQuestionTime = (questionId: string, durationSeconds: number) => {
     setSession(prev => {
       if (!prev) return null;
-      
+
       const existingResponse = prev.responses?.[questionId];
       if (existingResponse) {
         // Add to existing accumulated time (don't overwrite!)
@@ -211,7 +211,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
         };
       }
     });
-    
+
     //console.log(`📊 Question ${questionId} accumulated +${durationSeconds}s (total will be updated)`);
   };
 
@@ -250,18 +250,18 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
           localStorage.removeItem('fraterny_quest_session');
         }
       }
-      
+
       // Set section if provided
       if (sectionId) {
         setCurrentSectionId(sectionId);
         setSectionQuestions(getQuestionsBySection(sectionId));
       }
-      
+
       // Clear any old result data when starting fresh assessment
       console.log('🧹 Clearing old result data for fresh assessment');
       localStorage.removeItem('questSessionId');
       localStorage.removeItem('testid');
-      
+
       // Create a new session (will be replaced with API call)
       const newSession: QuestSession = {
         id: generateSessionId(),
@@ -276,10 +276,10 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
         visitedQuestions: [],
         questionProgress: {}
       };
-      
+
       setSession(newSession);
       setVisitedQuestions([]);
-      
+
       // Capture device identifier for fallback recovery (secondary method)
       // This runs alongside existing session storage, doesn't replace it
       getDeviceIdentifier().then(identifier => {
@@ -294,7 +294,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
       }).catch(err => {
         console.log('Device identifier capture failed (non-critical):', err);
       });
-      
+
       // NEW: Track quest start in GA4
       const userState = auth.user ? 'logged_in' : 'anonymous';
       const isResumedSession = !!savedSession;
@@ -315,22 +315,22 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
   };
 
   const submitResponse = async (
-    questionId: string, 
-    response: string, 
+    questionId: string,
+    response: string,
     tags?: HonestyTag[]
   ): Promise<void> => {
     console.log('💾 [DESKTOP-DEBUG] submitResponse called:', {
-    questionId,
-    responsePreview: response.substring(0, 100) + (response.length > 100 ? '...' : ''),
-    responseLength: response.length,
-    hasTags: !!tags,
-    tagsCount: tags?.length || 0
-  });
+      questionId,
+      responsePreview: response.substring(0, 100) + (response.length > 100 ? '...' : ''),
+      responseLength: response.length,
+      hasTags: !!tags,
+      tagsCount: tags?.length || 0
+    });
     if (!session) return;
-    
+
     try {
       setIsSubmitting(true);
-      
+
       // Create the response object
       const questionResponse: QuestionResponse = {
         questionId,
@@ -340,11 +340,11 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
         viewStartTime: questionViewTimes[questionId] ? new Date(questionViewTimes[questionId]).toISOString() : new Date().toISOString(),
         totalViewTimeSeconds: session.responses?.[questionId]?.totalViewTimeSeconds || 0
       };
-      
+
       // Update session with the new response
       setSession(prev => {
         if (!prev) return null;
-        
+
         return {
           ...prev,
           responses: {
@@ -363,7 +363,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
           ]
         };
       });
-      
+
       // NEW: Track successful question completion in GA4
       const userState = auth.user ? 'logged_in' : 'anonymous';
       const sessionId = session?.id || `temp_${Date.now()}`;
@@ -372,7 +372,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
       const question = sectionQuestions.find(q => q.id === questionId);
       if (question && question.sectionId) {
         const questionIndex = allQuestions.findIndex(q => q.id === questionId) + 1;
-        
+
         // googleAnalytics.trackQuestionComplete({
         //   session_id: sessionId,
         //   question_id: questionId,
@@ -383,20 +383,20 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
         //   time_on_question: questionResponse.totalViewTimeSeconds || 0
         // });
       }
-      
+
     } catch (err) {
       setError(err instanceof Error ? err : new Error(String(err)));
     } finally {
       setIsSubmitting(false);
     }
   };
-  
+
   const trackQuestionView = (questionId: string) => {
     if (currentViewingQuestion === questionId) return; // Already tracking
-    
+
     // Stop previous tracking
     stopQuestionTracking();
-    
+
     // Start new tracking
     setCurrentViewingQuestion(questionId);
     setQuestionViewTimes(prev => ({
@@ -407,15 +407,15 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
 
   const stopQuestionTracking = () => {
     if (!currentViewingQuestion) return;
-    
+
     const startTime = questionViewTimes[currentViewingQuestion];
     if (startTime) {
       const timeSpent = Math.round((Date.now() - startTime) / 1000);
-      
+
       // Update session with accumulated time
       setSession(prev => {
         if (!prev || !prev.responses) return prev;
-        
+
         const existingResponse = prev.responses[currentViewingQuestion];
         if (existingResponse) {
           const currentTotal = existingResponse.totalViewTimeSeconds || 0;
@@ -433,28 +433,28 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
         return prev;
       });
     }
-    
+
     setCurrentViewingQuestion(null);
   };
-  
+
   const nextQuestion = () => {
     if (!session) return;
-    
+
     const currentIndex = session.currentQuestionIndex || 0;
     const currentQuestion = sectionQuestions[currentIndex];
-    
+
     if (currentIndex >= sectionQuestions.length - 1) return;
-    
+
     const nextIndex = currentIndex + 1;
-    
+
     setSession(prev => {
       if (!prev) return null;
-      
+
       // Mark current question as visited when moving away
       const updatedVisitedQuestions = currentQuestion && !prev.visitedQuestions?.includes(currentQuestion.id)
         ? [...(prev.visitedQuestions || []), currentQuestion.id]
         : prev.visitedQuestions || [];
-      
+
       return {
         ...prev,
         currentQuestionIndex: nextIndex,
@@ -465,24 +465,24 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
 
   const previousQuestion = () => {
     if (!session) return;
-    
+
     const currentIndex = session.currentQuestionIndex || 0;
-    
+
     // If we're at the first question of current section, go to previous section
     if (currentIndex === 0) {
       const currentSectionIndex = questSections.findIndex(s => s.id === currentSectionId);
-      
+
       // If there's a previous section, go to its last question
       if (currentSectionIndex > 0) {
         const previousSectionId = questSections[currentSectionIndex - 1].id;
         const previousSectionQuestions = getQuestionsBySection(previousSectionId);
-        
+
         // Change to previous section and go to its last question
         setCurrentSectionId(previousSectionId);
-        
+
         setSession(prev => {
           if (!prev) return null;
-          
+
           return {
             ...prev,
             currentQuestionIndex: previousSectionQuestions.length - 1,
@@ -495,9 +495,9 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
       // Move to previous question in current section
       setSession(prev => {
         if (!prev) return null;
-        
+
         const prevIndex = currentIndex - 1;
-        
+
         return {
           ...prev,
           currentQuestionIndex: prevIndex
@@ -505,18 +505,18 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
       });
     }
   };
-  
+
   const skipQuestion = () => {
     if (!session) return;
-    
+
     const currentIndex = session.currentQuestionIndex || 0;
     const currentQuestion = sectionQuestions[currentIndex];
-    
+
     if (currentQuestion) {
       // Mark as skipped in session
       setSession(prev => {
         if (!prev) return null;
-        
+
         return {
           ...prev,
           questionProgress: {
@@ -529,23 +529,23 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
           ]
         };
       });
-      
+
       // Move to next question
       nextQuestion();
     }
   };
-  
+
   const goToQuestion = (questionIndex: number) => {
     if (!session) return;
-    
+
     const targetIndex = Math.max(0, Math.min(questionIndex, sectionQuestions.length - 1));
     const currentQuestion = sectionQuestions[session.currentQuestionIndex || 0];
-    
+
     // Mark current question as visited if we're moving away from it
     if (currentQuestion && targetIndex !== (session.currentQuestionIndex || 0)) {
       setSession(prev => {
         if (!prev) return null;
-        
+
         return {
           ...prev,
           currentQuestionIndex: targetIndex,
@@ -558,7 +558,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
     } else {
       setSession(prev => {
         if (!prev) return null;
-        
+
         return {
           ...prev,
           currentQuestionIndex: targetIndex
@@ -566,7 +566,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
       });
     }
   };
-  
+
   const editResponse = (questionId: string) => {
     const questionIndex = sectionQuestions.findIndex(q => q.id === questionId);
     if (questionIndex >= 0) {
@@ -575,222 +575,143 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
   };
 
   const finishQuest = async (submissionData: any): Promise<QuestResult | null> => {
-  console.log('🚀 Starting quest submission...');
+    console.log('🚀 Starting quest submission...');
 
     // Check if already submitted to prevent duplicates
-  if (hasSubmittedToAPI) {
-    console.log('⚠️ Submission already sent, preventing duplicate');
-    // Try to return cached result if available
-    const cachedSessionId = localStorage.getItem('questSessionId');
-    const cachedTestId = localStorage.getItem('testid');
-    if (cachedSessionId && cachedTestId) {
-      const navigationData = {
-        targetUrl: `/quest-result/processing/${submissionData.user_data.user_id}/${cachedSessionId}/${cachedTestId}`,
-        userId: submissionData.user_data.user_id,
-        sessionId: cachedSessionId,
-        testid: cachedTestId
-      };
-      return {
-        sessionId: cachedSessionId,
-        userId: submissionData.user_data.user_id,
-        navigationData: navigationData,
-        analysisData: {
-          summary: "Quest already submitted. Redirecting to results...",
-          sections: []
-        },
-        generatedAt: new Date().toISOString()
-      };
-    }
-    return null;
-  }
-
-  
-  try {
-    setIsSubmitting(true);
-    setHasSubmittedToAPI(true); // Mark as submitted immediately
-    
-    // Extract required IDs
-    const sessionId = submissionData.assessment_metadata.session_id;
-    const testid = submissionData.user_data.testid;
-    const userId = submissionData.user_data.user_id;
-
-    // Track API request start
-    const requestStartTime = Date.now();
-    console.log('posthog event captured: api_request_started..', requestStartTime);
-
-
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/agent`, submissionData, {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      timeout: 300000
-    });
-    console.log('📦 Server response received:', response.data);
-
-    // Validate response status
-    if (!response.data || response.data.status !== "Submitted") {
-      const errorMessage = response.data?.message || 'Submission failed - unexpected response';
-      console.error('❌ Submission failed:', errorMessage);
-      throw new Error(errorMessage);
-    }
-
-    //console.log('✅ Submission successful:', response.data);
-    // Track API request success
-    const responseTime = Date.now() - requestStartTime;
-    // posthog.capture('api_request_success', {
-    //   testid: testid,
-    //   endpoint: 'agent_submission',
-    //   response_time_ms: responseTime,
-    //   timestamp: new Date().toISOString()
-    // });
-
-
-    setSession(prev => {
-      if (!prev) return null;
-      return {
-        ...prev,
-        status: 'completed' as QuestSessionStatus,
-        completedAt: new Date().toISOString(),
-        durationMinutes: prev.startedAt 
-          ? (Date.now() - new Date(prev.startedAt).getTime()) / 60000 
-          : undefined
-      };
-    });
-    
-    // console.log('✅ Analysis completed successfully!');
-    // console.log('📦 Server response:', response.data);
-    
-    // Store data locally for results page access
-    localStorage.setItem('questSessionId', sessionId);
-    localStorage.setItem('testid', testid);
-
-    // Note: localStorage cleanup moved to results page to prevent data loss on back navigation
-    console.log('✅ Quest data preserved for results page');
-
-    const userState = auth.user ? 'logged_in' : 'anonymous';
-    const startTime = session?.startedAt ? new Date(session.startedAt).getTime() : Date.now();
-    const totalDuration = (Date.now() - startTime) / 1000; // in seconds
-    const questionsCompleted = session?.responses ? Object.keys(session.responses).length : 0;
-
-    // googleAnalytics.trackQuestComplete({
-    //   session_id: sessionId,
-    //   user_state: userState,
-    //   total_duration: totalDuration,
-    //   questions_completed: questionsCompleted
-    // });
-    
-    // Track affiliate questionnaire completion
-    const referredBy = submissionData.referred_by;
-    if (referredBy) {
-      try {
-        console.log('📋 Tracking affiliate questionnaire completion:', referredBy);
-        await fetch('/api/tracking/events', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            affiliate_code: referredBy,
-            event_type: 'questionnaire_completed',
-            user_id: userId,
-            session_id: sessionId,
-            test_id: testid,
-            ip_address: null,
-            device_info: null,
-            location: null,
-            metadata: {
-              completion_time: new Date().toISOString(),
-              total_duration: totalDuration,
-              questions_completed: questionsCompleted
-            }
-          })
-        });
-        console.log('✅ Questionnaire completion tracked for affiliate:', referredBy);
-      } catch (error) {
-        console.error('⚠️ Failed to track questionnaire completion (non-critical):', error);
+    if (hasSubmittedToAPI) {
+      console.log('⚠️ Submission already sent, preventing duplicate');
+      // Try to return cached result if available
+      const cachedSessionId = localStorage.getItem('questSessionId');
+      const cachedTestId = localStorage.getItem('testid');
+      if (cachedSessionId && cachedTestId) {
+        const navigationData = {
+          targetUrl: `/quest-result/processing/${submissionData.user_data.user_id}/${cachedSessionId}/${cachedTestId}`,
+          userId: submissionData.user_data.user_id,
+          sessionId: cachedSessionId,
+          testid: cachedTestId
+        };
+        return {
+          sessionId: cachedSessionId,
+          userId: submissionData.user_data.user_id,
+          navigationData: navigationData,
+          analysisData: {
+            summary: "Quest already submitted. Redirecting to results...",
+            sections: []
+          },
+          generatedAt: new Date().toISOString()
+        };
       }
+      return null;
     }
-    
-    // const targetUrl = `/quest/processing/${userId}/${sessionId}/${testid}`;
-    // navigate(targetUrl);
 
-    const navigationData = {
-      targetUrl: `/quest/processing/${userId}/${sessionId}/${testid}`,
-      userId,
-      sessionId,
-      testid
-    };
 
-    return {
-      sessionId: sessionId,
-      userId: userId,
-      navigationData: navigationData,
-      analysisData: {
-        summary: "Quest submitted successfully.",
-        sections: []
-      },
-      generatedAt: new Date().toISOString()
-    };
-    
-  } catch (error: any) {
-    const sessionId = submissionData.assessment_metadata.session_id;
-    const testid = submissionData.user_data.testid;
-    const userId = submissionData.user_data.user_id;
-    console.error('❌ Quest submission failed:', error.message);
-    // posthog.capture('api_request_error', {
-    //   testid: testid,
-    //   endpoint: 'agent_submission',
-    //   error_message: error.message || 'Unknown error',
-    //   timestamp: new Date().toISOString()
-    // });
-    
-    // Set error in context for UI to show
-    // setError(error instanceof Error ? error : new Error('Submission failed'));
-    // If it's a network error, check if submission actually succeeded
-    if (error.code === 'NETWORK_ERROR' || 
-    error.message.includes('timeout') || 
-    error.message.includes('Network Error') ||
-    error.code === 'ECONNABORTED') {
-  
-  try {
-    console.log('🔍 Network error detected, checking if submission actually succeeded...');
+    try {
+      setIsSubmitting(true);
+      setHasSubmittedToAPI(true); // Mark as submitted immediately
 
-    //let's add posthog event for network error detected
-    // posthog.capture('network_error_detected', {
-    //   testid: testid,
-    //   endpoint: 'agent_submission',
-    //   error_message: error.message || 'Network error detected',
-    //   timestamp: new Date().toISOString()
-    // });
+      // Extract required IDs
+      const sessionId = submissionData.assessment_metadata.session_id;
+      const testid = submissionData.user_data.testid;
+      const userId = submissionData.user_data.user_id;
 
-    const statusResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/status/${testid}`);
-    const statusData = await statusResponse.json();
-    
-    if (statusData.status === 'processing' || statusData.status === 'ready') {
-      console.log('✅ Submission was actually successful, navigating to processing...');
+      // Track API request start
+      const requestStartTime = Date.now();
+      console.log('posthog event captured: api_request_started..', requestStartTime);
 
-      //add posthog event for submission confirmed successful after network error
-      // posthog.capture('submission_confirmed_successful', {
+
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/agent`, submissionData, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        timeout: 300000
+      });
+      console.log('📦 Server response received:', response.data);
+
+      // Validate response status
+      if (!response.data || response.data.status !== "Submitted") {
+        const errorMessage = response.data?.message || 'Submission failed - unexpected response';
+        console.error('❌ Submission failed:', errorMessage);
+        throw new Error(errorMessage);
+      }
+
+      //console.log('✅ Submission successful:', response.data);
+      // Track API request success
+      const responseTime = Date.now() - requestStartTime;
+      // posthog.capture('api_request_success', {
       //   testid: testid,
       //   endpoint: 'agent_submission',
+      //   response_time_ms: responseTime,
       //   timestamp: new Date().toISOString()
       // });
-      
-      // Mark session as completed and do all success cleanup
+
+
       setSession(prev => {
         if (!prev) return null;
         return {
           ...prev,
           status: 'completed' as QuestSessionStatus,
           completedAt: new Date().toISOString(),
-          durationMinutes: prev.startedAt 
-            ? (Date.now() - new Date(prev.startedAt).getTime()) / 60000 
+          durationMinutes: prev.startedAt
+            ? (Date.now() - new Date(prev.startedAt).getTime()) / 60000
             : undefined
         };
       });
-      
+
+      // console.log('✅ Analysis completed successfully!');
+      // console.log('📦 Server response:', response.data);
+
+      // Store data locally for results page access
       localStorage.setItem('questSessionId', sessionId);
       localStorage.setItem('testid', testid);
-      // Note: localStorage cleanup moved to results page
-      
+
+      // Note: localStorage cleanup moved to results page to prevent data loss on back navigation
+      console.log('✅ Quest data preserved for results page');
+
+      const userState = auth.user ? 'logged_in' : 'anonymous';
+      const startTime = session?.startedAt ? new Date(session.startedAt).getTime() : Date.now();
+      const totalDuration = (Date.now() - startTime) / 1000; // in seconds
+      const questionsCompleted = session?.responses ? Object.keys(session.responses).length : 0;
+
+      // googleAnalytics.trackQuestComplete({
+      //   session_id: sessionId,
+      //   user_state: userState,
+      //   total_duration: totalDuration,
+      //   questions_completed: questionsCompleted
+      // });
+
+      // Track affiliate questionnaire completion
+      const referredBy = submissionData.referred_by;
+      if (referredBy) {
+        try {
+          console.log('📋 Tracking affiliate questionnaire completion:', referredBy);
+          await fetch('/api/tracking/events', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              affiliate_code: referredBy,
+              event_type: 'questionnaire_completed',
+              user_id: userId,
+              session_id: sessionId,
+              test_id: testid,
+              ip_address: null,
+              device_info: null,
+              location: null,
+              metadata: {
+                completion_time: new Date().toISOString(),
+                total_duration: totalDuration,
+                questions_completed: questionsCompleted
+              }
+            })
+          });
+          console.log('✅ Questionnaire completion tracked for affiliate:', referredBy);
+        } catch (error) {
+          console.error('⚠️ Failed to track questionnaire completion (non-critical):', error);
+        }
+      }
+
+      // const targetUrl = `/quest/processing/${userId}/${sessionId}/${testid}`;
+      // navigate(targetUrl);
+
       const navigationData = {
         targetUrl: `/quest/processing/${userId}/${sessionId}/${testid}`,
         userId,
@@ -803,38 +724,117 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
         userId: userId,
         navigationData: navigationData,
         analysisData: {
-          summary: "Quest analysis completed successfully.",
+          summary: "Quest submitted successfully.",
           sections: []
         },
         generatedAt: new Date().toISOString()
       };
+
+    } catch (error: any) {
+      const sessionId = submissionData.assessment_metadata.session_id;
+      const testid = submissionData.user_data.testid;
+      const userId = submissionData.user_data.user_id;
+      console.error('❌ Quest submission failed:', error.message);
+      // posthog.capture('api_request_error', {
+      //   testid: testid,
+      //   endpoint: 'agent_submission',
+      //   error_message: error.message || 'Unknown error',
+      //   timestamp: new Date().toISOString()
+      // });
+
+      // Set error in context for UI to show
+      // setError(error instanceof Error ? error : new Error('Submission failed'));
+      // If it's a network error, check if submission actually succeeded
+      if (error.code === 'NETWORK_ERROR' ||
+        error.message.includes('timeout') ||
+        error.message.includes('Network Error') ||
+        error.code === 'ECONNABORTED') {
+
+        try {
+          console.log('🔍 Network error detected, checking if submission actually succeeded...');
+
+          //let's add posthog event for network error detected
+          // posthog.capture('network_error_detected', {
+          //   testid: testid,
+          //   endpoint: 'agent_submission',
+          //   error_message: error.message || 'Network error detected',
+          //   timestamp: new Date().toISOString()
+          // });
+
+          const statusResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/status/${testid}`);
+          const statusData = await statusResponse.json();
+
+          if (statusData.status === 'processing' || statusData.status === 'ready') {
+            console.log('✅ Submission was actually successful, navigating to processing...');
+
+            //add posthog event for submission confirmed successful after network error
+            // posthog.capture('submission_confirmed_successful', {
+            //   testid: testid,
+            //   endpoint: 'agent_submission',
+            //   timestamp: new Date().toISOString()
+            // });
+
+            // Mark session as completed and do all success cleanup
+            setSession(prev => {
+              if (!prev) return null;
+              return {
+                ...prev,
+                status: 'completed' as QuestSessionStatus,
+                completedAt: new Date().toISOString(),
+                durationMinutes: prev.startedAt
+                  ? (Date.now() - new Date(prev.startedAt).getTime()) / 60000
+                  : undefined
+              };
+            });
+
+            localStorage.setItem('questSessionId', sessionId);
+            localStorage.setItem('testid', testid);
+            // Note: localStorage cleanup moved to results page
+
+            const navigationData = {
+              targetUrl: `/quest/processing/${userId}/${sessionId}/${testid}`,
+              userId,
+              sessionId,
+              testid
+            };
+
+            return {
+              sessionId: sessionId,
+              userId: userId,
+              navigationData: navigationData,
+              analysisData: {
+                summary: "Quest analysis completed successfully.",
+                sections: []
+              },
+              generatedAt: new Date().toISOString()
+            };
+          }
+        } catch (statusError) {
+          console.log('Status check also failed, will show retry option');
+          // posthog event for status check failure
+          // posthog.capture('status_check_failed_after_submission', {
+          //   testid: testid,
+          //   endpoint: 'status_check',
+          //   error_message: (statusError as Error).message || 'Status check failed',
+          //   timestamp: new Date().toISOString()
+          // });
+
+        }
+      }
+
+      throw error;
+
+    } finally {
+      setIsSubmitting(false);
     }
-  } catch (statusError) {
-    console.log('Status check also failed, will show retry option');
-    // posthog event for status check failure
-    // posthog.capture('status_check_failed_after_submission', {
-    //   testid: testid,
-    //   endpoint: 'status_check',
-    //   error_message: (statusError as Error).message || 'Status check failed',
-    //   timestamp: new Date().toISOString()
-    // });
-
-  }
-}
-
-    throw error;
-    
-  } finally {
-    setIsSubmitting(false);
-  }
   };
-    
+
   const resetQuest = () => {
     setSession(null);
     setError(null);
     setCurrentSectionId(initialSectionId || questSections[0].id);
   };
-  
+
   const getCurrentSection = () => {
     return questSections.find(s => s.id === currentSectionId) || questSections[0];
   };
@@ -848,7 +848,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
     const questionsBefore = questSections
       .slice(0, currentSectionIndex)
       .reduce((total, section) => total + section.questions.length, 0);
-    
+
     return questionsBefore + (session?.currentQuestionIndex || 0);
   };
 
@@ -862,39 +862,39 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
     console.log('🔄 finishSection called');
     console.log('📍 Session exists:', !!session);
     console.log('📍 Current section:', getCurrentSection()?.id);
-    
+
     if (!session || !getCurrentSection()) {
       console.log('❌ No session or current section - returning false');
       return false;
     }
-    
+
     // Check if all questions in current section are answered
     const currentSectionQuestions = getCurrentSection().questions;
     console.log('📊 Questions in current section:', currentSectionQuestions.length);
     console.log('📝 Session responses:', Object.keys(session.responses || {}));
-    
+
     const allQuestionsAnswered = currentSectionQuestions.every(q => {
       const hasResponse = session.responses && session.responses[q.id];
       console.log(`   Question ${q.id}: ${hasResponse ? '✅' : '❌'} answered`);
       return hasResponse;
     });
-    
+
     console.log('✅ All questions answered:', allQuestionsAnswered);
-    
+
     if (!allQuestionsAnswered) {
       console.log('❌ Not all questions answered - returning false');
       // Don't automatically move to next section if current isn't complete
       return false;
     }
-    
+
     // Find next section
     const currentIndex = questSections.findIndex(s => s.id === currentSectionId);
     console.log('📍 Current section index:', currentIndex);
     console.log('📍 Total sections:', questSections.length);
-    
+
     const nextSectionIndex = currentIndex + 1;
     console.log('📍 Next section index:', nextSectionIndex);
-    
+
     if (nextSectionIndex < questSections.length) {
       // Move to next section
       const nextSection = questSections[nextSectionIndex];
@@ -903,7 +903,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
       console.log('✅ Section change completed - returning true');
       return true;
     }
-    
+
     // No more sections - assessment is complete
     console.log('🏁 No more sections - assessment complete - returning false');
     return false;
@@ -911,7 +911,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
 
   const changeSection = (newSectionId: string) => {
     const targetSection = questSections.find(s => s.id === newSectionId);
-    
+
     if (!targetSection) {
       console.warn(`Section ${newSectionId} not found`);
       return;
@@ -921,33 +921,33 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
     if (currentSectionId === newSectionId) {
       return;
     }
-    
+
     // Update the section ID - this should trigger the useEffect
     setCurrentSectionId(newSectionId);
-    
+
     // Also immediately get and set the new questions to avoid any delay
     const newQuestions = getQuestionsBySection(newSectionId);
     setSectionQuestions(newQuestions);
-    
+
     // Update session state
     setSession(prev => {
       if (!prev) {
         return null;
       }
-      
+
       const newState = {
         ...prev,
         currentQuestionIndex: 0, // Always start from first question
         sectionId: newSectionId
       };
-      
+
       return newState;
     });
-    
+
     // Clear any errors
     setError(null);
   };
-  
+
   // Context value
   const value = useMemo(() => ({
     // State
@@ -960,11 +960,11 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
     progress,
     error,
     currentSectionId,
-    
+
     // Section data
     sections: questSections,
     currentSection: getCurrentSection(),
-    
+
     // Actions
     startQuest,
     submitResponse,
@@ -980,7 +980,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
     getTotalQuestionsInAssessment,
     getCurrentGlobalQuestionIndex,
     isLastQuestionInEntireAssessment,
-    trackQuestionView,     
+    trackQuestionView,
     stopQuestionTracking,
     hasAttemptedFinishWithIncomplete,
     accumulateQuestionTime,
@@ -996,7 +996,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
     error,
     currentSectionId
   ]);
-  
+
   return (
     <QuestContext.Provider value={value}>
       {children}

@@ -54,6 +54,7 @@ export interface ResultData {
   pecentile?: string;
   qualityscore?: string;
   referred_by?: string;
+  mode?: string;
   results: {
     "section 1"?: string;
     "Mind Card"?: MindCardData;
