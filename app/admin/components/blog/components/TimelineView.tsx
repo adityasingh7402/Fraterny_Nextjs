@@ -118,7 +118,7 @@ const TimelineView = ({
         return [];
     };
 
-    // Group blogs by time slot
+    // Group blogs by time slot based on created_at
     const groupBlogsByTimeSlot = () => {
         const grouped: { [key: string]: BlogPost[] } = {};
 
@@ -253,9 +253,14 @@ const TimelineView = ({
                                         No blogs in this time slot
                                     </div>
                                 ) : (
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         {slotBlogs.map(post => {
                                             const postTags = parseTags(post.tags);
+
+                                            // Check if post was updated (more than 1 minute difference)
+                                            const createdTime = new Date(post.created_at).getTime();
+                                            const updatedTime = new Date(post.updated_at).getTime();
+                                            const wasUpdated = Math.abs(updatedTime - createdTime) > 60000;
 
                                             return (
                                                 <div
@@ -284,18 +289,44 @@ const TimelineView = ({
                                                             {post.title}
                                                         </h4>
 
-                                                        <div className="flex flex-wrap gap-2 mb-2">
-                                                            {post.category && (
+                                                        {/* Category */}
+                                                        {post.category && (
+                                                            <div className="mb-2">
                                                                 <span className="px-2 py-0.5 bg-navy bg-opacity-10 text-navy text-xs rounded">
                                                                     {post.category}
                                                                 </span>
-                                                            )}
-                                                            <span className="text-xs text-gray-500">
+                                                            </div>
+                                                        )}
+
+                                                        {/* Timestamps - Created and Updated */}
+                                                        <div className="flex items-center gap-2 text-xs text-gray-500 mb-2 flex-wrap">
+                                                            <span className="flex items-center gap-1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                    <circle cx="12" cy="12" r="10"></circle>
+                                                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                                                </svg>
                                                                 {new Date(post.created_at).toLocaleTimeString('en-US', {
                                                                     hour: '2-digit',
                                                                     minute: '2-digit',
                                                                 })}
                                                             </span>
+
+                                                            {/* Show updated time if different from created time */}
+                                                            {wasUpdated && (
+                                                                <>
+                                                                    <span className="text-gray-300">•</span>
+                                                                    <span className="flex items-center gap-1 text-orange-600">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                            <polyline points="23 4 23 10 17 10"></polyline>
+                                                                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                                                                        </svg>
+                                                                        Updated: {new Date(post.updated_at).toLocaleTimeString('en-US', {
+                                                                            hour: '2-digit',
+                                                                            minute: '2-digit',
+                                                                        })}
+                                                                    </span>
+                                                                </>
+                                                            )}
                                                         </div>
 
                                                         {/* Tags */}
