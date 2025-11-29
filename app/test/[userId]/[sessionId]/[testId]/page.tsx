@@ -2,21 +2,34 @@
 
 import React, { useRef, useState } from 'react'
 import mockData from './mock-data';
-import { AuthBanner } from '../quest/reflection/[userId]/[sessionId]/[testId]/components/AuthBanner';
-import { tokens, CTA_HEIGHT } from '../quest/reflection/[userId]/[sessionId]/[testId]/utils/constants';
-import { SectionFrame } from '../quest/reflection/[userId]/[sessionId]/[testId]/components/SectionFrame';
+import { AuthBanner } from '../../../../quest/reflection/[userId]/[sessionId]/[testId]/components/AuthBanner';
+import { tokens, CTA_HEIGHT } from '../../../../quest/reflection/[userId]/[sessionId]/[testId]/utils/constants';
+import { SectionFrame } from '../../../../quest/reflection/[userId]/[sessionId]/[testId]/components/SectionFrame';
 import { motion, AnimatePresence } from 'motion/react';
 import { Arrow } from '@radix-ui/react-dropdown-menu';
 import { ArrowBigDown, ChevronDown, ChevronUp, LockIcon } from 'lucide-react';
-import { sectionIds } from '../quest/reflection/[userId]/[sessionId]/[testId]/utils/sectionHelpers';
-import { PDFImageViewer } from '../quest/reflection/[userId]/[sessionId]/[testId]/components/PDFImageViewer';
-import FAQIntrospection from '../quest/reflection/[userId]/[sessionId]/[testId]/components/FAQIntrospection';
-import Testimonials from '../quest/quest-mode/sections/Testimonials';
-import { DualGatewayPricingData } from '../quest/reflection/[userId]/[sessionId]/[testId]/utils/types';
+import { sectionIds } from '../../../../quest/reflection/[userId]/[sessionId]/[testId]/utils/sectionHelpers';
+import { PDFImageViewer } from '../../../../quest/reflection/[userId]/[sessionId]/[testId]/components/PDFImageViewer';
+import FAQIntrospection from '../../../../quest/reflection/[userId]/[sessionId]/[testId]/components/FAQIntrospection';
+import Testimonials from '../../../../quest/quest-mode/sections/Testimonials';
+import { DualGatewayPricingData } from '../../../../quest/reflection/[userId]/[sessionId]/[testId]/utils/types';
 import FAQ from './FAQ';
 import Testimonial from './Testimonial';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/app/auth/cotexts/AuthContext';
+import { toast } from 'sonner';
+import axios from 'axios';
 
-function page() {
+
+interface User {
+  id: string;
+  email?: string; // Make email optional to match Supabase
+  name?: string;
+  user_metadata?: any;
+  app_metadata?: any;
+}
+
+async function page( { params }: { params: Promise<{ userId: string; sessionId: string; testId: string; }> } ) {
 
     const containerRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState(0);
@@ -41,16 +54,57 @@ function page() {
         },
         isLoading: true
       });
+    const router = useRouter();
+    const { user, signInWithGoogle } = useAuth();
+    const { userId, sessionId, testId } = await params;
+
+
+     const handleSignIn = async () => {
+        try {
+        await signInWithGoogle();
+        // send the userdata to the backend to associate the session
+        if (user?.id) {
+            const userId = user?.id
+            const username = user.user_metadata.full_name;
+            const email = user?.email || '';
+            //console.log('User signed in:', user.user_metadata.full_name, user.email);
+            console.log('Associating session with user after sign-in:', { sessionId, testId, userId, username, email });
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/saveusingsignin`, {
+            sessionId,
+            testId,
+            userId,
+            username,
+            email
+            });
+            console.log('Sign-in association response:', response);
+
+        }
+        } catch (error) {
+        console.error('Sign-in error:', error);
+        toast.error('Sign-in failed. Please try again.', {
+            position: "top-right"
+        });
+        }
+    };
+
+
+      const handleAuthAction = () => {
+    if (user) {
+      router.push(`/profile?tab=history`); // or wherever your dashboard is
+    } else {
+      handleSignIn();
+    }
+  };
     
     
   return (
     <div className='w-screen max-w-screen overflow-x-hidden'>
         <AuthBanner
-            onSignIn={() => {}}
-            onPayment={() => {}}
-            user={null}
-            paymentLoading={false}
-            activeIndex={0}
+        onSignIn={handleAuthAction}
+        onPayment={() => {}} // to be done by aditya in original it is realted to payment
+        user={user}
+        paymentLoading={false} // this one too is related to aditya 
+        activeIndex={activeIndex}
         />
 
         <div
