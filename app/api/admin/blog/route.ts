@@ -25,14 +25,31 @@ export type BlogPost = {
   reading_time?: number | null;
 };
 
-// GET - Fetch all blog posts (including unpublished)
+// GET - Fetch all blog posts (including unpublished) with optional date filtering
 export async function GET(request: NextRequest) {
   try {
-    const { data, error } = await supabaseAdmin
+    const { searchParams } = new URL(request.url);
+    const startDate = searchParams.get('startDate');
+    const endDate = searchParams.get('endDate');
+
+    let query = supabaseAdmin
       .from('blog_posts')
-      .select('*')
-      .order('created_at', { ascending: false });
-    
+      .select('*');
+
+    // Apply date range filter if provided
+    if (startDate) {
+      query = query.gte('created_at', startDate);
+    }
+
+    if (endDate) {
+      // Add one day to endDate to include the entire end day
+      const endDateTime = new Date(endDate);
+      endDateTime.setDate(endDateTime.getDate() + 1);
+      query = query.lt('created_at', endDateTime.toISOString());
+    }
+
+    const { data, error } = await query.order('created_at', { ascending: false });
+
     if (error) {
       console.error('Error fetching blog posts:', error);
       return NextResponse.json(
