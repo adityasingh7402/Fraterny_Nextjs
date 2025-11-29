@@ -38,19 +38,19 @@ export default function BlogPostClient({ post }: Props) {
     if (typeof window === 'undefined') {
       return htmlContent;
     }
-    
+
     let cleaned = htmlContent.replace(/\s*data-start="[^"]*"/g, '');
     cleaned = cleaned.replace(/\s*data-end="[^"]*"/g, '');
-    
+
     const textarea = document.createElement('textarea');
     textarea.innerHTML = cleaned;
     cleaned = textarea.value;
-    
+
     const sanitized = DOMPurify.sanitize(cleaned, {
       ALLOWED_TAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'br', 'strong', 'em', 'u', 'ul', 'ol', 'li', 'a', 'blockquote', 'code', 'pre', 'hr', 'span', 'div'],
       ALLOWED_ATTR: ['href', 'target', 'rel', 'class']
     });
-    
+
     return sanitized;
   };
 
@@ -64,19 +64,19 @@ export default function BlogPostClient({ post }: Props) {
             <ArrowLeft size={16} className="mr-2" />
             Back to all posts
           </Link>
-          
+
           {post.category && (
             <div className="mb-4">
-              <span className="inline-block px-3 py-1 bg-black bg-opacity-10 text-navy text-sm rounded">
+              <span className="inline-block text-white px-3 py-1 bg-black bg-opacity-10 text-navy text-sm rounded">
                 {post.category}
               </span>
             </div>
           )}
-          
+
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-bold text-navy mb-6">
             {post.title}
           </h1>
-          
+
           <div className="mb-8 flex items-center text-gray-500">
             <Calendar size={16} className="mr-2" />
             {new Date(post.created_at).toLocaleDateString('en-US', {
@@ -85,7 +85,7 @@ export default function BlogPostClient({ post }: Props) {
               day: 'numeric'
             })}
           </div>
-          
+
           {post.image_key && (
             <div className="mb-8 rounded-lg overflow-hidden">
               <ResponsiveImage
@@ -100,7 +100,7 @@ export default function BlogPostClient({ post }: Props) {
               />
             </div>
           )}
-          
+
           {post.tags && post.tags.length > 0 && (
             <div className="mb-8 flex flex-wrap gap-2">
               {post.tags.map(tag => (
@@ -111,15 +111,15 @@ export default function BlogPostClient({ post }: Props) {
               ))}
             </div>
           )}
-          
+
           <div className="max-w-none text-gray-700">
             {parse(sanitizeContent(post.content))}
           </div>
-          
+
           <CommentSection postId={post.id} />
         </div>
       </article>
-      
+
       <div className="container mx-auto px-4 sm:px-6 pb-20">
         <div className="max-w-7xl mx-auto">
           <NewsletterSignup />

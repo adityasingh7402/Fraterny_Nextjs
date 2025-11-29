@@ -2,7 +2,7 @@
 import axios from 'axios';
 import type { CreateOrderRequest, CreateOrderResponse, PaymentCompletionRequest, UnifiedPricingData } from './types';
 
-const NEXT_PUBLIC_BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://api.fraterny.in';
+const NEXT_PUBLIC_BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://api.fraterny.com';
 
 // Create payment order via backend API
 export async function createPaymentOrder(orderData: CreateOrderRequest): Promise<CreateOrderResponse> {
