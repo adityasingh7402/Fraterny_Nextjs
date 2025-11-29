@@ -4,8 +4,8 @@ import { useState, useRef, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import PageHeader from './components/PageHeader';
 import BlogForm from './components/BlogForm';
-import BlogList from './components/BlogList';
-import DateFilter from './components/DateFilter';
+import TimelineView from './components/TimelineView';
+import DateJumpModal from './components/DateJumpModal';
 import { BlogFormValues, BlogPost } from './types';
 
 type TabType = 'published' | 'draft';
@@ -32,40 +32,12 @@ const AdminBlog = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showForm, setShowForm] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<TabType>('published');
-  const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
-  const [dateFilter, setDateFilter] = useState<{ startDate: string | null; endDate: string | null }>({
-    startDate: null,
-    endDate: null,
-  });
+  const [isDateJumpOpen, setIsDateJumpOpen] = useState<boolean>(false);
+  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
 
-  // Get today's date range for draft default filter
-  const getTodayDateRange = () => {
-    const today = new Date();
-    const startOfDay = new Date(today.setHours(0, 0, 0, 0)).toISOString();
-    const endOfDay = new Date(today.setHours(23, 59, 59, 999)).toISOString();
-    return { startOfDay, endOfDay };
-  };
-
-  // Use React Query hook for fetching all blog posts (including unpublished)
+  // Fetch blog posts for the selected date
   const fetchAdminBlogPosts = async () => {
-    let url = '/api/admin/blog';
-    const params = new URLSearchParams();
-
-    // For draft tab, apply today's filter by default if no custom filter is set
-    if (activeTab === 'draft' && !dateFilter.startDate && !dateFilter.endDate) {
-      const { startOfDay } = getTodayDateRange();
-      params.append('startDate', startOfDay.split('T')[0]);
-      params.append('endDate', new Date().toISOString().split('T')[0]);
-    } else if (dateFilter.startDate || dateFilter.endDate) {
-      // Apply custom date filter
-      if (dateFilter.startDate) params.append('startDate', dateFilter.startDate);
-      if (dateFilter.endDate) params.append('endDate', dateFilter.endDate);
-    }
-
-    if (params.toString()) {
-      url += `?${params.toString()}`;
-    }
-
+    const url = `/api/admin/blog?date=${selectedDate}`;
     const response = await fetch(url);
     const result = await response.json();
 
@@ -74,7 +46,7 @@ const AdminBlog = () => {
   };
 
   const { data: blogPosts, isLoading, error, refetch } = useQuery({
-    queryKey: ['adminBlogPosts', activeTab, dateFilter],
+    queryKey: ['adminBlogPosts', selectedDate],
     queryFn: fetchAdminBlogPosts,
   });
 
@@ -84,11 +56,6 @@ const AdminBlog = () => {
       formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }, [showForm, editingId]);
-
-  // Reset date filter when switching tabs
-  useEffect(() => {
-    setDateFilter({ startDate: null, endDate: null });
-  }, [activeTab]);
 
   const handleEdit = (post: BlogPost) => {
     setFormValues({
@@ -109,7 +76,6 @@ const AdminBlog = () => {
     });
     setEditingId(post.id);
     setShowForm(true);
-    // Scroll to form after state update
     setTimeout(() => {
       formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
@@ -134,20 +100,23 @@ const AdminBlog = () => {
     });
     setEditingId(null);
     setShowForm(true);
-    // Scroll to form after state update
     setTimeout(() => {
       formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
   };
 
   const handleFormSuccess = async () => {
-    // Refetch admin posts
     await refetch();
     setShowForm(false);
   };
 
-  const handleDateFilterChange = (startDate: string | null, endDate: string | null) => {
-    setDateFilter({ startDate, endDate });
+  const handleDateChange = (date: string) => {
+    setSelectedDate(date);
+  };
+
+  const handleDateJump = (date: string) => {
+    setSelectedDate(date);
+    setIsDateJumpOpen(false);
   };
 
   // Filter blog posts based on active tab
@@ -156,9 +125,6 @@ const AdminBlog = () => {
     if (activeTab === 'draft') return post.published === false;
     return true;
   });
-
-  // Check if filter is active
-  const isFilterActive = dateFilter.startDate !== null || dateFilter.endDate !== null;
 
   return (
     <div className="p-8">
@@ -176,7 +142,7 @@ const AdminBlog = () => {
         </div>
       )}
 
-      {/* Tabs with Filter Button */}
+      {/* Tabs with Jump to Date Button */}
       <div className="mb-6">
         <div className="border-b border-gray-200">
           <div className="flex items-center justify-between">
@@ -184,8 +150,8 @@ const AdminBlog = () => {
               <button
                 onClick={() => setActiveTab('published')}
                 className={`${activeTab === 'published'
-                    ? 'border-navy text-navy'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-navy text-navy'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors`}
               >
                 Published
@@ -198,8 +164,8 @@ const AdminBlog = () => {
               <button
                 onClick={() => setActiveTab('draft')}
                 className={`${activeTab === 'draft'
-                    ? 'border-navy text-navy'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-navy text-navy'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                   } whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors`}
               >
                 Draft
@@ -211,13 +177,10 @@ const AdminBlog = () => {
               </button>
             </nav>
 
-            {/* Filter Button */}
+            {/* Jump to Date Button */}
             <button
-              onClick={() => setIsFilterOpen(true)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${isFilterActive
-                  ? 'bg-navy text-white hover:bg-opacity-90'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
+              onClick={() => setIsDateJumpOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors bg-gray-100 text-gray-700 hover:bg-gray-200"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -230,32 +193,34 @@ const AdminBlog = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
               </svg>
-              Date Filter
-              {isFilterActive && (
-                <span className="ml-1 w-2 h-2 bg-white rounded-full"></span>
-              )}
+              Jump to Date
             </button>
           </div>
         </div>
       </div>
 
-      {/* Blog List */}
-      <BlogList
-        blogPosts={filteredBlogPosts || null}
+      {/* Timeline View */}
+      <TimelineView
+        blogPosts={filteredBlogPosts || []}
         isLoading={isLoading}
         error={error}
         onEdit={handleEdit}
         refetch={refetch}
+        selectedDate={selectedDate}
+        onDateChange={handleDateChange}
       />
 
-      {/* Date Filter Modal */}
-      <DateFilter
-        isOpen={isFilterOpen}
-        onClose={() => setIsFilterOpen(false)}
-        onFilterChange={handleDateFilterChange}
-        showTodayIndicator={activeTab === 'draft' && !dateFilter.startDate && !dateFilter.endDate}
+      {/* Date Jump Modal */}
+      <DateJumpModal
+        isOpen={isDateJumpOpen}
+        onClose={() => setIsDateJumpOpen(false)}
+        onDateSelect={handleDateJump}
+        currentDate={selectedDate}
       />
     </div>
   );
