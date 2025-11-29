@@ -34,18 +34,18 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://fraterny.in/quest/quest-mode',
+    canonical: 'https://fraterny.com/quest/quest-mode',
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://fraterny.in/quest/quest-mode',
+    url: 'https://fraterny.com/quest/quest-mode',
     title: 'Quest Mode — Your Psychological File | Fraterny',
     description: 'A private, aesthetic psychological file built from your words. Preview a fragment free; keep your full copy if it feels true.',
     siteName: 'Fraterny',
     images: [
       {
-        url: 'https://fraterny.in/Questfavicon.ico',
+        url: 'https://fraterny.com/Questfavicon.ico',
         width: 1200,
         height: 630,
         alt: 'Quest — Private Psychological File by Fraterny',
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Quest Mode — Your Psychological File | Fraterny',
     description: 'Compose a private psychological file from your words. Preview a precise fragment free; access the full edition when ready.',
-    images: ['https://fraterny.in/Questfavicon.ico'],
+    images: ['https://fraterny.com/Questfavicon.ico'],
     creator: '@frat_erny',
   },
   icons: {
@@ -74,7 +74,7 @@ const jsonLd = {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: 'https://fraterny.in/search?q={search_term_string}',
+        urlTemplate: 'https://fraterny.com/search?q={search_term_string}',
       },
       'query-input': 'required name=search_term_string',
     },

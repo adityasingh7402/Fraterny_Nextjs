@@ -88,7 +88,7 @@ export default function QuestLayout({
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: 'https://fraterny.in/search?q={search_term_string}',
+        urlTemplate: 'https://fraterny.com/search?q={search_term_string}',
       },
       'query-input': 'required name=search_term_string',
     },
