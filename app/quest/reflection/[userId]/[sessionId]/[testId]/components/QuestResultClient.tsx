@@ -9,7 +9,10 @@ import { Quote, Film as FilmIcon, BookOpen, Share2, Send, ThumbsUp,
     ChevronsUp,
     BookmarkPlus,
     Star,
-    ScrollText
+    ScrollText,
+    ChevronDown,
+    ChevronUp,
+    LockIcon
  } from 'lucide-react';
 import Image from 'next/image';
 import { ResultData, Film, Book, DualGatewayPricingData } from '../utils/types';
@@ -34,9 +37,12 @@ import { toast } from 'sonner';
 import { useAuth } from '@/app/auth/cotexts/AuthContext';
 import { googleAnalytics } from '@/lib/services/googleAnalytics';
 import { fetchDynamicPricing, checkExistingPaymentStatus, startPaymentStatusPolling } from '../utils/paymentHelpers';
-import Testimonials from '@/app/quest/quest-mode/sections/Testimonials';
+// import Testimonials from '@/app/quest/quest-mode/sections/Testimonials';
 import { TextGenerateEffect } from '@/components/ui/text-generate-effect';
 import FAQIntrospection from './FAQIntrospection';
+import Testimonial from './Testimonial';
+import FAQ from '@/app/quest/reflection/[userId]/[sessionId]/[testId]/components/FAQ';
+import mockData from '@/app/quest/reflection/[userId]/[sessionId]/[testId]/components/mock-data';
 
 interface QuestResultClientProps {
   initialData: ResultData | null;
@@ -80,6 +86,8 @@ export function QuestResultClient({
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [selectedPrediction, setSelectedPrediction] = useState<any>(null);
   const [selectedFinding, setSelectedFinding] = useState<string | null>(null);
+  const [clickedbuttonId, setClickedButtonId] = useState<string | null>(null);
+  const archetype: Record<string, string> = mockData.archetype;
   const router = useRouter();
   const getEffectiveUserId = () => {
     return userId;
@@ -624,6 +632,8 @@ export function QuestResultClient({
     };
   }) || [];
 
+
+
   
   
 
@@ -657,7 +667,7 @@ export function QuestResultClient({
         }}
       >
         {/* Emotional Section */}
-        <SectionFrame
+        {/* <SectionFrame
           id="emotional"
           title=""
           sub=""
@@ -685,10 +695,10 @@ export function QuestResultClient({
               </div>
             </motion.div>
           </div>
-        </SectionFrame>
+        </SectionFrame> */}
 
         {/* Mind Card Section */}
-        <SectionFrame
+        {/* <SectionFrame
           id="mind"
           title="Your Mind Card"
           sub="Archetype & stats"
@@ -717,21 +727,16 @@ export function QuestResultClient({
 
                       return (
                         <motion.div onClick={() => handleCardClick(i)} key={stat.label} layoutId={`insight-card-${i}`} className={`relative w-60 h-60 ${colors[i].bg} rounded-[10px] overflow-hidden`}>
-
-                          {/* Title */}
                           <div className="absolute left-[20px] top-[30px] opacity-70 mix-blend-hard-light text-white text-3xl font-normal font-gilroy-bold leading-9">
                             {stat.label.split(' ').map((word, idx) => (
                               <div key={idx}>{word}</div>
                             ))}
                           </div>
                           <div className="flex justify-between items-end h-full pl-4">
-                            {/* Percentage */}
+                         
                             <div className="opacity-90 text-white text-8xl font-normal font-gilroy-bold leading-[96.45px]">
                               {stat.value}%
                             </div>
-                            {/* <div className="pb-2">
-                                  <ChevronsUp className="h-8 w-8 text-white" />
-                                </div> */}
                             <motion.div
                               animate={{ y: [0, -3, 0] }}
                               transition={{
@@ -752,10 +757,10 @@ export function QuestResultClient({
               </>
             )}
           </div>
-        </SectionFrame>
+        </SectionFrame> */}
 
         {/* Findings Section */}
-        <SectionFrame
+        {/* <SectionFrame
           id="findings"
           title="5 Unique Findings About You"
           sub="Thought Provoking Insights"
@@ -798,10 +803,10 @@ export function QuestResultClient({
               )}
             </div>
           </div>
-        </SectionFrame>
+        </SectionFrame> */}
 
         {/* Subjects Section */}
-        <SectionFrame
+        {/* <SectionFrame
           id="subjects"
           title="Subjects You Are Mentally Built to Explore Deeper"
           sub="Deepen the edges"
@@ -822,8 +827,10 @@ export function QuestResultClient({
               </div>
             ))}
           </div>
-        </SectionFrame>
+        </SectionFrame> */}
 
+
+        {/* Permanently disabled sections below */}
         {/* Quotes Section */}
         {/* <SectionFrame
           id="quotes"
@@ -956,9 +963,10 @@ export function QuestResultClient({
             </div>
           </div>
         </SectionFrame> */}
+        {/* Permanently disabled sections above */}
 
         {/* Work Section */}
-        <SectionFrame
+        {/* <SectionFrame
           id="work"
           title="One Thing To Work On"
           sub="Start today; 60-minute cap"
@@ -970,15 +978,14 @@ export function QuestResultClient({
         >
           <div className="flex h-full flex-col items-center justify-center text-center">
             <div className="rounded-2xl bg-white/10 p-4 text-2xl leading-6">
-              {/* <div className="font-gilroy-regular mb-10 text-left leading-snug">{actionItem}</div> */}
               <div className='font-gilroy-regular mb-10 text-left text-white leading-snug'><TextGenerateEffect words={actionItem} /></div>
               <div className="opacity-95 text-xl font-gilroy-semibold">One small step could change your direction forever.</div>
             </div>
           </div>
-        </SectionFrame>
+        </SectionFrame> */}
 
         {/* PDF Section */}
-        <SectionFrame
+        {/* <SectionFrame
           id="pdf-report"
           title="Private Intelligence File"
           sub="Made from your words"
@@ -1010,7 +1017,283 @@ export function QuestResultClient({
           </div>
 
           
+        </SectionFrame> */}
+
+
+        {/* New architecture */}
+         <SectionFrame
+            id="emotional"
+            title=""
+            sub=""
+            shareText={ ""}
+            themeKey="emotional"
+            sessionId={""}
+            customClass="pt-16 pb-16 overflow-y-auto"
+            testId={""}
+            >
+            <div className="relative w-full max-w-[480px] mx-auto pt-4">
+                <motion.h1 className="mb-5 text-left">
+                <span className="block text-sm uppercase tracking-[0.3em] text-white/70 mb-1">Analysis Complete</span>
+                <span className="block text-5xl font-gilroy-bold tracking-tighter bg-gradient-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent">
+                    Quest Reveals About You
+                </span>
+                
+                </motion.h1>
+
+                <div className="flex flex-row gap-5">
+                { Object.entries(archetype).map(([key, value]) => (
+                    <div key={key} className="mb-6 border-l-2 border-white/30 pl-4">
+                        <h2 className="text-lg font-gilroy-semibold text-white uppercase tracking-[0.1em]">{key.charAt(0).toUpperCase() + key.slice(1)}</h2>
+                        <p className="text-white/80 text-[12px]">{value}</p>
+                    </div>
+                ))}
+                </div>
+                <span className="block mt-1 w-full h-0.5 bg-white/50 rounded-full"></span>
+
+                <div className="mt-6">
+                    <h2 className="text-lg font-gilroy-semibold text-white uppercase tracking-[0.1em] mb-2">Core Line</h2>
+                    <p className="text-white/80 text-lg font-gilroy-bold">{mockData.core_line}</p>
+                </div>
+
+                {/* <PatternSVG /> */}
+
+                <div className="mt-6">
+                    <h2 className="text-lg font-gilroy-semibold text-white uppercase tracking-[0.1em] mb-2">Primary Pattern</h2>
+                    <p className="text-white/80 text-md font-gilroy-medium">{mockData.primary_pattern}</p>
+                </div>
+            </div>
         </SectionFrame>
+
+        <SectionFrame
+            id="mind"
+            title="Header from yash"
+            sub=""
+            shareText={ ""}
+            themeKey="mind"
+            sessionId={""}
+            customClass="pt-16 pb-16 overflow-y-auto"
+            testId={""}
+            >
+            <div className="relative w-full max-w-[480px] mx-auto pt-4">
+              <motion.div className="mb-5 flex w-full items-center justify-between">
+                <span className="block text-md uppercase tracking-[0.3em] text-white/70 mb-1"> Calibration</span>
+                <span className="block text-sm font-gilroy-bold bg-transparent px-2 py-1 rounded-xl shadow-xl border-2 border-white text-white/70">
+                    DEPTH SCORE - {mockData?.depth_score || 10}
+                </span>
+              </motion.div>
+
+              <div className="flex flex-col gap-8">
+                  {Object.keys(mockData.slider_question)
+                    .filter(key => key.startsWith('question'))
+                    .map((key, index) => {
+                      const questionNumber = index + 1;
+                      const likertKey = `likert${questionNumber}` as keyof typeof mockData.slider_question;
+                      const likertLabels = mockData.slider_question[likertKey] as [string, string];
+                      
+                      return (
+                        <motion.div
+                          key={key}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                          className=""
+                        >
+                          {/* Question */}
+                          <h3 className="text-white/90 text-lg font-gilroy-semibold">
+                            {mockData.slider_question[key as keyof typeof mockData.slider_question]}
+                          </h3>
+                          
+                          {/* Slider Container */}
+                          <div className="space-y-1">
+                            {/* Slider Track */}
+                            <div className="relative">
+                              <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                defaultValue="70"
+                                className="w-full h-2 bg-white/10 rounded-full appearance-none cursor-pointer
+                                  [&::-webkit-slider-thumb]:appearance-none
+                                  [&::-webkit-slider-thumb]:w-6
+                                  [&::-webkit-slider-thumb]:h-6
+                                  [&::-webkit-slider-thumb]:rounded-full
+                                  [&::-webkit-slider-thumb]:bg-white
+                                  [&::-webkit-slider-thumb]:cursor-pointer
+                                  [&::-webkit-slider-thumb]:shadow-lg
+                                  [&::-moz-range-thumb]:w-6
+                                  [&::-moz-range-thumb]:h-6
+                                  [&::-moz-range-thumb]:rounded-full
+                                  [&::-moz-range-thumb]:bg-white
+                                  [&::-moz-range-thumb]:cursor-pointer
+                                  [&::-moz-range-thumb]:border-0
+                                  [&::-moz-range-thumb]:shadow-lg"
+                                style={{
+                                  background: `linear-gradient(to right, #ffffff 70%, rgba(255,255,255,0.1) 70%)`
+                                }}
+                                                                onChange={(e) => {
+                                  const value = e.target.value;
+                                  e.target.style.background = `linear-gradient(to right, #ffffff ${value}%, rgba(255,255,255,0.1) ${value}%)`;
+                                }}
+                              />
+                            </div>
+                            
+                            {/* Labels */}
+                            <div className="flex justify-between items-center font-gilroy-light">
+                              <span className="text-neutral-900 text-sm uppercase tracking-wider">
+                                {likertLabels[0]}
+                              </span>
+                              <span className="text-neutral-900 text-sm uppercase tracking-wider">
+                                {likertLabels[1]}
+                              </span>
+                            </div>
+                          </div>
+                        </motion.div>
+                      );
+                    })}
+                </div>
+
+                <div className='flex w-full justify-end mt-10'>
+                  <button className='block text-sm font-gilroy-bold bg-transparent px-2 py-1 rounded-xl shadow-xl border-2 border-white text-white/70'>
+                      CALIBRATE DEEPER
+                  </button>
+                </div>
+            </div>
+        </SectionFrame> 
+
+        <SectionFrame
+            id="mind"
+            title="Header from yash"
+            sub=""
+            shareText={ ""}
+            themeKey="films"
+            sessionId={""}
+            customClass="pt-16 pb-16 overflow-y-auto"
+            testId={""}
+            >
+            <div className="relative w-full max-w-[480px] mx-auto pt-4">
+                <motion.div className="mb-5 flex w-full items-center justify-between">
+                <span className="block text-md uppercase tracking-[0.3em] text-white/70 mb-1"> Behavioural signal </span>
+                <span className="block text-sm uppercase font-gilroy-bold bg-transparent px-2 py-1 rounded-xl shadow-xl border-2 border-white text-white/70">
+                    5 detected
+                </span>
+              </motion.div>
+
+                <div className="flex flex-col gap-5">
+                { Object.entries(mockData.signals).filter(([key, _]) => key.endsWith("_purpose")).map(([key, value]) => {
+                    const descKey = key.replace("_purpose", "_description");
+                    return (
+                        <motion.div key={key}
+                        className="p-4 border border-white/20 rounded-lg bg-white/5 cursor-pointer">
+                            <div className="flex items-center mb-2">
+                            <div
+                            onClick={() => clickedbuttonId === key ? setClickedButtonId(null) :  setClickedButtonId(key)}
+                            className="text-xl font-gilroy-semibold text-white mb-2 px-2 py-2 w-full flex items-center justify-between">
+                                <span className='flex gap-2 items-center'>{value} { key !== 'signal1_purpose' ? <LockIcon className='text-white size-4' /> : null}</span>
+                                {clickedbuttonId === key ? <ChevronUp size={16} className="ml-2"/> : <ChevronDown size={16} className="ml-2"/>}
+                            </div>
+                            </div>
+
+                        <AnimatePresence>
+                        {clickedbuttonId === key && (
+                            <>
+                            <motion.div
+                                initial={{height: 40, overflow: 'hidden'}}
+                                animate={{height: 'auto'}}
+                                exit={{height: 0, overflow: 'hidden'}}
+                                transition={{duration: 0.3}}
+                                className={`text-white/80 text-sm font-gilroy-medium ${key === 'signal1_purpose' ? '' : 'blur-sm'}`}
+                            >
+                                <motion.div
+                                initial={{opacity: 0}}
+                                animate={{opacity: 1}}
+                                exit={{opacity: 0}}
+                                transition={{duration: 0.3, delay: 0.1}}
+                                className='relative'
+                                >
+                                {(mockData.signals as Record<string, string>)[descKey]}
+                                </motion.div>
+                                
+                            </motion.div>
+                            
+                            </>
+                        )}
+                        </AnimatePresence>
+                    </motion.div>
+                );
+            })}
+            </div>
+                
+            </div>
+        </SectionFrame>
+
+          <SectionFrame
+        id="pdf-report"
+        title="Made from your words"
+        sub="Sealed in full file"
+        shareText="Check out my complete personality analysis from Fraterny!"
+        themeKey="mind"
+        customClass="pt-16 relative"
+        sessionId={"ghhj"}
+        testId={"ghh"}
+        >
+        <div style={{ paddingBottom: CTA_HEIGHT }}>
+
+            <div className='bg-gradient-to-r from-sky-600 to-sky-800 rounded-lg mt-10 p-4 h-[600px] flex flex-col items-center justify-center backdrop-blur-3xl border-2 border-white shadow-lg'>
+                
+                <div className='font-gilroy-bold text-2xl text-center text-white mt-8'>
+                    <p className='font-gilroy-regular pb-6'>TAKE OWNERSHIP OF YOUR <br /> <span className='text-4xl font-gilroy-bold'>ARCHITECTURE</span></p>
+                    <p className='mt-2 text-sm font-gilroy-medium'>Access the full, unredacted dossier tailored to your specific calibration.</p>
+                </div>
+                <div>
+                    <button className='mt-4 font-gilroy-bold bg-white text-blue-900 px-6 py-3 rounded-lg shadow-lg transition-colors'>
+                        ACCESS FULL REPORT
+                    </button>
+                    {/* <div className='text-center'>
+                        PRICING
+                    </div> */}
+                </div>
+                <div className='mt-6 mb-8 uppercase text-sm text-neutral-100 w-full flex items-center justify-center'>
+                    file contains 28 additional pages with
+                </div>
+                <div className='pb-10'>
+                    <div className='grid grid-cols-2 gap-4 mb-8'>
+                        <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg text-center'>
+                            <p className='font-gilroy-semibold text-white uppercase'>blind spot analysis</p>
+                        </div>
+                        <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg text-center'>
+                            <p className='font-gilroy-semibold text-white uppercase'>growth levers</p>
+
+                        </div>
+                        <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg text-center'>
+                            <p className='font-gilroy-semibold text-white uppercase'>relationship dynamics</p>
+
+                        </div>
+                        <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg text-center'>
+                            <p className='font-gilroy-semibold text-white uppercase'>architectural map</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {/* <div className='flex flex-col items-center justify-center mb-10 gap-4'>
+            <div className='bg-sky-300/10 rounded-lg p-4 w-full max-w-md border border-sky-300/30 shadow-lg space-y-8'>
+                <p className='font-gilroy-semibold text-white text-2xl'>"It felt illegal to read this. It articulated things I've felt for 10 years but never said."</p>
+                <p className='font-gilroy-medium text-neutral-300'>— Sarah K. // Architect</p>
+            </div>
+
+            <div className='bg-sky-300/10 rounded-lg p-4 w-full max-w-md border border-sky-300/30 shadow-lg space-y-8'>
+                <p className='font-gilroy-semibold text-white text-2xl'>"No fluff. Just pure signal. It didn't try to fix me, it just showed me the map."</p>
+                <p className='font-gilroy-medium text-neutral-300'>— James R. // Founder</p>
+            </div>
+        </div> */}
+
+        <Testimonial />
+
+        <FAQ className='bg-transparent rounded-lg' />
+
+        
+          </SectionFrame>
 
       </div>
 

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useState } from 'react'
-import mockData from './mock-data';
+import mockData from '../../../../quest/reflection/[userId]/[sessionId]/[testId]/components/mock-data';
 import { AuthBanner } from '../../../../quest/reflection/[userId]/[sessionId]/[testId]/components/AuthBanner';
 import { tokens, CTA_HEIGHT } from '../../../../quest/reflection/[userId]/[sessionId]/[testId]/utils/constants';
 import { SectionFrame } from '../../../../quest/reflection/[userId]/[sessionId]/[testId]/components/SectionFrame';
@@ -13,8 +13,8 @@ import { PDFImageViewer } from '../../../../quest/reflection/[userId]/[sessionId
 import FAQIntrospection from '../../../../quest/reflection/[userId]/[sessionId]/[testId]/components/FAQIntrospection';
 import Testimonials from '../../../../quest/quest-mode/sections/Testimonials';
 import { DualGatewayPricingData } from '../../../../quest/reflection/[userId]/[sessionId]/[testId]/utils/types';
-import FAQ from './FAQ';
-import Testimonial from './Testimonial';
+import FAQ from '../../../../quest/reflection/[userId]/[sessionId]/[testId]/components/FAQ';
+import Testimonial from '../../../../quest/reflection/[userId]/[sessionId]/[testId]/components/Testimonial';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/app/auth/cotexts/AuthContext';
 import { toast } from 'sonner';
@@ -170,8 +170,6 @@ async function page( { params }: { params: Promise<{ userId: string; sessionId: 
                     </div>
                 </SectionFrame>
 
-
-                {/* slider questions should be done by Aditya here */}
                 <SectionFrame
                     id="mind"
                     title="Calibration"
