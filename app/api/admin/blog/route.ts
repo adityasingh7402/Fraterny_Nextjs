@@ -29,6 +29,7 @@ export type BlogPost = {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
+    const date = searchParams.get('date');
     const startDate = searchParams.get('startDate');
     const endDate = searchParams.get('endDate');
 
@@ -36,16 +37,29 @@ export async function GET(request: NextRequest) {
       .from('blog_posts')
       .select('*');
 
-    // Apply date range filter if provided
-    if (startDate) {
-      query = query.gte('created_at', startDate);
-    }
+    // If 'date' parameter is provided, fetch all blogs for that specific day
+    if (date) {
+      const startOfDay = new Date(date);
+      startOfDay.setHours(0, 0, 0, 0);
 
-    if (endDate) {
-      // Add one day to endDate to include the entire end day
-      const endDateTime = new Date(endDate);
-      endDateTime.setDate(endDateTime.getDate() + 1);
-      query = query.lt('created_at', endDateTime.toISOString());
+      const endOfDay = new Date(date);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      query = query
+        .gte('created_at', startOfDay.toISOString())
+        .lte('created_at', endOfDay.toISOString());
+    } else {
+      // Apply date range filter if provided
+      if (startDate) {
+        query = query.gte('created_at', startDate);
+      }
+
+      if (endDate) {
+        // Add one day to endDate to include the entire end day
+        const endDateTime = new Date(endDate);
+        endDateTime.setDate(endDateTime.getDate() + 1);
+        query = query.lt('created_at', endDateTime.toISOString());
+      }
     }
 
     const { data, error } = await query.order('created_at', { ascending: false });
