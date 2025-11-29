@@ -26,7 +26,7 @@ const TermsOfUse = () => {
             {/* Overview */}
             <div className="mb-12">
               <p className="text-lg leading-relaxed font-gilroy-regular">
-                Welcome to Fraterny, accessible at <a href="https://fraterny.com" className="text-navy hover:underline">https://fraterny.com</a> / <a href="https://fraterny.in" className="text-navy hover:underline">https://fraterny.in</a>. By accessing or using our website, services, or participating in any of our programs, including <strong>Quest by Fraterny</strong> and <strong>Frat Villa</strong>, you agree to be bound by these Terms and Conditions ("Terms"). If you do not agree with any part of these Terms, you must refrain from using the Website or participating in any of our services.
+                Welcome to Fraterny, accessible at <a href="https://fraterny.com" className="text-navy hover:underline">https://fraterny.com</a> / <a href="https://fraterny.com" className="text-navy hover:underline">https://fraterny.com</a>. By accessing or using our website, services, or participating in any of our programs, including <strong>Quest by Fraterny</strong> and <strong>Frat Villa</strong>, you agree to be bound by these Terms and Conditions ("Terms"). If you do not agree with any part of these Terms, you must refrain from using the Website or participating in any of our services.
               </p>
             </div>
 

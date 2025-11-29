@@ -34,18 +34,18 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://fraterny.in/quest',
+    canonical: 'https://fraterny.com/quest',
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://fraterny.in/quest',
+    url: 'https://fraterny.com/quest',
     title: 'Quest — Open-ended Intospection',
     description: 'Private prompts. Your words compose your file.',
     siteName: 'Fraterny',
     images: [
       {
-        url: 'https://fraterny.in/favicon-32x32.png',
+        url: 'https://fraterny.com/favicon-32x32.png',
         width: 1200,
         height: 630,
         alt: 'Quest Self-Awareness by Fraterny',
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Quest — Open-ended Introspection',
     description: 'Private prompts. Your words compose your file.',
-    images: ['https://fraterny.in/favicon-32x32.png'],
+    images: ['https://fraterny.com/favicon-32x32.png'],
     creator: '@frat_erny',
   },
   icons: {
@@ -69,12 +69,12 @@ const jsonLd = {
     '@type': 'WebSite',
     name: 'Quest — Open-ended Introspection',
     description: 'Private prompt flow that composes a personal fragment from the user’s written answers',
-    url: 'https://fraterny.in',
+    url: 'https://fraterny.com',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: 'https://fraterny.in/search?q={search_term_string}',
+        urlTemplate: 'https://fraterny.com/search?q={search_term_string}',
       },
       'query-input': 'required name=search_term_string',
     },
@@ -90,11 +90,11 @@ const jsonLd = {
     '@type': 'Organization',
     name: 'Quest — Open-ended Introspection',
     description: 'Private prompt flow that composes a personal fragment from the user’s written answers',
-    url: 'https://fraterny.in',
-    logo: 'https://fraterny.in/favicon-32x32.png',
+    url: 'https://fraterny.com',
+    logo: 'https://fraterny.com/favicon-32x32.png',
     contactPoint: {
       '@type': 'ContactPoint',
-      email: 'contact@fraterny.in',
+      email: 'contact@fraterny.com',
       contactType: 'Customer Service',
     },
     sameAs: [
