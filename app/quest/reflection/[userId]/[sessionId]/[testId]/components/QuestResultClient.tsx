@@ -88,6 +88,8 @@ export function QuestResultClient({
   const [selectedPrediction, setSelectedPrediction] = useState<any>(null);
   const [selectedFinding, setSelectedFinding] = useState<string | null>(null);
   const [clickedbuttonId, setClickedButtonId] = useState<string | null>(null);
+  const [likertValues, setLikertValues] = useState({ q1: 7, q2: 7, q3: 7, q4: 7 });
+  const [likertSubmitting, setLikertSubmitting] = useState(false);
   const archetype: Record<string, string> = mockData.archetype;
   const router = useRouter();
   const getEffectiveUserId = () => {
@@ -588,6 +590,38 @@ export function QuestResultClient({
     const insight = mindCard?.insights[index];
     if (insight) {
       setSelectedInsight({ index, text: insight });
+    }
+  };
+
+  const handleLikertSubmit = async () => {
+    setLikertSubmitting(true);
+    try {
+      console.log(likertValues, testId);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/likert/`, {
+        test_id: testId,
+        q1: String(likertValues.q1),
+        q2: String(likertValues.q2),
+        q3: String(likertValues.q3),
+        q4: String(likertValues.q4)
+      });
+      console.log(response.data);
+
+      if (response.data.status === 200) {
+        toast.success(response.data.Message || 'Successfully updated the likert', {
+          position: "top-right"
+        });
+      } else {
+        toast.error(response.data.Message || 'Failed to update', {
+          position: "top-right"
+        });
+      }
+    } catch (error: any) {
+      console.error('Likert submission error:', error);
+      toast.error(error?.response?.data?.Message || 'Failed to update the likert', {
+        position: "top-right"
+      });
+    } finally {
+      setLikertSubmitting(false);
     }
   };
 
@@ -1098,8 +1132,7 @@ export function QuestResultClient({
                           <input
                             type="range"
                             min="0"
-                            max="100"
-                            defaultValue="70"
+                            max="10"
                             className="w-full h-2 bg-white/10 rounded-full appearance-none cursor-pointer
                                   [&::-webkit-slider-thumb]:appearance-none
                                   [&::-webkit-slider-thumb]:w-6
@@ -1115,12 +1148,21 @@ export function QuestResultClient({
                                   [&::-moz-range-thumb]:cursor-pointer
                                   [&::-moz-range-thumb]:border-0
                                   [&::-moz-range-thumb]:shadow-lg"
+                            value={likertValues[`q${questionNumber}` as keyof typeof likertValues]}
                             style={{
                               background: `linear-gradient(to right, #ffffff 70%, rgba(255,255,255,0.1) 70%)`
                             }}
                             onChange={(e) => {
                               const value = e.target.value;
-                              e.target.style.background = `linear-gradient(to right, #ffffff ${value}%, rgba(255,255,255,0.1) ${value}%)`;
+                              const numericValue = parseInt(value);
+                              const percentage = (numericValue / 10) * 100;
+                              e.target.style.background = `linear-gradient(to right, #ffffff ${percentage}%, rgba(255,255,255,0.1) ${percentage}%)`;
+
+                              // Update the state
+                              setLikertValues(prev => ({
+                                ...prev,
+                                [`q${questionNumber}`]: numericValue
+                              }));
                             }}
                           />
                         </div>
@@ -1141,8 +1183,12 @@ export function QuestResultClient({
             </div>
 
             <div className='flex w-full justify-end mt-10'>
-              <button className='block text-sm font-gilroy-bold bg-transparent px-2 py-1 rounded-xl shadow-xl border-2 border-white text-white/70'>
-                CALIBRATE DEEPER
+              <button
+                onClick={handleLikertSubmit}
+                disabled={likertSubmitting}
+                className='block text-sm font-gilroy-bold bg-transparent px-2 py-1 rounded-xl shadow-xl border-2 border-white text-white/70 hover:bg-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed'
+              >
+                {likertSubmitting ? 'SUBMITTING...' : 'CALIBRATE DEEPER'}
               </button>
             </div>
           </div>
