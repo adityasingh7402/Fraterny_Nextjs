@@ -4,16 +4,17 @@
 import React, { useState, useRef, useEffect, use } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { Quote, Film as FilmIcon, BookOpen, Share2, Send, ThumbsUp,
-    ThumbsDown,
-    ChevronsUp,
-    BookmarkPlus,
-    Star,
-    ScrollText,
-    ChevronDown,
-    ChevronUp,
-    LockIcon
- } from 'lucide-react';
+import {
+  Quote, Film as FilmIcon, BookOpen, Share2, Send, ThumbsUp,
+  ThumbsDown,
+  ChevronsUp,
+  BookmarkPlus,
+  Star,
+  ScrollText,
+  ChevronDown,
+  ChevronUp,
+  LockIcon
+} from 'lucide-react';
 import Image from 'next/image';
 import { ResultData, Film, Book, DualGatewayPricingData } from '../utils/types';
 import { tokens, CTA_HEIGHT } from '../utils/constants';
@@ -61,11 +62,11 @@ interface User {
 }
 
 
-export function QuestResultClient({ 
-  initialData, 
-  userId, 
-  sessionId, 
-  testId 
+export function QuestResultClient({
+  initialData,
+  userId,
+  sessionId,
+  testId
 }: QuestResultClientProps) {
   const [resultData] = useState<ResultData | null>(initialData);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -87,6 +88,8 @@ export function QuestResultClient({
   const [selectedPrediction, setSelectedPrediction] = useState<any>(null);
   const [selectedFinding, setSelectedFinding] = useState<string | null>(null);
   const [clickedbuttonId, setClickedButtonId] = useState<string | null>(null);
+  const [likertValues, setLikertValues] = useState({ q1: 7, q2: 7, q3: 7, q4: 7 });
+  const [likertSubmitting, setLikertSubmitting] = useState(false);
   const archetype: Record<string, string> = mockData.archetype;
   const router = useRouter();
   const getEffectiveUserId = () => {
@@ -174,18 +177,18 @@ export function QuestResultClient({
       try {
         const { getPaymentContext, clearPaymentContext } = await import('@/app/payment-gateway/shared/paymentApi');
         const paymentContext = getPaymentContext();
-        
+
         if (paymentContext) {
           console.log('🔄 Found pending payment context after auth:', paymentContext);
-          
+
           // Mark as resumed and clear context IMMEDIATELY to prevent refresh from re-triggering
           hasResumedPayment.current = true;
           clearPaymentContext();
           console.log('🧼 Payment context cleared from localStorage - refresh won\'t re-trigger payment');
-          
+
           // Small delay to ensure UI is ready
           await new Promise(resolve => setTimeout(resolve, 1000));
-          
+
           // Resume the payment (pass flag to prevent re-storing context)
           console.log('▶️ Resuming payment with gateway:', paymentContext.gateway);
           toast.info('Resuming your payment...', {
@@ -215,7 +218,7 @@ export function QuestResultClient({
         // Keep fallback pricing
       }
     };
-    
+
     loadPricing();
   }, []);
 
@@ -224,7 +227,7 @@ export function QuestResultClient({
     const checkPaymentStatus = async () => {
       try {
         const existingStatus = await checkExistingPaymentStatus(sessionId, testId);
-        
+
         if (existingStatus?.ispaymentdone === 'success') {
           console.log('💳 Found existing payment:', existingStatus);
           setAssessmentPaymentStatus(existingStatus);
@@ -254,13 +257,13 @@ export function QuestResultClient({
         console.log('⏭️ Affiliate signup already tracked in this session, skipping');
         return;
       }
-      
+
       // Only track if user is logged in and there's an affiliate code
       if (!user?.id || userId === 'anonymous') return;
-      
+
       const referredBy = localStorage.getItem('referred_by');
       if (!referredBy) return;
-      
+
       try {
         console.log('📊 Tracking affiliate signup for logged-in user:', {
           userId: user.id,
@@ -268,7 +271,7 @@ export function QuestResultClient({
           sessionId,
           testId
         });
-        
+
         const response = await fetch('/api/tracking/affiliate/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -286,9 +289,9 @@ export function QuestResultClient({
             }
           })
         });
-        
+
         const result = await response.json();
-        
+
         if (result.success) {
           console.log('✅ Affiliate signup tracked successfully');
           hasTrackedSignup.current = true; // Mark as tracked
@@ -303,7 +306,7 @@ export function QuestResultClient({
         console.error('❌ Error tracking affiliate signup:', error);
       }
     };
-    
+
     trackAffiliateSignupIfNeeded();
   }, [user, userId, sessionId, testId]);
 
@@ -311,7 +314,7 @@ export function QuestResultClient({
   useEffect(() => {
     const cleanupQuestData = () => {
       console.log('🧹 Cleaning up quest data after successful completion...');
-      
+
       const keysToCleanup = [
         'fraterny_quest_session',
         'fraterny_quest_responses',
@@ -319,7 +322,7 @@ export function QuestResultClient({
         'testid',
         'fraterny_device_backup'
       ];
-      
+
       // Clean up specific keys
       keysToCleanup.forEach(key => {
         const removed = localStorage.getItem(key);
@@ -328,7 +331,7 @@ export function QuestResultClient({
           console.log(`🗑️ Removed: ${key}`);
         }
       });
-      
+
       // Also clean up any quest_tags_* keys
       const allKeys: string[] = [];
       for (let i = 0; i < localStorage.length; i++) {
@@ -337,19 +340,19 @@ export function QuestResultClient({
           allKeys.push(key);
         }
       }
-      
+
       allKeys.forEach(key => {
         localStorage.removeItem(key);
         console.log(`🗑️ Removed tag: ${key}`);
       });
-      
+
       // Clear payment context from sessionStorage
       sessionStorage.removeItem('payment_context');
       sessionStorage.removeItem('session_data');
-      
+
       console.log('✅ Quest data cleanup complete');
     };
-    
+
     // Run cleanup on mount
     cleanupQuestData();
   }, []);
@@ -423,19 +426,19 @@ export function QuestResultClient({
 
   const handlePayment = async (gateway: 'razorpay' | 'paypal', isResuming: boolean = false) => {
     setPaymentLoading(true);
-    
+
     try {
       console.log(`💳 Initiating ${gateway} payment... (isResuming: ${isResuming})`);
 
       // Check if user is authenticated
       if (!user) {
         console.log('👤 User not authenticated, initiating sign-in and save flow...');
-        
+
         // Store payment context BEFORE redirecting to auth
         const { storePaymentContext } = await import('@/app/payment-gateway/shared/paymentApi');
         storePaymentContext(sessionId, testId, gateway);
         console.log('💾 Stored payment context for gateway:', gateway);
-        
+
         toast.info('Signing in to save your results and continue payment...', {
           position: "top-right"
         });
@@ -452,9 +455,9 @@ export function QuestResultClient({
             ? `${signedInUser.user_metadata.first_name} ${signedInUser.user_metadata.last_name || ''}`.trim()
             : 'User';
           const email = signedInUser?.email || '';
-          
+
           console.log('💾 Saving assessment results after sign-in:', { sessionId, testId, userId, username, email });
-          
+
           // Save the assessment results
           const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/saveusingsignin`, {
             sessionId,
@@ -463,12 +466,12 @@ export function QuestResultClient({
             username,
             email
           });
-          
+
           console.log('✅ Assessment saved:', response);
           toast.success('Results saved! Resuming payment...', {
             position: "top-right"
           });
-          
+
           // Continue with payment flow below (don't return)
         } else {
           // Sign-in failed or cancelled
@@ -479,7 +482,7 @@ export function QuestResultClient({
           return;
         }
       }
-      
+
       // Only store payment context if this is NOT a resumed payment
       // (resumed payments already cleared context to prevent re-trigger on refresh)
       if (!isResuming) {
@@ -489,10 +492,10 @@ export function QuestResultClient({
       } else {
         console.log('⏭️ Skipping context storage - this is a resumed payment');
       }
-      
+
       // Dynamically import the correct payment service
       let paymentResult;
-      
+
       if (gateway === 'razorpay') {
         const { processRazorpayPayment } = await import('@/app/payment-gateway/razorpay/razorpayService');
         paymentResult = await processRazorpayPayment(sessionId, testId, user);
@@ -500,18 +503,18 @@ export function QuestResultClient({
         const { processPayPalPayment } = await import('@/app/payment-gateway/paypal/paypalService');
         paymentResult = await processPayPalPayment(sessionId, testId, user);
       }
-      
+
       setPaymentLoading(false);
-      
+
       // Handle payment result
       if (paymentResult.success) {
         console.log('✅ Payment successful, starting status polling...');
         setUpsellOpen(false);
-        
+
         toast.success('Payment successful! Verifying...', {
           position: "top-right"
         });
-        
+
         // Start polling for payment status verification
         const stopPolling = startPaymentStatusPolling(
           sessionId,
@@ -529,7 +532,7 @@ export function QuestResultClient({
             setPaymentSuccess(true);
             setAssessmentPaymentStatus(completedStatus);
             setShowSuccessPopup(true);
-            
+
             // Clear payment context after successful payment
             const clearContext = async () => {
               const { clearPaymentContext } = await import('@/app/payment-gateway/shared/paymentApi');
@@ -537,7 +540,7 @@ export function QuestResultClient({
               console.log('🧹 Cleared payment context after successful payment');
             };
             clearContext();
-            
+
             toast.success('Payment verified successfully!', {
               position: "top-right",
               duration: 5000
@@ -552,10 +555,10 @@ export function QuestResultClient({
             });
           }
         );
-        
+
         // Store cleanup function
         stopPollingRef.current = stopPolling;
-        
+
       } else {
         // Payment failed or cancelled
         console.log('❌ Payment failed:', paymentResult.error);
@@ -578,28 +581,47 @@ export function QuestResultClient({
       return;
     }
 
-    try {
-      const link = document.createElement('a');
-      link.href = assessmentPaymentStatus.quest_pdf;
-      link.download = `Quest-Report-${sessionId}.pdf`;
-      link.target = '_blank';
-      
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      toast.success('Downloading your PDF report!');
-    } catch (error) {
-      console.error('PDF download error:', error);
-      window.open(assessmentPaymentStatus.quest_pdf, '_blank');
-      toast.success('Opening your PDF report!');
-    }
+    // Open PDF in new tab
+    window.open(assessmentPaymentStatus.quest_pdf, '_blank');
+    toast.success('Opening your PDF report!');
   };
 
   const handleCardClick = (index: number) => {
     const insight = mindCard?.insights[index];
     if (insight) {
       setSelectedInsight({ index, text: insight });
+    }
+  };
+
+  const handleLikertSubmit = async () => {
+    setLikertSubmitting(true);
+    try {
+      console.log(likertValues, testId);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/likert/`, {
+        test_id: testId,
+        q1: String(likertValues.q1),
+        q2: String(likertValues.q2),
+        q3: String(likertValues.q3),
+        q4: String(likertValues.q4)
+      });
+      console.log(response.data);
+
+      if (response.data.status === 200) {
+        toast.success(response.data.Message || 'Successfully updated the likert', {
+          position: "top-right"
+        });
+      } else {
+        toast.error(response.data.Message || 'Failed to update', {
+          position: "top-right"
+        });
+      }
+    } catch (error: any) {
+      console.error('Likert submission error:', error);
+      toast.error(error?.response?.data?.Message || 'Failed to update the likert', {
+        position: "top-right"
+      });
+    } finally {
+      setLikertSubmitting(false);
     }
   };
 
@@ -634,8 +656,8 @@ export function QuestResultClient({
 
 
 
-  
-  
+
+
 
   return (
     <div className="min-h-screen w-full bg-white text-gray-900">
@@ -914,7 +936,7 @@ export function QuestResultClient({
         </SectionFrame> */}
 
         {/* Books Section */}
-         {/* <SectionFrame
+        {/* <SectionFrame
           id="books"
           title="Books You'd Love If You Give Them a Chance"
           sub="3 high-yield picks"
@@ -1021,98 +1043,97 @@ export function QuestResultClient({
 
 
         {/* New architecture */}
-         <SectionFrame
-            id="emotional"
-            title=""
-            sub=""
-            shareText={ ""}
-            themeKey="emotional"
-            sessionId={""}
-            customClass="pt-16 pb-16 overflow-y-auto"
-            testId={""}
-            >
-            <div className="relative w-full max-w-[480px] mx-auto pt-4">
-                <motion.h1 className="mb-5 text-left">
-                <span className="block text-sm uppercase tracking-[0.3em] text-white/70 mb-1">Analysis Complete</span>
-                <span className="block text-5xl font-gilroy-bold tracking-tighter bg-gradient-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent">
-                    Quest Reveals About You
-                </span>
-                
-                </motion.h1>
+        <SectionFrame
+          id="emotional"
+          title=""
+          sub=""
+          shareText={""}
+          themeKey="emotional"
+          sessionId={""}
+          customClass="pt-16 pb-16 overflow-y-auto"
+          testId={""}
+        >
+          <div className="relative w-full max-w-[480px] mx-auto pt-4">
+            <motion.h1 className="mb-5 text-left">
+              <span className="block text-sm uppercase tracking-[0.3em] text-white/70 mb-1">Analysis Complete</span>
+              <span className="block text-5xl font-gilroy-bold tracking-tighter bg-gradient-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent">
+                Quest Reveals About You
+              </span>
 
-                <div className="flex flex-row gap-5">
-                { Object.entries(archetype).map(([key, value]) => (
-                    <div key={key} className="mb-6 border-l-2 border-white/30 pl-4">
-                        <h2 className="text-lg font-gilroy-semibold text-white uppercase tracking-[0.1em]">{key.charAt(0).toUpperCase() + key.slice(1)}</h2>
-                        <p className="text-white/80 text-[12px]">{value}</p>
-                    </div>
-                ))}
+            </motion.h1>
+
+            <div className="flex flex-row gap-5">
+              {Object.entries(archetype).map(([key, value]) => (
+                <div key={key} className="mb-6 border-l-2 border-white/30 pl-4">
+                  <h2 className="text-lg font-gilroy-semibold text-white uppercase tracking-[0.1em]">{key.charAt(0).toUpperCase() + key.slice(1)}</h2>
+                  <p className="text-white/80 text-[12px]">{value}</p>
                 </div>
-                <span className="block mt-1 w-full h-0.5 bg-white/50 rounded-full"></span>
-
-                <div className="mt-6">
-                    <h2 className="text-lg font-gilroy-semibold text-white uppercase tracking-[0.1em] mb-2">Core Line</h2>
-                    <p className="text-white/80 text-lg font-gilroy-bold">{mockData.core_line}</p>
-                </div>
-
-                {/* <PatternSVG /> */}
-
-                <div className="mt-6">
-                    <h2 className="text-lg font-gilroy-semibold text-white uppercase tracking-[0.1em] mb-2">Primary Pattern</h2>
-                    <p className="text-white/80 text-md font-gilroy-medium">{mockData.primary_pattern}</p>
-                </div>
+              ))}
             </div>
+            <span className="block mt-1 w-full h-0.5 bg-white/50 rounded-full"></span>
+
+            <div className="mt-6">
+              <h2 className="text-lg font-gilroy-semibold text-white uppercase tracking-[0.1em] mb-2">Core Line</h2>
+              <p className="text-white/80 text-lg font-gilroy-bold">{mockData.core_line}</p>
+            </div>
+
+            {/* <PatternSVG /> */}
+
+            <div className="mt-6">
+              <h2 className="text-lg font-gilroy-semibold text-white uppercase tracking-[0.1em] mb-2">Primary Pattern</h2>
+              <p className="text-white/80 text-md font-gilroy-medium">{mockData.primary_pattern}</p>
+            </div>
+          </div>
         </SectionFrame>
 
         <SectionFrame
-            id="mind"
-            title="Header from yash"
-            sub=""
-            shareText={ ""}
-            themeKey="mind"
-            sessionId={""}
-            customClass="pt-16 pb-16 overflow-y-auto"
-            testId={""}
-            >
-            <div className="relative w-full max-w-[480px] mx-auto pt-4">
-              <motion.div className="mb-5 flex w-full items-center justify-between">
-                <span className="block text-md uppercase tracking-[0.3em] text-white/70 mb-1"> Calibration</span>
-                <span className="block text-sm font-gilroy-bold bg-transparent px-2 py-1 rounded-xl shadow-xl border-2 border-white text-white/70">
-                    DEPTH SCORE - {mockData?.depth_score || 10}
-                </span>
-              </motion.div>
+          id="mind"
+          title="Header from yash"
+          sub=""
+          shareText={""}
+          themeKey="mind"
+          sessionId={""}
+          customClass="pt-16 pb-16 overflow-y-auto"
+          testId={""}
+        >
+          <div className="relative w-full max-w-[480px] mx-auto pt-4">
+            <motion.div className="mb-5 flex w-full items-center justify-between">
+              <span className="block text-md uppercase tracking-[0.3em] text-white/70 mb-1"> Calibration</span>
+              <span className="block text-sm font-gilroy-bold bg-transparent px-2 py-1 rounded-xl shadow-xl border-2 border-white text-white/70">
+                DEPTH SCORE - {mockData?.depth_score || 10}
+              </span>
+            </motion.div>
 
-              <div className="flex flex-col gap-8">
-                  {Object.keys(mockData.slider_question)
-                    .filter(key => key.startsWith('question'))
-                    .map((key, index) => {
-                      const questionNumber = index + 1;
-                      const likertKey = `likert${questionNumber}` as keyof typeof mockData.slider_question;
-                      const likertLabels = mockData.slider_question[likertKey] as [string, string];
-                      
-                      return (
-                        <motion.div
-                          key={key}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.1 }}
-                          className=""
-                        >
-                          {/* Question */}
-                          <h3 className="text-white/90 text-lg font-gilroy-semibold">
-                            {mockData.slider_question[key as keyof typeof mockData.slider_question]}
-                          </h3>
-                          
-                          {/* Slider Container */}
-                          <div className="space-y-1">
-                            {/* Slider Track */}
-                            <div className="relative">
-                              <input
-                                type="range"
-                                min="0"
-                                max="100"
-                                defaultValue="70"
-                                className="w-full h-2 bg-white/10 rounded-full appearance-none cursor-pointer
+            <div className="flex flex-col gap-8">
+              {Object.keys(mockData.slider_question)
+                .filter(key => key.startsWith('question'))
+                .map((key, index) => {
+                  const questionNumber = index + 1;
+                  const likertKey = `likert${questionNumber}` as keyof typeof mockData.slider_question;
+                  const likertLabels = mockData.slider_question[likertKey] as [string, string];
+
+                  return (
+                    <motion.div
+                      key={key}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className=""
+                    >
+                      {/* Question */}
+                      <h3 className="text-white/90 text-lg font-gilroy-semibold">
+                        {mockData.slider_question[key as keyof typeof mockData.slider_question]}
+                      </h3>
+
+                      {/* Slider Container */}
+                      <div className="space-y-1">
+                        {/* Slider Track */}
+                        <div className="relative">
+                          <input
+                            type="range"
+                            min="0"
+                            max="10"
+                            className="w-full h-2 bg-white/10 rounded-full appearance-none cursor-pointer
                                   [&::-webkit-slider-thumb]:appearance-none
                                   [&::-webkit-slider-thumb]:w-6
                                   [&::-webkit-slider-thumb]:h-6
@@ -1127,156 +1148,194 @@ export function QuestResultClient({
                                   [&::-moz-range-thumb]:cursor-pointer
                                   [&::-moz-range-thumb]:border-0
                                   [&::-moz-range-thumb]:shadow-lg"
-                                style={{
-                                  background: `linear-gradient(to right, #ffffff 70%, rgba(255,255,255,0.1) 70%)`
-                                }}
-                                                                onChange={(e) => {
-                                  const value = e.target.value;
-                                  e.target.style.background = `linear-gradient(to right, #ffffff ${value}%, rgba(255,255,255,0.1) ${value}%)`;
-                                }}
-                              />
-                            </div>
-                            
-                            {/* Labels */}
-                            <div className="flex justify-between items-center font-gilroy-light">
-                              <span className="text-neutral-900 text-sm uppercase tracking-wider">
-                                {likertLabels[0]}
-                              </span>
-                              <span className="text-neutral-900 text-sm uppercase tracking-wider">
-                                {likertLabels[1]}
-                              </span>
-                            </div>
-                          </div>
-                        </motion.div>
-                      );
-                    })}
-                </div>
+                            value={likertValues[`q${questionNumber}` as keyof typeof likertValues]}
+                            style={{
+                              background: `linear-gradient(to right, #ffffff 70%, rgba(255,255,255,0.1) 70%)`
+                            }}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              const numericValue = parseInt(value);
+                              const percentage = (numericValue / 10) * 100;
+                              e.target.style.background = `linear-gradient(to right, #ffffff ${percentage}%, rgba(255,255,255,0.1) ${percentage}%)`;
 
-                <div className='flex w-full justify-end mt-10'>
-                  <button className='block text-sm font-gilroy-bold bg-transparent px-2 py-1 rounded-xl shadow-xl border-2 border-white text-white/70'>
-                      CALIBRATE DEEPER
-                  </button>
-                </div>
-            </div>
-        </SectionFrame> 
+                              // Update the state
+                              setLikertValues(prev => ({
+                                ...prev,
+                                [`q${questionNumber}`]: numericValue
+                              }));
+                            }}
+                          />
+                        </div>
 
-        <SectionFrame
-            id="mind"
-            title="Header from yash"
-            sub=""
-            shareText={ ""}
-            themeKey="films"
-            sessionId={""}
-            customClass="pt-16 pb-16 overflow-y-auto"
-            testId={""}
-            >
-            <div className="relative w-full max-w-[480px] mx-auto pt-4">
-                <motion.div className="mb-5 flex w-full items-center justify-between">
-                <span className="block text-md uppercase tracking-[0.3em] text-white/70 mb-1"> Behavioural signal </span>
-                <span className="block text-sm uppercase font-gilroy-bold bg-transparent px-2 py-1 rounded-xl shadow-xl border-2 border-white text-white/70">
-                    5 detected
-                </span>
-              </motion.div>
-
-                <div className="flex flex-col gap-5">
-                { Object.entries(mockData.signals).filter(([key, _]) => key.endsWith("_purpose")).map(([key, value]) => {
-                    const descKey = key.replace("_purpose", "_description");
-                    return (
-                        <motion.div key={key}
-                        className="p-4 border border-white/20 rounded-lg bg-white/5 cursor-pointer">
-                            <div className="flex items-center mb-2">
-                            <div
-                            onClick={() => clickedbuttonId === key ? setClickedButtonId(null) :  setClickedButtonId(key)}
-                            className="text-xl font-gilroy-semibold text-white mb-2 px-2 py-2 w-full flex items-center justify-between">
-                                <span className='flex gap-2 items-center'>{value} { key !== 'signal1_purpose' ? <LockIcon className='text-white size-4' /> : null}</span>
-                                {clickedbuttonId === key ? <ChevronUp size={16} className="ml-2"/> : <ChevronDown size={16} className="ml-2"/>}
-                            </div>
-                            </div>
-
-                        <AnimatePresence>
-                        {clickedbuttonId === key && (
-                            <>
-                            <motion.div
-                                initial={{height: 40, overflow: 'hidden'}}
-                                animate={{height: 'auto'}}
-                                exit={{height: 0, overflow: 'hidden'}}
-                                transition={{duration: 0.3}}
-                                className={`text-white/80 text-sm font-gilroy-medium ${key === 'signal1_purpose' ? '' : 'blur-sm'}`}
-                            >
-                                <motion.div
-                                initial={{opacity: 0}}
-                                animate={{opacity: 1}}
-                                exit={{opacity: 0}}
-                                transition={{duration: 0.3, delay: 0.1}}
-                                className='relative'
-                                >
-                                {(mockData.signals as Record<string, string>)[descKey]}
-                                </motion.div>
-                                
-                            </motion.div>
-                            
-                            </>
-                        )}
-                        </AnimatePresence>
+                        {/* Labels */}
+                        <div className="flex justify-between items-center font-gilroy-light">
+                          <span className="text-neutral-900 text-sm uppercase tracking-wider">
+                            {likertLabels[0]}
+                          </span>
+                          <span className="text-neutral-900 text-sm uppercase tracking-wider">
+                            {likertLabels[1]}
+                          </span>
+                        </div>
+                      </div>
                     </motion.div>
-                );
-            })}
+                  );
+                })}
             </div>
-                
+
+            <div className='flex w-full justify-end mt-10'>
+              <button
+                onClick={handleLikertSubmit}
+                disabled={likertSubmitting}
+                className='block text-sm font-gilroy-bold bg-transparent px-2 py-1 rounded-xl shadow-xl border-2 border-white text-white/70 hover:bg-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed'
+              >
+                {likertSubmitting ? 'SUBMITTING...' : 'CALIBRATE DEEPER'}
+              </button>
             </div>
+          </div>
         </SectionFrame>
 
-          <SectionFrame
-        id="pdf-report"
-        title="Made from your words"
-        sub="Sealed in full file"
-        shareText="Check out my complete personality analysis from Fraterny!"
-        themeKey="mind"
-        customClass="pt-16 relative"
-        sessionId={"ghhj"}
-        testId={"ghh"}
+        <SectionFrame
+          id="mind"
+          title="Header from yash"
+          sub=""
+          shareText={""}
+          themeKey="films"
+          sessionId={""}
+          customClass="pt-16 pb-16 overflow-y-auto"
+          testId={""}
         >
-        <div style={{ paddingBottom: CTA_HEIGHT }}>
+          <div className="relative w-full max-w-[480px] mx-auto pt-4">
+            <motion.div className="mb-5 flex w-full items-center justify-between">
+              <span className="block text-md uppercase tracking-[0.3em] text-white/70 mb-1"> Behavioural signal </span>
+              <span className="block text-sm uppercase font-gilroy-bold bg-transparent px-2 py-1 rounded-xl shadow-xl border-2 border-white text-white/70">
+                5 detected
+              </span>
+            </motion.div>
+
+            <div className="flex flex-col gap-5">
+              {Object.entries(mockData.signals).filter(([key, _]) => key.endsWith("_purpose")).map(([key, value]) => {
+                const descKey = key.replace("_purpose", "_description");
+                return (
+                  <motion.div key={key}
+                    className="p-4 border border-white/20 rounded-lg bg-white/5 cursor-pointer">
+                    <div className="flex items-center mb-2">
+                      <div
+                        onClick={() => clickedbuttonId === key ? setClickedButtonId(null) : setClickedButtonId(key)}
+                        className="text-xl font-gilroy-semibold text-white mb-2 px-2 py-2 w-full flex items-center justify-between">
+                        <span className='flex gap-2 items-center'>{value} {key !== 'signal1_purpose' ? <LockIcon className='text-white size-4' /> : null}</span>
+                        {clickedbuttonId === key ? <ChevronUp size={16} className="ml-2" /> : <ChevronDown size={16} className="ml-2" />}
+                      </div>
+                    </div>
+
+                    <AnimatePresence>
+                      {clickedbuttonId === key && (
+                        <>
+                          <motion.div
+                            initial={{ height: 40, overflow: 'hidden' }}
+                            animate={{ height: 'auto' }}
+                            exit={{ height: 0, overflow: 'hidden' }}
+                            transition={{ duration: 0.3 }}
+                            className={`text-white/80 text-sm font-gilroy-medium ${key === 'signal1_purpose' ? '' : 'blur-sm'}`}
+                          >
+                            <motion.div
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              transition={{ duration: 0.3, delay: 0.1 }}
+                              className='relative'
+                            >
+                              {(mockData.signals as Record<string, string>)[descKey]}
+                            </motion.div>
+
+                          </motion.div>
+
+                        </>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+          </div>
+        </SectionFrame>
+
+        <SectionFrame
+          id="pdf-report"
+          title="Made from your words"
+          sub="Sealed in full file"
+          shareText="Check out my complete personality analysis from Fraterny!"
+          themeKey="mind"
+          customClass="pt-16 relative"
+          sessionId={"ghhj"}
+          testId={"ghh"}
+        >
+          <div style={{ paddingBottom: CTA_HEIGHT }}>
 
             <div className='bg-gradient-to-r from-sky-600 to-sky-800 rounded-lg mt-10 p-4 h-[600px] flex flex-col items-center justify-center backdrop-blur-3xl border-2 border-white shadow-lg'>
-                
-                <div className='font-gilroy-bold text-2xl text-center text-white mt-8'>
-                    <p className='font-gilroy-regular pb-6'>TAKE OWNERSHIP OF YOUR <br /> <span className='text-4xl font-gilroy-bold'>ARCHITECTURE</span></p>
-                    <p className='mt-2 text-sm font-gilroy-medium'>Access the full, unredacted dossier tailored to your specific calibration.</p>
-                </div>
-                <div>
-                    <button className='mt-4 font-gilroy-bold bg-white text-blue-900 px-6 py-3 rounded-lg shadow-lg transition-colors'>
-                        ACCESS FULL REPORT
-                    </button>
-                    {/* <div className='text-center'>
+
+              <div className='font-gilroy-bold text-2xl text-center text-white mt-8'>
+                <p className='font-gilroy-regular pb-6'>TAKE OWNERSHIP OF YOUR <br /> <span className='text-4xl font-gilroy-bold'>ARCHITECTURE</span></p>
+                <p className='mt-2 text-sm font-gilroy-medium'>Access the full, unredacted dossier tailored to your specific calibration.</p>
+              </div>
+              <div>
+                <button
+                  onClick={() => {
+                    console.log('🔘 Button clicked!');
+                    console.log('💳 Payment Status:', {
+                      paymentSuccess,
+                      assessmentPaymentStatus,
+                      pdfUrl: assessmentPaymentStatus?.quest_pdf
+                    });
+
+                    if (paymentSuccess && assessmentPaymentStatus?.quest_pdf) {
+                      // Payment already done - open PDF
+                      console.log('✅ Payment done, opening PDF...');
+                      handlePDFDownload();
+                    } else {
+                      // Payment not done - open payment modal
+                      console.log('❌ Payment not done, opening modal...');
+                      googleAnalytics.trackPdfUnlockCTA({
+                        session_id: sessionId!,
+                        test_id: testId!,
+                        user_state: user?.id ? 'logged_in' : 'anonymous'
+                      });
+                      setUpsellOpen(true);
+                    }
+                  }}
+                  className='mt-4 font-gilroy-bold bg-white text-blue-900 px-6 py-3 rounded-lg shadow-lg transition-colors hover:bg-blue-50 active:scale-95 transition-transform'
+                >
+                  {paymentSuccess ? 'DOWNLOAD PDF REPORT' : 'ACCESS FULL REPORT'}
+                </button>
+                {/* <div className='text-center'>
                         PRICING
                     </div> */}
-                </div>
-                <div className='mt-6 mb-8 uppercase text-sm text-neutral-100 w-full flex items-center justify-center'>
-                    file contains 28 additional pages with
-                </div>
-                <div className='pb-10'>
-                    <div className='grid grid-cols-2 gap-4 mb-8'>
-                        <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg text-center'>
-                            <p className='font-gilroy-semibold text-white uppercase'>blind spot analysis</p>
-                        </div>
-                        <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg text-center'>
-                            <p className='font-gilroy-semibold text-white uppercase'>growth levers</p>
+              </div>
+              <div className='mt-6 mb-8 uppercase text-sm text-neutral-100 w-full flex items-center justify-center'>
+                file contains 28 additional pages with
+              </div>
+              <div className='pb-10'>
+                <div className='grid grid-cols-2 gap-4 mb-8'>
+                  <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg text-center'>
+                    <p className='font-gilroy-semibold text-white uppercase'>blind spot analysis</p>
+                  </div>
+                  <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg text-center'>
+                    <p className='font-gilroy-semibold text-white uppercase'>growth levers</p>
 
-                        </div>
-                        <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg text-center'>
-                            <p className='font-gilroy-semibold text-white uppercase'>relationship dynamics</p>
+                  </div>
+                  <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg text-center'>
+                    <p className='font-gilroy-semibold text-white uppercase'>relationship dynamics</p>
 
-                        </div>
-                        <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg text-center'>
-                            <p className='font-gilroy-semibold text-white uppercase'>architectural map</p>
-                        </div>
-                    </div>
+                  </div>
+                  <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg text-center'>
+                    <p className='font-gilroy-semibold text-white uppercase'>architectural map</p>
+                  </div>
                 </div>
+              </div>
             </div>
-        </div>
+          </div>
 
-        {/* <div className='flex flex-col items-center justify-center mb-10 gap-4'>
+          {/* <div className='flex flex-col items-center justify-center mb-10 gap-4'>
             <div className='bg-sky-300/10 rounded-lg p-4 w-full max-w-md border border-sky-300/30 shadow-lg space-y-8'>
                 <p className='font-gilroy-semibold text-white text-2xl'>"It felt illegal to read this. It articulated things I've felt for 10 years but never said."</p>
                 <p className='font-gilroy-medium text-neutral-300'>— Sarah K. // Architect</p>
@@ -1288,12 +1347,12 @@ export function QuestResultClient({
             </div>
         </div> */}
 
-        <Testimonial />
+          <Testimonial />
 
-        <FAQ className='bg-transparent rounded-lg' />
+          <FAQ className='bg-transparent rounded-lg' />
 
-        
-          </SectionFrame>
+
+        </SectionFrame>
 
       </div>
 
@@ -1412,9 +1471,9 @@ export function QuestResultClient({
             }}
             className="fixed right-5 bottom-20 z-[60] flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-cyan-400 to-cyan-500 shadow-lg"
             initial={{ opacity: 0, scale: 0, rotate: -180 }}
-            animate={{ 
-              opacity: 1, 
-              scale: 1, 
+            animate={{
+              opacity: 1,
+              scale: 1,
               rotate: 0,
               y: [0, -3, 0]
             }}
