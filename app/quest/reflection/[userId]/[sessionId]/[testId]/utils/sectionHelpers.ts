@@ -1,14 +1,21 @@
 // sectionHelpers.ts
 
+// export const sectionIds = [
+//   "emotional",
+//   "mind",
+//   "findings",
+//   "subjects",
+//   "quotes",
+//   "films",
+//   "books",
+//   "work",
+//   "pdf-report"
+// ];
+
 export const sectionIds = [
   "emotional",
   "mind",
   "findings",
-  "subjects",
-  "quotes",
-  "films",
-  "books",
-  "work",
   "pdf-report"
 ];
 
