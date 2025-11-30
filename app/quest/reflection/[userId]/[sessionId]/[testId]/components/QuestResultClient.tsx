@@ -579,22 +579,9 @@ export function QuestResultClient({
       return;
     }
 
-    try {
-      const link = document.createElement('a');
-      link.href = assessmentPaymentStatus.quest_pdf;
-      link.download = `Quest-Report-${sessionId}.pdf`;
-      link.target = '_blank';
-
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      toast.success('Downloading your PDF report!');
-    } catch (error) {
-      console.error('PDF download error:', error);
-      window.open(assessmentPaymentStatus.quest_pdf, '_blank');
-      toast.success('Opening your PDF report!');
-    }
+    // Open PDF in new tab
+    window.open(assessmentPaymentStatus.quest_pdf, '_blank');
+    toast.success('Opening your PDF report!');
   };
 
   const handleCardClick = (index: number) => {
@@ -1248,11 +1235,20 @@ export function QuestResultClient({
               <div>
                 <button
                   onClick={() => {
+                    console.log('🔘 Button clicked!');
+                    console.log('💳 Payment Status:', {
+                      paymentSuccess,
+                      assessmentPaymentStatus,
+                      pdfUrl: assessmentPaymentStatus?.quest_pdf
+                    });
+
                     if (paymentSuccess && assessmentPaymentStatus?.quest_pdf) {
-                      // Payment already done - download PDF
+                      // Payment already done - open PDF
+                      console.log('✅ Payment done, opening PDF...');
                       handlePDFDownload();
                     } else {
                       // Payment not done - open payment modal
+                      console.log('❌ Payment not done, opening modal...');
                       googleAnalytics.trackPdfUnlockCTA({
                         session_id: sessionId!,
                         test_id: testId!,
