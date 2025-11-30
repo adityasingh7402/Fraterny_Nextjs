@@ -1090,7 +1090,7 @@ export function QuestResultClient({
 
         <SectionFrame
           id="mind"
-          title="Header from yash"
+          title="Calibration"
           sub=""
           shareText={""}
           themeKey="mind"
@@ -1100,7 +1100,7 @@ export function QuestResultClient({
         >
           <div className="relative w-full max-w-[480px] mx-auto pt-4">
             <motion.div className="mb-5 flex w-full items-center justify-between">
-              <span className="block text-md uppercase tracking-[0.3em] text-white/70 mb-1"> Calibration</span>
+              <span className="block text-md uppercase tracking-[0.3em] text-white/70 mb-1"> </span>
               <span className="block text-sm font-gilroy-bold bg-transparent px-2 py-1 rounded-xl shadow-xl border-2 border-white text-white/70">
                 DEPTH SCORE - {mockData?.depth_score || 10}
               </span>
@@ -1198,7 +1198,7 @@ export function QuestResultClient({
 
         <SectionFrame
           id="findings"
-          title="Header from yash"
+          title=" Behavioural signals "
           sub=""
           shareText={""}
           themeKey="films"
@@ -1208,7 +1208,7 @@ export function QuestResultClient({
         >
           <div className="relative w-full max-w-[480px] mx-auto pt-4">
             <motion.div className="mb-5 flex w-full items-center justify-between">
-              <span className="block text-md uppercase tracking-[0.3em] text-white/70 mb-1"> Behavioural signal </span>
+              <span className="block text-md uppercase tracking-[0.3em] text-white/70 mb-1"></span>
               <span className="block text-sm uppercase font-gilroy-bold bg-transparent px-2 py-1 rounded-xl shadow-xl border-2 border-white text-white/70">
                 5 detected
               </span>
