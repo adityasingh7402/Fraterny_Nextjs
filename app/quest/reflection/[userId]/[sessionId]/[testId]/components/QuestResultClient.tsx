@@ -13,7 +13,9 @@ import {
   ScrollText,
   ChevronDown,
   ChevronUp,
-  LockIcon
+  LockIcon,
+  Download,
+  Pointer
 } from 'lucide-react';
 import Image from 'next/image';
 import { ResultData, Film, Book, DualGatewayPricingData } from '../utils/types';
@@ -1195,7 +1197,7 @@ export function QuestResultClient({
         </SectionFrame>
 
         <SectionFrame
-          id="mind"
+          id="findings"
           title="Header from yash"
           sub=""
           shareText={""}
@@ -1305,7 +1307,7 @@ export function QuestResultClient({
                   }}
                   className='mt-4 font-gilroy-bold bg-white text-blue-900 px-6 py-3 rounded-lg shadow-lg transition-colors hover:bg-blue-50 active:scale-95 transition-transform'
                 >
-                  {paymentSuccess ? 'DOWNLOAD PDF REPORT' : 'ACCESS FULL REPORT'}
+                  {paymentSuccess ? <span>YOUR REPORT IS READY <Download className='inline-block ml-2' /></span> : 'ACCESS FULL REPORT'}
                 </button>
                 {/* <div className='text-center'>
                         PRICING
@@ -1331,6 +1333,10 @@ export function QuestResultClient({
                     <p className='font-gilroy-semibold text-white uppercase'>architectural map</p>
                   </div>
                 </div>
+              </div>
+
+              <div className='font-gilroy-medium text-sm text-white/70 pb-3'>
+                  <span className='flex items-center justify-center'>Still unsure? See how people love it and FAQs <Pointer className='inline-block ml-2 rotate-180' /></span>
               </div>
             </div>
           </div>
@@ -1374,12 +1380,29 @@ export function QuestResultClient({
         ))}
       </div>
 
+      <StickyCTA
+          onOpen={() => {
+            if (!paymentSuccess) {
+              // Track PDF unlock CTA click
+              googleAnalytics.trackPdfUnlockCTA({
+                session_id: sessionId!,
+                test_id: testId!,
+                user_state: user?.id ? 'logged_in' : 'anonymous'
+              });
+              setUpsellOpen(true);
+            }
+          }}
+          pricing={pricing}
+          percentile={resultData?.pecentile}
+          qualityScore={String(mockData?.depth_score || 0)}
+        />
+
       {/* Sticky CTA + Upsell - Hide when in PDF section */}
-      {paymentSuccess ? (
-        // Show PaymentSuccessMessage in all sections (fixed sticky conflict)
+      {/* {paymentSuccess ? (
+       
         <PaymentSuccessMessage userId={userId} />
       ) : (
-        // Show StickyCTA in all sections including PDF (fixed sticky conflict)
+       
         <StickyCTA
           onOpen={() => {
             if (!paymentSuccess) {
@@ -1396,7 +1419,7 @@ export function QuestResultClient({
           percentile={resultData?.pecentile}
           qualityScore={resultData?.qualityscore}
         />
-      )}
+      )} */}
       {!paymentSuccess && (
         <UpsellSheet
           open={upsellOpen}
