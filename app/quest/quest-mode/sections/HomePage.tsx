@@ -304,7 +304,7 @@ function page() {
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
                                     transition={{ duration: 0.3 }}
-                                    className=' flex flex-col gap-20 top-[8%] absolute pl-5 h-screen overflow-hidden'>
+                                    className=' flex flex-col gap-20 w-full top-[8%] absolute pl-5 h-screen overflow-hidden'>
 
                                     <div className=' flex flex-col'>
                                         <motion.div
