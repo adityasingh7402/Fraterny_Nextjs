@@ -44,6 +44,7 @@ import { fetchDynamicPricing, checkExistingPaymentStatus, startPaymentStatusPoll
 import { TextGenerateEffect } from '@/components/ui/text-generate-effect';
 import FAQIntrospection from './FAQIntrospection';
 import Testimonial from './Testimonial';
+import Testimonials from '@/app/quest/quest-mode/sections/Testimonials';
 import FAQ from '@/app/quest/reflection/[userId]/[sessionId]/[testId]/components/FAQ';
 import mockData from '@/app/quest/reflection/[userId]/[sessionId]/[testId]/components/mock-data';
 
@@ -691,7 +692,7 @@ export function QuestResultClient({
         }}
       >
         {/* Emotional Section */}
-        {/* <SectionFrame
+        <SectionFrame
           id="emotional"
           title=""
           sub=""
@@ -719,10 +720,10 @@ export function QuestResultClient({
               </div>
             </motion.div>
           </div>
-        </SectionFrame> */}
+        </SectionFrame>
 
         {/* Mind Card Section */}
-        {/* <SectionFrame
+        <SectionFrame
           id="mind"
           title="Your Mind Card"
           sub="Archetype & stats"
@@ -781,10 +782,10 @@ export function QuestResultClient({
               </>
             )}
           </div>
-        </SectionFrame> */}
+        </SectionFrame>
 
         {/* Findings Section */}
-        {/* <SectionFrame
+        <SectionFrame
           id="findings"
           title="5 Unique Findings About You"
           sub="Thought Provoking Insights"
@@ -827,10 +828,10 @@ export function QuestResultClient({
               )}
             </div>
           </div>
-        </SectionFrame> */}
+        </SectionFrame>
 
         {/* Subjects Section */}
-        {/* <SectionFrame
+        <SectionFrame
           id="subjects"
           title="Subjects You Are Mentally Built to Explore Deeper"
           sub="Deepen the edges"
@@ -851,7 +852,7 @@ export function QuestResultClient({
               </div>
             ))}
           </div>
-        </SectionFrame> */}
+        </SectionFrame>
 
 
         {/* Permanently disabled sections below */}
@@ -990,7 +991,7 @@ export function QuestResultClient({
         {/* Permanently disabled sections above */}
 
         {/* Work Section */}
-        {/* <SectionFrame
+        <SectionFrame
           id="work"
           title="One Thing To Work On"
           sub="Start today; 60-minute cap"
@@ -1006,10 +1007,10 @@ export function QuestResultClient({
               <div className="opacity-95 text-xl font-gilroy-semibold">One small step could change your direction forever.</div>
             </div>
           </div>
-        </SectionFrame> */}
+        </SectionFrame>
 
         {/* PDF Section */}
-        {/* <SectionFrame
+        <SectionFrame
           id="pdf-report"
           title="Private Intelligence File"
           sub="Made from your words"
@@ -1041,11 +1042,11 @@ export function QuestResultClient({
           </div>
 
           
-        </SectionFrame> */}
+        </SectionFrame>
 
 
         {/* New architecture */}
-        <SectionFrame
+        {/* <SectionFrame
           id="emotional"
           title=""
           sub=""
@@ -1079,16 +1080,14 @@ export function QuestResultClient({
               <p className="text-white/80 text-lg font-gilroy-bold">{mockData.core_line}</p>
             </div>
 
-            {/* <PatternSVG /> */}
-
             <div className="mt-6">
               <h2 className="text-lg font-gilroy-semibold text-white uppercase tracking-[0.1em] mb-2">Primary Pattern</h2>
               <p className="text-white/80 text-md font-gilroy-medium">{mockData.primary_pattern}</p>
             </div>
           </div>
-        </SectionFrame>
+        </SectionFrame> */}
 
-        <SectionFrame
+        {/* <SectionFrame
           id="mind"
           title="Calibration"
           sub=""
@@ -1122,14 +1121,14 @@ export function QuestResultClient({
                       transition={{ delay: index * 0.1 }}
                       className=""
                     >
-                      {/* Question */}
+                      
                       <h3 className="text-white/90 text-lg font-gilroy-semibold">
                         {mockData.slider_question[key as keyof typeof mockData.slider_question]}
                       </h3>
 
-                      {/* Slider Container */}
+                      
                       <div className="space-y-1">
-                        {/* Slider Track */}
+                        
                         <div className="relative">
                           <input
                             type="range"
@@ -1160,7 +1159,7 @@ export function QuestResultClient({
                               const percentage = (numericValue / 10) * 100;
                               e.target.style.background = `linear-gradient(to right, #ffffff ${percentage}%, rgba(255,255,255,0.1) ${percentage}%)`;
 
-                              // Update the state
+                              
                               setLikertValues(prev => ({
                                 ...prev,
                                 [`q${questionNumber}`]: numericValue
@@ -1169,7 +1168,7 @@ export function QuestResultClient({
                           />
                         </div>
 
-                        {/* Labels */}
+                       
                         <div className="flex justify-between items-center font-gilroy-light">
                           <span className="text-neutral-900 text-sm uppercase tracking-wider">
                             {likertLabels[0]}
@@ -1194,9 +1193,9 @@ export function QuestResultClient({
               </button>
             </div>
           </div>
-        </SectionFrame>
+        </SectionFrame> */}
 
-        <SectionFrame
+        {/* <SectionFrame
           id="findings"
           title=" Behavioural signals "
           sub=""
@@ -1260,9 +1259,9 @@ export function QuestResultClient({
             </div>
 
           </div>
-        </SectionFrame>
+        </SectionFrame> */}
 
-        <SectionFrame
+        {/* <SectionFrame
           id="pdf-report"
           title="Made from your words"
           sub="Sealed in full file"
@@ -1309,9 +1308,6 @@ export function QuestResultClient({
                 >
                   {paymentSuccess ? <span>YOUR REPORT IS READY <Download className='inline-block ml-2' /></span> : 'ACCESS FULL REPORT'}
                 </button>
-                {/* <div className='text-center'>
-                        PRICING
-                    </div> */}
               </div>
               <div className='mt-6 mb-8 uppercase text-sm text-neutral-100 w-full flex items-center justify-center'>
                 file contains 28 additional pages with
@@ -1341,24 +1337,12 @@ export function QuestResultClient({
             </div>
           </div>
 
-          {/* <div className='flex flex-col items-center justify-center mb-10 gap-4'>
-            <div className='bg-sky-300/10 rounded-lg p-4 w-full max-w-md border border-sky-300/30 shadow-lg space-y-8'>
-                <p className='font-gilroy-semibold text-white text-2xl'>"It felt illegal to read this. It articulated things I've felt for 10 years but never said."</p>
-                <p className='font-gilroy-medium text-neutral-300'>— Sarah K. // Architect</p>
-            </div>
-
-            <div className='bg-sky-300/10 rounded-lg p-4 w-full max-w-md border border-sky-300/30 shadow-lg space-y-8'>
-                <p className='font-gilroy-semibold text-white text-2xl'>"No fluff. Just pure signal. It didn't try to fix me, it just showed me the map."</p>
-                <p className='font-gilroy-medium text-neutral-300'>— James R. // Founder</p>
-            </div>
-        </div> */}
-
           <Testimonial />
 
           <FAQ className='bg-transparent rounded-lg' />
 
 
-        </SectionFrame>
+        </SectionFrame> */}
 
       </div>
 
