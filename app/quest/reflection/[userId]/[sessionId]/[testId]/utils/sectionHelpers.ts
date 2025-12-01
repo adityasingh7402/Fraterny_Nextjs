@@ -1,23 +1,23 @@
 // sectionHelpers.ts
 
-// export const sectionIds = [
-//   "emotional",
-//   "mind",
-//   "findings",
-//   "subjects",
-//   "quotes",
-//   "films",
-//   "books",
-//   "work",
-//   "pdf-report"
-// ];
-
 export const sectionIds = [
   "emotional",
   "mind",
   "findings",
+  "subjects",
+  "quotes",
+  "films",
+  "books",
+  "work",
   "pdf-report"
 ];
+
+// export const sectionIds = [
+//   "emotional",
+//   "mind",
+//   "findings",
+//   "pdf-report"
+// ];
 
 export const getSectionTitle = (sectionId: string): string => {
   const titles: Record<string, string> = {
