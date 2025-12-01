@@ -230,519 +230,522 @@ function page() {
 
     if (isMobile) {
         return (
-            <motion.div
-                ref={containerRef}
-                className={`${screen !== 3 ? 'mobile-container-lock' : 'relative h-screen-mobile overflow-hidden'}`}
-                onTouchStart={(e) => {
-                    if (screen === 3) return;
-                    const target = e.target as HTMLElement;
-                    if (target.closest('a, button, [data-allow-touch]')) return;
-                    e.preventDefault();
-                }}
-                onTouchMove={(e) => {
-                    if (screen === 3) return;
-                    const target = e.target as HTMLElement;
-                    if (target.closest('a, button, [data-allow-touch]')) return;
-                    e.preventDefault();
-                }}
-            >
-                <motion.section
-                    className={`w-full h-full relative overflow-hidden ${screen !== 3 ? 'prevent-scroll' : ''}`}>
-                    {/* Background Animation */}
-                    <AnimatePresence>
-                        {screen == 0 && <motion.div
-                            layoutId='bg'
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 1.2 }}
-                            className='absolute z-0 w-[554px] h-[554px] rounded-full'
-                            style={{
-                                background: 'radial-gradient(ellipse 50% 50% at 50% 50%, #0C45F0 0%, #41D9FF 51%, #48B9D8 100%)',
-                                left: '-70px',
-                                top: '47%',
-                                filter: 'blur(30px)',
-                                boxShadow: '60px 60px 60px rgba(0, 0, 0, 0.1)',
-                            }}
-                        />}
-
-                        {screen == 1 && <motion.div
-                            layoutId='bg'
-                            transition={{ duration: 1.2 }}
-                            className='absolute z-0 w-[554px] h-[554px] rounded-full'
-                            style={{
-                                background: 'radial-gradient(ellipse 50% 50% at 50% 50%, #0C45F0 0%, #41D9FF 51%, #48B9D8 100%)',
-                                left: '-70px',
-                                top: '17%',
-                                filter: 'blur(30px)',
-                                boxShadow: '60px 60px 60px rgba(0, 0, 0, 0.1)',
-                            }}
-                        />}
-
-                        {screen == 2 && <motion.div
-                            layoutId='bg'
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 1.2 }}
-                            className='absolute z-0 rounded-full'
-                            style={{
-                                background: 'radial-gradient(ellipse 50% 50% at 50% 50%, #0C45F0 0%, #41D9FF 51%, #48B9D8 100%)',
-                                width: '1000px',
-                                height: '1000px',
-                                left: '-269px',
-                                top: '-39px',
-                                filter: 'blur(30px)',
-                                boxShadow: '60px 60px 60px rgba(0, 0, 0, 0.1)',
-                            }}
-                        />}
-
-                    </AnimatePresence>
-
-                    <AnimatePresence>
-                        {screen == 0 &&
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
+            <>
+                <BrowserPopup />
+                <motion.div
+                    ref={containerRef}
+                    className={`${screen !== 3 ? 'mobile-container-lock' : 'relative h-screen-mobile overflow-hidden'}`}
+                    onTouchStart={(e) => {
+                        if (screen === 3) return;
+                        const target = e.target as HTMLElement;
+                        if (target.closest('a, button, [data-allow-touch]')) return;
+                        e.preventDefault();
+                    }}
+                    onTouchMove={(e) => {
+                        if (screen === 3) return;
+                        const target = e.target as HTMLElement;
+                        if (target.closest('a, button, [data-allow-touch]')) return;
+                        e.preventDefault();
+                    }}
+                >
+                    <motion.section
+                        className={`w-full h-full relative overflow-hidden ${screen !== 3 ? 'prevent-scroll' : ''}`}>
+                        {/* Background Animation */}
+                        <AnimatePresence>
+                            {screen == 0 && <motion.div
+                                layoutId='bg'
                                 exit={{ opacity: 0 }}
-                                transition={{ duration: 0.3 }}
-                                className=' flex flex-col gap-20 top-[8%] absolute pl-5 h-screen overflow-hidden'>
+                                transition={{ duration: 1.2 }}
+                                className='absolute z-0 w-[554px] h-[554px] rounded-full'
+                                style={{
+                                    background: 'radial-gradient(ellipse 50% 50% at 50% 50%, #0C45F0 0%, #41D9FF 51%, #48B9D8 100%)',
+                                    left: '-70px',
+                                    top: '47%',
+                                    filter: 'blur(30px)',
+                                    boxShadow: '60px 60px 60px rgba(0, 0, 0, 0.1)',
+                                }}
+                            />}
 
-                                <div className=' flex flex-col'>
-                                    <motion.div
-                                        variants={animationVariants}
-                                        initial="invisible"
-                                        animate="visible"
-                                        className='justify-start text-neutral-950 text-5xl font-normal font-gilroy-regular'
-                                    >
-                                        hi there,
-                                    </motion.div>
+                            {screen == 1 && <motion.div
+                                layoutId='bg'
+                                transition={{ duration: 1.2 }}
+                                className='absolute z-0 w-[554px] h-[554px] rounded-full'
+                                style={{
+                                    background: 'radial-gradient(ellipse 50% 50% at 50% 50%, #0C45F0 0%, #41D9FF 51%, #48B9D8 100%)',
+                                    left: '-70px',
+                                    top: '17%',
+                                    filter: 'blur(30px)',
+                                    boxShadow: '60px 60px 60px rgba(0, 0, 0, 0.1)',
+                                }}
+                            />}
 
-                                    <div className='flex gap-2'>
-                                        <motion.div
-                                            variants={animationVariants}
-                                            initial="invisible"
-                                            animate="visible"
-                                            className=""
-                                        >
-                                            <div className='justify-start text-neutral-500 text-7xl font-bold font-gilroy-bold'>
-                                                I'm
-                                            </div>
-                                        </motion.div>
-                                        <motion.div
-                                            layoutId='logo'
-                                            transition={{ duration: 1.2 }}
-                                            className="flex items-center"
-                                        >
-
-                                            <div>
-                                                <div className='text-7xl font-normal font-gilroy-bold tracking-[-0.5rem]'>
-                                                    QUEST
-                                                </div>
-                                                <div className='text-xl font-normal font-gilroy-regular tracking-[0.1rem] pl-5 mt-[-8px]'>
-                                                    BY FRATERNY
-                                                </div>
-                                            </div>
-                                        </motion.div>
-                                    </div>
-
-                                </div>
-
-                                <div className=' flex flex-col gap-0'>
-                                    <motion.div
-                                        variants={animationVariants}
-                                        initial="invisible"
-                                        animate="visible"
-                                        className='justify-start text-neutral-950 text-4xl font-normal font-gilroy-regular'
-                                    >
-                                        I can
-                                    </motion.div>
-                                    <motion.div
-                                        variants={animationVariants}
-                                        initial="invisible"
-                                        animate="visible"
-                                        className=''
-                                    >
-                                        <span className='justify-start text-neutral-950 text-4xl font-normal font-gilroy-bold'>
-                                            Analyse Your Brain
-                                        </span>
-                                    </motion.div>
-
-                                    <motion.div
-                                        variants={animationVariants}
-                                        initial="invisible"
-                                        animate="visible"
-                                    >
-                                        <div className="justify-start text-neutral-950 text-4xl font-normal font-gilroy-regular">
-                                            in 15 minutes
-                                        </div>
-                                    </motion.div>
-
-                                </div>
-
-                                <Link href="/quest/begin">
-                                    <div className=''>
-                                        <div className="w-40 h-14 mix-blend-luminosity bg-gradient-to-br from-white/20 to-white/20 rounded-[30px] border-2 border-white flex items-center justify-center" >
-                                            <div className="justify-center text-white text-2xl font-gilroy-bold">Begin</div>
-                                        </div>
-                                    </div>
-                                </Link>
-
-                            </motion.div>
-                        }
-
-                        {screen == 1 &&
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
+                            {screen == 2 && <motion.div
+                                layoutId='bg'
                                 exit={{ opacity: 0 }}
-                                transition={{ duration: 0.3 }}
-                                key={`screen-${screen}`}
-                                layoutId='section1'
-                                className='w-full h-screen flex flex-col items-center justify-center relative'>
+                                transition={{ duration: 1.2 }}
+                                className='absolute z-0 rounded-full'
+                                style={{
+                                    background: 'radial-gradient(ellipse 50% 50% at 50% 50%, #0C45F0 0%, #41D9FF 51%, #48B9D8 100%)',
+                                    width: '1000px',
+                                    height: '1000px',
+                                    left: '-269px',
+                                    top: '-39px',
+                                    filter: 'blur(30px)',
+                                    boxShadow: '60px 60px 60px rgba(0, 0, 0, 0.1)',
+                                }}
+                            />}
 
-                                <div className='flex w-full items-center justify-center pt-4'>
-                                    <motion.div
-                                        className="z-50"
-                                        initial={{ y: -20, opacity: 0 }}
-                                        animate={{ y: 0, opacity: 1 }}
-                                        transition={{
-                                            duration: 0.8,
-                                            ease: "easeOut",
-                                            delay: 0.4
-                                        }}
-                                    >
-                                        <img
-                                            src='/Vector.svg'
-                                            alt="QUEST"
-                                            className="h-[36px] w-auto brightness-0 cursor-pointer"
-                                            onClick={() => setScreen(0)}
-                                        />
-                                    </motion.div>
+                        </AnimatePresence>
 
-                                </div>
+                        <AnimatePresence>
+                            {screen == 0 &&
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.3 }}
+                                    className=' flex flex-col gap-20 top-[8%] absolute pl-5 h-screen overflow-hidden'>
 
-                                <div className='relative flex flex-col gap-10 top-[18%] h-screen'>
-                                    <div className=''>
+                                    <div className=' flex flex-col'>
                                         <motion.div
                                             variants={animationVariants}
                                             initial="invisible"
                                             animate="visible"
-                                            className="text-center justify-start text-white text-xl font-normal font-gilroy-regular">You’d be shocked to know,<br />Harvard researchers suggest that
+                                            className='justify-start text-neutral-950 text-5xl font-normal font-gilroy-regular'
+                                        >
+                                            hi there,
                                         </motion.div>
-                                    </div>
 
-                                    <div className=''>
-                                        <motion.div
-                                            variants={animationVariants}
-                                            initial="invisible"
-                                            animate="visible"
-                                            className="text-center justify-start text-white text-5xl font-normal font-gilroy-semibold">95%
-                                        </motion.div>
-                                        <motion.div
-                                            variants={animationVariants}
-                                            initial="invisible"
-                                            animate="visible"
-                                            className="text-center justify-start"><span className="text-white text-2xl font-normal font-gilroy-regular">of people believe<br />they are </span><span className="text-white text-2xl font-gilroy-bold font-bold">self-aware<br /></span><span className="text-white text-2xl font-normal font-gilroy-regular">but only</span>
-                                        </motion.div>
-                                    </div>
-
-                                    <div className=''>
-                                        <div className='flex flex-col gap-1'>
+                                        <div className='flex gap-2'>
                                             <motion.div
                                                 variants={animationVariants}
                                                 initial="invisible"
                                                 animate="visible"
-                                                className="text-center justify-start text-white text-5xl font-normal font-gilroy-semibold">10-15%</motion.div>
-
-                                            <motion.div
-                                                variants={animationVariants}
-                                                initial="invisible"
-                                                animate="visible"
-                                                className="text-center justify-start text-white text-2xl font-normal font-gilroy-regular">
-                                                actually are
-                                            </motion.div>
-
-                                        </div>
-                                    </div>
-
-                                    <div className='w-full flex justify-center mt-[-5px]'>
-                                        <motion.div
-                                            variants={animationVariants}
-                                            initial="invisible"
-                                            animate="visible"
-                                            className='w-20'
-                                        >
-                                            <motion.button
-                                                whileHover={{ scale: 1.1 }}
-                                                whileTap={{ scale: 0.9 }}
-                                                className="w-full h-full relative"
-                                                style={{}}
+                                                className=""
                                             >
-                                                {/* Circular spinning text */}
-                                                <motion.div
-                                                    className=""
-                                                    animate={{ rotate: 360 }}
-                                                    transition={{
-                                                        duration: 10,
-                                                        repeat: Infinity,
-                                                        ease: "linear"
-                                                    }}
-                                                >
-                                                    <img
-                                                        src="/text.svg"
-                                                        alt="Those who are"
-                                                        className="w-full h-full"
-                                                    />
-                                                </motion.div>
-
-                                                {/* Central arrow */}
-                                                <div className="absolute inset-0 flex items-center justify-center">
-                                                    <img
-                                                        src="/arrow-down.svg"
-                                                        alt="arrow down"
-                                                        className="w-6 h-6"
-                                                    />
+                                                <div className='justify-start text-neutral-500 text-7xl font-bold font-gilroy-bold'>
+                                                    I'm
                                                 </div>
-                                            </motion.button>
+                                            </motion.div>
+                                            <motion.div
+                                                layoutId='logo'
+                                                transition={{ duration: 1.2 }}
+                                                className="flex items-center"
+                                            >
 
+                                                <div>
+                                                    <div className='text-7xl font-normal font-gilroy-bold tracking-[-0.5rem]'>
+                                                        QUEST
+                                                    </div>
+                                                    <div className='text-xl font-normal font-gilroy-regular tracking-[0.1rem] pl-5 mt-[-8px]'>
+                                                        BY FRATERNY
+                                                    </div>
+                                                </div>
+                                            </motion.div>
+                                        </div>
+
+                                    </div>
+
+                                    <div className=' flex flex-col gap-0'>
+                                        <motion.div
+                                            variants={animationVariants}
+                                            initial="invisible"
+                                            animate="visible"
+                                            className='justify-start text-neutral-950 text-4xl font-normal font-gilroy-regular'
+                                        >
+                                            I can
+                                        </motion.div>
+                                        <motion.div
+                                            variants={animationVariants}
+                                            initial="invisible"
+                                            animate="visible"
+                                            className=''
+                                        >
+                                            <span className='justify-start text-neutral-950 text-4xl font-normal font-gilroy-bold'>
+                                                Analyse Your Brain
+                                            </span>
+                                        </motion.div>
+
+                                        <motion.div
+                                            variants={animationVariants}
+                                            initial="invisible"
+                                            animate="visible"
+                                        >
+                                            <div className="justify-start text-neutral-950 text-4xl font-normal font-gilroy-regular">
+                                                in 15 minutes
+                                            </div>
                                         </motion.div>
 
                                     </div>
 
-                                </div>
-                            </motion.div>
-                        }
+                                    <Link href="/quest/begin">
+                                        <div className=''>
+                                            <div className="w-40 h-14 mix-blend-luminosity bg-gradient-to-br from-white/20 to-white/20 rounded-[30px] border-2 border-white flex items-center justify-center" >
+                                                <div className="justify-center text-white text-2xl font-gilroy-bold">Begin</div>
+                                            </div>
+                                        </div>
+                                    </Link>
 
-                        {screen == 2 &&
-                            (
+                                </motion.div>
+                            }
+
+                            {screen == 1 &&
                                 <motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
                                     transition={{ duration: 0.3 }}
                                     key={`screen-${screen}`}
+                                    layoutId='section1'
                                     className='w-full h-screen flex flex-col items-center justify-center relative'>
 
-                                    <motion.div
-                                        className="absolute w-full flex justify-center pt-4 z-20 inset-0 invert"
-                                        initial={{ y: -20, opacity: 0 }}
-                                        animate={{ y: 0, opacity: 1 }}
-                                        transition={{
-                                            duration: 0.8,
-                                            ease: "easeOut",
-                                            delay: 0.4
-                                        }}
-                                    >
-                                        <img
-                                            src='/Vector.svg'
-                                            alt="QUEST"
-                                            className="h-[36px] w-auto brightness-0 cursor-pointer"
-                                            onClick={() => setScreen(0)}
-                                        />
-                                    </motion.div>
+                                    <div className='flex w-full items-center justify-center pt-4'>
+                                        <motion.div
+                                            className="z-50"
+                                            initial={{ y: -20, opacity: 0 }}
+                                            animate={{ y: 0, opacity: 1 }}
+                                            transition={{
+                                                duration: 0.8,
+                                                ease: "easeOut",
+                                                delay: 0.4
+                                            }}
+                                        >
+                                            <img
+                                                src='/Vector.svg'
+                                                alt="QUEST"
+                                                className="h-[36px] w-auto brightness-0 cursor-pointer"
+                                                onClick={() => setScreen(0)}
+                                            />
+                                        </motion.div>
 
+                                    </div>
 
+                                    <div className='relative flex flex-col gap-10 top-[18%] h-screen'>
+                                        <div className=''>
+                                            <motion.div
+                                                variants={animationVariants}
+                                                initial="invisible"
+                                                animate="visible"
+                                                className="text-center justify-start text-white text-xl font-normal font-gilroy-regular">You’d be shocked to know,<br />Harvard researchers suggest that
+                                            </motion.div>
+                                        </div>
+
+                                        <div className=''>
+                                            <motion.div
+                                                variants={animationVariants}
+                                                initial="invisible"
+                                                animate="visible"
+                                                className="text-center justify-start text-white text-5xl font-normal font-gilroy-semibold">95%
+                                            </motion.div>
+                                            <motion.div
+                                                variants={animationVariants}
+                                                initial="invisible"
+                                                animate="visible"
+                                                className="text-center justify-start"><span className="text-white text-2xl font-normal font-gilroy-regular">of people believe<br />they are </span><span className="text-white text-2xl font-gilroy-bold font-bold">self-aware<br /></span><span className="text-white text-2xl font-normal font-gilroy-regular">but only</span>
+                                            </motion.div>
+                                        </div>
+
+                                        <div className=''>
+                                            <div className='flex flex-col gap-1'>
+                                                <motion.div
+                                                    variants={animationVariants}
+                                                    initial="invisible"
+                                                    animate="visible"
+                                                    className="text-center justify-start text-white text-5xl font-normal font-gilroy-semibold">10-15%</motion.div>
+
+                                                <motion.div
+                                                    variants={animationVariants}
+                                                    initial="invisible"
+                                                    animate="visible"
+                                                    className="text-center justify-start text-white text-2xl font-normal font-gilroy-regular">
+                                                    actually are
+                                                </motion.div>
+
+                                            </div>
+                                        </div>
+
+                                        <div className='w-full flex justify-center mt-[-5px]'>
+                                            <motion.div
+                                                variants={animationVariants}
+                                                initial="invisible"
+                                                animate="visible"
+                                                className='w-20'
+                                            >
+                                                <motion.button
+                                                    whileHover={{ scale: 1.1 }}
+                                                    whileTap={{ scale: 0.9 }}
+                                                    className="w-full h-full relative"
+                                                    style={{}}
+                                                >
+                                                    {/* Circular spinning text */}
+                                                    <motion.div
+                                                        className=""
+                                                        animate={{ rotate: 360 }}
+                                                        transition={{
+                                                            duration: 10,
+                                                            repeat: Infinity,
+                                                            ease: "linear"
+                                                        }}
+                                                    >
+                                                        <img
+                                                            src="/text.svg"
+                                                            alt="Those who are"
+                                                            className="w-full h-full"
+                                                        />
+                                                    </motion.div>
+
+                                                    {/* Central arrow */}
+                                                    <div className="absolute inset-0 flex items-center justify-center">
+                                                        <img
+                                                            src="/arrow-down.svg"
+                                                            alt="arrow down"
+                                                            className="w-6 h-6"
+                                                        />
+                                                    </div>
+                                                </motion.button>
+
+                                            </motion.div>
+
+                                        </div>
+
+                                    </div>
+                                </motion.div>
+                            }
+
+                            {screen == 2 &&
+                                (
                                     <motion.div
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         exit={{ opacity: 0 }}
-                                        transition={{ duration: 0.10, delay: 0.4 }}
-                                        className='z-50 pl-5 flex flex-col gap-10 absolute w-full top-[25%]'>
+                                        transition={{ duration: 0.3 }}
+                                        key={`screen-${screen}`}
+                                        className='w-full h-screen flex flex-col items-center justify-center relative'>
 
                                         <motion.div
-                                            className='flex flex-col gap-4 z-50 w-[96%]'>
-                                            <div className='flex justify-between items-center'>
-                                                <div className="justify-start text-white text-4xl font-normal font-gilroy-bold">Are more<br /> effective leaders.</div>
-                                                <div className="justify-start text-white text-2xl font-normal font-gilroy-regular mt-10">1</div>
-                                            </div>
-                                            <div className="h-0 outline outline-2 outline-white w-[99%]"></div>
-                                        </motion.div>
-
-                                        <motion.div
-                                            className='flex flex-col gap-4 z-50 w-[96%]'>
-                                            <div className='flex justify-between items-center'>
-                                                <div className="justify-start text-white text-4xl font-normal font-gilroy-bold">Perform better <br /> at work.</div>
-                                                <div className="justify-start text-white text-2xl font-normal font-gilroy-regular mt-10">2</div>
-                                            </div>
-                                            <div className="h-0 outline outline-2 outline-white w-[99%]"></div>
-
-                                        </motion.div>
-
-                                        <motion.div
-                                            className='flex flex-col gap-4 z-50 w-[96%]'>
-                                            <div className='flex justify-between items-center'>
-                                                <div className="justify-start text-white text-4xl font-normal font-gilroy-bold">Are more <br /> confident</div>
-                                                <div className="justify-start text-white text-2xl font-normal font-gilroy-regular mt-10">3</div>
-                                            </div>
-                                            <div className="h-0 outline outline-2 outline-white w-[99%]"></div>
-
-                                        </motion.div>
-
-                                    </motion.div>
-                                    <motion.div />
-                                </motion.div>
-                            )
-                        }
-
-                        {screen == 3 &&
-                            <motion.section
-                                initial={{ opacity: 0, y: -20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0 }}
-                                transition={{ duration: 0.1, delay: 0.1 }}
-                                key={`screen-${screen}`}
-                                className=''>
-                                <div ref={analyzeScrollRef} className='relative h-screen overflow-y-auto'>
-                                    {/* Header */}
-                                    <div className='flex justify-between fixed top-0 w-full z-50 pt-4 left-0 text-white items-center'>
-                                        <motion.div>
-                                        </motion.div>
-
-                                        <div className="z-50">
-                                            <Image
+                                            className="absolute w-full flex justify-center pt-4 z-20 inset-0 invert"
+                                            initial={{ y: -20, opacity: 0 }}
+                                            animate={{ y: 0, opacity: 1 }}
+                                            transition={{
+                                                duration: 0.8,
+                                                ease: "easeOut",
+                                                delay: 0.4
+                                            }}
+                                        >
+                                            <img
                                                 src='/Vector.svg'
-                                                alt="QUEST: Run Quest in 15 minutes. Free test with optional paid PDF. Map thought patterns, get a 35+ page report."
-                                                width={90}
-                                                height={36}
-                                                className={`transition-all duration-500 ${isInHeroSection ? 'brightness-0 invert' : 'opacity-0'} ease-out cursor-pointer`}
+                                                alt="QUEST"
+                                                className="h-[36px] w-auto brightness-0 cursor-pointer"
                                                 onClick={() => setScreen(0)}
                                             />
-                                        </div>
+                                        </motion.div>
+
 
                                         <motion.div
-                                            className={`flex items-center justify-center cursor-pointer ${isInHeroSection ? 'brightness-0 invert' : ''} p-2 rounded-lg hover:bg-white/10 transition-colors`}
-                                            whileTap={{ scale: 0.95 }}
-                                            onClick={handleMenuClick}
-                                        >
-                                            <Menu className="w-6 h-6" />
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                            transition={{ duration: 0.10, delay: 0.4 }}
+                                            className='z-50 pl-5 flex flex-col gap-10 absolute w-full top-[25%]'>
+
+                                            <motion.div
+                                                className='flex flex-col gap-4 z-50 w-[96%]'>
+                                                <div className='flex justify-between items-center'>
+                                                    <div className="justify-start text-white text-4xl font-normal font-gilroy-bold">Are more<br /> effective leaders.</div>
+                                                    <div className="justify-start text-white text-2xl font-normal font-gilroy-regular mt-10">1</div>
+                                                </div>
+                                                <div className="h-0 outline outline-2 outline-white w-[99%]"></div>
+                                            </motion.div>
+
+                                            <motion.div
+                                                className='flex flex-col gap-4 z-50 w-[96%]'>
+                                                <div className='flex justify-between items-center'>
+                                                    <div className="justify-start text-white text-4xl font-normal font-gilroy-bold">Perform better <br /> at work.</div>
+                                                    <div className="justify-start text-white text-2xl font-normal font-gilroy-regular mt-10">2</div>
+                                                </div>
+                                                <div className="h-0 outline outline-2 outline-white w-[99%]"></div>
+
+                                            </motion.div>
+
+                                            <motion.div
+                                                className='flex flex-col gap-4 z-50 w-[96%]'>
+                                                <div className='flex justify-between items-center'>
+                                                    <div className="justify-start text-white text-4xl font-normal font-gilroy-bold">Are more <br /> confident</div>
+                                                    <div className="justify-start text-white text-2xl font-normal font-gilroy-regular mt-10">3</div>
+                                                </div>
+                                                <div className="h-0 outline outline-2 outline-white w-[99%]"></div>
+
+                                            </motion.div>
+
                                         </motion.div>
-                                    </div>
+                                        <motion.div />
+                                    </motion.div>
+                                )
+                            }
 
-                                    {/* Sidebar */}
-                                    <AnalyzeSidebar
-                                        isOpen={isSidebarOpen}
-                                        onClose={() => setIsSidebarOpen(false)}
-                                        theme="blue"
-                                        showMobileOnly={false}
-                                        onNavigateToSection={(targetScreen) => {
-                                            setScreen(targetScreen as 0 | 1 | 2 | 3);
-                                        }}
-                                    />
+                            {screen == 3 &&
+                                <motion.section
+                                    initial={{ opacity: 0, y: -20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.1, delay: 0.1 }}
+                                    key={`screen-${screen}`}
+                                    className=''>
+                                    <div ref={analyzeScrollRef} className='relative h-screen overflow-y-auto'>
+                                        {/* Header */}
+                                        <div className='flex justify-between fixed top-0 w-full z-50 pt-4 left-0 text-white items-center'>
+                                            <motion.div>
+                                            </motion.div>
+
+                                            <div className="z-50">
+                                                <Image
+                                                    src='/Vector.svg'
+                                                    alt="QUEST: Run Quest in 15 minutes. Free test with optional paid PDF. Map thought patterns, get a 35+ page report."
+                                                    width={90}
+                                                    height={36}
+                                                    className={`transition-all duration-500 ${isInHeroSection ? 'brightness-0 invert' : 'opacity-0'} ease-out cursor-pointer`}
+                                                    onClick={() => setScreen(0)}
+                                                />
+                                            </div>
+
+                                            <motion.div
+                                                className={`flex items-center justify-center cursor-pointer ${isInHeroSection ? 'brightness-0 invert' : ''} p-2 rounded-lg hover:bg-white/10 transition-colors`}
+                                                whileTap={{ scale: 0.95 }}
+                                                onClick={handleMenuClick}
+                                            >
+                                                <Menu className="w-6 h-6" />
+                                            </motion.div>
+                                        </div>
+
+                                        {/* Sidebar */}
+                                        <AnalyzeSidebar
+                                            isOpen={isSidebarOpen}
+                                            onClose={() => setIsSidebarOpen(false)}
+                                            theme="blue"
+                                            showMobileOnly={false}
+                                            onNavigateToSection={(targetScreen) => {
+                                                setScreen(targetScreen as 0 | 1 | 2 | 3);
+                                            }}
+                                        />
 
 
-                                    {/* ${isScrolled ? 'brightness-0 invert' : 'opacity-0'} */}
-                                    <div id="analyze-hero" ref={heroSectionRef} className='max-h-400 relative bg-[#004A7F] overflow-hidden gap-7 text-white w-full p-4 py-20'>
-                                        <div className='gap-8 flex relative flex-col z-20'>
-                                            {/* Main Title */}
-                                            <div className='w-[140px] text-left'>
-                                                <motion.p
+                                        {/* ${isScrolled ? 'brightness-0 invert' : 'opacity-0'} */}
+                                        <div id="analyze-hero" ref={heroSectionRef} className='max-h-400 relative bg-[#004A7F] overflow-hidden gap-7 text-white w-full p-4 py-20'>
+                                            <div className='gap-8 flex relative flex-col z-20'>
+                                                {/* Main Title */}
+                                                <div className='w-[140px] text-left'>
+                                                    <motion.p
+                                                        variants={animationVariants}
+                                                        initial="invisible"
+                                                        animate="visible"
+                                                        className='pb-[10px] font-gilroy-medium text-4xl'
+                                                    >
+                                                        What I will do?
+                                                    </motion.p>
+                                                    <div className='border-b-2 border-white ml-1' />
+                                                </div>
+
+                                                {/* Description */}
+                                                <p className='pt-2 font-gilroy-regular text-[20px]'>
+                                                    I'll guide you to reflect on your
+                                                </p>
+
+                                                {/* Pills */}
+                                                <motion.div
                                                     variants={animationVariants}
                                                     initial="invisible"
                                                     animate="visible"
-                                                    className='pb-[10px] font-gilroy-medium text-4xl'
+                                                    className='flex flex-wrap gap-2 mt-[-5px]'
                                                 >
-                                                    What I will do?
-                                                </motion.p>
-                                                <div className='border-b-2 border-white ml-1' />
+                                                    {['Motivations', 'Desires', 'Patterns', 'Triggers', 'Fears'].map((item, i) => (
+                                                        <div
+                                                            key={i}
+                                                            className="px-4 py-2 font-normal font-gilroy-bold rounded-full border-2 border-white bg-white/10 text-white tracking-[-1.1px]"
+                                                            style={{ fontSize: '20px', fontWeight: 400 }}
+                                                        >
+                                                            {item}
+                                                        </div>
+                                                    ))}
+                                                </motion.div>
+
+                                                {/* Understanding text */}
+                                                <p className='pt-4 font-gilroy-regular text-[20px]'>
+                                                    So together, we can understand
+                                                </p>
+
+                                                {/* Questions list */}
+                                                <motion.div
+                                                    variants={animationVariants}
+                                                    initial="invisible"
+                                                    animate="visible"
+                                                    className='flex flex-col gap-6'
+                                                >
+                                                    {[
+                                                        'What makes you unique',
+                                                        "How to use your strengths",
+                                                        'How others truly see you',
+                                                        'How to reach your ideal self'
+                                                    ].map((question, i) => (
+                                                        <div key={i} className="relative flex items-center justify-between">
+                                                            <p
+                                                                className="text-white font-bold pb-3 font-gilroy-bold text-[20px]"
+                                                            >
+                                                                {question}
+                                                            </p>
+                                                            <span
+                                                                className="font-normal ml-4 mb-3 font-gilroy-regular text-[14px]"
+                                                            >
+                                                                {i + 1}
+                                                            </span>
+                                                            <div className="absolute bottom-0 left-0 w-full h-[2px] bg-white" />
+                                                        </div>
+                                                    ))}
+                                                </motion.div>
                                             </div>
 
-                                            {/* Description */}
-                                            <p className='pt-2 font-gilroy-regular text-[20px]'>
-                                                I'll guide you to reflect on your
-                                            </p>
-
-                                            {/* Pills */}
+                                            {/* Background Gradient */}
                                             <motion.div
-                                                variants={animationVariants}
-                                                initial="invisible"
-                                                animate="visible"
-                                                className='flex flex-wrap gap-2 mt-[-5px]'
-                                            >
-                                                {['Motivations', 'Desires', 'Patterns', 'Triggers', 'Fears'].map((item, i) => (
-                                                    <div
-                                                        key={i}
-                                                        className="px-4 py-2 font-normal font-gilroy-bold rounded-full border-2 border-white bg-white/10 text-white tracking-[-1.1px]"
-                                                        style={{ fontSize: '20px', fontWeight: 400 }}
-                                                    >
-                                                        {item}
-                                                    </div>
-                                                ))}
-                                            </motion.div>
-
-                                            {/* Understanding text */}
-                                            <p className='pt-4 font-gilroy-regular text-[20px]'>
-                                                So together, we can understand
-                                            </p>
-
-                                            {/* Questions list */}
-                                            <motion.div
-                                                variants={animationVariants}
-                                                initial="invisible"
-                                                animate="visible"
-                                                className='flex flex-col gap-6'
-                                            >
-                                                {[
-                                                    'What makes you unique',
-                                                    "How to use your strengths",
-                                                    'How others truly see you',
-                                                    'How to reach your ideal self'
-                                                ].map((question, i) => (
-                                                    <div key={i} className="relative flex items-center justify-between">
-                                                        <p
-                                                            className="text-white font-bold pb-3 font-gilroy-bold text-[20px]"
-                                                        >
-                                                            {question}
-                                                        </p>
-                                                        <span
-                                                            className="font-normal ml-4 mb-3 font-gilroy-regular text-[14px]"
-                                                        >
-                                                            {i + 1}
-                                                        </span>
-                                                        <div className="absolute bottom-0 left-0 w-full h-[2px] bg-white" />
-                                                    </div>
-                                                ))}
-                                            </motion.div>
+                                                transition={{ duration: 0.8 }}
+                                                className='absolute z-10 w-[554px] h-[554px] bg-radial from-10% from-[#48B9D8] via-80% to-40% via-[#41D9FF] to-[#0C45F0] flex bottom-0 top-[45px] right-[51px] translate-x-1/2 rounded-full blur-[80px]'
+                                                style={{
+                                                    background: 'radial-gradient(50% 50% at 50% 50%, #0C45F0 0%, #41D9FF 50.96%, #48B9D8 100%)',
+                                                    backdropFilter: 'blur(10px)',
+                                                }}
+                                            />
                                         </div>
 
-                                        {/* Background Gradient */}
-                                        <motion.div
-                                            transition={{ duration: 0.8 }}
-                                            className='absolute z-10 w-[554px] h-[554px] bg-radial from-10% from-[#48B9D8] via-80% to-40% via-[#41D9FF] to-[#0C45F0] flex bottom-0 top-[45px] right-[51px] translate-x-1/2 rounded-full blur-[80px]'
-                                            style={{
-                                                background: 'radial-gradient(50% 50% at 50% 50%, #0C45F0 0%, #41D9FF 50.96%, #48B9D8 100%)',
-                                                backdropFilter: 'blur(10px)',
-                                            }}
-                                        />
-                                    </div>
-
-                                    <div id="change-section">
-                                        <Change />
-                                    </div>
-                                    <div className='flex flex-col'>
-                                        <Testimonials />
-                                        <div id="faq-section">
-                                            <FaqSection />
+                                        <div id="change-section">
+                                            <Change />
                                         </div>
-                                        <div id="contact-section">
-                                            <QuestFooter />
+                                        <div className='flex flex-col'>
+                                            <Testimonials />
+                                            <div id="faq-section">
+                                                <FaqSection />
+                                            </div>
+                                            <div id="contact-section">
+                                                <QuestFooter />
+                                            </div>
                                         </div>
+
                                     </div>
+                                </motion.section>
+                            }
 
-                                </div>
-                            </motion.section>
-                        }
+                        </AnimatePresence>
 
-                    </AnimatePresence>
+                    </motion.section>
 
-                </motion.section>
-
-                {/* Visual scroll indicator - non-clickable */}
-                {screen !== 3 && (
-                    <div className="bottom-6 right-6 z-50 fixed transition-opacity duration-300 pointer-events-none">
-                        {/* Make screen 0 and 2 share the same background, with only the middle (screen 1) different */}
-                        <div className={`flex items-center justify-center text-white w-10 h-10 rounded-full ${screen === 1 ? 'bg-black/50' : 'bg-white/30'} transition-all duration-200 backdrop-blur-sm`}>
-                            <ChevronDown className="text-white w-6 h-6" />
+                    {/* Visual scroll indicator - non-clickable */}
+                    {screen !== 3 && (
+                        <div className="bottom-6 right-6 z-50 fixed transition-opacity duration-300 pointer-events-none">
+                            {/* Make screen 0 and 2 share the same background, with only the middle (screen 1) different */}
+                            <div className={`flex items-center justify-center text-white w-10 h-10 rounded-full ${screen === 1 ? 'bg-black/50' : 'bg-white/30'} transition-all duration-200 backdrop-blur-sm`}>
+                                <ChevronDown className="text-white w-6 h-6" />
+                            </div>
                         </div>
-                    </div>
-                )}
-            </motion.div>
+                    )}
+                </motion.div>
+            </>
         )
     } else {
 
