@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Users, DollarSign, FileText, CreditCard, BarChart3, Menu, X, MessageCircle, TrendingUp, AlertCircle, Image, Mail, PieChart, Settings, UserCheck, Calendar, Shield, RefreshCw, Send } from 'lucide-react';
-
+import { Users, DollarSign, FileText, CreditCard, BarChart3, Menu, X, MessageCircle, TrendingUp, AlertCircle, Image, Mail, PieChart, Settings, UserCheck, Calendar, Shield, RefreshCw, Send, Layout } from 'lucide-react';
 // Import placeholder components (these will be replaced with real migrations)
 import {
   AdminUserManagement,
@@ -18,7 +17,8 @@ import {
   AdminPricingManagement,
   AdminEmailManagement,
   VillaEditionsManagement,
-  AdminBulkEmailManagement
+AdminBulkEmailManagement,
+  AdminPageManagement
 } from './placeholders';
 
 // Direct API interfaces - no utility functions needed
@@ -91,78 +91,85 @@ const menuItems = [
     component: AdminImages
   },
   {
+    id: 'pages',
+    label: 'Page Management',
+    icon: Layout,
+    component: AdminPageManagement
+  }, 
+  {
+    
     id: 'newsletter',
     label: 'Newsletter Subscribers',
     icon: Mail,
     component: NewsletterSubscribers
-  },
-  {
+  }, 
+  {          
     id: 'settings',
-    label: 'Website Settings',
-    icon: Settings,
+  label: 'Website Settings',
+  icon: Settings,
     component: WebsiteSettings
-  },
-  {
+  }, 
+  {          
     id: 'admin-emails',
-    label: 'Admin Emails',
-    icon: Shield,
+  label: 'Admin Emails',
+  icon: Shield,
     component: AdminEmailManagement
-  },
-  {
+  }, 
+  {          
     id: 'bulk-emails',
-    label: 'Bulk Email Management',
-    icon: Send,
+  label: 'Bulk Email Management',
+  icon: Send,
     component: AdminBulkEmailManagement
-  },
-  {
+  }, 
+  {          
     id: 'editions',
-    label: 'Villa Editions',
-    icon: Calendar,
+  label: 'Villa Editions',
+  icon: Calendar,
     component: VillaEditionsManagement  // We'll create this component next
-  },
-  {
+  }, 
+  {          
     id: 'influencers',
-    label: 'Influencer Management',
-    icon: UserCheck,
+  label: 'Influencer Management',
+  icon: UserCheck,
     component: AdminInfluencerManagement
-  },
-  {
+  }, 
+  {          
     id: 'users',
-    label: 'User Management',
-    icon: Users,
+  label: 'User Management',
+  icon: Users,
     component: AdminUserManagement
-  },
-  {
+  }, 
+  {          
     id: 'summaries',
-    label: 'Summary Management',
-    icon: FileText,
+  label: 'Summary Management',
+  icon: FileText,
     component: AdminSummaryManagement
-  },
-  {
+  }, 
+  {          
     id: 'payments',
-    label: 'Payment Dashboard',
-    icon: CreditCard,
+  label: 'Payment Dashboard',
+  icon: CreditCard,
     component: AdminQuestPayment
-  },
-  {
+  }, 
+  {          
     id: 'pricing',
-    label: 'Pricing Management',
-    icon: DollarSign,
+  label: 'Pricing Management',
+  icon: DollarSign,
     component: AdminPricingManagement
-  },
-  {
+  }, 
+  {          
     id: 'feedback',
-    label: 'Feedback Management',
-    icon: MessageCircle,
+  label: 'Feedback Management',
+  icon: MessageCircle,
     component: AdminFeedbackManagement
   }
 ];
 
 // Simple Overview Component - EXACT SAME AS ORIGINAL
 const DashboardOverview: React.FC = () => {
-  const [loading, setLoading] = useState(true);
+const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(null);
+    const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(null);
   const [quickStats, setQuickStats] = useState<QuickStats[]>([]);
   
   // Direct API call functions
