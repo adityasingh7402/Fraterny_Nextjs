@@ -2,9 +2,11 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import { toast } from 'sonner';
 import { PageSection, PageSectionImage } from '@/app/admin/components/page-management/types';
 import { supabase } from '@/lib/supabase';
 import { Upload } from 'lucide-react';
+import ConfirmationModal from '@/app/admin/components/page-management/components/ConfirmationModal';
 
 interface ImagePickerModalProps {
     section: PageSection;
@@ -25,6 +27,11 @@ const ImagePickerModal = ({
     const [isUploading, setIsUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    // Delete Modal State
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [imageToDelete, setImageToDelete] = useState<string | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
         fetchSectionImages();
@@ -48,6 +55,7 @@ const ImagePickerModal = ({
             }
         } catch (error) {
             console.error('Error fetching section images:', error);
+            toast.error('Failed to fetch images');
         } finally {
             setIsLoading(false);
         }
@@ -102,10 +110,10 @@ const ImagePickerModal = ({
             }
 
             await fetchSectionImages();
-            alert(`Successfully uploaded ${totalFiles} image(s)!`);
+            toast.success(`Successfully uploaded ${totalFiles} image(s)!`);
         } catch (error) {
             console.error('Error uploading images:', error);
-            alert('Error uploading images. Please try again.');
+            toast.error('Error uploading images. Please try again.');
         } finally {
             setIsUploading(false);
             setUploadProgress(0);
@@ -115,25 +123,34 @@ const ImagePickerModal = ({
         }
     };
 
-    const handleDeleteImage = async (imageId: string) => {
-        if (!confirm('Are you sure you want to delete this image? It will be PERMANENTLY DELETED from storage.')) {
-            return;
-        }
+    const handleDeleteClick = (imageId: string) => {
+        setImageToDelete(imageId);
+        setDeleteModalOpen(true);
+    };
 
+    const handleConfirmDelete = async () => {
+        if (!imageToDelete) return;
+
+        setIsDeleting(true);
         try {
-            const response = await fetch(`/api/media/delete?id=${imageId}`, {
+            const response = await fetch(`/api/media/delete?id=${imageToDelete}`, {
                 method: 'DELETE',
             });
             const result = await response.json();
 
             if (result.success) {
                 await fetchSectionImages();
+                toast.success('Image deleted successfully');
             } else {
-                alert(`Error: ${result.error}`);
+                toast.error(`Error: ${result.error}`);
             }
         } catch (error) {
             console.error('Error deleting image:', error);
-            alert('Error deleting image. Please try again.');
+            toast.error('Error deleting image. Please try again.');
+        } finally {
+            setIsDeleting(false);
+            setDeleteModalOpen(false);
+            setImageToDelete(null);
         }
     };
 
@@ -143,7 +160,7 @@ const ImagePickerModal = ({
     );
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
                 <div className="p-6 border-b border-gray-200">
                     <div className="flex items-center justify-between mb-4">
@@ -229,7 +246,7 @@ const ImagePickerModal = ({
                                             <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
-                                                    handleDeleteImage(image.id);
+                                                    handleDeleteClick(image.id);
                                                 }}
                                                 className="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors transform hover:scale-110"
                                                 title="Delete Image"
@@ -258,6 +275,17 @@ const ImagePickerModal = ({
                     </button>
                 </div>
             </div>
+
+            <ConfirmationModal
+                isOpen={deleteModalOpen}
+                onClose={() => setDeleteModalOpen(false)}
+                onConfirm={handleConfirmDelete}
+                title="Delete Image"
+                message="Are you sure you want to delete this image? It will be PERMANENTLY DELETED from storage. This action cannot be undone."
+                confirmText="Delete"
+                isDestructive={true}
+                isLoading={isDeleting}
+            />
         </div>
     );
 };

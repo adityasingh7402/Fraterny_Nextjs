@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { Page } from '@/app/admin/components/page-management/types';
+import ConfirmationModal from '@/app/admin/components/page-management/components/ConfirmationModal';
 
 interface PageListProps {
     pages: Page[];
@@ -10,28 +12,36 @@ interface PageListProps {
 
 const PageList = ({ pages, onEdit, onManageSections, refetch }: PageListProps) => {
     const [deletingId, setDeletingId] = useState<string | null>(null);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [pageToDelete, setPageToDelete] = useState<string | null>(null);
 
-    const handleDelete = async (id: string) => {
-        if (!confirm('Are you sure you want to delete this page? All sections and image mappings will also be deleted.')) {
-            return;
-        }
+    const handleDeleteClick = (id: string) => {
+        setPageToDelete(id);
+        setDeleteModalOpen(true);
+    };
 
-        setDeletingId(id);
+    const handleConfirmDelete = async () => {
+        if (!pageToDelete) return;
+
+        setDeletingId(pageToDelete);
         try {
-            const response = await fetch(`/api/admin/pages?id=${id}`, {
+            const response = await fetch(`/api/admin/pages?id=${pageToDelete}`, {
                 method: 'DELETE',
             });
             const result = await response.json();
 
             if (result.success) {
+                toast.success('Page deleted successfully');
                 refetch();
             } else {
-                alert(`Error: ${result.error}`);
+                toast.error(`Error: ${result.error}`);
             }
         } catch (error: any) {
-            alert(`Error: ${error.message}`);
+            toast.error(`Error: ${error.message}`);
         } finally {
             setDeletingId(null);
+            setDeleteModalOpen(false);
+            setPageToDelete(null);
         }
     };
 
@@ -115,7 +125,7 @@ const PageList = ({ pages, onEdit, onManageSections, refetch }: PageListProps) =
                                         Edit
                                     </button>
                                     <button
-                                        onClick={() => handleDelete(page.id)}
+                                        onClick={() => handleDeleteClick(page.id)}
                                         disabled={deletingId === page.id}
                                         className="text-red-600 hover:text-red-900 disabled:opacity-50"
                                     >
@@ -127,6 +137,17 @@ const PageList = ({ pages, onEdit, onManageSections, refetch }: PageListProps) =
                     ))}
                 </tbody>
             </table>
+
+            <ConfirmationModal
+                isOpen={deleteModalOpen}
+                onClose={() => setDeleteModalOpen(false)}
+                onConfirm={handleConfirmDelete}
+                title="Delete Page"
+                message="Are you sure you want to delete this page? All sections and image mappings will also be deleted. This action cannot be undone."
+                confirmText="Delete"
+                isDestructive={true}
+                isLoading={!!deletingId}
+            />
         </div>
     );
 };

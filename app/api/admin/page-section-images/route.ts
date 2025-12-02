@@ -39,16 +39,37 @@ export type PageSectionImageWithDetails = PageSectionImage & {
 export async function GET(request: NextRequest) {
     try {
         const { searchParams } = new URL(request.url);
-        const sectionId = searchParams.get('sectionId');
+        let sectionId = searchParams.get('sectionId');
+        const sectionKey = searchParams.get('sectionKey');
 
-        if (!sectionId) {
+        if (!sectionId && !sectionKey) {
             return NextResponse.json(
                 {
                     success: false,
-                    error: 'Section ID is required',
+                    error: 'Section ID or Section Key is required',
                 },
                 { status: 400 }
             );
+        }
+
+        // If sectionKey is provided but not sectionId, fetch the sectionId first
+        if (!sectionId && sectionKey) {
+            const { data: section, error: sectionError } = await supabaseAdmin
+                .from('page_sections')
+                .select('id')
+                .eq('section_key', sectionKey)
+                .single();
+
+            if (sectionError || !section) {
+                return NextResponse.json(
+                    {
+                        success: false,
+                        error: 'Section not found for the provided key',
+                    },
+                    { status: 404 }
+                );
+            }
+            sectionId = section.id;
         }
 
         const { data, error } = await supabaseAdmin

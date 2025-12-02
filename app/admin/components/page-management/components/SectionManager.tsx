@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { Page, PageSection, PageSectionImage, SectionFormValues } from '@/app/admin/components/page-management/types';
 import SectionForm from '@/app/admin/components/page-management/components/SectionForm';
 import SectionCard from '@/app/admin/components/page-management/components/SectionCard';
 import ImagePickerModal from '@/app/admin/components/page-management/components/ImagePickerModal';
+import ConfirmationModal from '@/app/admin/components/page-management/components/ConfirmationModal';
 
 interface SectionManagerProps {
     page: Page;
@@ -19,6 +21,11 @@ const SectionManager = ({ page, onBack }: SectionManagerProps) => {
     const [editingSection, setEditingSection] = useState<PageSection | null>(null);
     const [selectedSection, setSelectedSection] = useState<PageSection | null>(null);
     const [showImagePicker, setShowImagePicker] = useState(false);
+
+    // Delete Modal State
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [sectionToDelete, setSectionToDelete] = useState<string | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const [sectionFormValues, setSectionFormValues] = useState<SectionFormValues>({
         section_key: '',
@@ -45,6 +52,7 @@ const SectionManager = ({ page, onBack }: SectionManagerProps) => {
             }
         } catch (error) {
             console.error('Error fetching sections:', error);
+            toast.error('Failed to fetch sections');
         } finally {
             setIsLoading(false);
         }
@@ -86,30 +94,40 @@ const SectionManager = ({ page, onBack }: SectionManagerProps) => {
         setShowSectionForm(true);
     };
 
-    const handleDeleteSection = async (sectionId: string) => {
-        if (!confirm('Are you sure you want to delete this section? All associated images will be PERMANENTLY DELETED from storage.')) {
-            return;
-        }
+    const handleDeleteClick = (sectionId: string) => {
+        setSectionToDelete(sectionId);
+        setDeleteModalOpen(true);
+    };
 
+    const handleConfirmDelete = async () => {
+        if (!sectionToDelete) return;
+
+        setIsDeleting(true);
         try {
-            const response = await fetch(`/api/admin/page-sections?id=${sectionId}`, {
+            const response = await fetch(`/api/admin/page-sections?id=${sectionToDelete}`, {
                 method: 'DELETE',
             });
             const result = await response.json();
 
             if (result.success) {
+                toast.success('Section deleted successfully');
                 fetchSections();
             } else {
-                alert(`Error: ${result.error}`);
+                toast.error(`Error: ${result.error}`);
             }
         } catch (error: any) {
-            alert(`Error: ${error.message}`);
+            toast.error(`Error: ${error.message}`);
+        } finally {
+            setIsDeleting(false);
+            setDeleteModalOpen(false);
+            setSectionToDelete(null);
         }
     };
 
     const handleSectionFormSuccess = async () => {
         await fetchSections();
         setShowSectionForm(false);
+        toast.success(editingSection ? 'Section updated successfully' : 'Section created successfully');
     };
 
     const handleManageImages = (section: PageSection) => {
@@ -215,7 +233,7 @@ const SectionManager = ({ page, onBack }: SectionManagerProps) => {
                             section={section}
                             images={sectionImages[section.id] || []}
                             onEdit={() => handleEditSection(section)}
-                            onDelete={() => handleDeleteSection(section.id)}
+                            onDelete={() => handleDeleteClick(section.id)}
                             onManageImages={() => handleManageImages(section)}
                         />
                     ))}
@@ -231,6 +249,18 @@ const SectionManager = ({ page, onBack }: SectionManagerProps) => {
                     onSuccess={handleImagePickerSuccess}
                 />
             )}
+
+            {/* Delete Confirmation Modal */}
+            <ConfirmationModal
+                isOpen={deleteModalOpen}
+                onClose={() => setDeleteModalOpen(false)}
+                onConfirm={handleConfirmDelete}
+                title="Delete Section"
+                message="Are you sure you want to delete this section? All associated images will be PERMANENTLY DELETED from storage. This action cannot be undone."
+                confirmText="Delete"
+                isDestructive={true}
+                isLoading={isDeleting}
+            />
         </div>
     );
 };
