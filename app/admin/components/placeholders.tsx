@@ -32,3 +32,4 @@ export const AdminInfluencerManagement = MigratedAdminInfluencerManagement;
 export const AdminPricingManagement = MigratedAdminPricingManagement;
 export const VillaEditionsManagement = MigratedVillaEditionsManagement;
 export const AdminBulkEmailManagement = MigratedAdminBulkEmailManagement;
+export { default as AdminPageManagement } from './page-management';
