@@ -115,6 +115,28 @@ const ImagePickerModal = ({
         }
     };
 
+    const handleDeleteImage = async (imageId: string) => {
+        if (!confirm('Are you sure you want to delete this image? It will be PERMANENTLY DELETED from storage.')) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/media/delete?id=${imageId}`, {
+                method: 'DELETE',
+            });
+            const result = await response.json();
+
+            if (result.success) {
+                await fetchSectionImages();
+            } else {
+                alert(`Error: ${result.error}`);
+            }
+        } catch (error) {
+            console.error('Error deleting image:', error);
+            alert('Error deleting image. Please try again.');
+        }
+    };
+
     const filteredImages = sectionImages.filter(img =>
         img.website_images?.key?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         img.website_images?.alt_text?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -193,7 +215,7 @@ const ImagePickerModal = ({
                                 if (!image) return null;
 
                                 return (
-                                    <div key={sectionImage.id} className="relative aspect-video rounded-lg overflow-hidden border-2">
+                                    <div key={sectionImage.id} className="relative aspect-video rounded-lg overflow-hidden border-2 group">
                                         {image.storage_path && (
                                             <Image
                                                 src={getImageUrl(image.storage_path)}
@@ -203,7 +225,21 @@ const ImagePickerModal = ({
                                                 unoptimized
                                             />
                                         )}
-                                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 p-2">
+                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleDeleteImage(image.id);
+                                                }}
+                                                className="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors transform hover:scale-110"
+                                                title="Delete Image"
+                                            >
+                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 p-2 pointer-events-none">
                                             <p className="text-white text-xs truncate">{image.key}</p>
                                         </div>
                                     </div>

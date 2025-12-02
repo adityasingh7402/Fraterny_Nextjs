@@ -250,6 +250,61 @@ export async function DELETE(request: NextRequest) {
             );
         }
 
+        // 1. Fetch all images associated with this section
+        const { data: sectionImages, error: fetchError } = await supabaseAdmin
+            .from('page_section_images')
+            .select(`
+                image_id,
+                website_images (
+                    id,
+                    storage_path
+                )
+            `)
+            .eq('section_id', id);
+
+        if (fetchError) {
+            console.error('Error fetching associated images:', fetchError);
+            // We continue to try to delete the section even if fetching images fails
+        }
+
+        // 2. Delete images from Storage and website_images table
+        if (sectionImages && sectionImages.length > 0) {
+            const imageIds = sectionImages.map(item => item.image_id);
+            const storagePaths = sectionImages
+                .map((item: any) => {
+                    const img = item.website_images;
+                    if (Array.isArray(img)) return img[0]?.storage_path;
+                    return img?.storage_path;
+                })
+                .filter(path => path) as string[];
+
+            // Delete files from Supabase Storage
+            if (storagePaths.length > 0) {
+                const { error: storageError } = await supabaseAdmin.storage
+                    .from('website-images')
+                    .remove(storagePaths);
+
+                if (storageError) {
+                    console.error('Error deleting files from storage:', storageError);
+                }
+            }
+
+            // Delete records from website_images table
+            // Note: We delete from website_images, which is the source of truth.
+            // The entries in page_section_images will be deleted either by cascade or when the section is deleted.
+            if (imageIds.length > 0) {
+                const { error: imagesDeleteError } = await supabaseAdmin
+                    .from('website_images')
+                    .delete()
+                    .in('id', imageIds);
+
+                if (imagesDeleteError) {
+                    console.error('Error deleting image records:', imagesDeleteError);
+                }
+            }
+        }
+
+        // 3. Delete the section itself
         const { error } = await supabaseAdmin
             .from('page_sections')
             .delete()

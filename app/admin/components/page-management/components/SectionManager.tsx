@@ -87,7 +87,7 @@ const SectionManager = ({ page, onBack }: SectionManagerProps) => {
     };
 
     const handleDeleteSection = async (sectionId: string) => {
-        if (!confirm('Are you sure you want to delete this section? All image mappings will also be deleted.')) {
+        if (!confirm('Are you sure you want to delete this section? All associated images will be PERMANENTLY DELETED from storage.')) {
             return;
         }
 
