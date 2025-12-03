@@ -1,111 +1,4 @@
-// import React, { useState } from 'react';
-// import { motion, AnimatePresence, PanInfo } from 'framer-motion';
-
-// const SwipableCards = () => {
-//   const [currentIndex, setCurrentIndex] = useState(0);
-
-//   const cards = [
-//     {
-//       id: 1,
-//       title: "Card One",
-//       description: "First card content",
-//       bgColor: "from-purple-500 to-pink-500"
-//     },
-//     {
-//       id: 2,
-//       title: "Card Two",
-//       description: "Second card content",
-//       bgColor: "from-blue-500 to-cyan-500"
-//     },
-//     {
-//       id: 3,
-//       title: "Card Three",
-//       description: "Third card content",
-//       bgColor: "from-orange-500 to-red-500"
-//     }
-//   ];
-
-//   const handleDragEnd = (event: PointerEvent | TouchEvent | MouseEvent, info: PanInfo) => {
-//     const threshold = 50;
-    
-//     if (info.offset.x > threshold && currentIndex > 0) {
-//       setCurrentIndex(currentIndex - 1);
-//     } else if (info.offset.x < -threshold && currentIndex < cards.length - 1) {
-//       setCurrentIndex(currentIndex + 1);
-//     }
-//   };
-
-//   return (
-//     <div className="relative w-full h-screen overflow-hidden">
-//       {/* Animated Background */}
-//       {/* Animated Background - Layered approach */}
-//       <div className="absolute inset-0">
-//         <AnimatePresence initial={false}>
-//           <motion.div
-//             key={currentIndex}
-//             className={`absolute inset-0 bg-gradient-to-r ${cards[currentIndex].bgColor}`}
-//             initial={{ x: "100%" }}
-//             animate={{ x: "0%" }}
-//             exit={{ x: "-100%" }}
-//             transition={{
-//               duration: 0.6,
-//               ease: "easeInOut"
-//             }}
-//           />
-//         </AnimatePresence>
-//       </div>
-
-//       {/* Cards Container */}
-//       <div className="absolute inset-x-0 bottom-0 h-1/2 flex items-end justify-center pb-8">
-//         <motion.div
-//           className="relative w-full max-w-md px-6 h-full"
-//           drag="x"
-//           dragConstraints={{ left: 0, right: 0 }}
-//           dragElastic={0.2}
-//           onDragEnd={handleDragEnd}
-//         >
-//           <AnimatePresence mode="wait">
-//             <motion.div
-//               key={currentIndex}
-//               initial={{ opacity: 0, x: 100 }}
-//               animate={{ opacity: 1, x: 0 }}
-//               exit={{ opacity: 0, x: -100 }}
-//               transition={{ duration: 0.3 }}
-//               className="bg-white rounded-3xl shadow-2xl p-4 h-full"
-//             >
-//               <div className="w-full h-3/4 mb-6 overflow-hidden rounded-xl">
-//                 <img src='https://images.pexels.com/photos/756666/pexels-photo-756666.jpeg' />
-//               </div>
-//               <h2 className="text-3xl font-bold text-gray-800 mb-4">
-//                 {cards[currentIndex].title}
-//               </h2>
-//               <p className="text-gray-600 text-lg mb-6">
-//                 {cards[currentIndex].description}
-//               </p>
-              
-//               {/* Dots Indicator */}
-//               <div className="flex justify-center gap-2 mt-8">
-//                 {cards.map((_, index) => (
-//                   <div
-//                     key={index}
-//                     className={`h-2 rounded-full transition-all duration-300 ${
-//                       index === currentIndex
-//                         ? 'w-8 bg-gray-800'
-//                         : 'w-2 bg-gray-300'
-//                     }`}
-//                   />
-//                 ))}
-//               </div>
-//             </motion.div>
-//           </AnimatePresence>
-//         </motion.div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default SwipableCards;
-
+'use client';
 
 import React, { act, useState } from 'react';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
@@ -127,21 +20,24 @@ const SwipableCards = () => {
       title: keys[0],
       description: cardDetails.self,
       bgColor: "from-purple-500 to-pink-500",
-      bgimg: "https://images.pexels.com/photos/756666/pexels-photo-756666.jpeg"
+      bgimg: "./result/16.png",
+      cardimg: './result/14.png'
     },
     {
       id: 2,
       title: keys[1],
       description: cardDetails.aspiration,
       bgColor: "from-blue-500 to-cyan-500",
-      bgimg: "https://images.pexels.com/photos/31740993/pexels-photo-31740993.jpeg"
+      bgimg: "./result/13.png",
+      cardimg: './result/15.png'
     },
     {
       id: 3,
       title: keys[2],
       description: cardDetails.world,
       bgColor: "from-orange-500 to-red-500",
-      bgimg: "https://images.pexels.com/photos/30936371/pexels-photo-30936371.jpeg"
+      bgimg: "./result/18.png",
+      cardimg: './result/17.png'
     }
   ];
 
@@ -183,7 +79,7 @@ const SwipableCards = () => {
       {/* Header Section */}
       <div className="absolute top-2 left-0 right-0 flex justify-center z-20">
         <motion.h1 layout className="mb-10 text-left p-10">
-          <span className="block text-sm uppercase tracking-[0.3em] text-white/70 mb-1">Analysis Complete</span>
+          <span className="block text-sm uppercase tracking-[0.3em] text-white/70 mb-1 font-gilroy-regular">Analysis Complete</span>
           <span className="block text-5xl font-gilroy-bold tracking-tighter bg-gradient-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent">
             Quest Reveals About You
           </span>
@@ -197,8 +93,8 @@ const SwipableCards = () => {
             initial={{ opacity: 0, x: 10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5 }}
-            className="text-left text-white pt-14 text-3xl">{cards[currentIndex].description}</motion.p>
-            <motion.p className="text-left text-white text-xl">More description one liner if needed</motion.p>
+            className="text-left text-white pt-14 text-3xl font-gilroy-semibold">{cards[currentIndex].description}</motion.p>
+            <motion.p className="text-left text-white text-xl font-gilroy-regular">More description one liner if needed</motion.p>
           </motion.span>
         </motion.h1>
         <AnimatePresence>
@@ -258,7 +154,7 @@ const SwipableCards = () => {
                     // exit={{ scale: 0.9 }}
                     // transition={{ duration: 0.5 }}
                     key={card.bgimg} 
-                    src={card.bgimg} 
+                    src={card.cardimg}
                     alt={card.title}
                     className="w-full h-full object-cover"
                   />
@@ -269,7 +165,7 @@ const SwipableCards = () => {
                 animate={{ opacity: 1}}
                 exit={{ opacity: 0}}
                 transition={{ duration: 0.3 }}
-                className="text-2xl font-bold text-gray-800 mb-2">
+                className="text-2xl font-gilroy-extrabold uppercase tracking-tighter text-gray-800 mb-2">
                   {card.title}
                 </motion.h2>
                 <motion.p layoutId={`description-${card.id}`}
@@ -278,7 +174,7 @@ const SwipableCards = () => {
                 animate={{ opacity: 1}}
                 exit={{ opacity: 0}}
                 transition={{ duration: 0.3 }}
-                className="text-gray-600 text-base">
+                className="text-gray-600 text-base font-gilroy-bold">
                   {card.description}
                 </motion.p>
               </motion.div>
@@ -310,7 +206,7 @@ const SwipableCards = () => {
                       animate={{ opacity: 1, }}
                       exit={{ opacity: 0,}}
                       transition={{ duration: 0.3}}
-                      className="text-3xl font-bold text-gray-800 mb-4">
+                      className="text-3xl font-gilroy-extrabold text-gray-800 mb-4">
                         Detailed {cards[activeCardIndex].title}
                       </motion.h2>
                       <motion.p 
@@ -320,7 +216,7 @@ const SwipableCards = () => {
                       animate={{ opacity: 1}}
                       exit={{ opacity: 0}}
                       transition={{ duration: 0.3 }}
-                      className="text-gray-600">
+                      className="text-gray-600 font-gilroy-semibold">
                         Here is a more detailed description about {cards[activeCardIndex].title}. You can add more information, images, or any other content you want to display when the card is active.
                       </motion.p>
                     </motion.div>
