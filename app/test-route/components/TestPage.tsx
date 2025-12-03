@@ -4,6 +4,7 @@ import React, {useState} from 'react'
 import {motion, AnimatePresence} from 'motion/react'
 import { Tooltip } from './Tooltip';
 import { ChevronDown, ChevronUp, LockIcon } from 'lucide-react';
+import SwipableCards from './SwipableCards';
 
 
 export const mockData = {
@@ -45,40 +46,15 @@ function TestPage() {
   return (
     <div>
         <div>
-          <div className="relative w-full max-w-screen pt-18 bg-sky-900">
-            <motion.h1 className="mb-10 text-left p-10">
+          <div className="relative w-full max-w-screen">
+            {/* <motion.h1 className="mb-10 text-left p-10">
               <span className="block text-sm uppercase tracking-[0.3em] text-white/70 mb-1">Analysis Complete</span>
               <span className="block text-5xl font-gilroy-bold tracking-tighter bg-gradient-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent">
                 Quest Reveals About You
               </span>
 
             </motion.h1>
-
-            {/* <div className="flex relative justify-center items-center h-[400px] max-w-screen">
-            {Object.entries(mockData.archetype).map(([key, value], index) => (
-                <motion.div 
-                key={key} 
-                className='bg-sky-800 backdrop-blur-3xl border-white/20 border rounded-lg p-4 flex flex-col h-[280px] w-[200px] absolute'
-                style={{
-                    rotate: `${(index - 1) * 23}deg`,
-                    transformOrigin: 'bottom center',
-                    bottom: '100px', // All cards anchored at same bottom position
-                    left: '17%',
-                    transform: `translateX(-100%) rotate(${(index - 1) * 23}deg)`, // Center and rotate
-                }}
-                initial={{ y: 100, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: index * 0.15, duration: 0.5 }}
-                >
-                <h2 className="text-lg font-gilroy-semibold text-white uppercase tracking-[0.1em]">
-                    {key.charAt(0).toUpperCase() + key.slice(1)}
-                </h2>
-                <p className="text-white/80 text-[12px]">{value}</p>
-                </motion.div>
-            ))}
-            </div> */}
-            <>
-                <div className="flex relative justify-center items-center h-[380px] mt-24">
+            <div className="flex relative justify-center items-center h-[380px] mt-24">
                     {Object.entries(mockData.archetype).map(([key, value], index) => (
                     <motion.div 
                         key={key} 
@@ -102,7 +78,7 @@ function TestPage() {
                         >
                         {key.charAt(0).toUpperCase() + key.slice(1)}
                         </motion.h2>
-                        {/* <motion.p layoutId={`description-${key}`} className="text-white/80 text-[12px]">{value}</motion.p> */}
+                       
                     </motion.div>
                     ))}
                     <div className="absolute inset-0 flex items-center justify-center mask-t-from-55% via-55% to-0%">
@@ -127,8 +103,8 @@ function TestPage() {
                             </div>
                         </motion.div>
                     </div>
-                </div>
-            </>            
+            </div>*/}
+            <SwipableCards />
           </div>
 
           <div className='relative w-full max-w-screen mx-auto pt-18 p-10 bg-white'>
