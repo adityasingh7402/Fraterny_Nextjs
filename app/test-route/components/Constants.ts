@@ -8,6 +8,10 @@ export interface CardData {
   imageUrl: string;
   stats: { label: string; value: number }[];
   bgGradient: string;
+buttonbg: string;
+textcolor: string;
+bgHeading: string;      // NEW: e.g., "SOCIAL VIEW"
+  bgSubheading: string;
 }
 
 export interface Dimensions {
@@ -88,29 +92,41 @@ export const CARD_DIMENSIONS: CardDimensions = {
 export const CARDS_DATA: CardData[] = [
   {
     id: 1,
-    title: "",
-    subtitle: "",
-    tag: "",
-    imageUrl: '/result/SOUL ALIGNED (2).png',
+    title: "Healing Heart",
+    subtitle: "Embercarrier",
+    tag: "Self",
+    imageUrl: '/result/HEALING HEART.png',
     stats: [],
-    bgGradient: '/result/SOUL ALIGNED (3).png'
+    bgGradient: '/result/HEALING HEART (2).png',
+    buttonbg:  'bg-[#0198ac]',
+    textcolor: 'text-[#0198ac]',
+    bgHeading: "SELF IMAGE",
+  bgSubheading: "HOW YOU SEE YOURSELF"
   },
   {
     id: 2,
-    title: "",
-    subtitle: "",
-    tag: "",
+    title: "Restless Mind",
+    subtitle: "Signal Finder",
+    tag: "World",
     imageUrl: "/result/RESTLESS MIND.png",
     stats: [],
-    bgGradient: "/result/RESTLESS MIND (2).png"
+    bgGradient: "/result/RESTLESS MIND (2).png",
+    buttonbg: 'bg-[#1a5a7e]',
+    textcolor: 'text-[#1a5a7e]',
+    bgHeading: "ASPIRATION",
+  bgSubheading: "HOW YOU ASPIRE TO BE"
   },
   {
     id: 3,
-    title: "",
-    subtitle: "",
-    tag: "",
+    title: "Hidden Thinker",
+    subtitle: "Quiet Prodigy",
+    tag: "Aspire",
     imageUrl: "/result/HIDDEN THINKER (2).png",
     stats: [],
-    bgGradient: "/result/HIDDEN THINKER (3).png"
+    bgGradient: "/result/HIDDEN THINKER (3).png",
+    buttonbg: 'bg-[#043974]',
+    textcolor: 'text-[#043974]',
+    bgHeading: "SOCIAL VIEW",
+  bgSubheading: "HOW THE WORLD SEES YOU"
   }
 ];
