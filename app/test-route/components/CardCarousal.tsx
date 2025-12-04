@@ -86,12 +86,6 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim
   const bgMoveRatio = -viewportDim.width / SPACING;
   const backgroundX = useTransform(dragX, (value) => Math.round(value * bgMoveRatio));
 
-  useEffect(() => {
-  const unsubscribe = backgroundX.on("change", (latest) => {
-    console.log('📐 Background X:', latest);
-  });
-  return () => unsubscribe();
-}, [backgroundX]);
 
   // Helper to map infinite virtual index to 0..cards.length-1
   const getWrappedIndex = (virtualIndex: number) => {
@@ -180,15 +174,12 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim
       style={{ perspective: '1000px' }}
       
     >
-      <motion.div>
-        <p className='text-black text-3xl'>Indra</p>
-      </motion.div>
+
       {/* INFINITE DYNAMIC WIPE BACKGROUND */}
       <motion.div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{
           x: backgroundX,
-          // The container doesn't really need a width, we just position children absolutely relative to it
         }}
       >
         {visibleIndices.map(virtualIndex => {
@@ -223,10 +214,6 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim
       <AnimatePresence mode="wait">
         <motion.div
           key={currentVirtualIndex}
-          initial={{ opacity: 0, x: -5 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 5 }}
-          transition={{ duration: 0.4 }}
           className="flex flex-col items-center"
         >
           <h1 className="text-3xl font-gilroy-bold uppercase text-white text-center">
@@ -257,7 +244,7 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim
 
           return (
             <CardItem
-              key={`card-${virtualIndex}`} // Unique key using virtualIndex for "loop count" awareness
+              key={`card-${virtualIndex}`}
               virtualIndex={virtualIndex}
               currentVirtualIndex={currentVirtualIndex}
               dragX={dragX}
