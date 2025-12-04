@@ -43,10 +43,7 @@ export default function DemoResultPage() {
 
     return (
         <div className="w-full min-h-screen overflow-y-auto overflow-x-hidden bg-white">
-            {/* Gallery3D Section - Fixed height */}
-            <div className="relative w-full h-screen overflow-hidden bg-[#4A90A4]">
-                <Gallery3D />
-            </div>
+
             {/* Core Line Section */}
             <div className='relative w-full max-w-screen mx-auto pt-18 p-10 bg-white'>
                 <motion.h1 className="mb-5 text-left">
@@ -58,6 +55,11 @@ export default function DemoResultPage() {
                         <p className="text-black/80 text-lg font-gilroy-bold">{mockData.core_line}</p>
                     </div>
                 </motion.h1>
+            </div>
+
+            {/* Gallery3D Section - Fixed height */}
+            <div className="relative w-full h-screen overflow-hidden bg-[#4A90A4]">
+                <Gallery3D />
             </div>
 
             {/* Primary Pattern Section */}
