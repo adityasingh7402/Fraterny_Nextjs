@@ -42,6 +42,12 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
   // The reference implies the image is somewhat top-aligned with padding
   const topPadding = sidePadding; 
 
+  React.useEffect(() => {
+    if (!active && isExpanded) {
+      setIsExpanded(false);
+    }
+  }, [active, isExpanded]);
+
   return (
     <div
       className={`relative flex flex-col items-center overflow-hidden bg-white select-none transition-shadow duration-300`}
@@ -67,7 +73,6 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
           borderRadius: '10px',
           overflow: 'hidden',
         }}
-        onClick={() => setIsExpanded(true)}
       >
         <img 
           src={data.imageUrl} 
@@ -75,14 +80,34 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
           className="w-full h-full object-cover block"
           draggable={false}
         />
-        <div className="absolute bottom-0 right-0 text-white font-gilroy-regular text-sm pr-4 pb-2 mix-blend-overlay"> Know More ..</div>
+        <div onClick={() => setIsExpanded(true)} className="absolute bottom-0 right-0 text-white font-gilroy-regular text-sm pr-4 pb-2 mix-blend-overlay"> Know More ..</div>
       </div>
 
-      <motion.div layoutId={`card-info-${data.id}`} className="flex-1 w-full flex flex-col items-start justify-start relative z-10 px-6 pt-4">
-        <motion.div layoutId={`card-title-${data.id}`} className={`${data.textcolor} text-2xl font-gilroy-semibold uppercase tracking-tighter`}>{data.title}</motion.div>
-        <motion.div layoutId={`card-subtitle-${data.id}`} className={`mt-2 ${data.textcolor} text-sm font-gilroy-regular uppercase tracking-[0.1rem]`}>Currently Inclined</motion.div>
-        <motion.div layoutId={`card-tag-${data.id}`} className={`mt-1 text-md font-gilroy-regular px-3 py-2 rounded-xl ${data.buttonbg} text-white`}>{data.subtitle}</motion.div>
-      </motion.div>
+      <motion.div 
+        {...(isExpanded && { layoutId: `card-info-${data.id}` })}
+        className="flex-1 w-full flex flex-col items-start justify-start relative z-10 px-6 pt-4"
+        >
+        <motion.div 
+            {...(isExpanded && { layoutId: `card-title-${data.id}` })}
+            className={`${data.textcolor} text-2xl font-gilroy-semibold uppercase tracking-tighter`}
+        >
+            {data.title}
+        </motion.div>
+        
+        <motion.div 
+            {...(isExpanded && { layoutId: `card-subtitle-${data.id}` })}
+            className={`mt-2 ${data.textcolor} text-sm font-gilroy-regular uppercase tracking-[0.1rem]`}
+        >
+            Currently Inclined
+        </motion.div>
+        
+        <motion.div 
+            {...(isExpanded && { layoutId: `card-tag-${data.id}` })}
+            className={`mt-1 text-md font-gilroy-regular px-3 py-2 rounded-xl ${data.buttonbg} text-white`}
+        >
+            {data.subtitle}
+        </motion.div>
+        </motion.div>
 
       <AnimatePresence>
         {isExpanded && (
