@@ -77,9 +77,11 @@ const GalleryCard = ({ cardId, image, subtitle, title, isActive, isExpanded, onC
 
     // Card (image container) size
     const getCardSizeClasses = () => {
-        // When expanded on desktop, make image smaller for two-column layout
-        if (isExpanded && isActive && !isMobile) {
-            return "w-[350px] aspect-[3/4]";
+        // When expanded, make image 20% smaller
+        if (isExpanded && isActive) {
+            return isMobile
+                ? "w-[64vw] aspect-[3/4]"  // 20% smaller than 80vw
+                : "w-[280px] aspect-[3/4]"; // 20% smaller than 350px
         }
         return "lg:w-[80%] w-[100%] aspect-[3/4]";
     };
@@ -91,9 +93,17 @@ const GalleryCard = ({ cardId, image, subtitle, title, isActive, isExpanded, onC
         return ""; // No z-index, use natural DOM stacking order
     };
 
+    // Get top padding classes for mobile non-expanded state
+    const getTopPaddingClasses = () => {
+        if (isMobile && !isExpanded) {
+            return "pt-16"; // Increased top padding for mobile non-expanded
+        }
+        return "";
+    };
+
     return (
         <motion.div
-            className={`absolute cursor-pointer preserve-3d ${getZIndex()}`}
+            className={`absolute cursor-pointer preserve-3d ${getZIndex()} ${getTopPaddingClasses()}`}
             initial={false}
             animate={{
                 x: transform.x,
@@ -123,8 +133,8 @@ const GalleryCard = ({ cardId, image, subtitle, title, isActive, isExpanded, onC
                             initial={false}
                             animate={{
                                 fontSize: isExpanded && isActive
-                                    ? (isMobile ? "2rem" : "3rem")
-                                    : (isMobile ? "2rem" : "3rem"),
+                                    ? (isMobile ? "1.5rem" : "3rem")
+                                    : (isMobile ? "1.5rem" : "3rem"),
                             }}
                             transition={{ duration: 0.4 }}
                         >
@@ -151,7 +161,7 @@ const GalleryCard = ({ cardId, image, subtitle, title, isActive, isExpanded, onC
                         <motion.img
                             src={image}
                             alt={title}
-                            className="w-full h-full object-contain p-4 md:p-6"
+                            className="w-full h-full object-contain p-2 md:p-3"
                             initial={false}
                             animate={{
                                 scale: isExpanded && isActive ? 1 : 1.05,
@@ -166,8 +176,8 @@ const GalleryCard = ({ cardId, image, subtitle, title, isActive, isExpanded, onC
                                 initial={false}
                                 animate={{
                                     fontSize: isExpanded && isActive
-                                        ? (isMobile ? "0.875rem" : "1rem")
-                                        : (isMobile ? "0.75rem" : "0.875rem"),
+                                        ? (isMobile ? "0.60rem" : "1rem")
+                                        : (isMobile ? "0.60rem" : "0.875rem"),
                                 }}
                                 transition={{ duration: 0.4 }}
                             >
@@ -205,7 +215,6 @@ const GalleryCard = ({ cardId, image, subtitle, title, isActive, isExpanded, onC
                             {/* Description - 2-3 lines */}
                             <p className={`font-gilroy-regular text-sm md:text-base leading-relaxed mb-4 md:mb-5 ${isMobile ? 'max-w-md mx-auto' : ''} ${useBlackText ? 'text-black/80' : 'text-[#4A90A4]/70 md:text-white/90'}`}>
                                 Discover your inner journey through self-reflection and understanding.
-                                Embrace the path that resonates with your authentic self.
                             </p>
 
                             <p className={`font-gilroy-regular uppercase tracking-[0.15em] text-xs md:text-sm mb-2 md:mb-5 ${useBlackText ? 'text-black/70' : 'text-[#4A90A4] md:text-white/80'}`}>
