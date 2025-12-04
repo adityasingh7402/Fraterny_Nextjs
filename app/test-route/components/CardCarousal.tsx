@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { motion, useMotionValue, useTransform, animate, PanInfo, MotionValue } from 'framer-motion';
+import { motion, useMotionValue, useTransform, animate, PanInfo, MotionValue, AnimatePresence } from 'framer-motion';
 import Card from './Card';
 
 interface CardProps {
@@ -18,6 +18,10 @@ export interface CardData {
   imageUrl: string;
   stats: { label: string; value: number }[];
   bgGradient: string;
+    buttonbg: string;
+    textcolor: string;
+    bgHeading: string;      // NEW: e.g., "SOCIAL VIEW"
+  bgSubheading: string;
 }
 
 export interface Dimensions {
@@ -80,7 +84,14 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim
   // When carousel moves by 1 SPACING, Background should move by 1 VIEWPORT_WIDTH.
   // Negate to ensure inverse direction: Drag Right (Pos) -> BG Left (Neg)
   const bgMoveRatio = -viewportDim.width / SPACING;
-  const backgroundX = useTransform(dragX, (value) => value * bgMoveRatio);
+  const backgroundX = useTransform(dragX, (value) => Math.round(value * bgMoveRatio));
+
+  useEffect(() => {
+  const unsubscribe = backgroundX.on("change", (latest) => {
+    console.log('📐 Background X:', latest);
+  });
+  return () => unsubscribe();
+}, [backgroundX]);
 
   // Helper to map infinite virtual index to 0..cards.length-1
   const getWrappedIndex = (virtualIndex: number) => {
@@ -159,6 +170,8 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim
   for (let i = currentVirtualIndex - buffer; i <= currentVirtualIndex + buffer; i++) {
     visibleIndices.push(i);
   }
+
+  console.log('🎯 Current Index:', currentVirtualIndex, '| Visible Indices:', visibleIndices);
   
 
   return (
@@ -167,6 +180,9 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim
       style={{ perspective: '1000px' }}
       
     >
+      <motion.div>
+        <p className='text-black text-3xl'>Indra</p>
+      </motion.div>
       {/* INFINITE DYNAMIC WIPE BACKGROUND */}
       <motion.div
         className="absolute inset-0 z-0 pointer-events-none"
@@ -178,6 +194,8 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim
         {visibleIndices.map(virtualIndex => {
           const wrappedIndex = getWrappedIndex(virtualIndex);
           const cardData = cards[wrappedIndex];
+
+
           return (
             <div
             key={`bg-${virtualIndex}`}
@@ -188,12 +206,38 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim
               backgroundImage: `url("${cardData.bgGradient}")`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              left: -virtualIndex * viewportDim.width 
+              left: -virtualIndex * viewportDim.width - 1,
+              willChange: 'transform'
             }}
-          />
+          >
+            
+          </div>
+          
           );
         })}
       </motion.div>
+
+      <div className="absolute top-0 left-0 right-0 z-5 pointer-events-none flex flex-col items-center"
+        style={{ paddingTop: '15%' }}
+      >
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentVirtualIndex}
+          initial={{ opacity: 0, x: -5 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: 5 }}
+          transition={{ duration: 0.4 }}
+          className="flex flex-col items-center"
+        >
+          <h1 className="text-3xl font-gilroy-bold uppercase text-white text-center">
+            {cards[getWrappedIndex(currentVirtualIndex)].bgHeading}
+          </h1>
+          <p className="mt-2 text-sm font-gilroy-regular uppercase tracking-[0.4em] text-white/80 text-center">
+            {cards[getWrappedIndex(currentVirtualIndex)].bgSubheading}
+          </p>
+        </motion.div>
+      </AnimatePresence>
+    </div>
 
       {/* TRACK CONTAINER */}
       <motion.div

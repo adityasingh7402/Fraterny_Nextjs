@@ -133,12 +133,14 @@ function TestPage() {
             </div>
           </div> */}
 
-          <div className="w-full relative overflow-hidden"
-                style={{
-                    width: '100vw',
-                    height: `${dimensions.viewport.height}px`
-                }}
-            >
+          <div className="relative overflow-hidden"
+            style={{
+                width: '100vw',
+                height: `${dimensions.viewport.height}px`,
+                marginLeft: 'calc(50% - 50vw)',
+                marginRight: 'calc(50% - 50vw)'
+            }}
+        >
                 <CardCarousel 
                     cards={CARDS_DATA}
                     cardDim={dimensions.card}
