@@ -32,7 +32,6 @@ export interface CardDimensions {
 const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
   // Center image horizontally: (CardWidth - ImageWidth) / 2
   const sidePadding = (dimensions.width - dimensions.imageWidth) / 2;
-  console.log(data.bgGradient);
   
   
   // The reference implies the image is somewhat top-aligned with padding
