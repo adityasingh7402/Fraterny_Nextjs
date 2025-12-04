@@ -4,7 +4,9 @@ import React, {useState} from 'react'
 import {motion, AnimatePresence} from 'motion/react'
 import { Tooltip } from './Tooltip';
 import { ChevronDown, ChevronUp, LockIcon } from 'lucide-react';
-import SwipableCards from './SwipableCards';
+import SwipableCards from './CardCarousal';
+import CardCarousel from './CardCarousal';
+import { VIEWPORT_DIMENSIONS, CARD_DIMENSIONS, CARDS_DATA } from './Constants';
 
 
 export const mockData = {
@@ -43,11 +45,45 @@ export const mockData = {
 function TestPage() {
     const [isClicked, setIsClicked] = useState<{key: string, value: string} | null>(null)
     const [clickedbuttonId, setClickedButtonId] = useState<string | null>(null);
+    const SCALE = 2.8;
+
+const cardDetails = mockData.archetype
+const keys = Object.keys(cardDetails);
+
+const cards = [
+  {
+    id: 1,
+    title: keys[0],
+    description: cardDetails.self,
+    bgGradient: "linear-gradient(to right, rgb(168, 85, 247), rgb(236, 72, 153))",  // ← Changed from bgColor
+    imageUrl: '/result/SOUL ALIGNED (2).png',  // ← Changed from cardimg
+    bgimg: "/result/SOUL ALIGNED (3).png"
+  },
+  {
+    id: 2,
+    title: keys[1],
+    description: cardDetails.aspiration,
+    bgGradient: "linear-gradient(to right, rgb(59, 130, 246), rgb(6, 182, 212))",  // ← Changed from bgColor
+    imageUrl: "/result/RESTLESS MIND.png", 
+    bgimg: "/result/RESTLESS MIND (2).png",
+  },
+  {
+    id: 3,
+    title: keys[2],
+    description: cardDetails.world,
+    bgGradient: "linear-gradient(to right, rgb(249, 115, 22), rgb(239, 68, 68))",  // ← Changed from bgColor
+    imageUrl: "/result/HIDDEN THINKER (2).png",
+    bgimg: "/result/HIDDEN THINKER (3).png"
+  }
+];
+
+
+
   return (
     <div>
         <div>
-          <div className="relative w-full max-w-screen">
-            {/* <motion.h1 className="mb-10 text-left p-10">
+          {/* <div className="relative w-full max-w-screen">
+            <motion.h1 className="mb-10 text-left p-10">
               <span className="block text-sm uppercase tracking-[0.3em] text-white/70 mb-1">Analysis Complete</span>
               <span className="block text-5xl font-gilroy-bold tracking-tighter bg-gradient-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent">
                 Quest Reveals About You
@@ -103,9 +139,52 @@ function TestPage() {
                             </div>
                         </motion.div>
                     </div>
-            </div>*/}
-            <SwipableCards />
-          </div>
+            </div>
+          </div> */}
+
+          <div className="min-h-screen w-full flex items-center justify-center p-8 font-sans overflow-hidden">
+                
+                <div className="flex flex-col items-center">
+                  
+                  {/* Device Frame */}
+                  <div 
+                    className="relative rounded-[35px] shadow-2xl border-[6px] border-[#1e293b] overflow-hidden"
+                    style={{
+                      width: `${VIEWPORT_DIMENSIONS.width * SCALE}px`,
+                      height: `${VIEWPORT_DIMENSIONS.height * SCALE}px`,
+                      boxShadow: '0 0 60px -15px rgba(29, 78, 216, 0.3)' // Deep blue ambient glow
+                    }}
+                  >
+                    {/* Internal Scaler */}
+                    <div 
+                      className="origin-top-left w-full h-full"
+                      style={{
+                        transform: `scale(${SCALE})`,
+                        width: `${VIEWPORT_DIMENSIONS.width}px`,
+                        height: `${VIEWPORT_DIMENSIONS.height}px`,
+                      }}
+                    >
+                      {/* App UI Background - Transparent to allow carousel BG to show */}
+                      <div className="w-full h-full relative overflow-hidden bg-transparent">
+                        
+                        {/* Carousel Container */}
+                        <div className="absolute inset-0 z-10">
+                           <CardCarousel 
+                              cards={CARDS_DATA}
+                              cardDim={CARD_DIMENSIONS}
+                              viewportDim={VIEWPORT_DIMENSIONS}
+                           />
+                        </div>
+          
+                      </div>
+                    </div>
+                    
+                    {/* Screen Glare Reflection */}
+                    <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-white/5 via-transparent to-transparent rounded-[28px] z-50"></div>
+                  </div>
+          
+                </div>
+              </div>
 
           <div className='relative w-full max-w-screen mx-auto pt-18 p-10 bg-white'>
             <motion.h1 className="mb-5 text-left">
