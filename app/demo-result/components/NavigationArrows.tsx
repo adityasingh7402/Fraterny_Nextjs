@@ -7,11 +7,10 @@ import { useEffect, useState } from "react";
 interface NavigationArrowsProps {
     onPrev: () => void;
     onNext: () => void;
-    onClose?: () => void;
     isExpanded: boolean;
 }
 
-const NavigationArrows = ({ onPrev, onNext, onClose, isExpanded }: NavigationArrowsProps) => {
+const NavigationArrows = ({ onPrev, onNext, isExpanded }: NavigationArrowsProps) => {
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
@@ -66,26 +65,6 @@ const NavigationArrows = ({ onPrev, onNext, onClose, isExpanded }: NavigationArr
                     aria-label="Next"
                 >
                     <ChevronRight className="w-6 h-6 text-white" />
-                </motion.button>
-            )}
-
-            {/* Close Button (only when expanded) */}
-            {isExpanded && onClose && (
-                <motion.button
-                    className="nav-button fixed top-6 right-6 z-50"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onClose();
-                    }}
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.5 }}
-                    transition={{ duration: 0.3 }}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    aria-label="Close"
-                >
-                    <X className="w-4 h-4 text-white" />
                 </motion.button>
             )}
         </>
