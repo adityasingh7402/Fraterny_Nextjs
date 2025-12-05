@@ -3,7 +3,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import GalleryCard from "./GalleryCard";
-import NavigationArrows from "./NavigationArrows";
 import BackgroundImage from "./BackgroundImage";
 import Indicators from "./Indicators";
 
@@ -282,14 +281,6 @@ const Gallery3D = () => {
                         ))}
                 </AnimatePresence>
             </div>
-
-            {/* Navigation */}
-            <NavigationArrows
-                onPrev={handlePrev}
-                onNext={handleNext}
-                onClose={handleClose}
-                isExpanded={isExpanded}
-            />
 
             {/* Indicators */}
             <Indicators

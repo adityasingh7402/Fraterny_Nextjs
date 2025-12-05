@@ -139,7 +139,7 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                         {subtitle}
                     </motion.h1>
                     <motion.p
-                        className={`font-gilroy-regular tracking-[0.2rem] uppercase ${useBlackText ? 'text-black/80' : 'text-white/80'}`}
+                        className={`font-gilroy-regular tracking-[0.2rem] -mt-3 uppercase ${useBlackText ? 'text-black/80' : 'text-white/80'}`}
                         initial={false}
                         animate={{
                             fontSize: isExpanded && isActive
