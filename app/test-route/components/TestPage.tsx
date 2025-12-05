@@ -5,52 +5,18 @@ import {motion, AnimatePresence} from 'motion/react'
 import { Tooltip } from './Tooltip';
 import { ChevronDown, ChevronUp, LockIcon } from 'lucide-react';
 import CardCarousel from './CardCarousal';
-import { VIEWPORT_DIMENSIONS, CARD_DIMENSIONS, CARDS_DATA, calculateDimensions } from './Constants';
-
-
-export const mockData = {
-    "archetype":{
-        "self":"Soul Cartographer",
-        "world":"Quiet Prodigy",
-        "aspiration":"Hopewright"
-    },
-    "core_line":"You keep reaching for a life built on quiet presence, yet when uncertainty rises you almost automatically reach back for the old proof-by-effort script that once kept you safe.",
-    "primary_pattern":"You see yourself as someone who is here to map inner worlds and turn suffering into understanding. In daily life, others meet the reliable, undemanding achiever who rarely shows how much weight you carry inside. What pulls you forward is a simple but demanding wish: to live from embodied peace, abroad if needed, and to let spiritual practice shape your days instead of fear. The live tension is between trusting this slower, riskier path and the fast, familiar comfort of working harder than you actually want to.",
-    "slider_question":{
-        "question1":"When you slow down and rest, do you start to feel guilty inside?",
-        "question2":"Right now, how hard is it for you to ask someone for help?",
-        "question3":"How much do you feel torn between family duty and your own path?",
-        "question4":"Do you feel your spiritual ideas and your daily life actually match?",
-        "likert1":["Not at all","Very much"],
-        "likert2":["Not Hard","Very Hard"],
-        "likert3":["Doesn’t matter","Matters a lot"],
-        "likert4":["Never","Always"]
-    },
-    "signals":{
-        "signal1_purpose":"Work-as-safety autopilot",
-        "signal2_purpose":"Disappearing needs",
-        "signal3_purpose":"Deferred grief",
-        "signal4_purpose":"Concepts as armor",
-        "signal5_purpose":"Conditional freedom plan",
-        "signal1_description":"When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
-        "signal2_description":"When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
-        "signal3_description":"When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
-        "signal4_description":"When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
-        "signal5_description":"When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want."
-    },
-    "depth_score":42
-};
+import { VIEWPORT_DIMENSIONS, CARD_DIMENSIONS, calculateDimensions } from './Constants';
+import { CARDS_DATA } from './CardData';
 
 function TestPage() {
     const [isClicked, setIsClicked] = useState<{key: string, value: string} | null>(null)
     const [clickedbuttonId, setClickedButtonId] = useState<string | null>(null);
     const SCALE = 2.8;
-    const cardDetails = mockData.archetype
     // Dynamic dimensions based on window width
     const [dimensions, setDimensions] = useState({
-    viewport: VIEWPORT_DIMENSIONS,
-    card: CARD_DIMENSIONS
-});
+        viewport: VIEWPORT_DIMENSIONS,
+        card: CARD_DIMENSIONS
+    });
 
     // Calculate dimensions on mount and window resize
     useEffect(() => {
@@ -73,74 +39,13 @@ function TestPage() {
   return (
     <div>
         <div>
-          {/* <div className="relative w-full max-w-screen">
-            <motion.h1 className="mb-10 text-left p-10">
-              <span className="block text-sm uppercase tracking-[0.3em] text-white/70 mb-1">Analysis Complete</span>
-              <span className="block text-5xl font-gilroy-bold tracking-tighter bg-gradient-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent">
-                Quest Reveals About You
-              </span>
-
-            </motion.h1>
-            <div className="flex relative justify-center items-center h-[380px] mt-24">
-                    {Object.entries(mockData.archetype).map(([key, value], index) => (
-                    <motion.div 
-                        key={key} 
-                        layoutId={`card-${key}`}
-                        className='bg-linear-to-b from-sky-700 to-sky-950 backdrop-blur-3xl border-white/20 border rounded-t-lg p-4 flex flex-col h-[280px] w-[200px] absolute cursor-pointer'
-                        style={{
-                        rotate: `${(index - 1) * 23}deg`,
-                        transformOrigin: 'bottom center',
-                        bottom: '190px',
-                        left: '25%',
-                        transform: `translateX(-100%) rotate(${(index - 1) * 23}deg)`,
-                        }}
-                        initial={{ y: 100, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: index * 0.15, duration: 0.5 }}
-                        onClick={() => setIsClicked({key, value})}
-                    >
-                        <motion.h2 
-                        layoutId={`title-${key}`}
-                        className="text-lg font-gilroy-semibold text-white uppercase tracking-[0.1em]"
-                        >
-                        {key.charAt(0).toUpperCase() + key.slice(1)}
-                        </motion.h2>
-                       
-                    </motion.div>
-                    ))}
-                    <div className="absolute inset-0 flex items-center justify-center mask-t-from-55% via-55% to-0%">
-                        <motion.div
-                            layoutId={`card-${isClicked?.key}`}
-                            className='bg-linear-to-b from-sky-700 to-sky-950  backdrop-blur-3xl rounded-xl p-4 flex flex-col h-[250px] w-full cursor-pointer'
-                            onClick={() => setIsClicked(null)}
-                        >
-                            <p className='text-[10px] text-white/30 text-center'>Tap each card to discover..</p>
-                            <span className="block mt-1 w-full h-0.5 bg-white/50 rounded-full"></span>
-
-                            <div className="mt-6 text-white/90 text-center">
-                                <h3 className="text-xl font-gilroy-bold mb-4">{isClicked ? isClicked.key.charAt(0).toUpperCase() + isClicked.key.slice(1) : "This is how the world sees you"}</h3>
-                                <p className='text-md font-gilroy-medium'>{isClicked ? isClicked.value : "Select a card to see the description"}</p>
-                                <p className='text-sm text-white/80 font-gilroy-medium'>Dummy text to illustrate what does this mean?</p>
-                                <div className='flex flex-row items-center justify-center gap-5'>
-                                    <p className='text-sm text-white/80 font-gilroy-medium'>You are among 20 others</p>
-                                    <div className='flex items-center justify-center mt-10'>
-                                    <Tooltip />
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </div>
-            </div>
-          </div> */}
-
           <div className="relative overflow-hidden"
             style={{
                 width: '100vw',
                 height: `${dimensions.viewport.height}px`,
                 marginLeft: 'calc(50% - 50vw)',
                 marginRight: 'calc(50% - 50vw)'
-            }}
-        >
+            }}>
                 <CardCarousel 
                     cards={CARDS_DATA}
                     cardDim={dimensions.card}
@@ -148,7 +53,7 @@ function TestPage() {
                 />
             </div>
 
-          <div className='relative w-full max-w-screen mx-auto pt-18 p-10 bg-white'>
+          {/* <div className='relative w-full max-w-screen mx-auto pt-18 p-10 bg-white'>
             <motion.h1 className="mb-5 text-left">
               <span className="block text-sm uppercase tracking-[0.3em] text-black mb-1">Core line</span>
               <span className="block text-5xl font-gilroy-bold tracking-tighter text-neutral-800">
@@ -160,14 +65,11 @@ function TestPage() {
               </div>
 
             </motion.h1>
-          </div>
+          </div> */}
 
-          <div className='relative w-full max-w-screen pt-18 p-10 bg-neutral-400'>
+          {/* <div className='relative w-full max-w-screen pt-18 p-10 bg-neutral-400'>
             <motion.h1 className="mb-5 text-left">
               <span className="block text-sm uppercase tracking-[0.3em] text-neutral-600 mb-1">Primary Pattern</span>
-              {/* <span className="block text-5xl font-gilroy-bold tracking-tighter text-neutral-800">
-                Your <span className='bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-blue-400 to-teal-400'>Primary</span> Pattern
-              </span> */}
               <span className="block text-5xl font-gilroy-bold tracking-tighter text-neutral-800">
                 Your <span className='text-neutral-200'>Primary</span> Pattern
               </span>
@@ -176,14 +78,11 @@ function TestPage() {
                 <p className="text-black/80 text-lg font-gilroy-regular">{mockData.primary_pattern}</p>
               </div>
             </motion.h1>
-          </div>
+          </div> */}
 
-          <div className='relative w-full max-w-screen pt-18 p-10 bg-white'>
+          {/* <div className='relative w-full max-w-screen pt-18 p-10 bg-white'>
             <motion.h1 className="mb-5 text-left">
               <span className="block text-sm uppercase tracking-[0.3em] text-black mb-1">Calibrate</span>
-              {/* <span className="block text-5xl font-gilroy-bold tracking-tighter text-neutral-800">
-                Your <span className='bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-blue-400 to-teal-400'>Primary</span> Pattern
-              </span> */}
               <span className="block text-5xl font-gilroy-bold tracking-tighter text-neutral-800">
                 Calibrate Your Depth
               </span>
@@ -275,10 +174,10 @@ function TestPage() {
                 Submit
               </button>
             </div>
-          </div>
-          </div>
+            </div>
+          </div> */}
 
-          <div className='relative w-full max-w-screen pt-18 p-10 bg-sky-900'>
+          {/* <div className='relative w-full max-w-screen pt-18 p-10 bg-sky-900'>
             <motion.h1 className="mb-5 text-left">
               <span className="block text-sm uppercase tracking-[0.3em] text-white mb-1">Calibrate</span>
               <span className="block text-5xl font-gilroy-bold tracking-tighter text-neutral-100">
@@ -292,7 +191,7 @@ function TestPage() {
               </span>
             </motion.div>
 
-            {/* <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-5">
               {Object.entries(mockData.signals).filter(([key, _]) => key.endsWith("_purpose")).map(([key, value]) => {
                 const descKey = key.replace("_purpose", "_description");
                 return (
@@ -335,9 +234,9 @@ function TestPage() {
                   </motion.div>
                 );
               })}
-            </div> */}
+            </div> 
 
-            {/* <div className='w-full'>
+            <div className='w-full'>
             <svg width="400" height="450" viewBox="0 0 664 744" fill="none" xmlns="http://www.w3.org/2000/svg">
 
 
@@ -382,10 +281,10 @@ function TestPage() {
                     Anxiety due to changing work
                 </text>
             </svg>
-            </div> */}
+            </div>
             
 
-          </div>
+          </div> */}
 
             
           </div>

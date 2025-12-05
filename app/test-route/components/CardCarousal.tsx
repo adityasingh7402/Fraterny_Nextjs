@@ -3,39 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useMotionValue, useTransform, animate, PanInfo, MotionValue, AnimatePresence } from 'framer-motion';
 import Card from './Card';
-
-interface CardProps {
-  data: CardData;
-  dimensions: CardDimensions;
-  active: boolean;
-}
-
-export interface CardData {
-  id: number;
-  title: string;
-  subtitle: string;
-  tag: string;
-  imageUrl: string;
-  stats: { label: string; value: number }[];
-  bgGradient: string;
-    buttonbg: string;
-    textcolor: string;
-    bgHeading: string;      // NEW: e.g., "SOCIAL VIEW"
-  bgSubheading: string;
-}
-
-export interface Dimensions {
-  width: number;
-  height: number;
-}
-
-export interface CardDimensions {
-  width: number;
-  height: number;
-  imageWidth: number;
-  imageHeight: number;
-  gap: number;
-}
+import { CardData, CardDimensions, Dimensions } from './types';
 
 // --- HAPTICS HOOK ---
 const useHaptics = () => {
@@ -165,7 +133,6 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim
     visibleIndices.push(i);
   }
 
-  console.log('🎯 Current Index:', currentVirtualIndex, '| Visible Indices:', visibleIndices);
   
 
   return (
@@ -184,11 +151,12 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim
       >
         {visibleIndices.map(virtualIndex => {
           const wrappedIndex = getWrappedIndex(virtualIndex);
+          
           const cardData = cards[wrappedIndex];
 
 
           return (
-            <div
+          <div
             key={`bg-${virtualIndex}`}
             className={`absolute top-0`}
             style={{
@@ -201,30 +169,24 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim
               willChange: 'transform'
             }}
           >
-            
+            <motion.div
+              animate={{ opacity: 1 }}
+              initial={false}
+              transition={{ duration: 0.25 }}
+                className="flex flex-col items-center pt-14"
+              >
+                <h1 className="text-3xl font-gilroy-bold uppercase text-white text-center">
+                  {cards[getWrappedIndex(currentVirtualIndex)].bgHeading}
+                </h1>
+                <p className="mt-2 text-sm font-gilroy-regular uppercase tracking-[0.4em] text-white/80 text-center">
+                  {cards[getWrappedIndex(currentVirtualIndex)].bgSubheading}
+                </p>
+              </motion.div>
           </div>
           
           );
         })}
       </motion.div>
-
-      <div className="absolute top-0 left-0 right-0 z-5 pointer-events-none flex flex-col items-center"
-        style={{ paddingTop: '15%' }}
-      >
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentVirtualIndex}
-          className="flex flex-col items-center"
-        >
-          <h1 className="text-3xl font-gilroy-bold uppercase text-white text-center">
-            {cards[getWrappedIndex(currentVirtualIndex)].bgHeading}
-          </h1>
-          <p className="mt-2 text-sm font-gilroy-regular uppercase tracking-[0.4em] text-white/80 text-center">
-            {cards[getWrappedIndex(currentVirtualIndex)].bgSubheading}
-          </p>
-        </motion.div>
-      </AnimatePresence>
-    </div>
 
       {/* TRACK CONTAINER */}
       <motion.div
