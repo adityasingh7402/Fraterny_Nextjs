@@ -167,7 +167,7 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                         />
 
                         {/* "Know more" text overlay on image */}
-                        <div className={`absolute bottom-6 left-0 right-0 text-center ${!isActive ? 'hidden md:block' : ''}`}>
+                        {/* <div className={`absolute bottom-6 left-0 right-0 text-center ${!isActive ? 'hidden md:block' : ''}`}>
                             <motion.p
                                 className="font-gilroy-regular text-white/70 tracking-wider"
                                 initial={false}
@@ -180,7 +180,7 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                             >
                                 Know more
                             </motion.p>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 
