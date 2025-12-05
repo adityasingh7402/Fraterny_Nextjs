@@ -173,13 +173,15 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim
               animate={{ opacity: 1 }}
               initial={false}
               transition={{ duration: 0.25 }}
-                className="flex flex-col items-center pt-14"
+              className="flex flex-col items-center pt-14"
               >
                 <h1 className="text-3xl font-gilroy-bold uppercase text-white text-center">
-                  {cards[getWrappedIndex(currentVirtualIndex)].bgHeading}
+                  {/* {cards[getWrappedIndex(currentVirtualIndex)].bgHeading} */}
+                  {cardData.bgHeading}
                 </h1>
                 <p className="mt-2 text-sm font-gilroy-regular uppercase tracking-[0.4em] text-white/80 text-center">
-                  {cards[getWrappedIndex(currentVirtualIndex)].bgSubheading}
+                  {/* {cards[getWrappedIndex(currentVirtualIndex)].bgSubheading} */}
+                  {cardData.bgSubheading}
                 </p>
               </motion.div>
           </div>

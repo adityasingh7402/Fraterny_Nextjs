@@ -12,7 +12,7 @@ export const CARDS_DATA: CardData[] = [
     buttonbg:  'bg-[#0198ac]',
     textcolor: 'text-[#0198ac]',
     bgHeading: "SELF IMAGE",
-  bgSubheading: "HOW YOU SEE YOURSELF"
+    bgSubheading: "HOW YOU SEE YOURSELF"
   },
   {
     id: 2,
@@ -25,7 +25,7 @@ export const CARDS_DATA: CardData[] = [
     buttonbg: 'bg-[#1a5a7e]',
     textcolor: 'text-[#1a5a7e]',
     bgHeading: "ASPIRATION",
-  bgSubheading: "HOW YOU ASPIRE TO BE"
+    bgSubheading: "HOW YOU ASPIRE TO BE"
   },
   {
     id: 3,
@@ -38,6 +38,6 @@ export const CARDS_DATA: CardData[] = [
     buttonbg: 'bg-[#043974]',
     textcolor: 'text-[#043974]',
     bgHeading: "SOCIAL VIEW",
-  bgSubheading: "HOW THE WORLD SEES YOU"
+    bgSubheading: "HOW THE WORLD SEES YOU"
   }
 ];
