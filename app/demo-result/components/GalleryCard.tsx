@@ -12,9 +12,13 @@ interface GalleryCardProps {
     isExpanded: boolean;
     onClick: () => void;
     position: "left" | "center" | "right";
+    description: string;
+    included: string;
+    color: string;
+    categoryText: string;
 }
 
-const GalleryCard = ({ cardId, image, subtitle, title, isActive, isExpanded, onClick, position }: GalleryCardProps) => {
+const GalleryCard = ({ cardId, image, subtitle, title, description, included, color, categoryText, isActive, isExpanded, onClick, position }: GalleryCardProps) => {
     const [isMobile, setIsMobile] = useState(false);
 
     // Check if this card should use black text (card id 6)
@@ -96,7 +100,7 @@ const GalleryCard = ({ cardId, image, subtitle, title, isActive, isExpanded, onC
     // Get top padding classes for mobile non-expanded state
     const getTopPaddingClasses = () => {
         if (isMobile && !isExpanded) {
-            return "pt-16"; // Increased top padding for mobile non-expanded
+            return "pt-2"; // Increased top padding for mobile non-expanded
         }
         return "";
     };
@@ -124,24 +128,24 @@ const GalleryCard = ({ cardId, image, subtitle, title, isActive, isExpanded, onC
             }}
             whileHover={!isExpanded && isActive ? { scale: 1.02, z: 20 } : {}}
         >
-            <div className={`flex ${isExpanded && isActive && !isMobile ? 'flex-row gap-8 items-start' : 'flex-col items-center'} ${getContainerSizeClasses()}`}>
+            <div className={`flex ${isExpanded && isActive && !isMobile ? 'flex-row gap-8 items-stretch' : 'flex-col items-center'} ${getContainerSizeClasses()}`}>
                 {/* Header Section - OUTSIDE the white card */}
-                {!(isExpanded && isActive && !isMobile) && (
+                {!(isExpanded && isActive && !isMobile) && (!isMobile || isActive) && (
                     <div className="w-full text-center mb-4 md:mb-6">
                         <motion.h1
                             className={`font-gilroy-bold uppercase ${useBlackText ? 'text-black' : 'text-white'}`}
                             initial={false}
                             animate={{
                                 fontSize: isExpanded && isActive
-                                    ? (isMobile ? "1.5rem" : "3rem")
-                                    : (isMobile ? "1.5rem" : "3rem"),
+                                    ? (isMobile ? "2.5rem" : "3rem")
+                                    : (isMobile ? "2.5rem" : "3rem"),
                             }}
                             transition={{ duration: 0.4 }}
                         >
                             {subtitle}
                         </motion.h1>
                         <motion.p
-                            className={`font-gilroy-regular uppercase ${useBlackText ? 'text-black/80' : 'text-white/80'}`}
+                            className={`font-gilroy-regular tracking-[0.2rem] uppercase ${useBlackText ? 'text-black/80' : 'text-white/80'}`}
                             initial={false}
                             animate={{
                                 fontSize: isExpanded && isActive
@@ -150,7 +154,7 @@ const GalleryCard = ({ cardId, image, subtitle, title, isActive, isExpanded, onC
                             }}
                             transition={{ duration: 0.4 }}
                         >
-                            HOW YOU SEE YOURSELF
+                            {categoryText}
                         </motion.p>
                     </div>
                 )}
@@ -170,38 +174,43 @@ const GalleryCard = ({ cardId, image, subtitle, title, isActive, isExpanded, onC
                         />
 
                         {/* "Know more" text overlay on image */}
-                        <div className="absolute bottom-6 left-0 right-0 text-center">
-                            <motion.p
-                                className="font-gilroy-regular text-white/70 tracking-wider"
-                                initial={false}
-                                animate={{
-                                    fontSize: isExpanded && isActive
-                                        ? (isMobile ? "0.60rem" : "1rem")
-                                        : (isMobile ? "0.60rem" : "0.875rem"),
-                                }}
-                                transition={{ duration: 0.4 }}
-                            >
-                                Know more
-                            </motion.p>
-                        </div>
+                        {(!isMobile || isActive) && (
+                            <div className="absolute bottom-6 left-0 right-0 text-center">
+                                <motion.p
+                                    className="font-gilroy-regular text-white/70 tracking-wider"
+                                    initial={false}
+                                    animate={{
+                                        fontSize: isExpanded && isActive
+                                            ? (isMobile ? "0.60rem" : "1rem")
+                                            : (isMobile ? "0.60rem" : "0.875rem"),
+                                    }}
+                                    transition={{ duration: 0.4 }}
+                                >
+                                    Know more
+                                </motion.p>
+                            </div>
+                        )}
                     </div>
                 </div>
 
                 {/* Title Section - OUTSIDE and BELOW the white card (or to the right on desktop when expanded) */}
-                <div className={`${isExpanded && isActive && !isMobile ? 'flex-1 text-left' : 'w-full text-center mt-5 md:mt-8'}`}>
-                    <motion.h2
-                        className={`font-gilroy-bold uppercase tracking-wider ${useBlackText ? 'text-black' : 'text-[#4A90A4] md:text-white'}`}
-                        initial={false}
-                        animate={{
-                            fontSize: isExpanded && isActive
-                                ? (isMobile ? "1.5rem" : "3rem")
-                                : (isMobile ? "1.5rem" : "2rem"),
-                            lineHeight: "1.2",
-                        }}
-                        transition={{ duration: 0.4 }}
-                    >
-                        {title}
-                    </motion.h2>
+                <div className={`${isExpanded && isActive && !isMobile ? 'flex-1 text-left bg-white rounded-3xl p-8 flex flex-col justify-start shadow-lg' : 'w-full text-center mt-5 md:mt-8'}`}>
+                    {(!isMobile || isActive) && (
+                        <motion.h2
+                            className="font-gilroy-bold uppercase tracking-wider"
+                            style={{ color: color }}
+                            initial={false}
+                            animate={{
+                                fontSize: isExpanded && isActive
+                                    ? (isMobile ? "2rem" : "3rem")
+                                    : (isMobile ? "2rem" : "3rem"),
+                                lineHeight: "1.2",
+                            }}
+                            transition={{ duration: 0.4 }}
+                        >
+                            {title}
+                        </motion.h2>
+                    )}
 
                     {/* Expanded content */}
                     {isExpanded && isActive && (
@@ -213,20 +222,27 @@ const GalleryCard = ({ cardId, image, subtitle, title, isActive, isExpanded, onC
                             className="overflow-hidden"
                         >
                             {/* Description - 2-3 lines */}
-                            <p className={`font-gilroy-regular text-sm md:text-base leading-relaxed mb-4 md:mb-5 ${isMobile ? 'max-w-md mx-auto' : ''} ${useBlackText ? 'text-black/80' : 'text-[#4A90A4]/70 md:text-white/90'}`}>
-                                Discover your inner journey through self-reflection and understanding.
+                            <p
+                                className={`font-gilroy-regular text-sm md:text-base leading-relaxed mb-4 md:mb-5 ${isMobile ? 'max-w-md mx-auto' : ''}`}
+                                style={{ color: color }}
+                            >
+                                {description}
                             </p>
 
-                            <p className={`font-gilroy-regular uppercase tracking-[0.15em] text-xs md:text-sm mb-2 md:mb-5 ${useBlackText ? 'text-black/70' : 'text-[#4A90A4] md:text-white/80'}`}>
+                            <p
+                                className="font-gilroy-regular uppercase tracking-[0.15em] text-xs md:text-sm mb-2 md:mb-5"
+                                style={{ color: color, opacity: 0.8 }}
+                            >
                                 CURRENTLY INCLINED
                             </p>
 
                             <motion.button
-                                className="px-8 md:px-10 py-3 md:py-3.5 bg-[#4A90A4] text-white rounded-full font-gilroy-bold text-sm md:text-base uppercase tracking-wider"
+                                className="px-8 md:px-10 py-3 md:py-3.5 text-white rounded-full font-gilroy-bold text-sm md:text-base uppercase tracking-wider"
+                                style={{ backgroundColor: color }}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
-                                Embercarrier
+                                {included}
                             </motion.button>
                         </motion.div>
                     )}
@@ -237,7 +253,8 @@ const GalleryCard = ({ cardId, image, subtitle, title, isActive, isExpanded, onC
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.5 }}
-                            className="text-white/60 text-xs md:text-sm font-gilroy-regular mt-2"
+                            className="text-xs md:text-sm font-gilroy-regular mt-2"
+                            style={{ color: color, opacity: 0.6 }}
                         >
                             Click to expand
                         </motion.p>

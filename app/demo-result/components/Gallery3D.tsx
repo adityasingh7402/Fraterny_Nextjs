@@ -14,56 +14,77 @@ interface CardData {
     subtitle: string;
     title: string;
     description: string;
+    included: string;
+    color: string;
+    categoryText: string;
 }
 
 const cards: CardData[] = [
     {
         id: 1,
         image: "/result/SOUL ALIGNED (2).png",
-        background: "/result/SOUL ALIGNED (3).png",
+        background: "/result/SOUL ALIGNED (4).png",
         subtitle: "SELF IMAGE",
-        title: "Soul Cartographer",
+        title: "SOUL ALIGNED",
         description: "A breathtaking futuristic cityscape where technology meets dreams.",
+        included: "Quiet Beacon",
+        color: "#4dbdfc",
+        categoryText: "HOW YOU SEE YOURSELF"
     },
     {
         id: 2,
         image: "/result/RESTLESS MIND.png",
-        background: "/result/RESTLESS MIND (2).png",
-        subtitle: "WORLD IMAGE",
-        title: "Quiet Prodigy",
+        background: "/result/RESTLESS MIND (4).png",
+        subtitle: "SOCIAL VIEW",
+        title: "RESTLESS MIND",
         description: "Mystical temples hidden in nature's embrace, waiting to be discovered.",
+        included: "SIGNAL FINDER",
+        color: "#04486f",
+        categoryText: "HOW THE WORLD SEES YOU"
     },
     {
         id: 3,
         image: "/result/HIDDEN THINKER (2).png",
         background: "/result/HIDDEN THINKER (3).png",
-        subtitle: "ASPIRATION IMAGE",
-        title: "Hopewright",
+        subtitle: "ASPIRATION",
+        title: "HIDDEN THINKER",
         description: "Journey through the infinite beauty of the universe's celestial wonders.",
+        included: "Quiet Prodigy",
+        color: "#043974",
+        categoryText: "WHAT YOU ASPIRE TO BE"
     },
     {
         id: 4,
         image: "/result/STRATEGIST.png",
-        background: "/result/STRATEGIST (2).png",
-        subtitle: "ASPIRATION IMAGE",
-        title: "Strategist",
+        background: "/result/STRATEGIST (4).png",
+        subtitle: "ASPIRATION",
+        title: "The Strategist",
         description: "Journey through the infinite beauty of the universe's celestial wonders.",
+        included: "MIN-MAXER",
+        color: "#000000",
+        categoryText: "WHAT YOU ASPIRE TO BE"
     },
     {
         id: 5,
         image: "/result/HEALING HEART.png",
-        background: "/result/HEALING HEART (2).png",
-        subtitle: "ASPIRATION IMAGE",
+        background: "/result/HEALING HEART (4).png",
+        subtitle: "ASPIRATION",
         title: "Healing Heart",
         description: "Journey through the infinite beauty of the universe's celestial wonders.",
+        included: "Embercarrier",
+        color: "#0198ac",
+        categoryText: "WHAT YOU ASPIRE TO BE"
     },
     {
         id: 6,
         image: "/result/FREE SPIRIT (2).png",
-        background: "/result/FREE SPIRIT (3).png",
-        subtitle: "ASPIRATION IMAGE",
-        title: "Free Spirit",
+        background: "/result/FREE SPIRIT (4).png",
+        subtitle: "ASPIRATION",
+        title: "The Free Spirit",
         description: "Journey through the infinite beauty of the universe's celestial wonders.",
+        included: "OFFSCRIPT",
+        color: "#545454",
+        categoryText: "WHAT YOU ASPIRE TO BE"
     },
 ];
 
@@ -218,21 +239,9 @@ const Gallery3D = () => {
                 imageKey={currentIndex}
             />
 
-            {/* Heading Section - Hidden when card is expanded */}
-            {!isExpanded && (
-                <div className="absolute top-0 left-0 right-0 z-10 pt-8 p-5 md:p-10">
-                    <h1 className="mb-10 text-left">
-                        <span className={`block text-sm md:text-base uppercase tracking-[0.3em] mb-1 font-gilroy-regular ${cards[currentIndex].id === 6 ? 'text-black/70' : 'text-white/70'}`}>Analysis Complete</span>
-                        <span className={`block text-5xl md:text-6xl lg:text-7xl font-gilroy-bold tracking-tighter ${cards[currentIndex].id === 6 ? 'text-black' : 'bg-gradient-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent'}`}>
-                            Quest Reveals About You
-                        </span>
-                    </h1>
-                </div>
-            )}
-
             {/* 3D Card Container */}
             <div
-                className={`relative w-full h-full flex items-center justify-center perspective-1000 ${isExpanded ? 'pt-0' : 'pt-24 md:pt-48'}`}
+                className={`relative w-full h-full flex items-center justify-center perspective-1000`}
                 onClick={() => isExpanded && handleClose()}
             >
                 <AnimatePresence mode="sync">
@@ -261,6 +270,10 @@ const Gallery3D = () => {
                                 image={cards[index].image}
                                 subtitle={cards[index].subtitle}
                                 title={cards[index].title}
+                                description={cards[index].description}
+                                included={cards[index].included}
+                                color={cards[index].color}
+                                categoryText={cards[index].categoryText}
                                 isActive={index === currentIndex}
                                 isExpanded={isExpanded}
                                 onClick={() => handleCardClick(index)}
