@@ -202,8 +202,8 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                             initial={false}
                             animate={{
                                 fontSize: isExpanded && isActive
-                                    ? (isMobile ? "2rem" : "3rem")
-                                    : (isMobile ? "2rem" : "3rem"),
+                                    ? (isMobile ? "2rem" : "2.5rem")
+                                    : (isMobile ? "2rem" : "2.5rem"),
                                 lineHeight: "1.2",
                             }}
                             transition={{ duration: 0.4 }}
