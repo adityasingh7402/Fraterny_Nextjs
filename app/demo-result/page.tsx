@@ -1,6 +1,7 @@
 'use client';
 
 import Gallery3D from "./components/Gallery3D";
+import ConcertPage from './components/ConcertPage';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronDown, ChevronUp, LockIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -40,6 +41,7 @@ export const mockData = {
 
 export default function DemoResultPage() {
     const [clickedbuttonId, setClickedButtonId] = useState<string | null>(null);
+    const [activeCardColor, setActiveCardColor] = useState<string>('#0394A3');
 
     return (
         <div className="w-full min-h-screen overflow-y-auto overflow-x-hidden bg-white">
@@ -59,7 +61,7 @@ export default function DemoResultPage() {
 
             {/* Gallery3D Section - Fixed height */}
             <div className="relative w-full h-screen overflow-hidden bg-[#4A90A4]">
-                <Gallery3D />
+                <Gallery3D onColorChange={setActiveCardColor} />
             </div>
 
             {/* Primary Pattern Section */}
@@ -67,7 +69,7 @@ export default function DemoResultPage() {
                 <motion.h1 className="mb-5 text-left">
                     <span className="block text-sm uppercase tracking-[0.3em] text-neutral-600 mb-1">Primary Pattern</span>
                     <span className="block text-5xl font-gilroy-bold tracking-tighter text-neutral-800">
-                        Your <span className='text-neutral-200'>Primary</span> Pattern
+                        Your <span className='transition-colors duration-500' style={{ color: activeCardColor }}>Primary</span> Pattern
                     </span>
                     <div className="mt-6">
                         <p className="text-black/80 text-lg font-gilroy-regular">{mockData.primary_pattern}</p>
@@ -170,65 +172,7 @@ export default function DemoResultPage() {
             </div>
 
             {/* Behaviour Signals Section */}
-            <div className='relative w-full max-w-screen pt-18 p-10 bg-sky-900'>
-                <motion.h1 className="mb-5 text-left">
-                    <span className="block text-sm uppercase tracking-[0.3em] text-white mb-1">Calibrate</span>
-                    <span className="block text-5xl font-gilroy-bold tracking-tighter text-neutral-100">
-                        Behaviour Signals
-                    </span>
-                </motion.h1>
-                <motion.div className="mb-5 flex w-full items-center justify-between">
-                    <span className="block text-md uppercase tracking-[0.3em] text-white/70 mb-1"></span>
-                    <span className="block text-sm uppercase font-gilroy-bold bg-transparent px-2 py-1 rounded-xl shadow-xl border-2 border-white text-white/70">
-                        5 detected
-                    </span>
-                </motion.div>
-
-                <div className='w-full flex justify-center overflow-hidden'>
-                    <svg className="w-full max-w-md" viewBox="0 0 664 744" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M 134 344 Q 240 180 330 110" stroke="#0ea5e9" strokeWidth="2" fill="none" />
-                        <path d="M 134 344 Q 300 300 450 250" stroke="#0ea5e9" strokeWidth="2" fill="none" />
-                        <path d="M 134 344 Q 300 380 460 410" stroke="#0ea5e9" strokeWidth="2" fill="none" />
-                        <path d="M 134 344 Q 220 480 293 573" stroke="#0ea5e9" strokeWidth="2" fill="none" />
-
-                        {/* Top node */}
-                        <circle cx="330" cy="110" r="20" fill="#f8fafc" />
-
-                        {/* Right top node */}
-                        <circle cx="450" cy="250" r="16" fill="#f8fafc" />
-
-                        {/* Right bottom node */}
-                        <circle cx="460" cy="410" r="14" fill="#f8fafc" />
-
-                        {/* Bottom node */}
-                        <circle cx="293" cy="573" r="14" fill="#f8fafc" />
-
-                        {/* Center node (largest) */}
-                        <circle cx="134" cy="344" r="28" fill="#f8fafc" />
-
-                        {/* Text labels */}
-                        <text x="332" y="50" fontFamily="Arial, sans-serif" fontSize="24" fill="#e5e5e5" textAnchor="middle">
-                            Building confidence in public speaking
-                        </text>
-
-                        <text x="450" y="300" fontFamily="Arial, sans-serif" fontSize="22" fill="#e5e5e5" textAnchor="middle">
-                            Exploring new hobbies
-                        </text>
-
-                        <text x="460" y="460" fontFamily="Arial, sans-serif" fontSize="22" fill="#e5e5e5" textAnchor="middle">
-                            Managing digital screen time
-                        </text>
-
-                        <text x="293" y="635" fontFamily="Arial, sans-serif" fontSize="22" fill="#e5e5e5" textAnchor="middle">
-                            Feeling grateful for time with family
-                        </text>
-
-                        <text x="1" y="395" fontFamily="Arial, sans-serif" fontSize="20" fill="#e5e5e5" textAnchor="start">
-                            Anxiety due to changing work
-                        </text>
-                    </svg>
-                </div>
-            </div>
+            <ConcertPage backgroundColor={activeCardColor} />
         </div>
     );
 }

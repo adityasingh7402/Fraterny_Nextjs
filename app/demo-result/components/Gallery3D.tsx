@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import GalleryCard from "./GalleryCard";
 import BackgroundImage from "./BackgroundImage";
-import Indicators from "./Indicators";
+
 
 interface CardData {
     id: number;
@@ -44,7 +44,7 @@ const cards: CardData[] = [
     {
         id: 3,
         image: "/result/HIDDEN THINKER (2).webp",
-        background: "/result/HIDDEN THINKER (3).webp",
+        background: "/result/HIDDEN THINKER (5).webp",
         subtitle: "ASPIRATION",
         title: "HIDDEN THINKER",
         description: "Journey through the infinite beauty of the universe's celestial wonders.",
@@ -112,7 +112,11 @@ const useIsMobile = () => {
     return isMobile;
 };
 
-const Gallery3D = () => {
+interface Gallery3DProps {
+    onColorChange?: (color: string) => void;
+}
+
+const Gallery3D = ({ onColorChange }: Gallery3DProps) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isExpanded, setIsExpanded] = useState(false);
     const isMobile = useIsMobile();
@@ -125,6 +129,13 @@ const Gallery3D = () => {
     useEffect(() => {
         preloadImages();
     }, []);
+
+    // Notify parent of color change
+    useEffect(() => {
+        if (onColorChange) {
+            onColorChange(cards[currentIndex].color);
+        }
+    }, [currentIndex, onColorChange]);
 
     const getCardPosition = (index: number): "left" | "center" | "right" => {
         let diff = index - currentIndex;
@@ -271,7 +282,7 @@ const Gallery3D = () => {
                                 title={cards[index].title}
                                 description={cards[index].description}
                                 included={cards[index].included}
-                                color={cards[index].color}
+                                color={cards[currentIndex].color}
                                 categoryText={cards[index].categoryText}
                                 isActive={index === currentIndex}
                                 isExpanded={isExpanded}
@@ -282,12 +293,7 @@ const Gallery3D = () => {
                 </AnimatePresence>
             </div>
 
-            {/* Indicators */}
-            <Indicators
-                total={cards.length}
-                current={currentIndex}
-                isExpanded={isExpanded}
-            />
+
         </div>
     );
 };

@@ -34,7 +34,7 @@ export const CARDS_DATA: CardData[] = [
     tag: "Aspire",
     imageUrl: "/result/HIDDEN THINKER (2).webp",
     stats: [],
-    bgGradient: "/result/HIDDEN THINKER (3).webp",
+    bgGradient: "/result/HIDDEN THINKER (5).webp",
     buttonbg: 'bg-[#043974]',
     textcolor: 'text-[#043974]',
     bgHeading: "SOCIAL VIEW",
