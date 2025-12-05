@@ -2,14 +2,14 @@ import type { Metadata } from 'next';
 import ClientProviders from './ClientProviders';
 
 export const metadata: Metadata = {
-  title: 'Blog | FRAT - Insights on Personal Growth & Development',
-  description: 'Explore articles on psychology, personal development, and growth insights from the FRAT community.',
-  keywords: ['blog', 'personal development', 'personality assessment', 'growth', 'FRAT', 'self-improvement'],
-  
-  applicationName: 'FRAT',
-  authors: [{ name: 'FRAT Team' }],
-  creator: 'FRAT Inc.',
-  
+  title: 'Blog | Fraterny - Insights on Personal Growth & Development',
+  description: 'Explore articles on psychology, personal development, and growth insights from the Fraterny community.',
+  keywords: ['blog', 'personal development', 'personality assessment', 'growth', 'Fraterny', 'self-improvement'],
+
+  applicationName: 'Fraterny',
+  authors: [{ name: 'Fraterny Team' }],
+  creator: 'Fraterny',
+
   robots: {
     index: true,
     follow: true,
@@ -18,27 +18,31 @@ export const metadata: Metadata = {
       follow: true,
     },
   },
-  
+
+  alternates: {
+    canonical: 'https://fraterny.com/blog',
+  },
+
   openGraph: {
-    title: 'FRAT Blog - Personal Growth & Development',
+    title: 'Fraterny Blog - Personal Growth & Development',
     description: 'Explore insights on psychology, growth, and self-improvement',
-    url: 'https://frat.com/blog',
-    siteName: 'FRAT',
+    url: 'https://fraterny.com/blog',
+    siteName: 'Fraterny',
     locale: 'en_US',
     type: 'website',
     images: [
       {
-        url: 'https://frat.com/og-blog.jpg',
+        url: 'https://fraterny.com/og-blog.jpg',
         width: 1200,
         height: 630,
-        alt: 'FRAT Blog',
+        alt: 'Fraterny Blog',
       },
     ],
   },
-  
+
   twitter: {
     card: 'summary_large_image',
-    title: 'FRAT Blog - Personal Growth & Development',
+    title: 'Fraterny Blog - Personal Growth & Development',
     description: 'Explore insights on psychology, growth, and self-improvement',
     creator: '@fratapp',
   },

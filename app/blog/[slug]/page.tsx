@@ -47,6 +47,37 @@ async function getBlogPost(slug: string): Promise<BlogPost | null> {
   }
 }
 
+// Helper function to get the full image URL for Open Graph
+async function getImageUrl(imageKey: string | null): Promise<string> {
+  if (!imageKey) {
+    return 'https://fraterny.com/og-blog.jpg'; // Default fallback image
+  }
+
+  try {
+    // Fetch the image data from the database to get the storage path
+    const { data, error } = await supabaseAdmin
+      .from('website_images')
+      .select('storage_path')
+      .eq('key', imageKey)
+      .maybeSingle();
+
+    if (error || !data || !data.storage_path) {
+      console.error(`Error fetching image for key ${imageKey}:`, error);
+      return 'https://fraterny.com/og-blog.jpg';
+    }
+
+    // Get the public URL from Supabase Storage
+    const { data: urlData } = supabaseAdmin.storage
+      .from('website-images')
+      .getPublicUrl(data.storage_path);
+
+    return urlData.publicUrl || 'https://fraterny.com/og-blog.jpg';
+  } catch (err) {
+    console.error('Error generating image URL:', err);
+    return 'https://fraterny.com/og-blog.jpg';
+  }
+}
+
 // Generate metadata for SEO
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -62,21 +93,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = post.seo_title || post.title;
   const description = post.meta_description || post.excerpt || post.title;
   const keywords = post.meta_keywords || post.tags || [];
-  const imageUrl = post.social_image_key || post.image_key 
-    ? `https://frat.com/api/images/${post.social_image_key || post.image_key}` 
-    : 'https://frat.com/og-blog.jpg';
+
+  // Get the proper image URL from Supabase Storage
+  const imageKey = post.social_image_key || post.image_key;
+  const imageUrl = await getImageUrl(imageKey);
 
   return {
     title: `${title} | FRAT Blog`,
     description,
     keywords,
     authors: [{ name: 'FRAT Team' }],
-    
+
     openGraph: {
       title,
       description,
-      url: `https://frat.com/blog/${post.slug}`,
-      siteName: 'FRAT',
+      url: `https://fraterny.com/blog/${post.slug}`,
+      siteName: 'Fraterny',
       locale: 'en_US',
       type: 'article',
       publishedTime: post.created_at,
@@ -92,7 +124,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         },
       ],
     },
-    
+
     twitter: {
       card: 'summary_large_image',
       title,
@@ -105,7 +137,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       follow: true,
     },
     alternates: {
-      canonical: `https://frat.com/blog/${post.slug}`,
+      canonical: `https://fraterny.com/blog/${post.slug}`,
     },
   };
 }
