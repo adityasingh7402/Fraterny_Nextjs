@@ -3,7 +3,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import GalleryCard from "./GalleryCard";
-import NavigationArrows from "./NavigationArrows";
 import BackgroundImage from "./BackgroundImage";
 import Indicators from "./Indicators";
 
@@ -22,8 +21,8 @@ interface CardData {
 const cards: CardData[] = [
     {
         id: 1,
-        image: "/result/SOUL ALIGNED (2).png",
-        background: "/result/SOUL ALIGNED (4).png",
+        image: "/result/SOUL ALIGNED (2).webp",
+        background: "/result/SOUL ALIGNED (4).webp",
         subtitle: "SELF IMAGE",
         title: "SOUL ALIGNED",
         description: "A breathtaking futuristic cityscape where technology meets dreams.",
@@ -33,8 +32,8 @@ const cards: CardData[] = [
     },
     {
         id: 2,
-        image: "/result/RESTLESS MIND.png",
-        background: "/result/RESTLESS MIND (4).png",
+        image: "/result/RESTLESS MIND.webp",
+        background: "/result/RESTLESS MIND (4).webp",
         subtitle: "SOCIAL VIEW",
         title: "RESTLESS MIND",
         description: "Mystical temples hidden in nature's embrace, waiting to be discovered.",
@@ -44,8 +43,8 @@ const cards: CardData[] = [
     },
     {
         id: 3,
-        image: "/result/HIDDEN THINKER (2).png",
-        background: "/result/HIDDEN THINKER (3).png",
+        image: "/result/HIDDEN THINKER (2).webp",
+        background: "/result/HIDDEN THINKER (3).webp",
         subtitle: "ASPIRATION",
         title: "HIDDEN THINKER",
         description: "Journey through the infinite beauty of the universe's celestial wonders.",
@@ -55,8 +54,8 @@ const cards: CardData[] = [
     },
     {
         id: 4,
-        image: "/result/STRATEGIST.png",
-        background: "/result/STRATEGIST (4).png",
+        image: "/result/STRATEGIST.webp",
+        background: "/result/STRATEGIST (4).webp",
         subtitle: "ASPIRATION",
         title: "The Strategist",
         description: "Journey through the infinite beauty of the universe's celestial wonders.",
@@ -66,8 +65,8 @@ const cards: CardData[] = [
     },
     {
         id: 5,
-        image: "/result/HEALING HEART.png",
-        background: "/result/HEALING HEART (4).png",
+        image: "/result/HEALING HEART.webp",
+        background: "/result/HEALING HEART (4).webp",
         subtitle: "ASPIRATION",
         title: "Healing Heart",
         description: "Journey through the infinite beauty of the universe's celestial wonders.",
@@ -77,8 +76,8 @@ const cards: CardData[] = [
     },
     {
         id: 6,
-        image: "/result/FREE SPIRIT (2).png",
-        background: "/result/FREE SPIRIT (4).png",
+        image: "/result/FREE SPIRIT (2).webp",
+        background: "/result/FREE SPIRIT (4).webp",
         subtitle: "ASPIRATION",
         title: "The Free Spirit",
         description: "Journey through the infinite beauty of the universe's celestial wonders.",
@@ -282,14 +281,6 @@ const Gallery3D = () => {
                         ))}
                 </AnimatePresence>
             </div>
-
-            {/* Navigation */}
-            <NavigationArrows
-                onPrev={handlePrev}
-                onNext={handleNext}
-                onClose={handleClose}
-                isExpanded={isExpanded}
-            />
 
             {/* Indicators */}
             <Indicators
