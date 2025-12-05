@@ -1,37 +1,9 @@
 'use client';
 import React from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { CardData, CardDimensions, CardProps } from './types';
 
-interface CardProps {
-  data: CardData;
-  dimensions: CardDimensions;
-  active: boolean;
-}
 
-export interface CardData {
-  id: number;
-  title: string;
-  subtitle: string;
-  tag: string;
-  imageUrl: string;
-  stats: { label: string; value: number }[];
-  bgGradient: string;
-    buttonbg: string;
-    textcolor: string;
-}
-
-export interface Dimensions {
-  width: number;
-  height: number;
-}
-
-export interface CardDimensions {
-  width: number;
-  height: number;
-  imageWidth: number;
-  imageHeight: number;
-  gap: number;
-}
 
 const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
   // Center image horizontally: (CardWidth - ImageWidth) / 2
@@ -40,7 +12,9 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
   
   
   // The reference implies the image is somewhat top-aligned with padding
-  const topPadding = sidePadding; 
+  const topPadding = sidePadding;
+  const imagepadding = (57 -  topPadding);
+  
 
   React.useEffect(() => {
     if (!active && isExpanded) {
@@ -54,9 +28,9 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
       style={{
         width: `${dimensions.width}px`,
         height: `${dimensions.height}px`,
-        borderRadius: '12px', // Reduced by 50% from 24px
+        borderRadius: '57px',
         boxShadow: active 
-          ? '0 25px 50px -12px rgba(0,0,0,0.4)' // Deeper, more diffuse shadow for active
+          ? '0 25px 50px -12px rgba(0,0,0,0.4)'
           : '0 10px 15px -3px rgba(0,0,0,0.1)',
       }}
     >
@@ -70,7 +44,7 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
           width: `${dimensions.imageWidth}px`,
           height: `${dimensions.imageHeight}px`,
           marginTop: `${topPadding}px`,
-          borderRadius: '10px',
+          borderRadius: `${imagepadding}px`,
           overflow: 'hidden',
         }}
       >
@@ -96,14 +70,14 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
         
         <motion.div 
             {...(isExpanded && { layoutId: `card-subtitle-${data.id}` })}
-            className={`mt-2 ${data.textcolor} text-sm font-gilroy-regular uppercase tracking-[0.1rem]`}
+            className={`mt-10 ${data.textcolor} text-sm font-gilroy-regular uppercase tracking-[0.05rem]`}
         >
             Currently Inclined
         </motion.div>
         
         <motion.div 
             {...(isExpanded && { layoutId: `card-tag-${data.id}` })}
-            className={`mt-1 text-md font-gilroy-regular px-3 py-2 rounded-xl ${data.buttonbg} text-white`}
+            className={`mt-1 text-xl font-gilroy-light px-8 py-2 rounded-[35px] ${data.buttonbg} text-white`}
         >
             {data.subtitle}
         </motion.div>
