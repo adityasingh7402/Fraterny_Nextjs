@@ -7,6 +7,7 @@ import { ChevronDown, ChevronUp, LockIcon } from 'lucide-react';
 import CardCarousel from './CardCarousal';
 import { VIEWPORT_DIMENSIONS, CARD_DIMENSIONS, calculateDimensions } from './Constants';
 import { CARDS_DATA } from './CardData';
+import { Skeleton } from "@/components/ui/skeleton"
 
 function TestPage() {
     const [isClicked, setIsClicked] = useState<{key: string, value: string} | null>(null)
@@ -17,21 +18,31 @@ function TestPage() {
         viewport: VIEWPORT_DIMENSIONS,
         card: CARD_DIMENSIONS
     });
+    const [isLoading, setIsLoading] = useState(true);
 
-    // Calculate dimensions on mount and window resize
     useEffect(() => {
-        const handleResize = () => {
-            setDimensions(calculateDimensions(window.innerWidth));
-        };
+    const startTime = Date.now();
+    
+    const handleResize = () => {
+        setDimensions(calculateDimensions(window.innerWidth));
+    };
 
-        // Initial calculation
-        handleResize();
+    // Initial calculation
+    handleResize();
+    
+    // Ensure minimum 80ms loading time
+    const elapsed = Date.now() - startTime;
+    const remainingTime = Math.max(0, 80 - elapsed);
+    
+    setTimeout(() => {
+        setIsLoading(false);
+    }, remainingTime);
 
-        // Add resize listener
-        window.addEventListener('resize', handleResize);
+    // Add resize listener
+    window.addEventListener('resize', handleResize);
 
-        // Cleanup
-        return () => window.removeEventListener('resize', handleResize);
+    // Cleanup
+    return () => window.removeEventListener('resize', handleResize);
     }, []);
 
 
@@ -39,7 +50,7 @@ function TestPage() {
   return (
     <div>
         <div>
-          <div className="relative overflow-hidden"
+          {/* <div className="relative overflow-hidden"
             style={{
                 width: '100vw',
                 height: `${dimensions.viewport.height}px`,
@@ -51,6 +62,52 @@ function TestPage() {
                     cardDim={dimensions.card}
                     viewportDim={dimensions.viewport}
                 />
+            </div> */}
+
+            <div className="relative overflow-hidden"
+                style={{
+                    width: '100vw',
+                    height: `${dimensions.viewport.height}px`,
+                    marginLeft: 'calc(50% - 50vw)',
+                    marginRight: 'calc(50% - 50vw)'
+                }}
+            >
+                {isLoading ? (
+                    <div className="relative w-full h-full flex items-center justify-center">
+                        {/* Center Card */}
+                        <Skeleton 
+                            className="absolute rounded-xl"
+                            style={{
+                                width: `${dimensions.card.width}px`,
+                                height: `${dimensions.card.height}px`,
+                            }}
+                        />
+                        {/* Left Card */}
+                        <Skeleton 
+                            className="absolute rounded-xl opacity-40"
+                            style={{
+                                width: `${dimensions.card.width * 0.85}px`,
+                                height: `${dimensions.card.height * 0.85}px`,
+                                transform: 'translateX(-120%)',
+                            }}
+                        />
+                        {/* Right Card */}
+                        <Skeleton 
+                            className="absolute rounded-xl opacity-40"
+                            style={{
+                                width: `${dimensions.card.width * 0.85}px`,
+                                height: `${dimensions.card.height * 0.85}px`,
+                                transform: 'translateX(120%)',
+                            }}
+                        />
+                    </div>
+                ) : (
+                    <CardCarousel 
+                        cards={CARDS_DATA}
+                        cardDim={dimensions.card}
+                        viewportDim={dimensions.viewport}
+                    />
+                )}
             </div>
 
           {/* <div className='relative w-full max-w-screen mx-auto pt-18 p-10 bg-white'>
