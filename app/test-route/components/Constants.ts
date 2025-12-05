@@ -1,31 +1,6 @@
 'use client';
+import { CardData, CardDimensions, Dimensions } from './types';
 
-export interface CardData {
-  id: number;
-  title: string;
-  subtitle: string;
-  tag: string;
-  imageUrl: string;
-  stats: { label: string; value: number }[];
-  bgGradient: string;
-buttonbg: string;
-textcolor: string;
-bgHeading: string;      // NEW: e.g., "SOCIAL VIEW"
-  bgSubheading: string;
-}
-
-export interface Dimensions {
-  width: number;
-  height: number;
-}
-
-export interface CardDimensions {
-  width: number;
-  height: number;
-  imageWidth: number;
-  imageHeight: number;
-  gap: number;
-}
 
 // Ratio constants derived from original design
 const DESIGN_RATIOS = {
@@ -88,45 +63,3 @@ export const CARD_DIMENSIONS: CardDimensions = {
   imageHeight: 139.6,
   gap: 8.5,
 };
-
-export const CARDS_DATA: CardData[] = [
-  {
-    id: 1,
-    title: "Healing Heart",
-    subtitle: "Embercarrier",
-    tag: "Self",
-    imageUrl: '/result/HEALING HEART.png',
-    stats: [],
-    bgGradient: '/result/HEALING HEART (2).png',
-    buttonbg:  'bg-[#0198ac]',
-    textcolor: 'text-[#0198ac]',
-    bgHeading: "SELF IMAGE",
-  bgSubheading: "HOW YOU SEE YOURSELF"
-  },
-  {
-    id: 2,
-    title: "Restless Mind",
-    subtitle: "Signal Finder",
-    tag: "World",
-    imageUrl: "/result/RESTLESS MIND.png",
-    stats: [],
-    bgGradient: "/result/RESTLESS MIND (2).png",
-    buttonbg: 'bg-[#1a5a7e]',
-    textcolor: 'text-[#1a5a7e]',
-    bgHeading: "ASPIRATION",
-  bgSubheading: "HOW YOU ASPIRE TO BE"
-  },
-  {
-    id: 3,
-    title: "Hidden Thinker",
-    subtitle: "Quiet Prodigy",
-    tag: "Aspire",
-    imageUrl: "/result/HIDDEN THINKER (2).png",
-    stats: [],
-    bgGradient: "/result/HIDDEN THINKER (3).png",
-    buttonbg: 'bg-[#043974]',
-    textcolor: 'text-[#043974]',
-    bgHeading: "SOCIAL VIEW",
-  bgSubheading: "HOW THE WORLD SEES YOU"
-  }
-];
