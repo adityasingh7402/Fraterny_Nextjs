@@ -136,5 +136,3 @@ export const mockData = {
     },
     "depth_score":42
 };
-
-export default mockData;

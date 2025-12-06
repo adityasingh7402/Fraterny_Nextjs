@@ -6,7 +6,8 @@ import { Tooltip } from './Tooltip';
 import { ChevronDown, ChevronUp, LockIcon } from 'lucide-react';
 import CardCarousel from './CardCarousal';
 import { VIEWPORT_DIMENSIONS, CARD_DIMENSIONS, calculateDimensions } from './Constants';
-import { CARDS_DATA, mockData } from './CardData';
+import { CARDS_DATA } from './CardData';
+import mockData from '@/app/quest/reflection/[userId]/[sessionId]/[testId]/components/mock-data';
 import { Skeleton } from "@/components/ui/skeleton"
 
 function TestPage() {
