@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import Script  from 'next/script';
+import Script from 'next/script';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -34,12 +34,12 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://fraterny.com/quest',
+    canonical: 'https://fraterny.com/terms-of-use',
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://fraterny.com/quest',
+    url: 'https://fraterny.com/terms-of-use',
     title: 'Quest — Open-ended Intospection',
     description: 'Private prompts. Your words compose your file.',
     siteName: 'Fraterny',
@@ -65,44 +65,44 @@ export const metadata: Metadata = {
   },
 };
 const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: 'Quest — Open-ended Introspection',
-    description: 'Private prompt flow that composes a personal fragment from the user’s written answers',
-    url: 'https://fraterny.com',
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: 'https://fraterny.com/search?q={search_term_string}',
-      },
-      'query-input': 'required name=search_term_string',
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Quest — Open-ended Introspection',
+  description: 'Private prompt flow that composes a personal fragment from the user’s written answers',
+  url: 'https://fraterny.com',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: 'https://fraterny.com/search?q={search_term_string}',
     },
-    sameAs: [
-      'https://x.com/frat_erny',
-      'https://linkedin.com/company/fraterny',
-      'https://www.instagram.com/quest.fraterny/',
-    ],
-  };
+    'query-input': 'required name=search_term_string',
+  },
+  sameAs: [
+    'https://x.com/frat_erny',
+    'https://linkedin.com/company/fraterny',
+    'https://www.instagram.com/quest.fraterny/',
+  ],
+};
 
-  const organizationJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'Quest — Open-ended Introspection',
-    description: 'Private prompt flow that composes a personal fragment from the user’s written answers',
-    url: 'https://fraterny.com',
-    logo: 'https://fraterny.com/favicon-32x32.png',
-    contactPoint: {
-      '@type': 'ContactPoint',
-      email: 'contact@fraterny.com',
-      contactType: 'Customer Service',
-    },
-    sameAs: [
-      'https://x.com/frat_erny',
-      'https://linkedin.com/company/fraterny',
-      'https://www.instagram.com/quest.fraterny/',
-    ],
-  };
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Quest — Open-ended Introspection',
+  description: 'Private prompt flow that composes a personal fragment from the user’s written answers',
+  url: 'https://fraterny.com',
+  logo: 'https://fraterny.com/favicon-32x32.png',
+  contactPoint: {
+    '@type': 'ContactPoint',
+    email: 'contact@fraterny.com',
+    contactType: 'Customer Service',
+  },
+  sameAs: [
+    'https://x.com/frat_erny',
+    'https://linkedin.com/company/fraterny',
+    'https://www.instagram.com/quest.fraterny/',
+  ],
+};
 
 export default function Layout({
   children,
@@ -110,20 +110,20 @@ export default function Layout({
   children: React.ReactNode;
 }) {
   return (
-      <div>
-        <Script
-          id="website-jsonld"
-          type="application/ld+json"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-        <Script
-          id="organization-jsonld"
-          type="application/ld+json"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-        />
-        {children}
-      </div>
+    <div>
+      <Script
+        id="website-jsonld"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <Script
+        id="organization-jsonld"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
+      {children}
+    </div>
   );
 }
