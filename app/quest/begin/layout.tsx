@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import Script  from 'next/script';
+import Script from 'next/script';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -34,12 +34,12 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://fraterny.com/quest/quest-mode',
+    canonical: 'https://fraterny.com/quest/begin',
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://fraterny.com/quest/quest-mode',
+    url: 'https://fraterny.com/quest/begin',
     title: 'Quest Mode — Your Psychological File | Fraterny',
     description: 'A private, aesthetic psychological file built from your words. Preview a fragment free; keep your full copy if it feels true.',
     siteName: 'Fraterny',
@@ -60,49 +60,55 @@ export const metadata: Metadata = {
     creator: '@frat_erny',
   },
   icons: {
-    icon: '/Questfavicon.ico',
-    apple: '/Questfavicon.ico',
+    icon: [
+      { url: '/favicon-32x32.png' },
+      { url: '/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
+    ],
+    apple: [
+      { url: '/favicon-32x32.png' },
+    ],
+    shortcut: '/favicon.ico',
   },
 };
 const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: 'Fraterny — Quest Mode',
-    description: 'Quest composes confidential psychological files from user-written answers. Preview a fragment; access your full edition when ready.',
-    url: 'https://fraterny.com',
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: 'https://fraterny.com/search?q={search_term_string}',
-      },
-      'query-input': 'required name=search_term_string',
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Fraterny — Quest Mode',
+  description: 'Quest composes confidential psychological files from user-written answers. Preview a fragment; access your full edition when ready.',
+  url: 'https://fraterny.com',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: 'https://fraterny.com/search?q={search_term_string}',
     },
-    sameAs: [
-      'https://x.com/frat_erny',
-      'https://linkedin.com/company/fraterny',
-      'https://www.instagram.com/quest.fraterny/',
-    ],
-  };
+    'query-input': 'required name=search_term_string',
+  },
+  sameAs: [
+    'https://x.com/frat_erny',
+    'https://linkedin.com/company/fraterny',
+    'https://www.instagram.com/quest.fraterny/',
+  ],
+};
 
-  const organizationJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'Fraterny',
-    description: 'Quest by Fraterny composes aesthetic intelligence files—private psychological artifacts built from your words.',
-    url: 'https://fraterny.com',
-    logo: 'https://www.fraterny.com/og-image2.png',
-    contactPoint: {
-      '@type': 'ContactPoint',
-      email: 'support@fraterny.com',
-      contactType: 'Support Service',
-    },
-    sameAs: [
-      'https://x.com/frat_erny',
-      'https://linkedin.com/company/fraterny',
-      'https://www.instagram.com/quest.fraterny/',
-    ],
-  };
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Fraterny',
+  description: 'Quest by Fraterny composes aesthetic intelligence files—private psychological artifacts built from your words.',
+  url: 'https://fraterny.com',
+  logo: 'https://www.fraterny.com/og-image2.png',
+  contactPoint: {
+    '@type': 'ContactPoint',
+    email: 'support@fraterny.com',
+    contactType: 'Support Service',
+  },
+  sameAs: [
+    'https://x.com/frat_erny',
+    'https://linkedin.com/company/fraterny',
+    'https://www.instagram.com/quest.fraterny/',
+  ],
+};
 
 export default function QuestLayout({
   children,
@@ -110,20 +116,20 @@ export default function QuestLayout({
   children: React.ReactNode;
 }) {
   return (
-      <div>
-        <Script
-          id="website-jsonld"
-          type="application/ld+json"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-        <Script
-          id="organization-jsonld"
-          type="application/ld+json"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-        />
-        {children}
-      </div>
+    <div>
+      <Script
+        id="website-jsonld"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <Script
+        id="organization-jsonld"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
+      {children}
+    </div>
   );
 }
