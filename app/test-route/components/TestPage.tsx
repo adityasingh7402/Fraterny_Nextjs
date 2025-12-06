@@ -7,6 +7,7 @@ import { ChevronDown, ChevronUp, LockIcon } from 'lucide-react';
 import CardCarousel from './CardCarousal';
 import { VIEWPORT_DIMENSIONS, CARD_DIMENSIONS, calculateDimensions } from './Constants';
 import { CARDS_DATA } from './CardData';
+import mockData from '@/app/quest/reflection/[userId]/[sessionId]/[testId]/components/mock-data';
 import { Skeleton } from "@/components/ui/skeleton"
 
 function TestPage() {
@@ -136,6 +137,84 @@ function TestPage() {
               </div>
             </motion.h1>
           </div> */}
+
+          {/* variations1  */}
+
+          <div className='relative w-full max-w-4xl mx-auto pt-20 pb-16 px-6 md:px-12 lg:px-16 bg-[#fafaf9]'>
+            {/* Byline Section */}
+            <div className="flex items-center justify-between mb-8 pb-6 border-b border-neutral-300">
+                <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-transparent flex items-center justify-center">
+                    <span className="text-white font-gilroy-bold text-xs">
+                        <img src='/quillpen.png' className=''/>
+                    </span>
+                </div>
+                <div>
+                    <p className="text-xs font-gilroy-semibold text-neutral-800">Published by Quest</p>
+                    <p className="text-xs font-gilroy-regular text-neutral-500"> {new Date().toLocaleDateString()} • 2 min read</p>
+                </div>
+                </div>
+                <div className="hidden md:block text-xs font-gilroy-regular text-neutral-400">
+                Pattern Analysis
+                </div>
+            </div>
+
+            {/* Eyebrow */}
+            <div className="mb-3">
+                <span className="text-xs md:text-sm uppercase tracking-[0.3em] text-neutral-500 font-gilroy-regular">
+                Primary Pattern
+                </span>
+            </div>
+
+            {/* Main Headline */}
+            <h1 className="mb-1 text-4xl md:text-5xl lg:text-6xl font-gilroy-bold tracking-tight text-neutral-900 leading-[1.1]">
+                Your <span className='text-neutral-400'>Primary</span> Pattern
+            </h1>
+
+            {/* Contributor Line */}
+            <p className="text-sm font-gilroy-regular text-neutral-600 mb-10 pb-8 border-b border-neutral-200">
+                Insights compiled for your personal journey
+            </p>
+
+            {/* Body Text with Drop Cap */}
+            <div className="prose prose-lg max-w-none">
+                <p className="text-neutral-700 font-gilroy-regular text-base md:text-lg leading-relaxed">
+                <span className="float-left text-6xl md:text-7xl font-gilroy-bold text-neutral-800 leading-none mr-2 mt-1">
+                    Y
+                </span>
+                {mockData.primary_pattern.substring(1)}
+                </p>
+            </div>
+
+            {/* Pull Quote */}
+            <div className="my-12 py-8 border-l-4 border-neutral-800 pl-6">
+                <p className="text-xl md:text-2xl font-gilroy-light text-neutral-700 leading-relaxed">
+                "{mockData.core_line}"
+                </p>
+            </div>
+
+            {/* Footer Metadata */}
+            <div className="mt-12 pt-6 border-t border-neutral-200 flex flex-wrap gap-2 items-center text-xs font-gilroy-regular text-neutral-500">
+                <span>Filed under:</span>
+                <span className="px-3 py-1 bg-neutral-200 rounded-full text-neutral-700">Self-Discovery</span>
+                <span className="px-3 py-1 bg-neutral-200 rounded-full text-neutral-700">Pattern Analysis</span>
+            </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
           {/* <div className='relative w-full max-w-screen pt-18 p-10 bg-white'>
             <motion.h1 className="mb-5 text-left">

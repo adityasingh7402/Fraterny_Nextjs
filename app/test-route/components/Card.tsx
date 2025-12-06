@@ -2,6 +2,7 @@
 import React from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CardData, CardDimensions, CardProps } from './types';
+import {LogOut} from 'lucide-react'
 
 
 
@@ -59,18 +60,18 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
 
       <motion.div 
         {...(isExpanded && { layoutId: `card-info-${data.id}` })}
-        className="flex-1 w-full flex flex-col items-start justify-start relative z-10 px-6 pt-4"
+        className="flex-1 w-full flex flex-col items-start justify-start relative z-10 px-6"
         >
         <motion.div 
             {...(isExpanded && { layoutId: `card-title-${data.id}` })}
-            className={`${data.textcolor} text-2xl font-gilroy-semibold uppercase tracking-tighter`}
+            className={`${data.textcolor} text-3xl font-gilroy-semibold uppercase tracking-tighter`}
         >
             {data.title}
         </motion.div>
         
         <motion.div 
             {...(isExpanded && { layoutId: `card-subtitle-${data.id}` })}
-            className={`mt-10 ${data.textcolor} text-sm font-gilroy-regular uppercase tracking-[0.05rem]`}
+            className={`mt-4 ${data.textcolor} text-[12px] font-gilroy-regular uppercase tracking-[0.05rem]`}
         >
             Currently Inclined
         </motion.div>
@@ -98,41 +99,43 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
                 e.stopPropagation();
                 setIsExpanded(false);
                 }}
-                className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 transition-colors z-40"
+                className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center z-40"
             >
-                <svg className="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <span>{data.icon}</span>
             </button>
 
             {/* Expanded Content */}
             <motion.div 
                 layoutId={`card-info-${data.id}`} 
-                className="flex-1 w-full flex flex-col items-start justify-start"
+                className="flex-1 w-full flex flex-col items-start justify-start pt-2"
             >
                 <motion.div 
                 layoutId={`card-title-${data.id}`} 
-                className={`${data.textcolor} text-2xl font-gilroy-semibold uppercase tracking-tighter`}
+                className={`${data.textcolor} text-4xl font-gilroy-semibold uppercase tracking-tighter`}
                 >
                 {data.title}
                 </motion.div>
                 
                 <motion.div 
                 layoutId={`card-subtitle-${data.id}`} 
-                className='mt-4 text-gray-600 text-lg font-gilroy-regular uppercase tracking-[0.15rem]'
+                className='mt-4 text-gray-600 text-[15px] font-gilroy-regular uppercase tracking-[0.1rem]'
                 >
                 Currently Inclined
                 </motion.div>
                 
                 <motion.div 
                 layoutId={`card-tag-${data.id}`} 
-                className={`mt-1 text-md font-gilroy-regular px-3 py-2 rounded-xl ${data.buttonbg} text-white`}
+                className={`mt-1 text-xl font-gilroy-regular px-8 py-2 rounded-xl ${data.buttonbg} text-white`}
                 >
                 {data.subtitle}
                 </motion.div>
 
+                <div className="mt-6 flex-1 w-full overflow-y-auto">
+                    {data.content}
+                </div>
+
                 {/* Stats - if available */}
-                {data.stats && data.stats.length > 0 && (
+                {/* {data.stats && data.stats.length > 0 && (
                 <div className="mt-6 w-full space-y-2">
                     {data.stats.map((stat, index) => (
                     <div key={index} className="flex justify-between items-center">
@@ -141,7 +144,7 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
                     </div>
                     ))}
                 </div>
-                )}
+                )} */}
             </motion.div>
             </motion.div>
         )}
