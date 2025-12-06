@@ -26,13 +26,7 @@ export const calculateDimensions = (viewportWidth: number): {
   const imageHeight = Math.round(imageWidth * DESIGN_RATIOS.imageAspect);
   const gap = Math.round(cardWidth * DESIGN_RATIOS.gapRatio);
 
-  console.log('📐 Calculated Dimensions:', {
-    inputWidth: viewportWidth,
-    rounded: roundedViewportWidth,
-    viewport: { width: roundedViewportWidth, height: viewportHeight },
-    card: { width: cardWidth, height: cardHeight },
-    image: { width: imageWidth, height: imageHeight }
-  });
+
 
   return {
     viewport: {

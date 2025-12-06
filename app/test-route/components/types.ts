@@ -1,15 +1,19 @@
+import React from "react";
+
 export interface CardData {
   id: number;
-  title: string;
+  title: React.ReactNode;
   subtitle: string;
   tag: string;
   imageUrl: string;
   stats: { label: string; value: number }[];
   bgGradient: string;
-buttonbg: string;
-textcolor: string;
-bgHeading: string;
-  bgSubheading: string;
+  icon: React.ReactNode;
+  buttonbg: string;
+  textcolor: string;
+  bgHeading: React.ReactNode;
+  bgSubheading: React.ReactNode;
+  content: React.ReactNode;
 }
 
 export interface Dimensions {
