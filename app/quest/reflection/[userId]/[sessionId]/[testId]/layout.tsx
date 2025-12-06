@@ -13,14 +13,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: 'Your Quest Results | Personality Assessment',
     description: 'View your personalized Quest assessment results with detailed insights into your personality, strengths, and recommendations.',
-    
-    // Favicon (browser tab icon)
+
     icons: {
-      icon: '/Questfavicon.ico',
-      shortcut: '/Questfavicon.ico',
-      apple: '/apple-touch-icon.png',
+      icon: [
+        { url: '/favicon-32x32.png' },
+        { url: '/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
+      ],
+      apple: [
+        { url: '/favicon-32x32.png' },
+      ],
+      shortcut: '/favicon.ico',
     },
-    
+
     // Social media preview images
     openGraph: {
       title: 'Quest Assessment Results',

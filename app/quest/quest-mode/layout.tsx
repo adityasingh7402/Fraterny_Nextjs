@@ -63,8 +63,14 @@ export const metadata: Metadata = {
     creator: '@frat_erny',
   },
   icons: {
-    icon: '/Questfavicon.ico',
-    apple: '/Questfavicon.ico',
+    icon: [
+      { url: '/favicon-32x32.png' },
+      { url: '/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
+    ],
+    apple: [
+      { url: '/favicon-32x32.png' },
+    ],
+    shortcut: '/favicon.ico',
   },
 };
 const jsonLd = {
