@@ -90,7 +90,7 @@ export default function BlogPostClient({ post }: Props) {
             <div className="mb-8 rounded-lg overflow-hidden">
               <ResponsiveImage
                 dynamicKey={post.image_key}
-                alt={post.title}
+                alt={post.featured_image_alt || post.title}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="w-full h-auto"
                 loading="eager"

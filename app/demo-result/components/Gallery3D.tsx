@@ -25,7 +25,7 @@ const cards: CardData[] = [
         background: "/result/SOUL ALIGNED (4).webp",
         subtitle: "SELF IMAGE",
         title: "SOUL ALIGNED",
-        description: "A breathtaking futuristic cityscape where technology meets dreams.",
+        description: "The Healing Heart is someone who makes a room feel safe just by walking into it.\n\nPsychologically, this energy combines:\n• Approach orientation to recovery\n• Rhythmic regulation\n• Realistic optimism\n\nYour personal psychological artifact discusses how the Healing Heart mask and your current inclination affects you in great detail.",
         included: "Quiet Beacon",
         color: "#4dbdfc",
         categoryText: "HOW YOU SEE YOURSELF"
@@ -36,7 +36,7 @@ const cards: CardData[] = [
         background: "/result/RESTLESS MIND (4).webp",
         subtitle: "SOCIAL VIEW",
         title: "RESTLESS MIND",
-        description: "Mystical temples hidden in nature's embrace, waiting to be discovered.",
+        description: "The Healing Heart is someone who makes a room feel safe just by walking into it.\n\nPsychologically, this energy combines:\n• Approach orientation to recovery\n• Rhythmic regulation\n• Realistic optimism\n\nYour personal psychological artifact discusses how the Healing Heart mask and your current inclination affects you in great detail.",
         included: "SIGNAL FINDER",
         color: "#04486f",
         categoryText: "HOW THE WORLD SEES YOU"
@@ -47,7 +47,7 @@ const cards: CardData[] = [
         background: "/result/HIDDEN THINKER (5).webp",
         subtitle: "ASPIRATION",
         title: "HIDDEN THINKER",
-        description: "Journey through the infinite beauty of the universe's celestial wonders.",
+        description: "The Healing Heart is someone who makes a room feel safe just by walking into it.\n\nPsychologically, this energy combines:\n• Approach orientation to recovery\n• Rhythmic regulation\n• Realistic optimism\n\nYour personal psychological artifact discusses how the Healing Heart mask and your current inclination affects you in great detail.",
         included: "Quiet Prodigy",
         color: "#043974",
         categoryText: "WHAT YOU ASPIRE TO BE"
@@ -58,7 +58,7 @@ const cards: CardData[] = [
         background: "/result/STRATEGIST (4).webp",
         subtitle: "ASPIRATION",
         title: "The Strategist",
-        description: "Journey through the infinite beauty of the universe's celestial wonders.",
+        description: "The Healing Heart is someone who makes a room feel safe just by walking into it.\n\nPsychologically, this energy combines:\n• Approach orientation to recovery\n• Rhythmic regulation\n• Realistic optimism\n\nYour personal psychological artifact discusses how the Healing Heart mask and your current inclination affects you in great detail.",
         included: "MIN-MAXER",
         color: "#000000",
         categoryText: "WHAT YOU ASPIRE TO BE"
@@ -69,7 +69,7 @@ const cards: CardData[] = [
         background: "/result/HEALING HEART (4).webp",
         subtitle: "ASPIRATION",
         title: "Healing Heart",
-        description: "Journey through the infinite beauty of the universe's celestial wonders.",
+        description: "The Healing Heart is someone who makes a room feel safe just by walking into it.\n\nPsychologically, this energy combines:\n• Approach orientation to recovery\n• Rhythmic regulation\n• Realistic optimism\n\nYour personal psychological artifact discusses how the Healing Heart mask and your current inclination affects you in great detail.",
         included: "Embercarrier",
         color: "#0198ac",
         categoryText: "WHAT YOU ASPIRE TO BE"
@@ -80,7 +80,7 @@ const cards: CardData[] = [
         background: "/result/FREE SPIRIT (4).webp",
         subtitle: "ASPIRATION",
         title: "The Free Spirit",
-        description: "Journey through the infinite beauty of the universe's celestial wonders.",
+        description: "The Healing Heart is someone who makes a room feel safe just by walking into it.\n\nPsychologically, this energy combines:\n• Approach orientation to recovery\n• Rhythmic regulation\n• Realistic optimism\n\nYour personal psychological artifact discusses how the Healing Heart mask and your current inclination affects you in great detail.",
         included: "OFFSCRIPT",
         color: "#545454",
         categoryText: "WHAT YOU ASPIRE TO BE"
