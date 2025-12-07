@@ -70,7 +70,7 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
     // Container size classes - utilizing Tailwind responsive prefixes
     const getContainerSizeClasses = () => {
         if (isExpanded && isActive) {
-            return "w-[85vw] md:w-[90vw] md:max-w-[900px]";
+            return "w-[85vw] md:w-[90vw] md:max-w-[1050px]";
         }
         return "w-[75vw] md:w-[450px]";
     };
@@ -79,7 +79,7 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
     const getCardSizeClasses = () => {
         // When expanded, make image 20% smaller
         if (isExpanded && isActive) {
-            return "w-[64vw] md:w-[280px] aspect-[3/4]";
+            return "w-[64vw] md:w-[380px] aspect-[3/4]";
         }
         return "lg:w-[80%] w-[100%] aspect-[3/4]";
     };
@@ -153,12 +153,12 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                 </div>
 
                 {/* White Card - Contains ONLY the image */}
-                <div className={`clean-card overflow-hidden transition-all duration-500 ${getCardSizeClasses()} ${isExpanded && isActive ? 'md:flex-shrink-0' : ''}`}>
-                    <div className="relative w-full h-full bg-white py-2 rounded-3xl">
+                <div className={`clean-card overflow-hidden transition-all duration-500 ${getCardSizeClasses()} ${isExpanded && isActive ? 'md:shrink-0' : ''}`}>
+                    <div className={`relative w-full h-full py-2 bg-white rounded-3xl ${isExpanded && isActive ? '' : 'py-2'}`}>
                         <motion.img
                             src={image}
                             alt={title}
-                            className="w-full h-full object-contain p-2 md:p-3"
+                            className={`w-full h-full object-contain ${isExpanded && isActive ? 'p-1' : 'p-2 md:p-3'}`}
                             initial={false}
                             animate={{
                                 scale: isExpanded && isActive ? 1 : 1.05,
@@ -188,7 +188,7 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                 <div className={`transition-all duration-500 w-full text-center mt-5 ${isExpanded && isActive ? 'md:flex-1 md:text-left md:bg-white md:rounded-3xl md:p-8 md:flex md:flex-col md:justify-start md:shadow-lg md:mt-0 md:w-auto' : 'md:mt-8'}`}>
                     <div className={`${!isActive ? 'hidden md:block' : ''}`}>
                         <motion.h2
-                            className="font-gilroy-bold uppercase tracking-wider"
+                            className="font-gilroy-bold uppercase"
                             style={{ color: color }}
                             initial={false}
                             animate={{
@@ -214,8 +214,8 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                         >
                             {/* Description - 2-3 lines */}
                             <p
-                                className={`font-gilroy-regular text-sm md:text-base leading-relaxed mb-4 md:mb-5 ${isMobile ? 'max-w-md mx-auto' : ''}`}
-                                style={{ color: color }}
+                                className={`font-gilroy-regular text-sm md:text-base leading-relaxed mb-4 md:mb-5 whitespace-pre-line ${isMobile ? 'max-w-md mx-auto' : ''}`}
+                                style={{ color: '#000000' }}
                             >
                                 {description}
                             </p>
@@ -228,7 +228,7 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                             </p>
 
                             <motion.button
-                                className="px-8 md:px-10 py-3 md:py-3.5 text-white rounded-full font-gilroy-bold text-sm md:text-base uppercase tracking-wider"
+                                className="px-8 md:px-10 py-3 md:py-3.5 text-white rounded-full font-gilroy-regular text-base uppercase"
                                 style={{ backgroundColor: color }}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}

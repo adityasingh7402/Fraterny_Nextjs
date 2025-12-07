@@ -39,10 +39,10 @@ const BlogList = ({ blogPosts, isLoading, error, onEdit, refetch }: BlogListProp
       const result = await response.json();
 
       if (!result.success) throw new Error(result.error);
-      
+
       // Refetch admin blog posts
       await refetch();
-      
+
       toast.success('Blog post deleted successfully');
     } catch (error) {
       console.error('Error deleting blog post:', error);
@@ -53,7 +53,7 @@ const BlogList = ({ blogPosts, isLoading, error, onEdit, refetch }: BlogListProp
   const handleTogglePublish = async (post: BlogPost) => {
     const newStatus = !post.published;
     const actionText = newStatus ? 'publish' : 'unpublish';
-    
+
     try {
       const response = await fetch('/api/admin/blog', {
         method: 'PUT',
@@ -81,9 +81,9 @@ const BlogList = ({ blogPosts, isLoading, error, onEdit, refetch }: BlogListProp
       const result = await response.json();
 
       if (!result.success) throw new Error(result.error);
-      
+
       await refetch();
-      
+
       toast.success(`Blog post ${actionText}ed successfully`);
     } catch (error) {
       console.error(`Error ${actionText}ing blog post:`, error);
@@ -92,18 +92,18 @@ const BlogList = ({ blogPosts, isLoading, error, onEdit, refetch }: BlogListProp
   };
 
   // Helper function to parse PostgreSQL array strings
-const parsePostgresArray = (value: any): string[] => {
-  if (Array.isArray(value)) return value;
-  if (!value) return [];
-  if (typeof value === 'string') {
-    // Remove curly braces and parse
-    const cleaned = value.replace(/^\{|\}$/g, '');
-    if (!cleaned) return [];
-    // Split by comma, handle quoted strings
-    return cleaned.match(/(?:[^,"]+|"[^"]*")+/g)?.map(s => s.replace(/^"|"$/g, '').trim()) || [];
-  }
-  return [];
-};
+  const parsePostgresArray = (value: any): string[] => {
+    if (Array.isArray(value)) return value;
+    if (!value) return [];
+    if (typeof value === 'string') {
+      // Remove curly braces and parse
+      const cleaned = value.replace(/^\{|\}$/g, '');
+      if (!cleaned) return [];
+      // Split by comma, handle quoted strings
+      return cleaned.match(/(?:[^,"]+|"[^"]*")+/g)?.map(s => s.replace(/^"|"$/g, '').trim()) || [];
+    }
+    return [];
+  };
 
   // Status labels for blog posts
   const getStatusLabel = (post: BlogPost) => {
@@ -133,7 +133,7 @@ const parsePostgresArray = (value: any): string[] => {
                   <div className="flex-shrink-0 w-24 h-24 rounded overflow-hidden bg-gray-100">
                     <ResponsiveImage
                       dynamicKey={post.image_key}
-                      alt={post.title}
+                      alt={post.featured_image_alt || post.title}
                       sizes="small"
                       className="w-full h-full object-cover"
                     />
@@ -143,7 +143,7 @@ const parsePostgresArray = (value: any): string[] => {
                     No image
                   </div>
                 )}
-                
+
                 <div className="flex-grow">
                   <div className="flex justify-between items-start">
                     <div>
@@ -203,7 +203,7 @@ const parsePostgresArray = (value: any): string[] => {
           ))
         )}
       </div>
-      
+
       {/* Preview Modal */}
       {previewPost && (
         <BlogPreviewModal

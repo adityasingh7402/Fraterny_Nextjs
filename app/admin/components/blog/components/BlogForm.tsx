@@ -53,23 +53,23 @@ const BlogForm = ({ editingId, formValues, setFormValues, setEditingId, onSucces
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-  const { name, value, type } = e.target;
-  const checked = 'checked' in e.target ? e.target.checked : undefined;
-  
-  setFormValues(prev => {
-    const newValues = {
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    };
-    
-    // Auto-generate slug when title changes (only if slug is empty)
-    if (name === 'title' && !prev.slug) {
-      newValues.slug = generateSlug(value);
-    }
-    
-    return newValues;
-  });
-};
+    const { name, value, type } = e.target;
+    const checked = 'checked' in e.target ? e.target.checked : undefined;
+
+    setFormValues(prev => {
+      const newValues = {
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value
+      };
+
+      // Auto-generate slug when title changes (only if slug is empty)
+      if (name === 'title' && !prev.slug) {
+        newValues.slug = generateSlug(value);
+      }
+
+      return newValues;
+    });
+  };
 
 
   const handleAddTag = () => {
@@ -92,7 +92,7 @@ const BlogForm = ({ editingId, formValues, setFormValues, setEditingId, onSucces
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    
+
     if (!file.type.startsWith('image/')) {
       toast.error('Please select an image file');
       return;
@@ -105,18 +105,19 @@ const BlogForm = ({ editingId, formValues, setFormValues, setEditingId, onSucces
 
     try {
       setUploadingImage(true);
-      const imageKey = `blog-${editingId || Date.now()}`;
+      // Reuse existing key to ensure replacement, otherwise generate new one
+      const imageKey = formValues.image_key || `blog-${editingId || Date.now()}`;
       const title = formValues.title.trim();
-      
+
       console.log('Preparing upload with title:', title);
-      
+
       const formData = new FormData();
       formData.append('file', file);
       formData.append('key', imageKey);
       formData.append('description', `Image for blog: ${title}`);
-      formData.append('alt_text', title);
+      formData.append('alt_text', formValues.featured_image_alt || title);
       formData.append('category', 'Blog');
-      
+
       console.log('FormData contents:', {
         file: formData.get('file'),
         key: formData.get('key'),
@@ -147,7 +148,7 @@ const BlogForm = ({ editingId, formValues, setFormValues, setEditingId, onSucces
       setUploadingImage(false);
     }
   };
-  
+
   const handleRemoveImage = () => {
     setFormValues(prev => ({
       ...prev,
@@ -170,7 +171,7 @@ const BlogForm = ({ editingId, formValues, setFormValues, setEditingId, onSucces
           }),
         });
         const result = await response.json();
-        
+
         if (!result.success) throw new Error(result.error);
         toast.success('Blog post updated successfully');
       } else {
@@ -180,17 +181,17 @@ const BlogForm = ({ editingId, formValues, setFormValues, setEditingId, onSucces
           body: JSON.stringify(formValues),
         });
         const result = await response.json();
-        
+
         if (!result.success) throw new Error(result.error);
         toast.success('Blog post created successfully');
       }
 
-      setFormValues({ 
-        title: '', 
-        content: '', 
-        category: '', 
-        tags: [], 
-        published: true, 
+      setFormValues({
+        title: '',
+        content: '',
+        category: '',
+        tags: [],
+        published: true,
         image_key: null,
         meta_description: '',
         meta_keywords: [],
@@ -239,13 +240,13 @@ const BlogForm = ({ editingId, formValues, setFormValues, setEditingId, onSucces
           <label className="block text-sm font-medium text-gray-700 mb-3">
             Featured Image
           </label>
-          
+
           {formValues.image_key ? (
             <div className="mb-4">
               <div className="relative w-full max-w-md aspect-video mb-2 rounded overflow-hidden bg-gray-100">
                 <ResponsiveImage
                   dynamicKey={formValues.image_key}
-                  alt={formValues.title || "Blog featured image"}
+                  alt={formValues.featured_image_alt || formValues.title || "Blog featured image"}
                   className="w-full h-full object-cover"
                   sizes="medium"
                 />
@@ -265,7 +266,7 @@ const BlogForm = ({ editingId, formValues, setFormValues, setEditingId, onSucces
               <p className="mt-1 text-sm text-gray-500">Upload a featured image for your blog post</p>
             </div>
           )}
-          
+
           <div className="mt-2">
             <label className="inline-flex items-center px-4 py-2 bg-navy text-white rounded-md hover:bg-opacity-90 transition-colors cursor-pointer">
               <Upload size={16} className="mr-2" />
@@ -329,8 +330,8 @@ const BlogForm = ({ editingId, formValues, setFormValues, setEditingId, onSucces
           {formValues.tags.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-2">
               {formValues.tags.map(tag => (
-                <span 
-                  key={tag} 
+                <span
+                  key={tag}
                   className="inline-flex items-center px-3 py-1.5 rounded-full text-sm bg-orange-100 text-orange-700"
                 >
                   '{tag}'
@@ -363,7 +364,7 @@ const BlogForm = ({ editingId, formValues, setFormValues, setEditingId, onSucces
         {/* SEO Section */}
         <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
           <h3 className="text-lg font-medium text-gray-900 mb-4">SEO Settings</h3>
-          
+
           <div className="space-y-4">
             {/* Meta Description */}
             <div>
@@ -397,8 +398,8 @@ const BlogForm = ({ editingId, formValues, setFormValues, setEditingId, onSucces
                 onChange={(e) => {
                   const value = e.target.value;
                   // Only split and filter when user is not actively typing (on blur or when they finish typing)
-                  setFormValues(prev => ({ 
-                    ...prev, 
+                  setFormValues(prev => ({
+                    ...prev,
                     meta_keywords: value ? value.split(',').map(k => k.trim()) : []
                   }));
                 }}
@@ -520,7 +521,7 @@ const BlogForm = ({ editingId, formValues, setFormValues, setEditingId, onSucces
           </button>
         </div>
       </form>
-      
+
       {/* Preview Modal */}
       <BlogPreviewModal
         post={{
