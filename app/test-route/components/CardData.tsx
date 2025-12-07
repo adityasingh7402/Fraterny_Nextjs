@@ -5,7 +5,10 @@ import React from 'react';
 export const CARDS_DATA: CardData[] = [
   {
     id: 1,
-    title: <>HEALING <br /> HEART</>,
+    title: <div className="flex flex-col items-start leading-6">
+     <p className="pb-2"> HEALING</p>
+     <p> HEART </p>
+    </div>,
     subtitle: "Embercarrier",
     tag: "Self",
     imageUrl: '/result/HEALING HEART.webp',
@@ -17,7 +20,7 @@ export const CARDS_DATA: CardData[] = [
     bgHeading: <> SELF VIEW </>,
     bgSubheading: <> HOW YOU SEE YOURSELF </>,
     content: <div className="">
-      <p className="text-sm font-gilroy-light text-gray-800 mb-3">
+      <p className="text-sm font-gilroy-light text-gray-800 mb-1">
         The Healing Heart is someone who makes a room feel safe just by walking into it.
       </p>
       
@@ -25,7 +28,7 @@ export const CARDS_DATA: CardData[] = [
         Psychologically, this energy combines:
       </p>
       
-      <ul className="list-disc ml-6 mb-3 text-sm font-gilroy-light">
+      <ul className="list-disc ml-6 mb-1 text-sm font-gilroy-light">
         <li className=" text-gray-800 text-sm font-gilroy-light">Approach orientation to recovery</li>
         <li className=" text-gray-800 text-sm font-gilroy-light">Rhythmic regulation</li>
         <li className=" text-gray-800 text-sm font-gilroy-light">Realistic optimism</li>
@@ -38,7 +41,10 @@ export const CARDS_DATA: CardData[] = [
   },
   {
     id: 2,
-    title: <>RESTLESS <br /> MIND</>,
+    title: <div className="flex flex-col items-start leading-6">
+     <p className="pb-2"> RESTLESS </p>
+     <p> MIND </p>
+    </div>,
     subtitle: "Signal Finder",
     tag: "World",
     imageUrl: "/result/RESTLESS MIND.webp",
@@ -50,7 +56,7 @@ export const CARDS_DATA: CardData[] = [
     bgHeading: <>ASPIRATION</>,
     bgSubheading: "HOW YOU ASPIRE TO BE",
     content: <>
-      <p className="text-sm font-gilroy-light text-gray-800 mb-6">
+      <p className="text-sm font-gilroy-light text-gray-800 mb-2">
         Restless Minds carry a brain that often feels like a browser with fifty tabs open.
       </p>
       
@@ -58,7 +64,7 @@ export const CARDS_DATA: CardData[] = [
         Psychologically, this energy combines:
       </p>
       
-      <ul className="list-disc ml-6 mb-6 text-sm font-gilroy-light">
+      <ul className="list-disc ml-6 mb-2 text-sm font-gilroy-light">
         <li className="text-gray-800 text-sm font-gilroy-light">Range and Regulation</li>
         <li className="text-gray-800 text-sm font-gilroy-light">Decision Friction</li>
         <li className="text-gray-800 text-sm font-gilroy-light">Creative Motion</li>
@@ -71,19 +77,22 @@ export const CARDS_DATA: CardData[] = [
   },
   {
     id: 3,
-    title: <>HIDDEN <br /> THINKER</>,
+    title: <div className="flex flex-col items-start leading-6">
+     <p className="pb-2"> HIDDEN </p>
+     <p> THINKER </p>
+    </div>,
     subtitle: "Quiet Prodigy",
     tag: "Aspire",
     imageUrl: "/result/HIDDEN THINKER (2).webp",
     icon: <><LogOut className="w-6 h-6 text-[#043974]" /></>,
     stats: [],
-    bgGradient: "/result/HIDDEN THINKER (3).webp",
+    bgGradient: "/result/HIDDEN THINKER (5).webp",
     buttonbg: 'bg-[#043974]',
     textcolor: 'text-[#043974]',
     bgHeading: <>SOCIAL VIEW</>,
     bgSubheading: <>HOW THE WORLD SEES YOU</>,
     content: <>
-    <p className="text-sm font-gilroy-light text-gray-800 mb-6">
+    <p className="text-sm font-gilroy-light text-gray-800 mb-2">
       Hidden Thinkers slow moments down just enough to get them right.
     </p>
     
@@ -91,7 +100,7 @@ export const CARDS_DATA: CardData[] = [
       Psychologically, this energy combines:
     </p>
     
-    <ul className="list-disc ml-6 mb-6 text-sm font-gilroy-light">
+    <ul className="list-disc ml-6 mb-2 text-sm font-gilroy-light">
       <li className="text-gray-800 text-sm font-gilroy-light">Accuracy drive & craftsmanship</li>
       <li className="text-gray-800 text-sm font-gilroy-light">Calm attentional style</li>
       <li className="text-gray-800 text-sm font-gilroy-light">Visibility caution</li>

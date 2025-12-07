@@ -60,11 +60,11 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
 
       <motion.div 
         {...(isExpanded && { layoutId: `card-info-${data.id}` })}
-        className="flex-1 w-full flex flex-col items-start justify-start relative z-10 px-6"
+        className="flex-1 w-full flex flex-col items-start justify-start relative z-10 px-6 py-6"
         >
         <motion.div 
             {...(isExpanded && { layoutId: `card-title-${data.id}` })}
-            className={`${data.textcolor} text-3xl font-gilroy-semibold uppercase tracking-tighter`}
+            className={`${data.textcolor} text-3xl font-gilroy-semibold uppercase tracking-tight`}
         >
             {data.title}
         </motion.div>
@@ -107,11 +107,11 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
             {/* Expanded Content */}
             <motion.div 
                 layoutId={`card-info-${data.id}`} 
-                className="flex-1 w-full flex flex-col items-start justify-start pt-2"
+                className="flex-1 w-full flex flex-col items-start justify-start"
             >
                 <motion.div 
                 layoutId={`card-title-${data.id}`} 
-                className={`${data.textcolor} text-4xl font-gilroy-semibold uppercase tracking-tighter`}
+                className={`${data.textcolor} text-4xl font-gilroy-semibold uppercase tracking-tight`}
                 >
                 {data.title}
                 </motion.div>
