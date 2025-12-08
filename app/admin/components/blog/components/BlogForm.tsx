@@ -42,6 +42,8 @@ const BlogForm = ({ editingId, formValues, setFormValues, setEditingId, onSucces
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [previousImageKey, setPreviousImageKey] = useState<string | null>(null);
+  const [imageVersion, setImageVersion] = useState(0);
 
   const handlePreview = () => {
     // Create a preview post object from current form values
@@ -137,6 +139,22 @@ const BlogForm = ({ editingId, formValues, setFormValues, setEditingId, onSucces
           ...prev,
           image_key: imageKey
         }));
+
+        // Force refresh of image by incrementing version
+        setImageVersion(prev => prev + 1);
+
+        // If we replaced a previous image that had a different key, delete the old one
+        if (previousImageKey && previousImageKey !== imageKey) {
+          console.log('Deleting previous image:', previousImageKey);
+          try {
+            await fetch(`/api/media/delete?key=${previousImageKey}`, {
+              method: 'DELETE',
+            });
+            setPreviousImageKey(null);
+          } catch (err) {
+            console.error('Failed to delete previous image', err);
+          }
+        }
         toast.success('Image uploaded successfully');
       } else {
         throw new Error(result.error || 'Upload failed');
@@ -150,6 +168,9 @@ const BlogForm = ({ editingId, formValues, setFormValues, setEditingId, onSucces
   };
 
   const handleRemoveImage = () => {
+    if (formValues.image_key) {
+      setPreviousImageKey(formValues.image_key);
+    }
     setFormValues(prev => ({
       ...prev,
       image_key: null
@@ -249,6 +270,7 @@ const BlogForm = ({ editingId, formValues, setFormValues, setEditingId, onSucces
                   alt={formValues.featured_image_alt || formValues.title || "Blog featured image"}
                   className="w-full h-full object-cover"
                   sizes="medium"
+                  version={imageVersion}
                 />
                 <button
                   type="button"

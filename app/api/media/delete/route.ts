@@ -12,23 +12,28 @@ export async function DELETE(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
+    const key = searchParams.get('key');
 
-    if (!id) {
+    if (!id && !key) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Image ID is required',
+          error: 'Image ID or Key is required',
         },
         { status: 400 }
       );
     }
 
     // First get the complete image record
-    const { data: image, error: fetchError } = await supabaseAdmin
-      .from('website_images')
-      .select('*')
-      .eq('id', id)
-      .single();
+    let query = supabaseAdmin.from('website_images').select('*');
+
+    if (id) {
+      query = query.eq('id', id);
+    } else if (key) {
+      query = query.eq('key', key);
+    }
+
+    const { data: image, error: fetchError } = await query.single();
 
     if (fetchError || !image) {
       console.error('Error fetching image for deletion:', fetchError);
@@ -67,7 +72,7 @@ export async function DELETE(request: NextRequest) {
     const { error: deleteError } = await supabaseAdmin
       .from('website_images')
       .delete()
-      .eq('id', id);
+      .eq('id', image.id);
 
     if (deleteError) {
       console.error('Error deleting image record:', deleteError);

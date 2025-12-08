@@ -268,6 +268,75 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
+    // 1. Fetch the blog post to get image keys
+    const { data: blogPost, error: fetchError } = await supabaseAdmin
+      .from('blog_posts')
+      .select('image_key, social_image_key')
+      .eq('id', id)
+      .single();
+
+    if (fetchError) {
+      console.error('Error fetching blog post for deletion:', fetchError);
+      // We continue even if fetch fails, to ensure we try to delete the post itself
+    } else if (blogPost) {
+      // 2. Collect keys to delete
+      const keysToDelete = [];
+      if (blogPost.image_key) keysToDelete.push(blogPost.image_key);
+      if (blogPost.social_image_key) keysToDelete.push(blogPost.social_image_key);
+
+      if (keysToDelete.length > 0) {
+        console.log('Found associated images to delete:', keysToDelete);
+
+        // Process each key
+        for (const key of keysToDelete) {
+          try {
+            // Find in website_images
+            const { data: imageRecord } = await supabaseAdmin
+              .from('website_images')
+              .select('id, storage_path, sizes')
+              .eq('key', key)
+              .single();
+
+            if (imageRecord && imageRecord.storage_path) {
+              // Delete from storage
+              const filesToDelete = [imageRecord.storage_path];
+
+              // Also delete optimized versions if they exist
+              if (imageRecord.sizes && typeof imageRecord.sizes === 'object') {
+                const sizes = imageRecord.sizes as Record<string, string>;
+                Object.values(sizes).forEach((path) => {
+                  if (path) filesToDelete.push(path);
+                });
+              }
+
+              const { error: storageError } = await supabaseAdmin.storage
+                .from('website-images')
+                .remove(filesToDelete);
+
+              if (storageError) {
+                console.error(`Error deleting storage files for key ${key}:`, storageError);
+              }
+
+              // Delete from website_images table
+              const { error: dbError } = await supabaseAdmin
+                .from('website_images')
+                .delete()
+                .eq('id', imageRecord.id);
+
+              if (dbError) {
+                console.error(`Error deleting image record for key ${key}:`, dbError);
+              } else {
+                console.log(`Successfully deleted image data for key ${key}`);
+              }
+            }
+          } catch (imgError) {
+            console.error(`Error processing deletion for image key ${key}:`, imgError);
+          }
+        }
+      }
+    }
+
+    // 3. Delete the blog post
     const { error } = await supabaseAdmin
       .from('blog_posts')
       .delete()
