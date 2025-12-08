@@ -19,6 +19,7 @@ interface BulkEmailRequest {
   isHtml: boolean;
   replyTo: string;
   fromName?: string;
+  fromEmail?: string;
 }
 
 interface EmailResult {
@@ -53,7 +54,7 @@ export async function POST(request: NextRequest) {
 
     // Parse request body
     const body: BulkEmailRequest = await request.json();
-    const { recipients, subject, body: emailBody, isHtml, replyTo, fromName } = body;
+    const { recipients, subject, body: emailBody, isHtml, replyTo, fromName, fromEmail: customFromEmail } = body;
 
     // Validate required fields
     if (!recipients || !Array.isArray(recipients) || recipients.length === 0) {
@@ -101,8 +102,11 @@ export async function POST(request: NextRequest) {
     const smtpPort = process.env.MAILTRAP_PORT;
     const smtpUser = process.env.MAILTRAP_USERNAME;
     const smtpPass = process.env.MAILTRAP_PASSWORD;
-    const fromEmail = process.env.FROM_EMAIL;
+    const envFromEmail = process.env.FROM_EMAIL;
     const defaultFromName = process.env.FROM_NAME || 'Fraterny';
+
+    // Use custom from email if provided, otherwise fallback to env
+    const fromEmail = customFromEmail || envFromEmail;
 
     if (!smtpHost || !smtpPort || !smtpUser || !smtpPass || !fromEmail) {
       console.error('Missing SMTP configuration');
