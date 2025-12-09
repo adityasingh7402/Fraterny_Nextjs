@@ -17,30 +17,18 @@ interface Concert {
     description: string;
 }
 
-// Sample data
-const signalsData: any = {
-    "signal1_purpose": "Work-as-safety autopilot",
-    "signal2_purpose": "Disappearing needs",
-    "signal3_purpose": "Deferred grief",
-    "signal4_purpose": "Concepts as armor",
-    "signal5_purpose": "Conditional freedom plan",
-    "signal1_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
-    "signal2_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
-    "signal3_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
-    "signal4_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
-    "signal5_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want."
-};
-
-const concerts: Concert[] = [1, 2, 3, 4, 5].map((id) => ({
-    id,
-    band: signalsData[`signal${id}_purpose`],
-    date: `Signal 0${id}`,
-    venue: "Internal",
-    city: "Pattern",
-    sponsor: "Behavioral Signal",
-    price: 0,
-    description: signalsData[`signal${id}_description`]
-}));
+interface SignalsData {
+    signal1_purpose: string;
+    signal2_purpose: string;
+    signal3_purpose: string;
+    signal4_purpose: string;
+    signal5_purpose: string;
+    signal1_description: string;
+    signal2_description: string;
+    signal3_description: string;
+    signal4_description: string;
+    signal5_description: string;
+}
 
 // Inline styles for the page
 const styles = `
@@ -75,7 +63,7 @@ const ConcertList = ({
     return (
         <div className="h-auto p-6 relative overflow-hidden concert-page" style={{ background: backgroundColor, transition: 'background-color 0.5s ease' }}>
             {/* Content Container */}
-            <div className="relative z-10 max-w-7xl mx-auto pt-12">
+            <div className="relative z-10 max-w-7xl mx-auto py-12">
                 {/* Header */}
                 <motion.div
                     className="max-w-7xl mx-auto pb-12">
@@ -238,10 +226,23 @@ const ConcertDetail = ({
 // Main Page Component
 interface ConcertPageProps {
     backgroundColor?: string;
+    signalsData?: SignalsData;
 }
 
-const ConcertPage = ({ backgroundColor }: ConcertPageProps) => {
+const ConcertPage = ({ backgroundColor, signalsData }: ConcertPageProps) => {
     const [selectedConcert, setSelectedConcert] = useState<Concert | null>(null);
+
+    // Generate concerts array from signals data
+    const concerts: Concert[] = signalsData ? [1, 2, 3, 4, 5].map((id) => ({
+        id,
+        band: signalsData[`signal${id}_purpose` as keyof SignalsData],
+        date: `Signal 0${id}`,
+        venue: "Internal",
+        city: "Pattern",
+        sponsor: "Behavioral Signal",
+        price: 0,
+        description: signalsData[`signal${id}_description` as keyof SignalsData]
+    })) : [];
 
     return (
         <>

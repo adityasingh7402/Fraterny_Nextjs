@@ -8,27 +8,17 @@ import BackgroundImage from "./BackgroundImage";
 
 interface CardData {
     id: number;
-    image: string;
-    background: string;
+    imageUrl: string;
+    bgGradient: string;
     subtitle: string;
-    title: string;
-    description: string;
-    included: string;
-    color: string;
-    categoryText: string;
+    title: React.ReactNode;
+    content: React.ReactNode;
+    buttonbg: string;
+    textcolor: string;
+    bgHeading: React.ReactNode;
+    bgSubheading: React.ReactNode;
+    tag: string;
 }
-
-import { GALLERY_CARDS } from "./GalleryData";
-
-const cards: CardData[] = GALLERY_CARDS;
-
-// Preload all images on mount
-const preloadImages = () => {
-    cards.forEach(card => {
-        const img = new Image();
-        img.src = card.image;
-    });
-};
 
 // Check if mobile
 const useIsMobile = () => {
@@ -47,11 +37,38 @@ const useIsMobile = () => {
     return isMobile;
 };
 
+// Helper function to convert ReactNode to string
+const reactNodeToString = (node: React.ReactNode): string => {
+    if (typeof node === 'string') return node.trim();
+    if (typeof node === 'number') return String(node);
+    if (Array.isArray(node)) {
+        // Join array elements with a space to prevent words from concatenating
+        return node.map(reactNodeToString).filter(str => str).join(' ');
+    }
+    if (node && typeof node === 'object') {
+        // Check for React._payload structure (lazy/promise values)
+        const anyNode = node as any;
+        if (anyNode._payload && anyNode._payload.value) {
+            return reactNodeToString(anyNode._payload.value);
+        }
+
+        // Extract text from JSX elements
+        if ('props' in node) {
+            const element = node as any;
+            if (element.props && element.props.children) {
+                return reactNodeToString(element.props.children);
+            }
+        }
+    }
+    return '';
+};
+
 interface Gallery3DProps {
     onColorChange?: (color: string) => void;
+    cards: CardData[];
 }
 
-const Gallery3D = ({ onColorChange }: Gallery3DProps) => {
+const Gallery3D = ({ onColorChange, cards }: Gallery3DProps) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isExpanded, setIsExpanded] = useState(false);
     const isMobile = useIsMobile();
@@ -60,17 +77,29 @@ const Gallery3D = ({ onColorChange }: Gallery3DProps) => {
     const touchStartX = useRef<number | null>(null);
     const touchEndX = useRef<number | null>(null);
 
-    // Preload images on mount
-    useEffect(() => {
-        preloadImages();
-    }, []);
-
     // Notify parent of color change
     useEffect(() => {
-        if (onColorChange) {
-            onColorChange(cards[currentIndex].color);
+        if (onColorChange && cards[currentIndex]) {
+            // Extract color from buttonbg (e.g., "bg-[#4dbdfc]" -> "#4dbdfc")
+            const buttonbg = cards[currentIndex].buttonbg;
+            const colorMatch = buttonbg.match(/#[0-9A-Fa-f]{6}/);
+            const color = colorMatch ? colorMatch[0] : '#4A90A4';
+            onColorChange(color);
+
+            // DEBUG: Log desktop center card data
+            if (!isMobile) {
+                console.log('🖥️ DESKTOP Gallery3D - Center Card Data:', {
+                    currentIndex,
+                    card: cards[currentIndex],
+                    title: cards[currentIndex].title,
+                    subtitle: cards[currentIndex].subtitle,
+                    bgSubheading: cards[currentIndex].bgSubheading,
+                    imageUrl: cards[currentIndex].imageUrl,
+                    content: cards[currentIndex].content
+                });
+            }
         }
-    }, [currentIndex, onColorChange]);
+    }, [currentIndex, onColorChange, cards, isMobile]);
 
     const getCardPosition = (index: number): "left" | "center" | "right" => {
         let diff = index - currentIndex;
@@ -180,7 +209,7 @@ const Gallery3D = ({ onColorChange }: Gallery3DProps) => {
         >
             {/* Dynamic Background */}
             <BackgroundImage
-                image={cards[currentIndex].background}
+                image={cards[currentIndex].bgGradient}
                 imageKey={currentIndex}
             />
 
@@ -208,23 +237,32 @@ const Gallery3D = ({ onColorChange }: Gallery3DProps) => {
                             // Center card renders last (highest z-index)
                             return 0;
                         })
-                        .map((index) => (
-                            <GalleryCard
-                                key={cards[index].id}
-                                cardId={cards[index].id}
-                                image={cards[index].image}
-                                subtitle={cards[index].subtitle}
-                                title={cards[index].title}
-                                description={cards[index].description}
-                                included={cards[index].included}
-                                color={cards[currentIndex].color}
-                                categoryText={cards[index].categoryText}
-                                isActive={index === currentIndex}
-                                isExpanded={isExpanded}
-                                onClick={() => handleCardClick(index)}
-                                position={getCardPosition(index)}
-                            />
-                        ))}
+                        .map((index) => {
+                            const card = cards[index];
+                            const currentCard = cards[currentIndex];
+                            // Extract color from buttonbg
+                            const colorMatch = currentCard.buttonbg.match(/#[0-9A-Fa-f]{6}/);
+                            const color = colorMatch ? colorMatch[0] : '#4A90A4';
+
+                            return (
+                                <GalleryCard
+                                    key={card.id}
+                                    cardId={card.id}
+                                    image={card.imageUrl}
+                                    subtitle={card.subtitle}
+                                    title={reactNodeToString(card.title)}
+                                    description={card.content}
+                                    included={card.subtitle}
+                                    color={color}
+                                    categoryHeading={reactNodeToString(card.bgHeading)}
+                                    categoryText={reactNodeToString(card.bgSubheading)}
+                                    isActive={index === currentIndex}
+                                    isExpanded={isExpanded}
+                                    onClick={() => handleCardClick(index)}
+                                    position={getCardPosition(index)}
+                                />
+                            );
+                        })}
                 </AnimatePresence>
             </div>
 
