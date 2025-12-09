@@ -925,6 +925,12 @@ export function QuestResultClient({
             depthScore={resultData?.depth_score || 0}
             questions={resultData.slider_question}
             accentColor={activeCardColor}
+            onFeedbackTrigger={() => {
+              console.log('🎯 CalibrateSection triggered feedback popup!');
+              setFeedbackPopupOpen(true);
+            }}
+            hasAutoTriggered={hasTriggeredFeedback}
+            testId={testId}
           />
         </div>
 
