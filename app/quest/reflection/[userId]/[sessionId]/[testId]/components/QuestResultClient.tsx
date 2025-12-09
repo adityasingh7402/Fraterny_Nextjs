@@ -19,9 +19,8 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { ResultData, Film, Book, DualGatewayPricingData } from '../utils/types';
-import { tokens, CTA_HEIGHT } from '../utils/constants';
+// import { tokens, CTA_HEIGHT } from '../utils/constants';
 import { sectionIds } from '../utils/sectionHelpers';
-import { AuthBanner } from './AuthBanner';
 import { ProgressRail } from './ProgressRail';
 import { StickyCTA } from './StickyCTA';
 import { PaymentSuccessMessage } from './PaymentSuccessMessage';
@@ -30,7 +29,7 @@ import { InsightModal } from './InsightModal';
 import { FilmModal } from './FilmModal';
 import { BookModal } from './BookModal';
 import { FeedbackPopup } from './FeedbackPopUp';
-import { PDFImageViewer } from './PDFImageViewer';
+// import { PDFImageViewer } from './PDFImageViewer';
 import { AstrologyModal } from './AstrologyModal';
 import { FindingModal } from './FindingModal';
 import { PaymentSuccessPopup } from './PaymentSuccessPopup';
@@ -42,11 +41,33 @@ import { googleAnalytics } from '@/lib/services/googleAnalytics';
 import { fetchDynamicPricing, checkExistingPaymentStatus, startPaymentStatusPolling } from '../utils/paymentHelpers';
 // import Testimonials from '@/app/quest/quest-mode/sections/Testimonials';
 import { TextGenerateEffect } from '@/components/ui/text-generate-effect';
-import FAQIntrospection from './FAQIntrospection';
-import Testimonial from './Testimonial';
 import Testimonials from '@/app/quest/quest-mode/sections/Testimonials';
 import FAQ from '@/app/quest/reflection/[userId]/[sessionId]/[testId]/components/FAQ';
-import mockData from '@/app/quest/reflection/[userId]/[sessionId]/[testId]/components/mock-data';
+
+
+
+import ConcertPage from "../final-design/ConcertPage";
+import PrimaryPattern from '../final-design/PrimaryPattern';
+import CalibrateSection from '../final-design/CalibrateSection';
+import Gallery3D from "../final-design/Gallery3D";
+import {CARDS_DATA, mockData} from '../final-design/ResultData'
+import { useIsMobile } from '@/app/admin/hooks/use-mobile';
+import { VIEWPORT_DIMENSIONS, CARD_DIMENSIONS, calculateDimensions } from '../final-design/Constants';
+import { Skeleton } from "@/components/ui/skeleton"
+import CardCarousel from "../final-design/CardCarousal";
+import { AuthBanner } from "../final-design/AuthBanner"
+import { PDFImageViewer } from "../../[testId]/components/PDFImageViewer";
+import { CTA_HEIGHT } from "../../[testId]/utils/constants";
+import FAQIntrospection from "../final-design/FAQIntrospection";
+import Testimonial from "../final-design/Testimonial";
+import QuestFooter from "../../../../../quest-mode/sections/QuestFooter";
+
+
+
+
+
+
+
 
 interface QuestResultClientProps {
   initialData: ResultData | null;
@@ -628,6 +649,72 @@ export function QuestResultClient({
     }
   };
 
+  const [activeCardColor, setActiveCardColor] = useState<string>('#0394A3');
+  const isMobile = useIsMobile();
+  const [isClicked, setIsClicked] = useState<{key: string, value: string} | null>(null)
+  
+      const SCALE = 2.8;
+      // Dynamic dimensions based on window width
+      const [dimensions, setDimensions] = useState({
+          viewport: VIEWPORT_DIMENSIONS,
+          card: CARD_DIMENSIONS
+      });
+      const [isLoading, setIsLoading] = useState(true);
+  
+      useEffect(() => {
+      const startTime = Date.now();
+      
+      const handleResize = () => {
+          setDimensions(calculateDimensions(window.innerWidth));
+      };
+  
+      // Initial calculation
+      handleResize();
+      
+      // Ensure minimum 80ms loading time
+      const elapsed = Date.now() - startTime;
+      const remainingTime = Math.max(0, 80 - elapsed);
+      
+      setTimeout(() => {
+          setIsLoading(false);
+      }, remainingTime);
+  
+      // Add resize listener
+      window.addEventListener('resize', handleResize);
+  
+      // Cleanup
+      return () => window.removeEventListener('resize', handleResize);
+      }, []);
+  
+      useEffect(() => {
+          const container = containerRef.current;
+          if (!container) return;
+      
+          const handleScroll = () => {
+            const sections = container.querySelectorAll('[id]');
+            let currentIndex = 0;
+      
+            sections.forEach((section, index) => {
+              const rect = section.getBoundingClientRect();
+              if (rect.top <= 100 && rect.bottom >= 100) {
+                currentIndex = index;
+              }
+            });
+      
+            setActiveIndex(currentIndex);
+            // Show feedback popup after 2 seconds when user reaches subjects section (index 3)
+            if (currentIndex >= 3 && !hasTriggeredFeedback) {
+              setHasTriggeredFeedback(true);
+              setTimeout(() => {
+                setFeedbackPopupOpen(true);
+              }, 2000);
+            }
+          };
+      
+          container.addEventListener('scroll', handleScroll);
+          return () => container.removeEventListener('scroll', handleScroll);
+        }, [hasTriggeredFeedback]);
+
   if (!resultData) {
     return (
       <div className="h-screen bg-[#004A7F] flex items-center justify-center">
@@ -663,863 +750,200 @@ export function QuestResultClient({
 
 
   return (
-    <div className="min-h-screen w-full bg-white text-gray-900">
-      <AuthBanner
-        onSignIn={handleAuthAction}
-        onPayment={handlePayment}
-        user={user}
-        paymentLoading={paymentLoading}
-        activeIndex={activeIndex}
-      />
-
-      <div
-        ref={containerRef}
-        className="w-full overflow-y-auto"
-        style={{
-          // iOS-friendly height and scrolling
-          // Dynamic height: full height in PDF section, reduced height in other sections
-          height: activeIndex === 9 ? '100dvh' : `calc(100dvh - ${CTA_HEIGHT}px)`,
-          WebkitOverflowScrolling: 'touch',
-          overscrollBehaviorY: 'none',
-          overscrollBehaviorX: 'none',
-          overscrollBehavior: 'none',
-          touchAction: 'pan-y',
-          // Softer snapping -> less "bounce"
-          scrollSnapType: 'y mandatory',
-          // Prevent elastic bounce
-          position: 'relative',
-          isolation: 'isolate'
-        }}
-      >
-        {/* Emotional Section */}
-        <SectionFrame
-          id="emotional"
-          title=""
-          sub=""
-          shareText={resultData.results["section 1"] || ""}
-          themeKey="emotional"
-          sessionId={sessionId}
-          customClass="pt-16 pb-16 overflow-y-auto"
-          testId={testId}
-        >
-          <div className="relative w-full max-w-[480px] mx-auto pt-4">
-            <motion.h1 className="mb-5 text-left">
-              <span className="block text-sm uppercase tracking-[0.3em] text-white/70 mb-1">Analysis Complete</span>
-              <span className="block text-5xl font-gilroy-bold tracking-tighter bg-gradient-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent">
-                Let's explore Your Mind
-              </span>
-              <span className="block mt-1 w-20 h-1 bg-white/50 rounded-full"></span>
-            </motion.h1>
-
-            <motion.div className="rounded-[28px] bg-white/10 backdrop-blur-xl ring-1 ring-white/20 p-6 text-white">
-              <p className="text-sm text-white/80 font-gilroy-regular">Your mind, in one sentence.</p>
-              <h2 className="mt-1 text-[44px] leading-[0.95] font-gilroy-bold tracking-tighter">Emotional<br />Mirror</h2>
-
-              <div className="mt-2 rounded-3xl font-gilroy-regular bg-white text-slate-900 p-2 shadow-[0_10px_30px_rgba(0,0,0,.12)]">
-                <p className="text-xl leading-tight p-2">{resultData.results["section 1"]}</p>
-              </div>
-            </motion.div>
-          </div>
-        </SectionFrame>
-
-        {/* Mind Card Section */}
-        <SectionFrame
-          id="mind"
-          title="Your Mind Card"
-          sub="Archetype & stats"
-          shareText={`${mindCard?.name || 'Mind Card'}; ${mindStats.map(s => `${s.label} ${s.value}`).join(', ')}.`}
-          themeKey="mind"
-          customClass="pt-16 pb-16 overflow-y-auto"
-          sessionId={sessionId}
-          testId={testId}
-        >
-          <div className="grid grid-rows-[auto_1fr] gap-4">
-            {mindCard && (
-              <>
-                <div className="text-left">
-                  <div className="text-teal-900 text-4xl font-normal font-gilroy-bold leading-7 pb-2 pt-2">{mindCard.name}</div>
-                  <div className="text-white/80 text-base font-normal font-gilroy-regular leading-tight] ">{mindCard.personality}</div>
-                </div>
-                <div className="overflow-x-auto">
-                  <div className="flex gap-4 pb-4" style={{ width: "max-content" }}>
-                    {mindStats.map((stat, i) => {
-                      const colors = [
-                        { bg: "bg-red-800", decorative: "bg-red-400" },
-                        { bg: "bg-purple-900", decorative: "bg-purple-100" },
-                        { bg: "bg-stone-400", decorative: "bg-green-100" },
-                        { bg: "bg-sky-500", decorative: "bg-sky-100" }
-                      ];
-
-                      return (
-                        <motion.div onClick={() => handleCardClick(i)} key={stat.label} layoutId={`insight-card-${i}`} className={`relative w-60 h-60 ${colors[i].bg} rounded-[10px] overflow-hidden`}>
-                          <div className="absolute left-[20px] top-[30px] opacity-70 mix-blend-hard-light text-white text-3xl font-normal font-gilroy-bold leading-9">
-                            {stat.label.split(' ').map((word, idx) => (
-                              <div key={idx}>{word}</div>
-                            ))}
-                          </div>
-                          <div className="flex justify-between items-end h-full pl-4">
-                         
-                            <div className="opacity-90 text-white text-8xl font-normal font-gilroy-bold leading-[96.45px]">
-                              {stat.value}%
-                            </div>
-                            <motion.div
-                              animate={{ y: [0, -3, 0] }}
-                              transition={{
-                                duration: 2.5,
-                                repeat: Infinity,
-                                ease: "easeInOut"
-                              }}
-                              className="pb-2"
-                            >
-                              <ChevronsUp className="h-8 w-8 text-white" />
-                            </motion.div>
-                          </div>
-                        </motion.div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        </SectionFrame>
-
-        {/* Findings Section */}
-        <SectionFrame
-          id="findings"
-          title="5 Unique Findings About You"
-          sub="Thought Provoking Insights"
-          shareText={findings.join("\n")}
-          themeKey="findings"
-          customClass="pt-14 pb-16 overflow-y-auto"
-          sessionId={sessionId}
-          testId={testId}
-        >
-          <div className="w-full">
-            <div className="grid grid-cols-2 gap-3 auto-rows-min">
-              {findings.slice(0, 4).map((finding, i) => (
-                <div
-                  key={i}
-                  className="bg-[#7dc3e4] rounded-lg p-3 min-h-[80px] flex items-start cursor-pointer"
-                  onClick={() => {
-                    setSelectedFinding(finding);
-                    setSelectedFindingIndex(i);
-                    setFindingModalOpen(true);
-                  }}
-                >
-                  <div className="text-white text-lg font-normal font-gilroy-regular leading-tight">
-                    {finding.slice(0, 50).trim() + '...'}
-                  </div>
-                </div>
-              ))}
-              {findings[4] && (
-                <div
-                  className="col-span-2 bg-[#7dc3e4] rounded-lg p-3 min-h-[80px] flex items-start cursor-pointer"
-                  onClick={() => {
-                    setSelectedFinding(findings[4]);
-                    setSelectedFindingIndex(4);
-                    setFindingModalOpen(true);
-                  }}
-                >
-                  <div className="text-white text-lg font-normal font-gilroy-regular leading-tight">
-                    {findings[4].slice(0, 100).trim() + '...'}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </SectionFrame>
-
-        {/* Subjects Section */}
-        <SectionFrame
-          id="subjects"
-          title="Subjects You Are Mentally Built to Explore Deeper"
-          sub="Deepen the edges"
-          shareText={subjects.map(s => `${s.title}: ${s.description}`).join("; ")}
-          themeKey="subjects"
-          inputClassName="placeholder:text-gray-700 bg-gray-100/30 text-gray-800 border border-gray-300"
-          buttonClassName="bg-blue-600 text-white hover:bg-blue-700 border border-blue-600"
-          customClass="pt-12 pb-[50px] overflow-y-auto"
-          sessionId={sessionId}
-          testId={testId}
-        >
-          <div className="grid h-full content-center gap-3">
-            {subjects.map((subject, i) => (
-              <div key={i} className="rounded-2xl bg-white p-3 text-[15px]" style={{ border: `1px solid ${tokens.border}` }}>
-                <div className="font-gilroy-semibold text-gray-900">{subject.title}</div>
-                <div className="text-sm text-gray-600 mt-1 font-gilroy-regular">{subject.description}</div>
-                <div className="text-xs text-blue-600 mt-2 font-gilroy-medium">{subject.matchPercentage}% match</div>
-              </div>
-            ))}
-          </div>
-        </SectionFrame>
-
-
-        {/* Permanently disabled sections below */}
-        {/* Quotes Section */}
-        {/* <SectionFrame
-          id="quotes"
-          title="Philosophical Quotes That Mirrors Your Psyche"
-          sub="Save the ones that hit"
-          shareText={quotes.map((q) => `"${q.text}" — ${q.author}`).join("\n")}
-          themeKey="quotes"
-          inputClassName="placeholder:text-gray-700 bg-gray-100/30 text-gray-800 border border-gray-300"
-          buttonClassName="bg-blue-600 text-white hover:bg-blue-700 border border-blue-600"
-          customClass="pt-12 pb-24 overflow-y-auto"
-          sessionId={sessionId}
-          testId={testId}
-        >
-          <ul className="grid content-center gap-3 overflow-y-auto">
-            {quotes.slice(0, 4).map((quote, i) => (
-              <li key={i} className="rounded-2xl bg-white p-3" style={{ border: `1px solid ${tokens.border}` }}>
-                <div className="flex items-start gap-2">
-                  <div className="w-4 h-4 flex-shrink-0 flex items-center justify-center mt-0.5">
-                    <Quote className="w-full h-full" color={tokens.accent} />
-                  </div>
-                  <div>
-                    <div className="text-[15px] font-['Inter'] leading-tight">{quote.text}</div>
-                    <div className="text-[12px]" style={{ color: tokens.muted }}>— {quote.author}</div>
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </SectionFrame> */}
-
-        {/* Films Section */}
-        {/* <SectionFrame
-          id="films"
-          title="Films That Will Hit Closer Than Expected"
-          sub="Weekend cues"
-          shareText={films.map((f) => `${f.title} — ${f.description}`).join("\n")}
-          themeKey="films"
-          customClass="pt-16 pb-16 overflow-y-auto"
-          sessionId={sessionId}
-          testId={testId}
-        >
-          <div className="overflow-x-auto">
-            <div className="flex gap-4 pb-1" style={{ width: "max-content" }}>
-              {films.slice(0, 3).map((film, i) => (
-                <div
-                  key={i}
-                  className="flex flex-col items-center gap-3 flex-shrink-0 cursor-pointer"
-                  onClick={() => {
-                    setSelectedFilm(film);
-                    setFilmModalOpen(true);
-                  }}
-                >
-                  <div className="w-40 h-48 relative rounded-lg shadow-[0px_8px_20px_0px_rgba(12,69,240,0.22)] overflow-hidden bg-gradient-to-b from-blue-600 to-blue-700 flex items-center justify-center">
-                    {film.imageUrl ? (
-                      <>
-                        <img
-                          src='/film.svg'
-                          alt={film.title}
-                          className="w-full h-full object-cover"
-                        />
-                        <img
-                          src="/filmiconsvg.svg"
-                          alt="Prediction Card"
-                          className="absolute bottom-2 left-2 h-6 w-5 z-10 drop-shadow-2xl"
-                        />
-                      </>
-                    ) : (
-                      <FilmIcon className="h-16 w-16 text-white/60" />
-                    )}
-                  </div>
-                  <div className="flex gap-2">
-                    <div className="text-white w-28 text-center text-lg font-bold font-['Inter'] leading-normal">
-                      {film.title}
-                    </div>
-
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </SectionFrame> */}
-
-        {/* Books Section */}
-        {/* <SectionFrame
-          id="books"
-          title="Books You'd Love If You Give Them a Chance"
-          sub="3 high-yield picks"
-          shareText={books.map((b) => `${b.title} — ${b.author}`).join("\n")}
-          inputClassName="placeholder:text-gray-700 bg-gray-100/30 text-gray-800 border border-gray-300"
-          buttonClassName="bg-blue-600 text-white hover:bg-blue-700 border border-blue-600"
-          themeKey="books"
-          customClass="pt-12 pb-12 overflow-y-auto"
-          sessionId={sessionId}
-          testId={testId}
-        >
-          <div className="overflow-x-auto">
-            <div className="flex gap-4 pb-1" style={{ width: "max-content" }}>
-              {books.map((book, i) => {
-                const backgrounds = ["#41D9FF", "#0C45F0", "#41D9FF"];
-
-                return (
-                  <div key={i} className="flex flex-col items-center gap-3 flex-shrink-0"
-                    onClick={() => {
-                      console.log('Book clicked:', book); // Add this for debugging
-                      setSelectedBook(book);
-                      setBookModalOpen(true);
-                    }}>
-                   
-                    <div
-                      className="w-40 h-48 relative rounded-lg shadow-[0px_8px_20px_0px_rgba(12,69,240,0.22)] flex items-center justify-center"
-                      style={{ backgroundColor: backgrounds[i] }}
-                    >
-                      <BookOpen className="h-20 w-20 text-white" />
-                      <BookmarkPlus className="absolute right-2 bottom-2 h-6 w-6 text-white/70" />
-                      
-                    </div>
-
-                   
-                    <div className="w-36 text-center">
-                      <div className="text-neutral-950 text-lg font-bold font-['Inter'] leading-normal">
-                        {book.title}
-                      </div>
-                      <div className="text-gray-500 text-lg font-normal font-['Inter'] leading-normal">
-                        {book.author}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </SectionFrame> */}
-        {/* Permanently disabled sections above */}
-
-        {/* Work Section */}
-        <SectionFrame
-          id="work"
-          title="One Thing To Work On"
-          sub="Start today; 60-minute cap"
-          shareText={actionItem}
-          themeKey="work"
-          customClass="pt-20 pb-24 overflow-y-auto"
-          sessionId={sessionId}
-          testId={testId}
-        >
-          <div className="flex h-full flex-col items-center justify-center text-center">
-            <div className="rounded-2xl bg-white/10 p-4 text-2xl leading-6">
-              <div className='font-gilroy-regular mb-10 text-left text-white leading-snug'><TextGenerateEffect words={actionItem} /></div>
-              <div className="opacity-95 text-xl font-gilroy-semibold">One small step could change your direction forever.</div>
-            </div>
-          </div>
-        </SectionFrame>
-
-        {/* PDF Section */}
-        <SectionFrame
-          id="pdf-report"
-          title="Private Intelligence File"
-          sub="Made from your words"
-          shareText="Check out my complete personality analysis from Fraterny!"
-          themeKey="pdf-report"
-          customClass="pt-16 relative"
-          sessionId={sessionId}
-          testId={testId}
-        >
-          <div style={{ paddingBottom: CTA_HEIGHT }}>
-            <PDFImageViewer 
-              paymentSuccess={paymentSuccess}
-              paymentStatus={assessmentPaymentStatus}
-              onPDFDownload={handlePDFDownload}
-              onUnlockClick={() => {
-                if (!paymentSuccess) {
-                  googleAnalytics.trackPdfUnlockCTA({
-                        session_id: sessionId!,
-                        test_id: testId!,
-                        user_state: user?.id ? 'logged_in' : 'anonymous'
-                    });
-                  setUpsellOpen(true);
-                }
-              }}
-              pricing={pricing}
+    <div>
+        <div className="w-full min-h-screen overflow-y-auto overflow-x-hidden bg-white">
+            <AuthBanner
+                onSignIn={() => {}}
+                onPayment={() => {}}
+                user={null}
+                paymentLoading={false}
+                activeIndex={activeIndex}
             />
-            <Testimonials headerText='' />
-            <FAQIntrospection />
-          </div>
 
-          
-        </SectionFrame>
-
-
-        {/* New architecture */}
-        {/* <SectionFrame
-          id="emotional"
-          title=""
-          sub=""
-          shareText={""}
-          themeKey="emotional"
-          sessionId={""}
-          customClass="pt-16 pb-16 overflow-y-auto"
-          testId={""}
-        >
-          <div className="relative w-full max-w-[480px] mx-auto pt-4">
-            <motion.h1 className="mb-5 text-left">
-              <span className="block text-sm uppercase tracking-[0.3em] text-white/70 mb-1">Analysis Complete</span>
-              <span className="block text-5xl font-gilroy-bold tracking-tighter bg-gradient-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent">
-                Quest Reveals About You
-              </span>
-
-            </motion.h1>
-
-            <div className="flex flex-row gap-5">
-              {Object.entries(archetype).map(([key, value]) => (
-                <div key={key} className="mb-6 border-l-2 border-white/30 pl-4">
-                  <h2 className="text-lg font-gilroy-semibold text-white uppercase tracking-[0.1em]">{key.charAt(0).toUpperCase() + key.slice(1)}</h2>
-                  <p className="text-white/80 text-[12px]">{value}</p>
+        {/* Primary Pattern & Core Line Section */}
+        <div id="primary-pattern" className='relative w-full mx-auto pt-20 pb-16 px-6 md:px-12 lg:px-16 bg-[#fafaf9]'>
+        <div className="max-w-7xl mx-auto">
+            {/* Byline Section */}
+            <div className="flex items-center justify-between mb-8 pb-6 border-b border-neutral-300">
+                <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-transparent flex items-center justify-center">
+                    <span className="text-white font-gilroy-bold text-xs">
+                        <img src='/quillpen.png' className=''/>
+                    </span>
                 </div>
-              ))}
-            </div>
-            <span className="block mt-1 w-full h-0.5 bg-white/50 rounded-full"></span>
-
-            <div className="mt-6">
-              <h2 className="text-lg font-gilroy-semibold text-white uppercase tracking-[0.1em] mb-2">Core Line</h2>
-              <p className="text-white/80 text-lg font-gilroy-bold">{mockData.core_line}</p>
-            </div>
-
-            <div className="mt-6">
-              <h2 className="text-lg font-gilroy-semibold text-white uppercase tracking-[0.1em] mb-2">Primary Pattern</h2>
-              <p className="text-white/80 text-md font-gilroy-medium">{mockData.primary_pattern}</p>
-            </div>
-          </div>
-        </SectionFrame> */}
-
-        {/* <SectionFrame
-          id="mind"
-          title="Calibration"
-          sub=""
-          shareText={""}
-          themeKey="mind"
-          sessionId={""}
-          customClass="pt-16 pb-16 overflow-y-auto"
-          testId={""}
-        >
-          <div className="relative w-full max-w-[480px] mx-auto pt-4">
-            <motion.div className="mb-5 flex w-full items-center justify-between">
-              <span className="block text-md uppercase tracking-[0.3em] text-white/70 mb-1"> </span>
-              <span className="block text-sm font-gilroy-bold bg-transparent px-2 py-1 rounded-xl shadow-xl border-2 border-white text-white/70">
-                DEPTH SCORE - {mockData?.depth_score || 10}
-              </span>
-            </motion.div>
-
-            <div className="flex flex-col gap-8">
-              {Object.keys(mockData.slider_question)
-                .filter(key => key.startsWith('question'))
-                .map((key, index) => {
-                  const questionNumber = index + 1;
-                  const likertKey = `likert${questionNumber}` as keyof typeof mockData.slider_question;
-                  const likertLabels = mockData.slider_question[likertKey] as [string, string];
-
-                  return (
-                    <motion.div
-                      key={key}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className=""
-                    >
-                      
-                      <h3 className="text-white/90 text-lg font-gilroy-semibold">
-                        {mockData.slider_question[key as keyof typeof mockData.slider_question]}
-                      </h3>
-
-                      
-                      <div className="space-y-1">
-                        
-                        <div className="relative">
-                          <input
-                            type="range"
-                            min="0"
-                            max="10"
-                            className="w-full h-2 bg-white/10 rounded-full appearance-none cursor-pointer
-                                  [&::-webkit-slider-thumb]:appearance-none
-                                  [&::-webkit-slider-thumb]:w-6
-                                  [&::-webkit-slider-thumb]:h-6
-                                  [&::-webkit-slider-thumb]:rounded-full
-                                  [&::-webkit-slider-thumb]:bg-white
-                                  [&::-webkit-slider-thumb]:cursor-pointer
-                                  [&::-webkit-slider-thumb]:shadow-lg
-                                  [&::-moz-range-thumb]:w-6
-                                  [&::-moz-range-thumb]:h-6
-                                  [&::-moz-range-thumb]:rounded-full
-                                  [&::-moz-range-thumb]:bg-white
-                                  [&::-moz-range-thumb]:cursor-pointer
-                                  [&::-moz-range-thumb]:border-0
-                                  [&::-moz-range-thumb]:shadow-lg"
-                            value={likertValues[`q${questionNumber}` as keyof typeof likertValues]}
-                            style={{
-                              background: `linear-gradient(to right, #ffffff 70%, rgba(255,255,255,0.1) 70%)`
-                            }}
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              const numericValue = parseInt(value);
-                              const percentage = (numericValue / 10) * 100;
-                              e.target.style.background = `linear-gradient(to right, #ffffff ${percentage}%, rgba(255,255,255,0.1) ${percentage}%)`;
-
-                              
-                              setLikertValues(prev => ({
-                                ...prev,
-                                [`q${questionNumber}`]: numericValue
-                              }));
-                            }}
-                          />
-                        </div>
-
-                       
-                        <div className="flex justify-between items-center font-gilroy-light">
-                          <span className="text-neutral-900 text-sm uppercase tracking-wider">
-                            {likertLabels[0]}
-                          </span>
-                          <span className="text-neutral-900 text-sm uppercase tracking-wider">
-                            {likertLabels[1]}
-                          </span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  );
-                })}
-            </div>
-
-            <div className='flex w-full justify-end mt-10'>
-              <button
-                onClick={handleLikertSubmit}
-                disabled={likertSubmitting}
-                className='block text-sm font-gilroy-bold bg-transparent px-2 py-1 rounded-xl shadow-xl border-2 border-white text-white/70 hover:bg-white/10 transition-all disabled:opacity-50 disabled:cursor-not-allowed'
-              >
-                {likertSubmitting ? 'SUBMITTING...' : 'CALIBRATE DEEPER'}
-              </button>
-            </div>
-          </div>
-        </SectionFrame> */}
-
-        {/* <SectionFrame
-          id="findings"
-          title=" Behavioural signals "
-          sub=""
-          shareText={""}
-          themeKey="films"
-          sessionId={""}
-          customClass="pt-16 pb-16 overflow-y-auto"
-          testId={""}
-        >
-          <div className="relative w-full max-w-[480px] mx-auto pt-4">
-            <motion.div className="mb-5 flex w-full items-center justify-between">
-              <span className="block text-md uppercase tracking-[0.3em] text-white/70 mb-1"></span>
-              <span className="block text-sm uppercase font-gilroy-bold bg-transparent px-2 py-1 rounded-xl shadow-xl border-2 border-white text-white/70">
-                5 detected
-              </span>
-            </motion.div>
-
-            <div className="flex flex-col gap-5">
-              {Object.entries(mockData.signals).filter(([key, _]) => key.endsWith("_purpose")).map(([key, value]) => {
-                const descKey = key.replace("_purpose", "_description");
-                return (
-                  <motion.div key={key}
-                    className="p-4 border border-white/20 rounded-lg bg-white/5 cursor-pointer">
-                    <div className="flex items-center mb-2">
-                      <div
-                        onClick={() => clickedbuttonId === key ? setClickedButtonId(null) : setClickedButtonId(key)}
-                        className="text-xl font-gilroy-semibold text-white mb-2 px-2 py-2 w-full flex items-center justify-between">
-                        <span className='flex gap-2 items-center'>{value} {key !== 'signal1_purpose' ? <LockIcon className='text-white size-4' /> : null}</span>
-                        {clickedbuttonId === key ? <ChevronUp size={16} className="ml-2" /> : <ChevronDown size={16} className="ml-2" />}
-                      </div>
-                    </div>
-
-                    <AnimatePresence>
-                      {clickedbuttonId === key && (
-                        <>
-                          <motion.div
-                            initial={{ height: 40, overflow: 'hidden' }}
-                            animate={{ height: 'auto' }}
-                            exit={{ height: 0, overflow: 'hidden' }}
-                            transition={{ duration: 0.3 }}
-                            className={`text-white/80 text-sm font-gilroy-medium ${key === 'signal1_purpose' ? '' : 'blur-sm'}`}
-                          >
-                            <motion.div
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              exit={{ opacity: 0 }}
-                              transition={{ duration: 0.3, delay: 0.1 }}
-                              className='relative'
-                            >
-                              {(mockData.signals as Record<string, string>)[descKey]}
-                            </motion.div>
-
-                          </motion.div>
-
-                        </>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                );
-              })}
-            </div>
-
-          </div>
-        </SectionFrame> */}
-
-        {/* <SectionFrame
-          id="pdf-report"
-          title="Made from your words"
-          sub="Sealed in full file"
-          shareText="Check out my complete personality analysis from Fraterny!"
-          themeKey="mind"
-          customClass="pt-16 relative"
-          sessionId={"ghhj"}
-          testId={"ghh"}
-        >
-          <div style={{ paddingBottom: CTA_HEIGHT }}>
-
-            <div className='bg-gradient-to-r from-sky-600 to-sky-800 rounded-lg mt-10 p-4 h-[600px] flex flex-col items-center justify-center backdrop-blur-3xl border-2 border-white shadow-lg'>
-
-              <div className='font-gilroy-bold text-2xl text-center text-white mt-8'>
-                <p className='font-gilroy-regular pb-6'>TAKE OWNERSHIP OF YOUR <br /> <span className='text-4xl font-gilroy-bold'>ARCHITECTURE</span></p>
-                <p className='mt-2 text-sm font-gilroy-medium'>Access the full, unredacted dossier tailored to your specific calibration.</p>
-              </div>
-              <div>
-                <button
-                  onClick={() => {
-                    console.log('🔘 Button clicked!');
-                    console.log('💳 Payment Status:', {
-                      paymentSuccess,
-                      assessmentPaymentStatus,
-                      pdfUrl: assessmentPaymentStatus?.quest_pdf
-                    });
-
-                    if (paymentSuccess && assessmentPaymentStatus?.quest_pdf) {
-                      // Payment already done - open PDF
-                      console.log('✅ Payment done, opening PDF...');
-                      handlePDFDownload();
-                    } else {
-                      // Payment not done - open payment modal
-                      console.log('❌ Payment not done, opening modal...');
-                      googleAnalytics.trackPdfUnlockCTA({
-                        session_id: sessionId!,
-                        test_id: testId!,
-                        user_state: user?.id ? 'logged_in' : 'anonymous'
-                      });
-                      setUpsellOpen(true);
-                    }
-                  }}
-                  className='mt-4 font-gilroy-bold bg-white text-blue-900 px-6 py-3 rounded-lg shadow-lg transition-colors hover:bg-blue-50 active:scale-95 transition-transform'
-                >
-                  {paymentSuccess ? <span>YOUR REPORT IS READY <Download className='inline-block ml-2' /></span> : 'ACCESS FULL REPORT'}
-                </button>
-              </div>
-              <div className='mt-6 mb-8 uppercase text-sm text-neutral-100 w-full flex items-center justify-center'>
-                file contains 28 additional pages with
-              </div>
-              <div className='pb-10'>
-                <div className='grid grid-cols-2 gap-4 mb-8'>
-                  <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg text-center'>
-                    <p className='font-gilroy-semibold text-white uppercase'>blind spot analysis</p>
-                  </div>
-                  <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg text-center'>
-                    <p className='font-gilroy-semibold text-white uppercase'>growth levers</p>
-
-                  </div>
-                  <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg text-center'>
-                    <p className='font-gilroy-semibold text-white uppercase'>relationship dynamics</p>
-
-                  </div>
-                  <div className='bg-transparent rounded-lg p-4 border border-white/30 shadow-lg text-center'>
-                    <p className='font-gilroy-semibold text-white uppercase'>architectural map</p>
-                  </div>
+                <div>
+                    <p className="text-xs font-gilroy-semibold text-neutral-800">Published by Quest</p>
+                    <p className="text-xs font-gilroy-regular text-neutral-500"> {new Date().toLocaleDateString()} • 2 min read</p>
                 </div>
-              </div>
-
-              <div className='font-gilroy-medium text-sm text-white/70 pb-3'>
-                  <span className='flex items-center justify-center'>Still unsure? See how people love it and FAQs <Pointer className='inline-block ml-2 rotate-180' /></span>
-              </div>
+                </div>
+                <div className="hidden md:block text-xs font-gilroy-regular text-neutral-400">
+                Pattern Analysis
+                </div>
             </div>
-          </div>
 
-          <Testimonial />
+            {/* Eyebrow */}
+            <div className="mb-3">
+                <span className="text-xs md:text-sm uppercase tracking-[0.3em] text-neutral-500 font-gilroy-regular">
+                Primary Pattern
+                </span>
+            </div>
 
-          <FAQ className='bg-transparent rounded-lg' />
+            {/* Main Headline */}
+            <h1 className="mb-1 text-4xl md:text-5xl lg:text-6xl font-gilroy-bold tracking-tight text-neutral-900 leading-[1.1]">
+                Your <span className='text-neutral-400'>Primary</span> Pattern
+            </h1>
 
+            {/* Contributor Line */}
+            <p className="text-sm font-gilroy-regular text-neutral-600 mb-10 pb-8 border-b border-neutral-200">
+                Insights compiled for your personal journey
+            </p>
 
-        </SectionFrame> */}
+            {/* Body Text with Drop Cap */}
+            <div className="max-w-none">
+                <p className="text-neutral-700 font-gilroy-regular text-base md:text-lg leading-relaxed">
+                <span className="float-left text-6xl md:text-7xl font-gilroy-bold text-neutral-800 leading-none mr-2 mt-1">
+                    Y
+                </span>
+                {mockData.primary_pattern.substring(1)}
+                </p>
+            </div>
 
-      </div>
+            {/* Pull Quote */}
+            <div className="my-12 py-8 border-l-4 border-neutral-800 pl-6">
+                <p className="text-xl md:text-2xl font-gilroy-light text-neutral-700 leading-relaxed">
+                "{mockData.core_line}"
+                </p>
+            </div>
 
-      {/* Progress Rail */}
-      <div className="fixed right-2 top-1/2 z-[55] -translate-y-1/2 flex flex-col items-center gap-2">
-        {sectionIds.map((id, i) => (
-          <button
-            key={id}
-            aria-label={`Jump to ${id}`}
-            onClick={() => containerRef.current?.querySelector(`#${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-            className="transition-all"
+            {/* Footer Metadata */}
+            <div className="mt-12 pt-6 border-t border-neutral-200 flex flex-wrap gap-2 items-center text-xs font-gilroy-regular text-neutral-500">
+                <span>Filed under:</span>
+                <span className="px-3 py-1 bg-neutral-200 rounded-full text-neutral-700">Self-Discovery</span>
+                <span className="px-3 py-1 bg-neutral-200 rounded-full text-neutral-700">Pattern Analysis</span>
+            </div>
+        </div>
+        </div>
+
+        {/* Gallery3D Section - Fixed height */}
+        {!isMobile ? (
+            <div id="gallery-3d" className="relative w-full h-screen overflow-hidden bg-[#4A90A4]"
+                style={{ backgroundColor: activeCardColor, transition: 'background-color 0.5s ease' }}>
+                <Gallery3D onColorChange={setActiveCardColor} />
+            </div>
+          ) : (
+            <div id="gallery-3d-mobile" className="relative overflow-hidden"
             style={{
-              width: 6,
-              height: i === activeIndex ? 20 : 6,
-              borderRadius: 9999,
-              background: i === activeIndex ? tokens.accent : 'rgba(10,10,10,0.25)'
-            }}
-          />
-        ))}
-      </div>
+                width: '100vw',
+                height: `${dimensions.viewport.height}px`,
+                marginLeft: 'calc(50% - 50vw)',
+                marginRight: 'calc(50% - 50vw)'
+            }}>
+            {isLoading ? (
+                <div className="relative w-full h-full flex items-center justify-center">
+                    {/* Center Card */}
+                    <Skeleton 
+                        className="absolute rounded-xl"
+                        style={{
+                            width: `${dimensions.card.width}px`,
+                            height: `${dimensions.card.height}px`,
+                        }}
+                    />
+                    {/* Left Card */}
+                    <Skeleton 
+                        className="absolute rounded-xl opacity-40"
+                        style={{
+                            width: `${dimensions.card.width * 0.85}px`,
+                            height: `${dimensions.card.height * 0.85}px`,
+                            transform: 'translateX(-120%)',
+                        }}
+                    />
+                    {/* Right Card */}
+                    <Skeleton 
+                        className="absolute rounded-xl opacity-40"
+                        style={{
+                            width: `${dimensions.card.width * 0.85}px`,
+                            height: `${dimensions.card.height * 0.85}px`,
+                            transform: 'translateX(120%)',
+                        }}
+                    />
+                </div>
+                ) : (
+                    <CardCarousel 
+                        cards={CARDS_DATA}
+                        cardDim={dimensions.card}
+                        viewportDim={dimensions.viewport}
+                    />
+                )}
+            </div>
+          )}
 
-      <StickyCTA
-          onOpen={() => {
-            if (!paymentSuccess) {
-              // Track PDF unlock CTA click
-              googleAnalytics.trackPdfUnlockCTA({
-                session_id: sessionId!,
-                test_id: testId!,
-                user_state: user?.id ? 'logged_in' : 'anonymous'
-              });
-              setUpsellOpen(true);
-            }
-          }}
-          pricing={pricing}
-          percentile={resultData?.pecentile}
-          qualityScore={String(mockData?.depth_score || 0)}
-        />
 
-      {/* Sticky CTA + Upsell - Hide when in PDF section */}
-      {/* {paymentSuccess ? (
-       
-        <PaymentSuccessMessage userId={userId} />
-      ) : (
-       
-        <StickyCTA
-          onOpen={() => {
-            if (!paymentSuccess) {
-              // Track PDF unlock CTA click
-              googleAnalytics.trackPdfUnlockCTA({
-                session_id: sessionId!,
-                test_id: testId!,
-                user_state: user?.id ? 'logged_in' : 'anonymous'
-              });
-              setUpsellOpen(true);
-            }
-          }}
-          pricing={pricing}
-          percentile={resultData?.pecentile}
-          qualityScore={resultData?.qualityscore}
-        />
-      )} */}
-      {!paymentSuccess && (
-        <UpsellSheet
-          open={upsellOpen}
-          onClose={() => setUpsellOpen(false)}
-          onPayment={handlePayment}
-          paymentLoading={paymentLoading}
-          pricing={pricing}
-        />
-      )}
+        {/* Calibrate Section */}
+        <div id="calibrate-section">
+            <CalibrateSection
+                depthScore={mockData?.depth_score || 0}
+                questions={mockData.slider_question}
+                accentColor={activeCardColor}
+            />
+        </div>
 
-      <PaymentSuccessPopup
-        open={showSuccessPopup}
-        onClose={handleCloseSuccessPopup}
-        userId={userId}
-      />
+        {/* Behaviour Signals Section */}
+        <div id="concert-page">
+            <ConcertPage backgroundColor={activeCardColor} />
+        </div>
 
-      <InsightModal
-        insight={selectedInsight}
-        onClose={() => setSelectedInsight(null)}
-        attribute={selectedInsight ? mindStats[selectedInsight.index]?.label || '' : ''}
-      />
+        <div id="pdf-report" className="relative w-full mx-auto pt-6 pb-16 max-w-7xl">
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="mb-8 max-w-7xl mx-auto px-6 sm:px-0"
+            >
+                <span className="block text-sm uppercase tracking-[0.3em] text-neutral-400 mb-2 font-gilroy-medium">
+                    Private File
+                </span>
+                <h1 className="text-5xl md:text-7xl font-gilroy-bold tracking-tighter text-neutral-900 leading-none">
+                      Your <span style={{ color: activeCardColor }}>Private</span> File
+                </h1>
+            </motion.div>
+            <div style={{ paddingBottom: CTA_HEIGHT }} className="flex flex-col sm:flex-row justify-center items-center gap-10">
+                <div className="max-w-xl px-6 sm:px-0">
+                <PDFImageViewer
+                    paymentSuccess={false}
+                    paymentStatus={{
+                    ispaymentdone: "success",
+                    quest_pdf: "https://example.com/sample.pdf",
+                    quest_status: "generated",
+                    }}
+                    onPDFDownload={() => {}}
+                    onUnlockClick={() => {
+                    // if (!paymentSuccess) {
+                    //   // googleAnalytics.trackPdfUnlockCTA({...});
+                    //   // setUpsellOpen(true);
+                    // }
+                    }}
+                    pricing={{
+                    razorpay: { main: "199", original: "399" },
+                    isLoading: false,
+                    }}
+                />
+                </div>
+                <div>
+                <FAQIntrospection />
+                </div>
+            </div>
+            <div className="mt-5">
+            <Testimonial 
+                headerText="How people feel with Quest insights"
+            />
+            </div>
+        </div>
 
-      <FilmModal
-        film={selectedFilm}
-        onClose={() => {
-          setSelectedFilm(null);
-          setFilmModalOpen(false);
-        }}
-      />
-
-      {/* <AstrologyModal
-        prediction={selectedPrediction}
-        onClose={() => {
-          setSelectedPrediction(null);
-          setAstrologyModalOpen(false);
-        }}
-      /> */}
-
-      <BookModal
-        book={selectedBook}
-        onClose={() => {
-          setSelectedBook(null);
-          setBookModalOpen(false);
-        }}
-      />
-
-      <FindingModal
-        finding={selectedFinding}
-        selectedIndex={selectedFindingIndex}
-        onClose={() => {
-          setSelectedFinding(null);
-          setFindingModalOpen(false);
-        }}
-      />
-
-      <FeedbackPopup
-        open={feedbackPopupOpen}
-        onClose={() => setFeedbackPopupOpen(false)}
-        onDismiss={(hasInteracted) => setShowFeedbackStar(hasInteracted)}
-        sessionId={sessionId}
-        testId={testId}
-        userId={getEffectiveUserId()}
-      />
-
-      {/* Sticky Feedback Star */}
-      <AnimatePresence>
-        {showFeedbackStar && (
-          <motion.button
-            onClick={() => {
-              setShowFeedbackStar(false);
-              setFeedbackPopupOpen(true);
-            }}
-            className="fixed right-5 bottom-20 z-[60] flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-cyan-400 to-cyan-500 shadow-lg"
-            initial={{ opacity: 0, scale: 0, rotate: -180 }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-              rotate: 0,
-              y: [0, -3, 0]
-            }}
-            exit={{ opacity: 0, scale: 0, rotate: 180 }}
-            transition={{
-              type: "spring",
-              stiffness: 200,
-              damping: 15,
-              y: {
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }
-            }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            aria-label="Give feedback"
-          >
-            <Star className="h-5 w-5 text-white fill-white" />
-          </motion.button>
-        )}
-      </AnimatePresence>
-
-      {/* Tip Tooltip */}
-      <AnimatePresence>
-        {tip && (
-          <motion.div
-            className="fixed bottom-20 right-20 z-[65] rounded-2xl bg-black/80 px-3 py-2 text-[12px] text-white max-w-48"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-          >
-            {tip}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Bottom CTA Space */}
-      <div style={{ height: CTA_HEIGHT }} />
-    </div>
+        <div>
+            <QuestFooter />
+        </div>
+        </div>
+        </div>
   );
 }
