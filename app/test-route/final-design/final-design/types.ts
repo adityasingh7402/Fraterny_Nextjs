@@ -14,7 +14,6 @@ export interface CardData {
   bgHeading: React.ReactNode;
   bgSubheading: React.ReactNode;
   content: React.ReactNode;
-  color?: string;
 }
 
 export interface Dimensions {
