@@ -791,10 +791,10 @@ export function QuestResultClient({
     <div>
       <div className="w-full min-h-screen overflow-y-auto overflow-x-hidden bg-white">
         <AuthBanner
-          onSignIn={() => { }}
-          onPayment={() => { }}
-          user={null}
-          paymentLoading={false}
+          onSignIn={handleAuthAction}
+          onPayment={handlePayment}
+          user={user}
+          paymentLoading={paymentLoading}
           activeIndex={activeIndex}
         />
 
