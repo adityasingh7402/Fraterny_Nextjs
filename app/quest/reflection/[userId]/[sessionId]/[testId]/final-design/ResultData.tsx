@@ -8,8 +8,8 @@ export const CARDS_DATA: CardData[] = [
   {
     id: 1,
     title: <div className="flex flex-col items-start leading-6">
-     <p className="pb-2"> HEALING</p>
-     <p> HEART </p>
+      <p className="pb-2"> HEALING</p>
+      <p> HEART </p>
     </div>,
     subtitle: "Embercarrier",
     tag: "Self",
@@ -25,17 +25,17 @@ export const CARDS_DATA: CardData[] = [
       <p className="text-sm font-gilroy-light text-gray-800 mb-1">
         The Healing Heart is someone who makes a room feel safe just by walking into it.
       </p>
-      
+
       <p className="text-sm font-gilroy-light text-gray-800 mb-1">
         Psychologically, this energy combines:
       </p>
-      
+
       <ul className="list-disc ml-6 mb-1 text-sm font-gilroy-light">
         <li className=" text-gray-800 text-sm font-gilroy-light">Approach orientation to recovery</li>
         <li className=" text-gray-800 text-sm font-gilroy-light">Rhythmic regulation</li>
         <li className=" text-gray-800 text-sm font-gilroy-light">Realistic optimism</li>
       </ul>
-      
+
       <p className="text-sm font-gilroy-light">
         Your personal psychological artifact discusses how the Healing Heart mask and your current inclination affects you in great detail.
       </p>
@@ -44,8 +44,8 @@ export const CARDS_DATA: CardData[] = [
   {
     id: 2,
     title: <div className="flex flex-col items-start leading-6">
-     <p className="pb-2"> RESTLESS </p>
-     <p> MIND </p>
+      <p className="pb-2"> RESTLESS </p>
+      <p> MIND </p>
     </div>,
     subtitle: "Signal Finder",
     tag: "World",
@@ -61,17 +61,17 @@ export const CARDS_DATA: CardData[] = [
       <p className="text-sm font-gilroy-light text-gray-800 mb-2">
         Restless Minds carry a brain that often feels like a browser with fifty tabs open.
       </p>
-      
+
       <p className="text-sm font-gilroy-light text-gray-800 mb-1">
         Psychologically, this energy combines:
       </p>
-      
+
       <ul className="list-disc ml-6 mb-2 text-sm font-gilroy-light">
         <li className="text-gray-800 text-sm font-gilroy-light">Range and Regulation</li>
         <li className="text-gray-800 text-sm font-gilroy-light">Decision Friction</li>
         <li className="text-gray-800 text-sm font-gilroy-light">Creative Motion</li>
       </ul>
-      
+
       <p className="text-sm font-gilroy-light text-gray-800">
         Your personal psychological artifact discusses how the Restless Mind mask and your current inclination affects you in great detail.
       </p>
@@ -80,8 +80,8 @@ export const CARDS_DATA: CardData[] = [
   {
     id: 3,
     title: <div className="flex flex-col items-start leading-6">
-     <p className="pb-2"> HIDDEN </p>
-     <p> THINKER </p>
+      <p className="pb-2"> HIDDEN </p>
+      <p> THINKER </p>
     </div>,
     subtitle: "Quiet Prodigy",
     tag: "Aspire",
@@ -94,32 +94,32 @@ export const CARDS_DATA: CardData[] = [
     bgHeading: <>SOCIAL VIEW</>,
     bgSubheading: <>HOW THE WORLD SEES YOU</>,
     content: <>
-    <p className="text-sm font-gilroy-light text-gray-800 mb-2">
-      Hidden Thinkers slow moments down just enough to get them right.
-    </p>
-    
-    <p className="text-sm font-gilroy-light text-gray-800 mb-1">
-      Psychologically, this energy combines:
-    </p>
-    
-    <ul className="list-disc ml-6 mb-2 text-sm font-gilroy-light">
-      <li className="text-gray-800 text-sm font-gilroy-light">Accuracy drive & craftsmanship</li>
-      <li className="text-gray-800 text-sm font-gilroy-light">Calm attentional style</li>
-      <li className="text-gray-800 text-sm font-gilroy-light">Visibility caution</li>
-    </ul>
-    
-    <p className="text-sm font-gilroy-light text-gray-800">
-      Your personal psychological artifact discusses how the Hidden Thinker mask and your current inclination affects you in great detail.
-    </p>
-  </>
+      <p className="text-sm font-gilroy-light text-gray-800 mb-2">
+        Hidden Thinkers slow moments down just enough to get them right.
+      </p>
+
+      <p className="text-sm font-gilroy-light text-gray-800 mb-1">
+        Psychologically, this energy combines:
+      </p>
+
+      <ul className="list-disc ml-6 mb-2 text-sm font-gilroy-light">
+        <li className="text-gray-800 text-sm font-gilroy-light">Accuracy drive & craftsmanship</li>
+        <li className="text-gray-800 text-sm font-gilroy-light">Calm attentional style</li>
+        <li className="text-gray-800 text-sm font-gilroy-light">Visibility caution</li>
+      </ul>
+
+      <p className="text-sm font-gilroy-light text-gray-800">
+        Your personal psychological artifact discusses how the Hidden Thinker mask and your current inclination affects you in great detail.
+      </p>
+    </>
   }
 ];
 
 export const clusters: Cluster[] = [
   {
     name: <div className="flex flex-col items-start leading-6">
-     <p className="pb-2"> THE </p>
-     <p> STRATEGISTS </p>
+      <p className="pb-2"> THE </p>
+      <p> STRATEGISTS </p>
     </div>,
     img: '/result/STRATEGIST.webp',
     bgimg: '/result/STRATEGIST (4).webp',
@@ -132,17 +132,17 @@ export const clusters: Cluster[] = [
       <p className="text-sm font-gilroy-light text-gray-800 mb-1">
         Strategists are people who quietly turn mess into movement.
       </p>
-      
+
       <p className="text-sm font-gilroy-light text-gray-800 mb-1">
         In psychology terms, this energy blends:
       </p>
-      
+
       <ul className="list-decimal ml-6 mb-1 text-sm font-gilroy-light">
         <li className="text-gray-800 text-sm font-gilroy-light">Reality testing</li>
         <li className="text-gray-800 text-sm font-gilroy-light">Locus of control</li>
         <li className="text-gray-800 text-sm font-gilroy-light">Executive functioning</li>
       </ul>
-      
+
       <p className="text-sm font-gilroy-light">
         Your personal psychological artifact discusses how the Strategist mask and your current inclination affects you in great detail.
       </p>
@@ -158,8 +158,8 @@ export const clusters: Cluster[] = [
   },
   {
     name: <div className="flex flex-col items-start leading-6">
-     <p className="pb-2"> HIDDEN </p>
-     <p> THINKER </p>
+      <p className="pb-2"> HIDDEN </p>
+      <p> THINKER </p>
     </div>,
     img: '/result/HIDDEN THINKER (2).webp',
     bgimg: '/result/HIDDEN THINKER (5).webp',
@@ -172,17 +172,17 @@ export const clusters: Cluster[] = [
       <p className="text-sm font-gilroy-light text-gray-800 mb-2">
         Hidden Thinkers slow moments down just enough to get them right.
       </p>
-      
+
       <p className="text-sm font-gilroy-light text-gray-800 mb-1">
         Psychologically, this energy combines:
       </p>
-      
+
       <ul className="list-disc ml-6 mb-2 text-sm font-gilroy-light">
         <li className="text-gray-800 text-sm font-gilroy-light">Accuracy drive & craftsmanship</li>
         <li className="text-gray-800 text-sm font-gilroy-light">Calm attentional style</li>
         <li className="text-gray-800 text-sm font-gilroy-light">Visibility caution</li>
       </ul>
-      
+
       <p className="text-sm font-gilroy-light text-gray-800">
         Your personal psychological artifact discusses how the Hidden Thinker mask and your current inclination affects you in great detail.
       </p>
@@ -197,8 +197,8 @@ export const clusters: Cluster[] = [
   },
   {
     name: <div className="flex flex-col items-start leading-6">
-     <p className="pb-2"> THE FREE </p>
-     <p> SPIRITS </p>
+      <p className="pb-2"> THE FREE </p>
+      <p> SPIRITS </p>
     </div>,
     img: '/result/FREE SPIRIT (2).webp',
     bgimg: '/result/FREE SPIRIT (4).webp',
@@ -211,17 +211,17 @@ export const clusters: Cluster[] = [
       <p className="text-sm font-gilroy-light text-gray-800 mb-1">
         Free Spirits are the people who refuse to live life on autopilot.
       </p>
-      
+
       <p className="text-sm font-gilroy-light text-gray-800 mb-1">
         Psychologically, this energy combines:
       </p>
-      
+
       <ul className="list-disc ml-6 mb-1 text-sm font-gilroy-light">
         <li className="text-gray-800 text-sm font-gilroy-light">Autonomy and Agency</li>
         <li className="text-gray-800 text-sm font-gilroy-light">Novelty Seeking</li>
         <li className="text-gray-800 text-sm font-gilroy-light">Experiential Learning</li>
       </ul>
-      
+
       <p className="text-sm font-gilroy-light">
         Your personal psychological artifact discusses how the Free Spirit mask and your current inclination affects you in great detail.
       </p>
@@ -236,8 +236,8 @@ export const clusters: Cluster[] = [
   },
   {
     name: <div className="flex flex-col items-start leading-6">
-     <p className="pb-2"> RESTLESS </p>
-     <p> MIND </p>
+      <p className="pb-2"> RESTLESS </p>
+      <p> MIND </p>
     </div>,
     img: '/result/RESTLESS MIND.webp',
     bgimg: '/result/RESTLESS MIND (4).webp',
@@ -250,17 +250,17 @@ export const clusters: Cluster[] = [
       <p className="text-sm font-gilroy-light text-gray-800 mb-2">
         Restless Minds carry a brain that often feels like a browser with fifty tabs open.
       </p>
-      
+
       <p className="text-sm font-gilroy-light text-gray-800 mb-1">
         Psychologically, this energy combines:
       </p>
-      
+
       <ul className="list-disc ml-6 mb-2 text-sm font-gilroy-light">
         <li className="text-gray-800 text-sm font-gilroy-light">Range and Regulation</li>
         <li className="text-gray-800 text-sm font-gilroy-light">Decision Friction</li>
         <li className="text-gray-800 text-sm font-gilroy-light">Creative Motion</li>
       </ul>
-      
+
       <p className="text-sm font-gilroy-light text-gray-800">
         Your personal psychological artifact discusses how the Restless Mind mask and your current inclination affects you in great detail.
       </p>
@@ -289,17 +289,17 @@ export const clusters: Cluster[] = [
       <p className="text-sm font-gilroy-light text-gray-800 mb-1">
         The Healing Heart is someone who makes a room feel safe just by walking into it.
       </p>
-      
+
       <p className="text-sm font-gilroy-light text-gray-800 mb-1">
         Psychologically, this energy combines:
       </p>
-      
+
       <ul className="list-disc ml-6 mb-1 text-sm font-gilroy-light">
         <li className=" text-gray-800 text-sm font-gilroy-light">Approach orientation to recovery</li>
         <li className=" text-gray-800 text-sm font-gilroy-light">Rhythmic regulation</li>
         <li className=" text-gray-800 text-sm font-gilroy-light">Realistic optimism</li>
       </ul>
-      
+
       <p className="text-sm font-gilroy-light">
         Your personal psychological artifact discusses how the Healing Heart mask and your current inclination affects you in great detail.
       </p>
@@ -328,17 +328,17 @@ export const clusters: Cluster[] = [
       <p className="text-sm font-gilroy-light text-gray-800 mb-1">
         The Soul Aligned are the people who sense the invisible layers of a moment.
       </p>
-      
+
       <p className="text-sm font-gilroy-light text-gray-800 mb-1">
         Psychologically, this energy combines:
       </p>
-      
+
       <ul className="list-disc ml-6 mb-1 text-sm font-gilroy-light">
         <li className="text-gray-800 text-sm font-gilroy-light">Coherence</li>
         <li className="text-gray-800 text-sm font-gilroy-light">Emotional Literacy</li>
         <li className="text-gray-800 text-sm font-gilroy-light">Contextual Intelligence</li>
       </ul>
-      
+
       <p className="text-sm font-gilroy-light">
         Your personal psychological artifact discusses how the Soul Aligned mask and your current inclination affects you in great detail.
       </p>
@@ -356,36 +356,36 @@ export const clusters: Cluster[] = [
 
 
 export const mockData = {
-    "archetype":{
-        "self":"Soul Cartographer",
-        "world":"Quiet Prodigy",
-        "aspiration":"Hopewright"
-    },
-    "core_line":"You keep reaching for a life built on quiet presence, yet when uncertainty rises you almost automatically reach back for the old proof-by-effort script that once kept you safe.",
-    "primary_pattern":"You see yourself as someone who is here to map inner worlds and turn suffering into understanding. In daily life, others meet the reliable, undemanding achiever who rarely shows how much weight you carry inside. What pulls you forward is a simple but demanding wish: to live from embodied peace, abroad if needed, and to let spiritual practice shape your days instead of fear. The live tension is between trusting this slower, riskier path and the fast, familiar comfort of working harder than you actually want to.",
-    "slider_question":{
-        "question1":"When you slow down and rest, do you start to feel guilty inside?",
-        "question2":"Right now, how hard is it for you to ask someone for help?",
-        "question3":"How much do you feel torn between family duty and your own path?",
-        "question4":"Do you feel your spiritual ideas and your daily life actually match?",
-        "likert1":["Not at all","Very much"],
-        "likert2":["Not Hard","Very Hard"],
-        "likert3":["Doesn’t matter","Matters a lot"],
-        "likert4":["Never","Always"]
-    },
-    "signals":{
-        "signal1_purpose":"Work-as-safety autopilot",
-        "signal2_purpose":"Disappearing needs",
-        "signal3_purpose":"Deferred grief",
-        "signal4_purpose":"Concepts as armor",
-        "signal5_purpose":"Conditional freedom plan",
-        "signal1_description":"When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
-        "signal2_description":"When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
-        "signal3_description":"When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
-        "signal4_description":"When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
-        "signal5_description":"When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want."
-    },
-    "depth_score":42
+  "archetype": {
+    "self": "Soul Cartographer",
+    "world": "Quiet Prodigy",
+    "aspiration": "Hopewright"
+  },
+  "core_line": "You keep reaching for a life built on quiet presence, yet when uncertainty rises you almost automatically reach back for the old proof-by-effort script that once kept you safe.",
+  "primary_pattern": "You see yourself as someone who is here to map inner worlds and turn suffering into understanding. In daily life, others meet the reliable, undemanding achiever who rarely shows how much weight you carry inside. What pulls you forward is a simple but demanding wish: to live from embodied peace, abroad if needed, and to let spiritual practice shape your days instead of fear. The live tension is between trusting this slower, riskier path and the fast, familiar comfort of working harder than you actually want to.",
+  "slider_question": {
+    "question1": "When you slow down and rest, do you start to feel guilty inside?",
+    "question2": "Right now, how hard is it for you to ask someone for help?",
+    "question3": "How much do you feel torn between family duty and your own path?",
+    "question4": "Do you feel your spiritual ideas and your daily life actually match?",
+    "likert1": ["Not at all", "Very much"],
+    "likert2": ["Not Hard", "Very Hard"],
+    "likert3": ["Doesn’t matter", "Matters a lot"],
+    "likert4": ["Never", "Always"]
+  },
+  "signals": {
+    "signal1_purpose": "Work-as-safety autopilot",
+    "signal2_purpose": "Disappearing needs",
+    "signal3_purpose": "Deferred grief",
+    "signal4_purpose": "Concepts as armor",
+    "signal5_purpose": "Conditional freedom plan",
+    "signal1_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
+    "signal2_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
+    "signal3_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
+    "signal4_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
+    "signal5_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want."
+  },
+  "depth_score": 42
 };
 
 
@@ -437,7 +437,7 @@ const getArchetypeData = (archetypeData: {
   // Process each archetype (self, world, aspiration)
   Object.entries(archetypeData).forEach(([key, archetypeName]) => {
     const cluster = findClusterByArchetype(archetypeName);
-    
+
     if (cluster) {
       result[key] = {
         clusterName: cluster.name,
@@ -463,7 +463,7 @@ const getArchetypeData = (archetypeData: {
 export const prepareFinalData = (data: typeof mockData) => {
   // Get cluster data for each archetype
   const archetypeData = getArchetypeData(data.archetype);
-  
+
   // Define heading overrides based on context (self/world/aspiration)
   const headingMap = {
     self: {
@@ -479,7 +479,7 @@ export const prepareFinalData = (data: typeof mockData) => {
       bgSubheading: <>HOW YOU ASPIRE TO BE</>
     }
   };
-  
+
   // Apply overrides to archetype data
   Object.keys(archetypeData).forEach(key => {
     const headings = headingMap[key as keyof typeof headingMap];
@@ -488,8 +488,8 @@ export const prepareFinalData = (data: typeof mockData) => {
       archetypeData[key].bgSubheading = headings.bgSubheading;
     }
   });
-  
-  
+
+
   // Return complete dataset
   return {
     archetypes: archetypeData,

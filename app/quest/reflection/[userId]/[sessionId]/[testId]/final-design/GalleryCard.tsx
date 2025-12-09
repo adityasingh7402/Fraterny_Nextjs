@@ -12,13 +12,14 @@ interface GalleryCardProps {
     isExpanded: boolean;
     onClick: () => void;
     position: "left" | "center" | "right";
-    description: string;
+    description: React.ReactNode;
     included: string;
     color: string;
     categoryText: string;
+    categoryHeading?: string;
 }
 
-const GalleryCard = ({ cardId, image, subtitle, title, description, included, color, categoryText, isActive, isExpanded, onClick, position }: GalleryCardProps) => {
+const GalleryCard = ({ cardId, image, subtitle, title, description, included, color, categoryText, categoryHeading, isActive, isExpanded, onClick, position }: GalleryCardProps) => {
     const [isMobile, setIsMobile] = useState(false);
 
     // Check if this card should use black text (card id 6)
@@ -124,22 +125,28 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
         >
             <div className={`flex flex-col items-center ${isExpanded && isActive ? 'md:flex-row md:gap-8 md:items-stretch' : ''} ${getContainerSizeClasses()}`}>
                 {/* Header Section - OUTSIDE the white card */}
-                {/* Logic: Hidden on Desktop if Expanded & Active. Hidden on Mobile if Not Active. */}
-                <div className={`w-full text-center mb-4 md:mb-6 ${isExpanded && isActive ? 'md:hidden' : ''} ${!isActive ? 'hidden md:block' : ''}`}>
-                    {/* <motion.h1
-                        className={`font-gilroy-bold uppercase ${useBlackText ? 'text-black' : 'text-white'}`}
-                        initial={false}
-                        animate={{
-                            fontSize: isExpanded && isActive
-                                ? (isMobile ? "2.5rem" : "3rem")
-                                : (isMobile ? "2.5rem" : "3rem"),
-                        }}
-                        transition={{ duration: 0.4 }}
-                    >
-                        {subtitle}
-                    </motion.h1> */}
+                {/* Mobile: Only show on active card. Desktop:Always show unless expanded & active */}
+                <div className={`w-full text-center mb-4 md:mb-6 
+                    ${!isActive ? 'hidden' : ''} 
+                    ${isExpanded && isActive ? 'md:hidden' : 'md:block'}`}>
+                    {/* Category Heading (e.g., "ASPIRATION") */}
+                    {categoryHeading && (
+                        <motion.h1
+                            className={`font-gilroy-bold uppercase ${useBlackText ? 'text-black' : 'text-white'}`}
+                            initial={false}
+                            animate={{
+                                fontSize: isExpanded && isActive
+                                    ? (isMobile ? "2.5rem" : "3rem")
+                                    : (isMobile ? "2.5rem" : "3rem"),
+                            }}
+                            transition={{ duration: 0.4 }}
+                        >
+                            {categoryHeading}
+                        </motion.h1>
+                    )}
+                    {/* Category Subheading (e.g., "HOW YOU ASPIRE TO BE") */}
                     <motion.p
-                        className={`font-gilroy-semibold tracking-[0.2rem] -mt-3 uppercase ${useBlackText ? 'text-black/80' : 'text-white/80'}`}
+                        className={`font-gilroy-regular tracking-[0.2rem] -mt-3 uppercase ${useBlackText ? 'text-black/80' : 'text-white/80'}`}
                         initial={false}
                         animate={{
                             fontSize: isExpanded && isActive
@@ -212,13 +219,13 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                             transition={{ duration: 0.4, delay: 0.2 }}
                             className="overflow-hidden"
                         >
-                            {/* Description - 2-3 lines */}
-                            <p
-                                className={`font-gilroy-regular text-sm md:text-base leading-relaxed mb-4 md:mb-5 whitespace-pre-line ${isMobile ? 'max-w-md mx-auto' : ''}`}
+                            {/* Description - formatted JSX content */}
+                            <div
+                                className={`font-gilroy-regular text-sm md:text-base leading-relaxed mb-4 md:mb-5 ${isMobile ? 'max-w-md mx-auto' : ''}`}
                                 style={{ color: '#000000' }}
                             >
                                 {description}
-                            </p>
+                            </div>
 
                             <p
                                 className="font-gilroy-regular uppercase tracking-[0.15em] text-xs md:text-sm mb-2 md:mb-5"

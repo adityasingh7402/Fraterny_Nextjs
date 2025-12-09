@@ -61,7 +61,7 @@ import { CTA_HEIGHT } from "../../[testId]/utils/constants";
 import FAQIntrospection from "../final-design/FAQIntrospection";
 import Testimonial from "../final-design/Testimonial";
 import QuestFooter from "../../../../../quest-mode/sections/QuestFooter";
-import {CardData} from '../final-design/types'
+import { CardData } from '../final-design/types'
 
 
 
@@ -727,12 +727,12 @@ export function QuestResultClient({
 
   // Transform resultData.archetypes into CardData format
   const transformArchetypesToCards = (): CardData[] => {
-    if (!resultData?.archetypes) return CARDS_DATA; 
-    
+    if (!resultData?.archetypes) return CARDS_DATA;
+
     const { self, world, aspiration } = resultData.archetypes;
     console.log('self', self);
-    
-    
+
+
     return [
       {
         id: 1,
@@ -843,14 +843,14 @@ export function QuestResultClient({
                   Y
                 </span>
                 {resultData.primary_pattern.substring(1)}
-                </p>
+              </p>
             </div>
 
             {/* Pull Quote */}
             <div className="my-12 py-8 border-l-4 border-neutral-800 pl-6">
-                <p className="text-xl md:text-2xl font-gilroy-light text-neutral-700 leading-relaxed">
+              <p className="text-xl md:text-2xl font-gilroy-light text-neutral-700 leading-relaxed">
                 "{resultData.core_line}"
-                </p>
+              </p>
             </div>
 
             {/* Footer Metadata */}
@@ -866,7 +866,10 @@ export function QuestResultClient({
         {!isMobile ? (
           <div id="gallery-3d" className="relative w-full h-screen overflow-hidden bg-[#4A90A4]"
             style={{ backgroundColor: activeCardColor, transition: 'background-color 0.5s ease' }}>
-            <Gallery3D onColorChange={setActiveCardColor} />
+            <Gallery3D
+              onColorChange={setActiveCardColor}
+              cards={transformArchetypesToCards()}
+            />
           </div>
         ) : (
           <div id="gallery-3d-mobile" className="relative overflow-hidden"
@@ -877,57 +880,66 @@ export function QuestResultClient({
               marginRight: 'calc(50% - 50vw)'
             }}>
             {isLoading ? (
-                <div className="relative w-full h-full flex items-center justify-center">
-                    {/* Center Card */}
-                    <Skeleton 
-                        className="absolute rounded-xl"
-                        style={{
-                            width: `${dimensions.card.width}px`,
-                            height: `${dimensions.card.height}px`,
-                        }}
-                    />
-                    {/* Left Card */}
-                    <Skeleton 
-                        className="absolute rounded-xl opacity-40"
-                        style={{
-                            width: `${dimensions.card.width * 0.85}px`,
-                            height: `${dimensions.card.height * 0.85}px`,
-                            transform: 'translateX(-120%)',
-                        }}
-                    />
-                    {/* Right Card */}
-                    <Skeleton 
-                        className="absolute rounded-xl opacity-40"
-                        style={{
-                            width: `${dimensions.card.width * 0.85}px`,
-                            height: `${dimensions.card.height * 0.85}px`,
-                            transform: 'translateX(120%)',
-                        }}
-                    />
-                </div>
-                ) : (
-                <CardCarousel 
-                    cards={transformArchetypesToCards()}
-                    cardDim={dimensions.card}
-                    viewportDim={dimensions.viewport}
+              <div className="relative w-full h-full flex items-center justify-center">
+                {/* Center Card */}
+                <Skeleton
+                  className="absolute rounded-xl"
+                  style={{
+                    width: `${dimensions.card.width}px`,
+                    height: `${dimensions.card.height}px`,
+                  }}
                 />
-                )}
-            </div>
-          )}
+                {/* Left Card */}
+                <Skeleton
+                  className="absolute rounded-xl opacity-40"
+                  style={{
+                    width: `${dimensions.card.width * 0.85}px`,
+                    height: `${dimensions.card.height * 0.85}px`,
+                    transform: 'translateX(-120%)',
+                  }}
+                />
+                {/* Right Card */}
+                <Skeleton
+                  className="absolute rounded-xl opacity-40"
+                  style={{
+                    width: `${dimensions.card.width * 0.85}px`,
+                    height: `${dimensions.card.height * 0.85}px`,
+                    transform: 'translateX(120%)',
+                  }}
+                />
+              </div>
+            ) : (
+              <CardCarousel
+                cards={transformArchetypesToCards()}
+                cardDim={dimensions.card}
+                viewportDim={dimensions.viewport}
+              />
+            )}
+          </div>
+        )}
 
 
         {/* Calibrate Section */}
         <div id="calibrate-section">
-            <CalibrateSection
-                depthScore={resultData?.depth_score || 0}
-                questions={resultData.slider_question}
-                accentColor={activeCardColor}
-            />
+          <CalibrateSection
+            depthScore={resultData?.depth_score || 0}
+            questions={resultData.slider_question}
+            accentColor={activeCardColor}
+            onFeedbackTrigger={() => {
+              console.log('🎯 CalibrateSection triggered feedback popup!');
+              setFeedbackPopupOpen(true);
+            }}
+            hasAutoTriggered={hasTriggeredFeedback}
+            testId={testId}
+          />
         </div>
 
         {/* Behaviour Signals Section */}
         <div id="concert-page">
-          <ConcertPage backgroundColor={activeCardColor} />
+          <ConcertPage
+            backgroundColor={activeCardColor}
+            signalsData={resultData?.signals}
+          />
         </div>
 
         <div id="pdf-report" className="relative w-full mx-auto pt-6 pb-16 max-w-7xl">
