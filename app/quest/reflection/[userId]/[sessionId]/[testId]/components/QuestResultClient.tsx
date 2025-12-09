@@ -61,11 +61,7 @@ import { CTA_HEIGHT } from "../../[testId]/utils/constants";
 import FAQIntrospection from "../final-design/FAQIntrospection";
 import Testimonial from "../final-design/Testimonial";
 import QuestFooter from "../../../../../quest-mode/sections/QuestFooter";
-
-
-
-
-
+import {CardData} from '../final-design/types'
 
 
 
@@ -610,12 +606,12 @@ export function QuestResultClient({
     toast.success('Opening your PDF report!');
   };
 
-  const handleCardClick = (index: number) => {
-    const insight = mindCard?.insights[index];
-    if (insight) {
-      setSelectedInsight({ index, text: insight });
-    }
-  };
+  // const handleCardClick = (index: number) => {
+  //   const insight = mindCard?.insights[index];
+  //   if (insight) {
+  //     setSelectedInsight({ index, text: insight });
+  //   }
+  // };
 
   const handleLikertSubmit = async () => {
     setLikertSubmitting(true);
@@ -727,22 +723,63 @@ export function QuestResultClient({
     );
   }
 
-  const mindCard = resultData.results["Mind Card"];
-  const findings = resultData.results.findings || [];
-  const quotes = resultData.results.quotes || [];
-  const films = resultData.results.films || [];
-  const subjects = resultData.results.subjects || [];
-  const books = resultData.results.books || [];
-  const actionItem = resultData.results.actionItem || '';
 
-  const mindStats = mindCard?.attributes.map((attr, index) => {
-    const scoreText = mindCard.scores[index] || "0/100";
-    const scoreValue = parseInt(scoreText.split('/')[0]);
-    return {
-      label: attr.charAt(0).toUpperCase() + attr.slice(1),
-      value: scoreValue
-    };
-  }) || [];
+  // Transform resultData.archetypes into CardData format
+  const transformArchetypesToCards = (): CardData[] => {
+    if (!resultData?.archetypes) return CARDS_DATA; 
+    
+    const { self, world, aspiration } = resultData.archetypes;
+    console.log('self', self);
+    
+    
+    return [
+      {
+        id: 1,
+        title: self.clusterName,
+        subtitle: self.subtitle,
+        tag: "SELF VIEW",
+        imageUrl: self.imgUrl,
+        stats: [],
+        bgGradient: self.bgUrl,
+        icon: self.icon,
+        buttonbg: self.buttonbg,
+        textcolor: self.textcolor,
+        bgHeading: self.bgHeading,
+        bgSubheading: self.bgSubheading,
+        content: self.content
+      },
+      {
+        id: 2,
+        title: world.clusterName,
+        subtitle: world.subtitle,
+        tag: "SOCIAL VIEW",
+        imageUrl: world.imgUrl,
+        stats: [],
+        bgGradient: world.bgUrl,
+        icon: world.icon,
+        buttonbg: world.buttonbg,
+        textcolor: world.textcolor,
+        bgHeading: world.bgHeading,
+        bgSubheading: world.bgSubheading,
+        content: world.content
+      },
+      {
+        id: 3,
+        title: aspiration.clusterName,
+        subtitle: aspiration.subtitle,
+        tag: "ASPIRATION",
+        imageUrl: aspiration.imgUrl,
+        stats: [],
+        bgGradient: aspiration.bgUrl,
+        icon: aspiration.icon,
+        buttonbg: aspiration.buttonbg,
+        textcolor: aspiration.textcolor,
+        bgHeading: aspiration.bgHeading,
+        bgSubheading: aspiration.bgSubheading,
+        content: aspiration.content
+      }
+    ];
+  };
 
 
 
@@ -804,14 +841,14 @@ export function QuestResultClient({
                 <span className="float-left text-6xl md:text-7xl font-gilroy-bold text-neutral-800 leading-none mr-2 mt-1">
                     Y
                 </span>
-                {mockData.primary_pattern.substring(1)}
+                {resultData.primary_pattern.substring(1)}
                 </p>
             </div>
 
             {/* Pull Quote */}
             <div className="my-12 py-8 border-l-4 border-neutral-800 pl-6">
                 <p className="text-xl md:text-2xl font-gilroy-light text-neutral-700 leading-relaxed">
-                "{mockData.core_line}"
+                "{resultData.core_line}"
                 </p>
             </div>
 
@@ -868,11 +905,11 @@ export function QuestResultClient({
                     />
                 </div>
                 ) : (
-                    <CardCarousel 
-                        cards={CARDS_DATA}
-                        cardDim={dimensions.card}
-                        viewportDim={dimensions.viewport}
-                    />
+                <CardCarousel 
+                    cards={transformArchetypesToCards()}
+                    cardDim={dimensions.card}
+                    viewportDim={dimensions.viewport}
+                />
                 )}
             </div>
           )}
@@ -881,8 +918,8 @@ export function QuestResultClient({
         {/* Calibrate Section */}
         <div id="calibrate-section">
             <CalibrateSection
-                depthScore={mockData?.depth_score || 0}
-                questions={mockData.slider_question}
+                depthScore={resultData?.depth_score || 0}
+                questions={resultData.slider_question}
                 accentColor={activeCardColor}
             />
         </div>

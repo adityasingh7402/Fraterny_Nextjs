@@ -10,6 +10,8 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
   // Center image horizontally: (CardWidth - ImageWidth) / 2
   const sidePadding = (dimensions.width - dimensions.imageWidth) / 2;
   const [isExpanded, setIsExpanded] = React.useState(false);
+  console.log('Card Data:', data);
+  
   
   
   // The reference implies the image is somewhat top-aligned with padding
