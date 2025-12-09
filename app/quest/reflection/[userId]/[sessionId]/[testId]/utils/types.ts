@@ -47,26 +47,47 @@ export interface MindCardData {
   insights: string[];
 }
 
-export interface ResultData {
-  session_id: string;
-  user_id?: string;
-  completion_date: string;
-  pecentile?: string;
-  qualityscore?: string;
-  referred_by?: string;
-  mode?: string;
-  results: {
-    "section 1"?: string;
-    "Mind Card"?: MindCardData;
-    findings?: string[];
-    quotes?: Quote[];
-    films?: Film[];
-    subjects?: Subject[];
-    astrology?: AstrologyData;
-    books?: Book[];
-    actionItem?: string;
+export type ResultData = {
+  archetypes: {
+    [key: string]: {
+      clusterName: React.ReactNode;
+      subtitle: string;  // ADD THIS
+      imgUrl: string;
+      bgUrl: string;
+      buttonbg: string;
+      textcolor: string;
+      icon: React.ReactNode;
+      content: React.ReactNode;
+      bgHeading: React.ReactNode;
+      bgSubheading: React.ReactNode;
+    };
   };
-}
+  core_line: string;
+  primary_pattern: string;
+  slider_question: {
+    question1: string;
+    question2: string;
+    question3: string;
+    question4: string;
+    likert1: string[];
+    likert2: string[];
+    likert3: string[];
+    likert4: string[];
+  };
+  signals: {
+    signal1_purpose: string;
+    signal2_purpose: string;
+    signal3_purpose: string;
+    signal4_purpose: string;
+    signal5_purpose: string;
+    signal1_description: string;
+    signal2_description: string;
+    signal3_description: string;
+    signal4_description: string;
+    signal5_description: string;
+  };
+  depth_score: number;
+};
 
 export interface User {
   id: string;

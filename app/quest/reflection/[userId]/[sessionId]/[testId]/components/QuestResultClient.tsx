@@ -61,12 +61,7 @@ import { CTA_HEIGHT } from "../../[testId]/utils/constants";
 import FAQIntrospection from "../final-design/FAQIntrospection";
 import Testimonial from "../final-design/Testimonial";
 import QuestFooter from "../../../../../quest-mode/sections/QuestFooter";
-import { GALLERY_CARDS } from '../final-design/GalleryData';
-
-
-
-
-
+import {CardData} from '../final-design/types'
 
 
 
@@ -612,12 +607,12 @@ export function QuestResultClient({
     toast.success('Opening your PDF report!');
   };
 
-  const handleCardClick = (index: number) => {
-    const insight = mindCard?.insights[index];
-    if (insight) {
-      setSelectedInsight({ index, text: insight });
-    }
-  };
+  // const handleCardClick = (index: number) => {
+  //   const insight = mindCard?.insights[index];
+  //   if (insight) {
+  //     setSelectedInsight({ index, text: insight });
+  //   }
+  // };
 
   const handleLikertSubmit = async () => {
     setLikertSubmitting(true);
@@ -729,39 +724,63 @@ export function QuestResultClient({
     );
   }
 
-  const mindCard = resultData.results["Mind Card"];
-  const findings = resultData.results.findings || [];
-  const quotes = resultData.results.quotes || [];
-  const films = resultData.results.films || [];
-  const subjects = resultData.results.subjects || [];
-  const books = resultData.results.books || [];
-  const actionItem = resultData.results.actionItem || '';
 
-  const mindStats = mindCard?.attributes.map((attr, index) => {
-    const scoreText = mindCard.scores[index] || "0/100";
-    const scoreValue = parseInt(scoreText.split('/')[0]);
-    return {
-      label: attr.charAt(0).toUpperCase() + attr.slice(1),
-      value: scoreValue
-    };
-  }) || [];
-
-  const mobileCards = React.useMemo(() => GALLERY_CARDS.map(card => ({
-    id: card.id,
-    title: card.title,
-    subtitle: card.included,
-    tag: card.subtitle,
-    imageUrl: card.image,
-    stats: [],
-    bgGradient: card.background,
-    buttonbg: "",
-    textcolor: "",
-    icon: <LogOut className={`w-6 h-6`} style={{ color: card.color }} />,
-    bgHeading: <>{card.subtitle}</>,
-    bgSubheading: <>{card.categoryText}</>,
-    content: <p className="text-sm font-gilroy-light text-gray-800 whitespace-pre-line">{card.description}</p>,
-    color: card.color
-  })), []);
+  // Transform resultData.archetypes into CardData format
+  const transformArchetypesToCards = (): CardData[] => {
+    if (!resultData?.archetypes) return CARDS_DATA; 
+    
+    const { self, world, aspiration } = resultData.archetypes;
+    console.log('self', self);
+    
+    
+    return [
+      {
+        id: 1,
+        title: self.clusterName,
+        subtitle: self.subtitle,
+        tag: "SELF VIEW",
+        imageUrl: self.imgUrl,
+        stats: [],
+        bgGradient: self.bgUrl,
+        icon: self.icon,
+        buttonbg: self.buttonbg,
+        textcolor: self.textcolor,
+        bgHeading: self.bgHeading,
+        bgSubheading: self.bgSubheading,
+        content: self.content
+      },
+      {
+        id: 2,
+        title: world.clusterName,
+        subtitle: world.subtitle,
+        tag: "SOCIAL VIEW",
+        imageUrl: world.imgUrl,
+        stats: [],
+        bgGradient: world.bgUrl,
+        icon: world.icon,
+        buttonbg: world.buttonbg,
+        textcolor: world.textcolor,
+        bgHeading: world.bgHeading,
+        bgSubheading: world.bgSubheading,
+        content: world.content
+      },
+      {
+        id: 3,
+        title: aspiration.clusterName,
+        subtitle: aspiration.subtitle,
+        tag: "ASPIRATION",
+        imageUrl: aspiration.imgUrl,
+        stats: [],
+        bgGradient: aspiration.bgUrl,
+        icon: aspiration.icon,
+        buttonbg: aspiration.buttonbg,
+        textcolor: aspiration.textcolor,
+        bgHeading: aspiration.bgHeading,
+        bgSubheading: aspiration.bgSubheading,
+        content: aspiration.content
+      }
+    ];
+  };
 
 
 
@@ -823,15 +842,15 @@ export function QuestResultClient({
                 <span className="float-left text-6xl md:text-7xl font-gilroy-bold leading-none mr-2 mt-1" style={{ color: activeCardColor }}>
                   Y
                 </span>
-                {mockData.primary_pattern.substring(1)}
-              </p>
+                {resultData.primary_pattern.substring(1)}
+                </p>
             </div>
 
             {/* Pull Quote */}
-            <div className="my-12 py-8 border-l-4 pl-6" style={{ borderColor: activeCardColor }}>
-              <p className="text-xl md:text-2xl font-gilroy-light text-neutral-700 leading-relaxed">
-                "{mockData.core_line}"
-              </p>
+            <div className="my-12 py-8 border-l-4 border-neutral-800 pl-6">
+                <p className="text-xl md:text-2xl font-gilroy-light text-neutral-700 leading-relaxed">
+                "{resultData.core_line}"
+                </p>
             </div>
 
             {/* Footer Metadata */}
@@ -858,61 +877,52 @@ export function QuestResultClient({
               marginRight: 'calc(50% - 50vw)'
             }}>
             {isLoading ? (
-              <div className="relative w-full h-full flex items-center justify-center">
-                {/* Center Card */}
-                <Skeleton
-                  className="absolute rounded-xl"
-                  style={{
-                    width: `${dimensions.card.width}px`,
-                    height: `${dimensions.card.height}px`,
-                  }}
+                <div className="relative w-full h-full flex items-center justify-center">
+                    {/* Center Card */}
+                    <Skeleton 
+                        className="absolute rounded-xl"
+                        style={{
+                            width: `${dimensions.card.width}px`,
+                            height: `${dimensions.card.height}px`,
+                        }}
+                    />
+                    {/* Left Card */}
+                    <Skeleton 
+                        className="absolute rounded-xl opacity-40"
+                        style={{
+                            width: `${dimensions.card.width * 0.85}px`,
+                            height: `${dimensions.card.height * 0.85}px`,
+                            transform: 'translateX(-120%)',
+                        }}
+                    />
+                    {/* Right Card */}
+                    <Skeleton 
+                        className="absolute rounded-xl opacity-40"
+                        style={{
+                            width: `${dimensions.card.width * 0.85}px`,
+                            height: `${dimensions.card.height * 0.85}px`,
+                            transform: 'translateX(120%)',
+                        }}
+                    />
+                </div>
+                ) : (
+                <CardCarousel 
+                    cards={transformArchetypesToCards()}
+                    cardDim={dimensions.card}
+                    viewportDim={dimensions.viewport}
                 />
-                {/* Left Card */}
-                <Skeleton
-                  className="absolute rounded-xl opacity-40"
-                  style={{
-                    width: `${dimensions.card.width * 0.85}px`,
-                    height: `${dimensions.card.height * 0.85}px`,
-                    transform: 'translateX(-120%)',
-                  }}
-                />
-                {/* Right Card */}
-                <Skeleton
-                  className="absolute rounded-xl opacity-40"
-                  style={{
-                    width: `${dimensions.card.width * 0.85}px`,
-                    height: `${dimensions.card.height * 0.85}px`,
-                    transform: 'translateX(120%)',
-                  }}
-                />
-              </div>
-            ) : (
-              <CardCarousel
-                cards={mobileCards}
-                cardDim={dimensions.card}
-                viewportDim={dimensions.viewport}
-                onColorChange={setActiveCardColor}
-              />
-            )}
-          </div>
-        )}
+                )}
+            </div>
+          )}
 
 
         {/* Calibrate Section */}
         <div id="calibrate-section">
-          <CalibrateSection
-            depthScore={mockData?.depth_score || 0}
-            questions={mockData.slider_question}
-            accentColor={activeCardColor}
-            hasAutoTriggered={hasTriggeredFeedback || hasFeedbackSubmitted}
-            testId={testId}
-            onFeedbackTrigger={() => {
-              if (!hasFeedbackSubmitted) {
-                setHasTriggeredFeedback(true);
-                setFeedbackPopupOpen(true);
-              }
-            }}
-          />
+            <CalibrateSection
+                depthScore={resultData?.depth_score || 0}
+                questions={resultData.slider_question}
+                accentColor={activeCardColor}
+            />
         </div>
 
         {/* Behaviour Signals Section */}

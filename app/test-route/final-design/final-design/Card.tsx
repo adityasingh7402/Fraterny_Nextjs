@@ -2,7 +2,7 @@
 import React from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { CardData, CardDimensions, CardProps } from './types';
-import { LogOut } from 'lucide-react'
+import {LogOut} from 'lucide-react'
 
 
 
@@ -16,8 +16,8 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
   
   // The reference implies the image is somewhat top-aligned with padding
   const topPadding = sidePadding;
-  const imagepadding = (57 - topPadding);
-
+  const imagepadding = (57 -  topPadding);
+  
 
   React.useEffect(() => {
     if (!active && isExpanded) {
@@ -32,7 +32,7 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
         width: `${dimensions.width}px`,
         height: `${dimensions.height}px`,
         borderRadius: '57px',
-        boxShadow: active
+        boxShadow: active 
           ? '0 25px 50px -12px rgba(0,0,0,0.4)'
           : '0 10px 15px -3px rgba(0,0,0,0.1)',
       }}
@@ -41,7 +41,7 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
          1. IMAGE CONTAINER 
          Fixed height from specs: 139.6px
       */}
-      <div
+      <div 
         className="flex-shrink-0 relative z-10 bg-gray-100"
         style={{
           width: `${dimensions.imageWidth}px`,
@@ -51,8 +51,8 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
           overflow: 'hidden',
         }}
       >
-        <img
-          src={data.imageUrl}
+        <img 
+          src={data.imageUrl} 
           alt="Card Visual"
           className="w-full h-full object-cover block"
           draggable={false}
@@ -60,89 +60,84 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
         <div onClick={() => setIsExpanded(true)} className="absolute bottom-0 right-0 text-white font-gilroy-regular text-sm pr-4 pb-2 mix-blend-overlay"> Know More ..</div>
       </div>
 
-      <motion.div
+      <motion.div 
         {...(isExpanded && { layoutId: `card-info-${data.id}` })}
         className="flex-1 w-full flex flex-col items-start justify-start relative z-10 px-6 py-6"
-      >
-        <motion.div
-          {...(isExpanded && { layoutId: `card-title-${data.id}` })}
-          className={`${data.textcolor} text-3xl font-gilroy-semibold uppercase tracking-tight`}
-          style={data.color ? { color: data.color } : undefined}
         >
-          {data.title}
-        </motion.div>
-
-        <motion.div
-          {...(isExpanded && { layoutId: `card-subtitle-${data.id}` })}
-          className={`mt-4 ${data.textcolor} text-[12px] font-gilroy-regular uppercase tracking-[0.05rem]`}
-          style={data.color ? { color: data.color } : undefined}
+        <motion.div 
+            {...(isExpanded && { layoutId: `card-title-${data.id}` })}
+            className={`${data.textcolor} text-3xl font-gilroy-semibold uppercase tracking-tight`}
         >
-          Currently Inclined
+            {data.title}
         </motion.div>
-
-        <motion.div
-          {...(isExpanded && { layoutId: `card-tag-${data.id}` })}
-          className={`mt-1 text-xl font-gilroy-light px-8 py-2 rounded-[35px] ${data.buttonbg} text-white`}
-          style={data.color ? { backgroundColor: data.color } : undefined}
+        
+        <motion.div 
+            {...(isExpanded && { layoutId: `card-subtitle-${data.id}` })}
+            className={`mt-4 ${data.textcolor} text-[12px] font-gilroy-regular uppercase tracking-[0.05rem]`}
         >
-          {data.subtitle}
+            Currently Inclined
         </motion.div>
-      </motion.div>
+        
+        <motion.div 
+            {...(isExpanded && { layoutId: `card-tag-${data.id}` })}
+            className={`mt-1 text-xl font-gilroy-light px-8 py-2 rounded-[35px] ${data.buttonbg} text-white`}
+        >
+            {data.subtitle}
+        </motion.div>
+        </motion.div>
 
       <AnimatePresence>
         {isExpanded && (
-          <motion.div
+            <motion.div
             className="absolute inset-0 bg-white rounded-xl z-30 flex flex-col p-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-          >
+            >
             {/* Close Button */}
             <button
-              onClick={(e) => {
+                onClick={(e) => {
                 e.stopPropagation();
                 setIsExpanded(false);
-              }}
-              className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center z-40"
+                }}
+                className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center z-40"
             >
-              <span>{data.icon}</span>
+                <span>{data.icon}</span>
             </button>
 
             {/* Expanded Content */}
-            <motion.div
-              layoutId={`card-info-${data.id}`}
-              className="flex-1 w-full flex flex-col items-start justify-start"
+            <motion.div 
+                layoutId={`card-info-${data.id}`} 
+                className="flex-1 w-full flex flex-col items-start justify-start"
             >
-              <motion.div
-                layoutId={`card-title-${data.id}`}
+                <motion.div 
+                layoutId={`card-title-${data.id}`} 
                 className={`${data.textcolor} text-4xl font-gilroy-semibold uppercase tracking-tight`}
-                style={data.color ? { color: data.color } : undefined}
-              >
+                >
                 {data.title}
-              </motion.div>
-
-              <motion.div
-                layoutId={`card-subtitle-${data.id}`}
+                </motion.div>
+                
+                <motion.div 
+                layoutId={`card-subtitle-${data.id}`} 
                 className='mt-4 text-gray-600 text-[15px] font-gilroy-regular uppercase tracking-[0.1rem]'
-              >
+                >
                 Currently Inclined
-              </motion.div>
-
-              <motion.div
-                layoutId={`card-tag-${data.id}`}
+                </motion.div>
+                
+                <motion.div 
+                layoutId={`card-tag-${data.id}`} 
                 className={`mt-1 text-xl font-gilroy-regular px-8 py-2 rounded-xl ${data.buttonbg} text-white`}
-                style={data.color ? { backgroundColor: data.color } : undefined}
-              >
+                >
                 {data.subtitle}
-              </motion.div>
+                </motion.div>
 
-              <div className="mt-6 flex-1 w-full overflow-y-auto">
-                {data.content}
-              </div>
+                <div className="mt-6 flex-1 w-full overflow-y-auto">
+                    {data.content}
+                </div>
 
-              {/* Stats - if available */}
-              {/* {data.stats && data.stats.length > 0 && (
+                {/* Stats - if available */}
+                {/* {data.stats && data.stats.length > 0 && (
                 <div className="mt-6 w-full space-y-2">
                     {data.stats.map((stat, index) => (
                     <div key={index} className="flex justify-between items-center">
@@ -153,9 +148,9 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
                 </div>
                 )} */}
             </motion.div>
-          </motion.div>
+            </motion.div>
         )}
-      </AnimatePresence>
+        </AnimatePresence>
 
       {/* Glossy Reflection Gradient */}
       <div className="absolute inset-0 bg-gradient-to-tr from-white/30 via-transparent to-transparent pointer-events-none z-20 opacity-50"></div>
