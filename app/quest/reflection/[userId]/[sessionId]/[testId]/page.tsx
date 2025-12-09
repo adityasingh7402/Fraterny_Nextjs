@@ -1,6 +1,5 @@
 // page.tsx
 import { QuestResultClient } from './components/QuestResultClient';
-import { validateResultData } from './utils/validations';
 import { mockData } from './final-design/ResultData';
 import {prepareFinalData} from './final-design/ResultData';
 import axios from 'axios';
