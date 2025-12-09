@@ -29,10 +29,9 @@ interface CardCarouselProps {
   cards: CardData[];
   cardDim: CardDimensions;
   viewportDim: Dimensions;
-  onColorChange?: (color: string) => void;
 }
 
-const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim, onColorChange }) => {
+const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim }) => {
   const [currentVirtualIndex, setCurrentVirtualIndex] = useState(0);
   const haptics = useHaptics();
 
@@ -50,7 +49,7 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim
   const verticalOffset = (viewportDim.height - cardDim.height) / 2;
 
   // --- BACKGROUND WIPE LOGIC ---
-  // When carousel moves by 1 VIEWPORT_WIDTH.
+  // When carousel moves by 1 SPACING, Background should move by 1 VIEWPORT_WIDTH.
   // Negate to ensure inverse direction: Drag Right (Pos) -> BG Left (Neg)
   const bgMoveRatio = -viewportDim.width / SPACING;
   const backgroundX = useTransform(dragX, (value) => Math.round(value * bgMoveRatio));
@@ -76,17 +75,6 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim
     });
     return () => unsubscribe();
   }, [dragX, currentVirtualIndex, haptics, SPACING]);
-
-  // Trigger color change when current index changes
-  useEffect(() => {
-    if (onColorChange) {
-      const wrappedIndex = getWrappedIndex(currentVirtualIndex);
-      const color = cards[wrappedIndex]?.color;
-      if (color) {
-        onColorChange(color);
-      }
-    }
-  }, [currentVirtualIndex, cards, onColorChange]);
 
   const handleCardTap = (virtualIndex: number) => {
     if (virtualIndex === currentVirtualIndex) return;
@@ -145,13 +133,13 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim
     visibleIndices.push(i);
   }
 
-
+  
 
   return (
     <div
       className="relative w-full h-full flex items-center justify-center overflow-hidden"
       style={{ perspective: '1000px' }}
-
+      
     >
 
       {/* INFINITE DYNAMIC WIPE BACKGROUND */}
@@ -163,29 +151,29 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim
       >
         {visibleIndices.map(virtualIndex => {
           const wrappedIndex = getWrappedIndex(virtualIndex);
-
+          
           const cardData = cards[wrappedIndex];
 
 
           return (
-            <div
-              key={`bg-${virtualIndex}`}
-              className={`absolute top-0`}
-              style={{
-                width: viewportDim.width + 2,
-                height: viewportDim.height,
-                backgroundImage: `url("${cardData.bgGradient}")`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                left: -virtualIndex * viewportDim.width - 1,
-                willChange: 'transform'
-              }}
-            >
-              <motion.div
-                animate={{ opacity: 1 }}
-                initial={false}
-                transition={{ duration: 0.25 }}
-                className="flex flex-col items-center pt-14"
+          <div
+            key={`bg-${virtualIndex}`}
+            className={`absolute top-0`}
+            style={{
+              width: viewportDim.width + 2,
+              height: viewportDim.height,
+              backgroundImage: `url("${cardData.bgGradient}")`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              left: -virtualIndex * viewportDim.width - 1,
+              willChange: 'transform'
+            }}
+          >
+            <motion.div
+              animate={{ opacity: 1 }}
+              initial={false}
+              transition={{ duration: 0.25 }}
+              className="flex flex-col items-center pt-14"
               >
                 <p className="text-5xl font-gilroy-semibold uppercase text-white text-center mb-[-10px]">
                   {/* {cards[getWrappedIndex(currentVirtualIndex)].bgHeading} */}
@@ -196,8 +184,8 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim
                   {cardData.bgSubheading}
                 </p>
               </motion.div>
-            </div>
-
+          </div>
+          
           );
         })}
       </motion.div>

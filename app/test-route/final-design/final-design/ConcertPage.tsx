@@ -79,11 +79,11 @@ const ConcertList = ({
                 {/* Header */}
                 <motion.div
                     className="max-w-7xl mx-auto pb-12">
-                    <span className="block text-sm uppercase tracking-[0.3em] text-white/80 mb-4 font-gilroy-medium px-1 sm:px-0">
+                    <span className="block text-sm uppercase tracking-[0.3em] text-neutral-800 mb-4 font-gilroy-medium px-1 sm:px-0">
                         Behavioural Signals
                     </span>
-                    <h1 className="text-5xl md:text-7xl font-gilroy-bold tracking-tighter text-white leading-none px-1 sm:px-0">
-                        Your <span className="text-white/50">Behavioural</span> Aspects
+                    <h1 className="text-5xl md:text-7xl font-gilroy-bold tracking-tighter text-neutral-900 leading-none px-1 sm:px-0">
+                        Your <span className="text-white">Behavioural</span> Aspects
                     </h1>
                 </motion.div>
 
@@ -131,7 +131,7 @@ const ConcertList = ({
                                         {concert.band}
                                         {concert.id !== 1 && <LockIcon className="w-6 h-6 md:w-8 md:h-8" />}
                                     </h2>
-
+                                    
                                 </div>
                             </div>
                         </motion.div>
@@ -247,7 +247,7 @@ const ConcertPage = ({ backgroundColor }: ConcertPageProps) => {
         <>
             <style>{styles}</style>
             <div className="concert-page">
-
+                
                 <ConcertList
                     concerts={concerts}
                     onSelectConcert={setSelectedConcert}

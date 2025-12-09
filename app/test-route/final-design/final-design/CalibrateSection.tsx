@@ -1,9 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState, useEffect, useRef } from "react";
-import axios from 'axios';
-import { toast } from 'sonner';
+import { useState } from "react";
 
 interface CalibrateSectionProps {
     depthScore: number;
@@ -11,93 +9,14 @@ interface CalibrateSectionProps {
         [key: string]: string | string[];
     };
     accentColor?: string;
-    hasAutoTriggered?: boolean;
-    onFeedbackTrigger?: () => void;
-    testId?: string;
 }
 
-export default function CalibrateSection({ depthScore, questions, accentColor = "#0394A3", hasAutoTriggered = false, onFeedbackTrigger, testId }: CalibrateSectionProps) {
+export default function CalibrateSection({ depthScore, questions, accentColor = "#0394A3" }: CalibrateSectionProps) {
     // Extract questions and likert scales
     const questionKeys = Object.keys(questions).filter(key => key.startsWith('question'));
-    const sectionRef = useRef<HTMLElement>(null);
-    const hasTriggeredRef = useRef(false);
-
-    // State for slider values (default to middle value 5)
-    const [sliderValues, setSliderValues] = useState({ q1: 5, q2: 5, q3: 5, q4: 5 });
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    // Trigger feedback popup when section comes into view
-    useEffect(() => {
-        if (!onFeedbackTrigger || hasAutoTriggered || hasTriggeredRef.current) return;
-
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting && !hasTriggeredRef.current && !hasAutoTriggered) {
-                        // Wait 2 seconds after section is in view
-                        setTimeout(() => {
-                            if (onFeedbackTrigger && !hasTriggeredRef.current && !hasAutoTriggered) {
-                                hasTriggeredRef.current = true;
-                                onFeedbackTrigger();
-                            }
-                        }, 2000);
-                    }
-                });
-            },
-            { threshold: 0.3 } // Trigger when 30% of section is visible
-        );
-
-        if (sectionRef.current) {
-            observer.observe(sectionRef.current);
-        }
-
-        return () => {
-            if (sectionRef.current) {
-                observer.unobserve(sectionRef.current);
-            }
-        };
-    }, [onFeedbackTrigger, hasAutoTriggered]);
-
-    const handleSubmitCalibration = async () => {
-        if (!testId) {
-            toast.error('Test ID not found', { position: "top-right" });
-            return;
-        }
-
-        setIsSubmitting(true);
-        try {
-            console.log('Submitting calibration:', sliderValues, testId);
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/likert/`, {
-                test_id: testId,
-                q1: String(sliderValues.q1),
-                q2: String(sliderValues.q2),
-                q3: String(sliderValues.q3),
-                q4: String(sliderValues.q4)
-            });
-
-            console.log('Calibration response:', response.data);
-
-            if (response.data.status === 200) {
-                toast.success(response.data.Message || 'Successfully updated calibration', {
-                    position: "top-right"
-                });
-            } else {
-                toast.error(response.data.Message || 'Failed to update', {
-                    position: "top-right"
-                });
-            }
-        } catch (error: any) {
-            console.error('Calibration submission error:', error);
-            toast.error(error?.response?.data?.Message || 'Failed to update calibration', {
-                position: "top-right"
-            });
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
 
     return (
-        <section ref={sectionRef} className="relative w-full py-24 px-6 md:px-12 bg-white text-neutral-900 overflow-hidden">
+        <section className="relative w-full py-24 px-6 md:px-12 bg-white text-neutral-900 overflow-hidden">
             <div className="max-w-7xl mx-auto">
 
                 {/* Header */}
@@ -178,7 +97,7 @@ export default function CalibrateSection({ depthScore, questions, accentColor = 
                                                 type="range"
                                                 min="0"
                                                 max="10"
-                                                value={sliderValues[`q${questionNumber}` as keyof typeof sliderValues]}
+                                                defaultValue="5"
                                                 className="w-full h-2 bg-neutral-200 rounded-full appearance-none cursor-pointer
                                                     focus:outline-none
                                                     [&::-webkit-slider-thumb]:appearance-none
@@ -203,14 +122,14 @@ export default function CalibrateSection({ depthScore, questions, accentColor = 
                                                 style={{
                                                     // We can't easily style the thumb border color dynamically in plain CSS modules/setup without styled-components or CSS variables.
                                                     // So we use accentColor for the "filled" part via a linear gradient trick.
-                                                    backgroundImage: `linear-gradient(to right, ${accentColor} ${(sliderValues[`q${questionNumber}` as keyof typeof sliderValues] / 10) * 100}%, #e5e5e5 ${(sliderValues[`q${questionNumber}` as keyof typeof sliderValues] / 10) * 100}%)`
+                                                    backgroundImage: `linear-gradient(to right, ${accentColor} 50%, #e5e5e5 50%)`
                                                 }}
-                                                onChange={(e) => {
-                                                    const value = parseInt(e.target.value);
-                                                    setSliderValues(prev => ({
-                                                        ...prev,
-                                                        [`q${questionNumber}`]: value
-                                                    }));
+                                                onInput={(e) => {
+                                                    const target = e.target as HTMLInputElement;
+                                                    const value = parseInt(target.value);
+                                                    const percentage = (value / 10) * 100;
+                                                    target.style.backgroundImage = `linear-gradient(to right, ${accentColor} ${percentage}%, #e5e5e5 ${percentage}%)`;
+                                                    // Optional: You could update some local state here if you wanted the thumb border to change color too
                                                 }}
                                             />
                                         </div>
@@ -226,12 +145,10 @@ export default function CalibrateSection({ depthScore, questions, accentColor = 
 
                         <div className="flex justify-end pt-8">
                             <button
-                                onClick={handleSubmitCalibration}
-                                disabled={isSubmitting}
-                                className="px-8 py-4 rounded-full font-gilroy-bold text-white text-sm uppercase tracking-widest shadow-xl transition-all hover:-translate-y-1 hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="px-8 py-4 rounded-full font-gilroy-bold text-white text-sm uppercase tracking-widest shadow-xl transition-all hover:-translate-y-1 hover:shadow-2xl"
                                 style={{ backgroundColor: accentColor }}
                             >
-                                {isSubmitting ? 'Submitting...' : 'Submit Calibration'}
+                                Submit Calibration
                             </button>
                         </div>
                     </div>

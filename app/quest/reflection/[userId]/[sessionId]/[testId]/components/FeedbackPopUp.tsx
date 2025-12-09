@@ -13,12 +13,13 @@ interface FeedbackPopupProps {
   open: boolean;
   onClose: () => void;
   onDismiss?: (hasInteracted: boolean) => void;
+  onFeedbackSubmit?: () => void;
   sessionId?: string;
   testId?: string;
   userId?: string;
 }
 
-export const FeedbackPopup: React.FC<FeedbackPopupProps> = ({ open, onClose, onDismiss, sessionId, testId, userId }) => {
+export const FeedbackPopup: React.FC<FeedbackPopupProps> = ({ open, onClose, onDismiss, onFeedbackSubmit, sessionId, testId, userId }) => {
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -51,12 +52,17 @@ export const FeedbackPopup: React.FC<FeedbackPopupProps> = ({ open, onClose, onD
 
       console.log('Overall feedback response:', response.data);
       console.log('Response status:', response.status);
-      
+
       // Check HTTP status code (200-299 is success)
       if (response.status >= 200 && response.status < 300) {
         // Show thank you popup
         setShowThankYou(true);
-        
+
+        // Call the submit callback
+        if (onFeedbackSubmit) {
+          onFeedbackSubmit();
+        }
+
         // Auto-close thank you popup after 2 seconds
         setTimeout(() => {
           setShowThankYou(false);
@@ -70,7 +76,7 @@ export const FeedbackPopup: React.FC<FeedbackPopupProps> = ({ open, onClose, onD
       }
     } catch (error: any) {
       console.error('Failed to submit overall feedback:', error);
-      
+
       // Handle axios error response
       const errorMessage = error.response?.data?.message || 'Failed to submit feedback. Please try again.';
       toast.error(errorMessage, { position: "top-right" });
@@ -85,7 +91,7 @@ export const FeedbackPopup: React.FC<FeedbackPopupProps> = ({ open, onClose, onD
     if (onDismiss) {
       onDismiss(true); // Always true since they didn't submit
     }
-    
+
     setRating(0);
     setFeedback("");
     onClose();
@@ -131,83 +137,83 @@ export const FeedbackPopup: React.FC<FeedbackPopupProps> = ({ open, onClose, onD
                   <X className="h-5 w-5 text-gray-600" />
                 </button>
 
-            {/* Header */}
-            <div className="mb-6">
-              <h3 className="text-2xl font-gilroy-bold text-gray-900 mb-2">
-                Rate my Accuracy
-              </h3>
-              <p className="text-gray-600 font-gilroy-regular text-sm">
-                Do you have any feedback on my accuracy and depth?
-              </p>
-            </div>
+                {/* Header */}
+                <div className="mb-6">
+                  <h3 className="text-2xl font-gilroy-bold text-gray-900 mb-2">
+                    Rate my Accuracy
+                  </h3>
+                  <p className="text-gray-600 font-gilroy-regular text-sm">
+                    Do you have any feedback on my accuracy and depth?
+                  </p>
+                </div>
 
-            {/* Star Rating */}
-            <div className="mb-6">
-              <div className="flex justify-center gap-2">
-                {[1, 2, 3, 4, 5].map((star) => (
+                {/* Star Rating */}
+                <div className="mb-6">
+                  <div className="flex justify-center gap-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <motion.button
+                        key={star}
+                        onClick={() => handleStarClick(star)}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="p-1 transition-colors"
+                      >
+                        <Star
+                          className={`h-8 w-8 transition-colors ${star <= rating
+                            ? 'text-sky-500 fill-sky-500'
+                            : 'text-gray-300 hover:text-gray-400'
+                            }`}
+                        />
+                      </motion.button>
+                    ))}
+                  </div>
+                  {rating > 0 && (
+                    <p className="text-center text-sm text-gray-600 mt-2 font-gilroy-regular">
+                      {rating === 1 && 'Inaccurate'}
+                      {rating === 2 && 'Less Accurate'}
+                      {rating === 3 && 'Somewhat Accurate'}
+                      {rating === 4 && 'Accurate'}
+                      {rating === 5 && 'Very Accurate'}
+                    </p>
+                  )}
+                </div>
+
+                {/* Feedback Text */}
+                <div className="mb-6">
+                  <textarea
+                    value={feedback}
+                    onChange={(e) => setFeedback(e.target.value)}
+                    placeholder="Tell us more about your experience... (optional)"
+                    className="w-full p-3 border border-gray-200 rounded-xl resize-none font-gilroy-regular text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all"
+                    rows={4}
+                  />
+                </div>
+
+                {/* Submit Button */}
+                <div className="flex justify-end">
                   <motion.button
-                    key={star}
-                    onClick={() => handleStarClick(star)}
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="p-1 transition-colors"
+                    onClick={handleSubmit}
+                    disabled={(rating === 0 && !feedback.trim()) || isSubmitting}
+                    whileHover={(rating > 0 || feedback.trim()) ? { scale: 1.02 } : {}}
+                    whileTap={(rating > 0 || feedback.trim()) ? { scale: 0.98 } : {}}
+                    className={`flex items-center gap-2 px-6 py-3 rounded-xl font-gilroy-bold text-sm transition-all ${(rating > 0 || feedback.trim())
+                      ? 'bg-sky-500 hover:bg-sky-600 text-white shadow-lg hover:shadow-xl'
+                      : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                      }`}
                   >
-                    <Star
-                      className={`h-8 w-8 transition-colors ${star <= rating
-                        ? 'text-sky-500 fill-sky-500'
-                        : 'text-gray-300 hover:text-gray-400'
-                        }`}
-                    />
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        Submitting...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="h-4 w-4" />
+                        Submit Feedback
+                      </>
+                    )}
                   </motion.button>
-                ))}
-              </div>
-              {rating > 0 && (
-                <p className="text-center text-sm text-gray-600 mt-2 font-gilroy-regular">
-                  {rating === 1 && 'Inaccurate'}
-                  {rating === 2 && 'Less Accurate'}
-                  {rating === 3 && 'Somewhat Accurate'}
-                  {rating === 4 && 'Accurate'}
-                  {rating === 5 && 'Very Accurate'}
-                </p>
-              )}
-            </div>
-
-            {/* Feedback Text */}
-            <div className="mb-6">
-              <textarea
-                value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
-                placeholder="Tell us more about your experience... (optional)"
-                className="w-full p-3 border border-gray-200 rounded-xl resize-none font-gilroy-regular text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-all"
-                rows={4}
-              />
-            </div>
-
-            {/* Submit Button */}
-            <div className="flex justify-end">
-              <motion.button
-                onClick={handleSubmit}
-                disabled={(rating === 0 && !feedback.trim()) || isSubmitting}
-                whileHover={(rating > 0 || feedback.trim()) ? { scale: 1.02 } : {}}
-                whileTap={(rating > 0 || feedback.trim()) ? { scale: 0.98 } : {}}
-                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-gilroy-bold text-sm transition-all ${(rating > 0 || feedback.trim())
-                  ? 'bg-sky-500 hover:bg-sky-600 text-white shadow-lg hover:shadow-xl'
-                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                  }`}
-              >
-                {isSubmitting ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Submitting...
-                  </>
-                ) : (
-                  <>
-                    <Send className="h-4 w-4" />
-                    Submit Feedback
-                  </>
-                )}
-              </motion.button>
-            </div>
+                </div>
               </>
             )}
           </motion.div>
