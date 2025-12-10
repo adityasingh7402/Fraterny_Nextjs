@@ -115,7 +115,7 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
             >
               <motion.div
                 layoutId={`card-title-${data.id}`}
-                className={`${data.textcolor} text-3xl xs:text-4xl font-gilroy-bold uppercase tracking-tight`}
+                className={`${data.textcolor} text-3xl xs:text-4xl font-gilroy-bold uppercase tracking-tight pt-8`}
                 style={data.color ? { color: data.color } : undefined}
               >
                 {data.title}
@@ -123,7 +123,8 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
 
               <motion.div
                 layoutId={`card-subtitle-${data.id}`}
-                className='mt-4 text-gray-600 text-[12px] xs:text-[15px] font-gilroy-regular uppercase tracking-[0.1rem]'
+                className={`mt-4 ${data.textcolor} text-[12px] xs:text-[15px] font-gilroy-regular uppercase tracking-[0.1rem]`}
+                style={data.color ? { color: data.color } : undefined}
               >
                 Currently Inclined
               </motion.div>
