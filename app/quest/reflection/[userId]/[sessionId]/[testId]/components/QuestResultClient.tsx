@@ -957,10 +957,10 @@ export function QuestResultClient({
             className="mb-8 max-w-7xl mx-auto px-6 sm:px-0"
           >
             <span className="block text-sm uppercase tracking-[0.3em] text-neutral-400 mb-2 font-gilroy-medium">
-              Private File
+              Made from your words
             </span>
             <h1 className="text-5xl md:text-7xl font-gilroy-bold tracking-tighter text-neutral-900 leading-none">
-              Your <span style={{ color: activeCardColor }}>Private</span> File
+              Private <span style={{ color: activeCardColor }}>Intelligence</span> File
             </h1>
           </motion.div>
           <div className="flex flex-col sm:flex-row justify-center items-center gap-10">
