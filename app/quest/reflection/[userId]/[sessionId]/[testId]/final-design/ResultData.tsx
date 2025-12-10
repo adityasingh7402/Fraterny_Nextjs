@@ -117,7 +117,7 @@ export const CARDS_DATA: CardData[] = [
 export const clusters: Cluster[] = [
   {
     name: <div className="flex flex-col items-start leading-6">
-      <p className="pb-2"> THE </p>
+      <p className="pb-1"> THE </p>
       <p> STRATEGIST </p>
     </div>,
     img: '/result/STRATEGIST.webp',
@@ -162,7 +162,7 @@ export const clusters: Cluster[] = [
   },
   {
     name: <div className="flex flex-col items-start leading-6">
-      <p className="pb-2"> HIDDEN </p>
+      <p className="pb-1"> HIDDEN </p>
       <p> THINKER </p>
     </div>,
     img: '/result/HIDDEN THINKER (2).webp',
@@ -206,8 +206,8 @@ export const clusters: Cluster[] = [
   },
   {
     name: <div className="flex flex-col items-start leading-6">
-      <p className="pb-2"> THE FREE </p>
-      <p> SPIRITS </p>
+      <p className="pb-1"> THE FREE </p>
+      <p> SPIRIT </p>
     </div>,
     img: '/result/FREE SPIRIT (2).webp',
     bgimg: '/result/FREE SPIRIT (4).webp',
@@ -250,7 +250,7 @@ export const clusters: Cluster[] = [
   },
   {
     name: <div className="flex flex-col items-start leading-6">
-      <p className="pb-2"> RESTLESS </p>
+      <p className="pb-1"> RESTLESS </p>
       <p> MIND </p>
     </div>,
     img: '/result/RESTLESS MIND.webp',
@@ -294,7 +294,7 @@ export const clusters: Cluster[] = [
   },
   {
     name: <div className="flex flex-col items-start leading-6">
-      <p className="pb-2"> HEALING </p>
+      <p className="pb-1"> HEALING </p>
       <p> HEARTS </p>
     </div>,
     img: '/result/HEALING HEART.webp',
@@ -338,7 +338,7 @@ export const clusters: Cluster[] = [
   },
   {
     name: <div className="flex flex-col items-start leading-6">
-      <p className="pb-2"> SOUL </p>
+      <p className="pb-1"> SOUL </p>
       <p>ALIGNED </p>
     </div>,
     img: '/result/SOUL ALIGNED (2).webp',
