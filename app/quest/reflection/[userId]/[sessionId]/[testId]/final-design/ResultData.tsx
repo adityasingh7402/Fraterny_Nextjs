@@ -2,7 +2,6 @@ import { LogOut } from "lucide-react";
 import { CardData } from "./types";
 import { Cluster } from "./types";
 import React from 'react';
-import { log } from "console";
 
 export const CARDS_DATA: CardData[] = [
   {
@@ -119,7 +118,7 @@ export const clusters: Cluster[] = [
   {
     name: <div className="flex flex-col items-start leading-6">
       <p className="pb-2"> THE </p>
-      <p> STRATEGISTS </p>
+      <p> STRATEGIST </p>
     </div>,
     img: '/result/STRATEGIST.webp',
     bgimg: '/result/STRATEGIST (4).webp',

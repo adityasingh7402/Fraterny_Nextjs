@@ -15,7 +15,7 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
   
   // The reference implies the image is somewhat top-aligned with padding
   const topPadding = sidePadding;
-  const imagepadding = (57 - topPadding);
+  const imagepadding = (28 - topPadding);
 
 
   React.useEffect(() => {
@@ -30,7 +30,7 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
       style={{
         width: `${dimensions.width}px`,
         height: `${dimensions.height}px`,
-        borderRadius: '57px',
+        borderRadius: '28px',
         boxShadow: active
           ? '0 25px 50px -12px rgba(0,0,0,0.4)'
           : '0 10px 15px -3px rgba(0,0,0,0.1)',
@@ -56,7 +56,7 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
           className="w-full h-full object-cover block"
           draggable={false}
         />
-        <div onClick={() => setIsExpanded(true)} className="absolute bottom-0 right-0 text-white font-gilroy-regular text-sm pr-4 pb-2 mix-blend-overlay"> Know More ..</div>
+        <div onClick={() => setIsExpanded(true)} className="absolute bottom-0 right-0 text-white font-gilroy-regular text-sm pr-4 pb-2 mix-blend-overlay"> Know More..</div>
       </div>
 
       <motion.div
