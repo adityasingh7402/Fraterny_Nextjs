@@ -730,10 +730,11 @@ export function QuestResultClient({
     if (!resultData?.archetypes) return CARDS_DATA;
 
     const { self, world, aspiration } = resultData.archetypes;
-    console.log('self', self);
+    console.log('🎴 TRANSFORM - self:', self);
+    console.log('🎴 TRANSFORM - world:', world);
+    console.log('🎴 TRANSFORM - aspiration:', aspiration);
 
-
-    return [
+    const cards = [
       {
         id: 1,
         title: self.clusterName,
@@ -780,6 +781,15 @@ export function QuestResultClient({
         content: aspiration.content
       }
     ];
+
+    console.log('🎴 TRANSFORMED CARDS:', cards.map(c => ({
+      id: c.id,
+      subtitle: c.subtitle,
+      tag: c.tag,
+      imageUrl: c.imageUrl
+    })));
+
+    return cards;
   };
 
 
@@ -942,7 +952,7 @@ export function QuestResultClient({
           />
         </div>
 
-        <div id="pdf-report" className="relative w-full mx-auto pt-6 pb-16 max-w-7xl">
+        <div id="pdf-report" className="relative w-full mx-auto py-24 max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

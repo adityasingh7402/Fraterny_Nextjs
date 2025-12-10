@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence, PanInfo } from "framer-motion";
 import { PanInfo as FramerPanInfo } from "framer-motion";
-import { LockIcon } from "lucide-react";
+import { LockIcon, ChevronDown } from "lucide-react";
 
 // Types
 interface Concert {
@@ -94,7 +94,7 @@ const ConcertList = ({
                             className="cursor-pointer group"
                         >
                             <div
-                                className="flex items-baseline justify-between pb-4 transition-all duration-300"
+                                className="flex items-center justify-between pb-4 transition-all duration-300"
                                 style={{
                                     borderBottom: '1px solid hsl(0 0% 100% / 0.2)',
                                 }}
@@ -107,20 +107,22 @@ const ConcertList = ({
                             >
                                 <div>
                                     <p
-                                        className="text-xs uppercase tracking-widest mt-1 font-gilroy-regular bg-white/20 rounded-full px-3 py-1 inline-block mb-4 transition-colors duration-300"
+                                        className="text-xs uppercase tracking-widest inline-flex flex-row items-center gap-2 mt-1 font-gilroy-regular bg-white/20 rounded-full px-3 py-1 mb-4 transition-colors duration-300"
                                         style={{ color: 'hsl(0 0% 100% / 0.6)' }}
                                     >
-                                        {concert.date}
+                                        {concert.date} {concert.id !== 1 && <LockIcon className="w-4 h-4" />}
                                     </p>
                                     <h2
                                         className="font-gilroy-semibold text-3xl md:text-5xl uppercase tracking-tight leading-none transition-all duration-300 flex items-center gap-3"
                                         style={{ color: 'hsl(0 0% 100%)' }}
                                     >
                                         {concert.band}
-                                        {concert.id !== 1 && <LockIcon className="w-6 h-6 md:w-8 md:h-8" />}
                                     </h2>
 
                                 </div>
+                                <ChevronDown
+                                    className="w-6 h-6 md:w-8 md:h-8 text-white/60 group-hover:text-white group-hover:translate-y-1 transition-all duration-300 flex-shrink-0"
+                                />
                             </div>
                         </motion.div>
                     ))}

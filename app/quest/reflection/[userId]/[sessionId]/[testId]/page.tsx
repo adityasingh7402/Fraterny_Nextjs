@@ -1,7 +1,7 @@
 // page.tsx
 import { QuestResultClient } from './components/QuestResultClient';
 import { mockData } from './final-design/ResultData';
-import {prepareFinalData} from './final-design/ResultData';
+import { prepareFinalData } from './final-design/ResultData';
 import axios from 'axios';
 
 type Props = {
@@ -45,25 +45,57 @@ type Props = {
 
 async function getResultData(userId: string, sessionId: string, testId: string) {
   try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/report/${userId}/${sessionId}/${testId}`
-    );
+    const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/report/${userId}/${sessionId}/${testId}`;
+    console.log('🔍 Fetching from API:', apiUrl);
 
-    if (response.data && response.data.archetype) {
-      const processedData = prepareFinalData(response.data);
-      // console.log("✅ Processed data:", processedData);
+    const response = await axios.get(apiUrl);
+
+    console.log('📦 API Response status:', response.status);
+
+    // Parse the results field which contains stringified JSON
+    let parsedResults = null;
+    if (response.data?.results) {
+      try {
+        parsedResults = typeof response.data.results === 'string'
+          ? JSON.parse(response.data.results)
+          : response.data.results;
+        console.log('✅ Parsed results:', parsedResults);
+      } catch (parseError) {
+        console.error('❌ Failed to parse results:', parseError);
+      }
+    }
+
+    // Check if we have valid archetype data
+    if (parsedResults && parsedResults.archetype) {
+      console.log('✅ Using API data - archetype found!');
+      console.log('📊 Archetype data:', parsedResults.archetype);
+      const processedData = prepareFinalData(parsedResults);
+      console.log('🎯 PROCESSED DATA FOR CLIENT:', {
+        self: processedData.archetypes.self?.subtitle,
+        world: processedData.archetypes.world?.subtitle,
+        aspiration: processedData.archetypes.aspiration?.subtitle
+      });
       return processedData;
     } else {
-      //console.log('⚠️ No valid data from backend, using mockData');
+      console.log('⚠️ No valid archetype in parsed results, falling back to mockData');
+      console.log('⚠️ Response structure:', Object.keys(response.data || {}));
+      console.log('⚠️ Parsed results structure:', parsedResults ? Object.keys(parsedResults) : 'null');
       const processedMockData = prepareFinalData(mockData);
-      console.log('✅ Processed mock data:', processedMockData); // Add this
       return processedMockData;
     }
 
   } catch (error) {
-    //console.error('❌ Error fetching result data, using mockData:', error);
+    console.error('❌ Error fetching result data:', error);
+    if (axios.isAxiosError(error)) {
+      console.error('❌ Axios error details:', {
+        message: error.message,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data
+      });
+    }
+    console.log('⚠️ Falling back to mockData due to error');
     const processedMockData = prepareFinalData(mockData);
-    //console.log('✅ Processed mock data (error case):', processedMockData); // Add this
     return processedMockData;
   }
 }
@@ -74,7 +106,7 @@ export default async function QuestResultPage({ params }: Props) {
 
   const resultData = await getResultData(userId, sessionId, testId);
   //console.log('Fetched Result Data:', resultData);
-  
+
 
   return (
     <QuestResultClient
