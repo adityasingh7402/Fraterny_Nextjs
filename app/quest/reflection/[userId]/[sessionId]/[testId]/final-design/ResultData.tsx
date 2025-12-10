@@ -436,9 +436,11 @@ const getArchetypeData = (archetypeData: {
 
   // Process each archetype (self, world, aspiration)
   Object.entries(archetypeData).forEach(([key, archetypeName]) => {
+    console.log(`🔍 Processing ${key}: "${archetypeName}"`);
     const cluster = findClusterByArchetype(archetypeName);
 
     if (cluster) {
+      console.log(`✅ Found cluster for ${archetypeName}:`, cluster.name);
       result[key] = {
         clusterName: cluster.name,
         subtitle: archetypeName,
@@ -451,9 +453,12 @@ const getArchetypeData = (archetypeData: {
         bgHeading: cluster.bgHeading,
         bgSubheading: cluster.bgSubheading
       };
+    } else {
+      console.error(`❌ No cluster found for ${key}: "${archetypeName}"`);
     }
   });
 
+  console.log('📊 Final archetype result:', result);
   return result;
 };
 
