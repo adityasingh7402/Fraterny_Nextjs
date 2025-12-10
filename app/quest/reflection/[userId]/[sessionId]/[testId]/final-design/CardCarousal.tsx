@@ -185,7 +185,7 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim
                 animate={{ opacity: 1 }}
                 initial={false}
                 transition={{ duration: 0.25 }}
-                className="flex flex-col items-center pt-14"
+                className="flex flex-col items-center pt-11"
               >
                 <p className="text-5xl font-gilroy-semibold uppercase text-white text-center mb-[-8px]">
                   {/* {cards[getWrappedIndex(currentVirtualIndex)].bgHeading} */}
