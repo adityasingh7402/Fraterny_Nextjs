@@ -6,7 +6,7 @@ import { CardData, CardDimensions, Dimensions } from './types';
 const DESIGN_RATIOS = {
   viewportAspect: 1.804,      // height/width ratio
   cardWidthRatio: 0.7066,     // card width / viewport width
-  cardAspect: 2.09,          // card height / card width. Increase the card height
+  cardAspect: 2.13,          // card height / card width. Increase the card height
   imageWidthRatio: 0.853,     // image width / card width
   imageAspect: 1.407,         // image height / image width
   gapRatio: 0.073             // gap / card width
