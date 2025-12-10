@@ -81,7 +81,7 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
 
         <motion.div
           {...(isExpanded && { layoutId: `card-tag-${data.id}` })}
-          className={`mt-1 text-md xs:text-xl font-gilroy-light px-8 py-2 rounded-[35px] ${data.buttonbg} text-white`}
+          className={`mt-1 text-md xs:text-xl font-gilroy-light px-8 py-2 rounded-xl ${data.buttonbg} text-white`}
           style={data.color ? { backgroundColor: data.color } : undefined}
         >
           {data.subtitle}
