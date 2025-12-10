@@ -75,12 +75,12 @@ const ConcertList = ({
                     </h1>
                 </motion.div>
 
-                <motion.div className="mb-5 flex w-full items-center justify-between">
+                {/* <motion.div className="mb-5 flex w-full items-center justify-between">
                     <span className="block text-md uppercase tracking-[0.3em] text-white/70 mb-1"></span>
                     <span className="block text-sm uppercase font-gilroy-bold bg-transparent px-2 py-1 rounded-xl shadow-xl border-2 border-white text-white/70">
                         5 detected
                     </span>
-                </motion.div>
+                </motion.div> */}
 
                 {/* Concert List */}
                 <div className="space-y-6">
