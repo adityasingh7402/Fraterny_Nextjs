@@ -56,12 +56,12 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
           className="w-full h-full object-cover block"
           draggable={false}
         />
-        <div onClick={() => setIsExpanded(true)} className="absolute bottom-0 right-0 text-white font-gilroy-regular text-sm pr-4 pb-2 mix-blend-overlay"> Know More..</div>
+        <div onClick={() => setIsExpanded(true)} className="absolute bottom-0 right-0 text-white font-gilroy-regular text-sm pr-4 pb-2 mix-blend-overlay"> Know More...</div>
       </div>
 
       <motion.div
         {...(isExpanded && { layoutId: `card-info-${data.id}` })}
-        className="flex-1 w-full flex flex-col items-start justify-start relative z-10 px-6 py-6"
+        className="flex-1 w-full flex flex-col items-start justify-start relative z-10 px-6 py-4"
       >
         <motion.div
           {...(isExpanded && { layoutId: `card-title-${data.id}` })}
@@ -73,7 +73,7 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
 
         <motion.div
           {...(isExpanded && { layoutId: `card-subtitle-${data.id}` })}
-          className={`mt-8 ${data.textcolor} text-[12px] font-gilroy-regular uppercase tracking-[0.05rem]`}
+          className={`mt-10 ${data.textcolor} text-[12px] font-gilroy-regular uppercase tracking-[0.05rem]`}
           style={data.color ? { color: data.color } : undefined}
         >
           Currently Inclined
@@ -81,7 +81,7 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
 
         <motion.div
           {...(isExpanded && { layoutId: `card-tag-${data.id}` })}
-          className={`mt-1 text-md xs:text-xl font-gilroy-light px-8 py-2 rounded-xl ${data.buttonbg} text-white`}
+          className={`mt-1 text-[20px] xs:text-xl font-gilroy-light px-4 py-2 rounded-xl ${data.buttonbg} text-white`}
           style={data.color ? { backgroundColor: data.color } : undefined}
         >
           {data.subtitle}
@@ -115,7 +115,7 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
             >
               <motion.div
                 layoutId={`card-title-${data.id}`}
-                className={`${data.textcolor} text-3xl xs:text-4xl font-gilroy-bold uppercase tracking-tight pt-8`}
+                className={`${data.textcolor} text-3xl xs:text-4xl font-gilroy-bold uppercase tracking-tight pt-7`}
                 style={data.color ? { color: data.color } : undefined}
               >
                 {data.title}
