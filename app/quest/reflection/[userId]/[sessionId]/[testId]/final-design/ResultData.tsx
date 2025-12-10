@@ -322,10 +322,10 @@ export const clusters: Cluster[] = [
       <p className="text-sm font-gilroy-light">
         Your personal psychological artifact discusses how the Healing Heart mask and your current inclination affects you in great detail.
       </p>
-      <div className={`flex flex-row items-end justify-end gap-2 w-full mt-6`}>
-        <div className={`w-3 h-3 rounded-full bg-[#0198ac]`}></div>
-        <div className={`w-3 h-3 rounded-full bg-[#0198ac]`}></div>
-        <div className={`w-3 h-3 rounded-full bg-[#0198ac]`}></div>
+      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6`}>
+        <div className={`w-2 h-2 rounded-full bg-[#0198ac]`}></div>
+        <div className={`w-2 h-2 rounded-full bg-[#0198ac]`}></div>
+        <div className={`w-2 h-2 rounded-full bg-[#0198ac]`}></div>
       </div>
     </div>,
     archetypes: [
