@@ -730,9 +730,6 @@ export function QuestResultClient({
     if (!resultData?.archetypes) return CARDS_DATA;
 
     const { self, world, aspiration } = resultData.archetypes;
-    console.log('🎴 TRANSFORM - self:', self);
-    console.log('🎴 TRANSFORM - world:', world);
-    console.log('🎴 TRANSFORM - aspiration:', aspiration);
 
     const cards = [
       {
@@ -781,13 +778,6 @@ export function QuestResultClient({
         content: aspiration.content
       }
     ];
-
-    console.log('🎴 TRANSFORMED CARDS:', cards.map(c => ({
-      id: c.id,
-      subtitle: c.subtitle,
-      tag: c.tag,
-      imageUrl: c.imageUrl
-    })));
 
     return cards;
   };

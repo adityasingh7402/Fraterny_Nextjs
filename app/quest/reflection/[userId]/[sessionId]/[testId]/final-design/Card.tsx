@@ -10,7 +10,6 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
   // Center image horizontally: (CardWidth - ImageWidth) / 2
   const sidePadding = (dimensions.width - dimensions.imageWidth) / 2;
   const [isExpanded, setIsExpanded] = React.useState(false);
-  console.log('Card Data:', data);
   
   
   
@@ -66,7 +65,7 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
       >
         <motion.div
           {...(isExpanded && { layoutId: `card-title-${data.id}` })}
-          className={`${data.textcolor} text-3xl font-gilroy-semibold uppercase tracking-tight`}
+          className={`${data.textcolor} text-3xl font-gilroy-bold uppercase tracking-tight`}
           style={data.color ? { color: data.color } : undefined}
         >
           {data.title}
@@ -74,7 +73,7 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
 
         <motion.div
           {...(isExpanded && { layoutId: `card-subtitle-${data.id}` })}
-          className={`mt-4 ${data.textcolor} text-[12px] font-gilroy-regular uppercase tracking-[0.05rem]`}
+          className={`mt-8 ${data.textcolor} text-[12px] font-gilroy-regular uppercase tracking-[0.05rem]`}
           style={data.color ? { color: data.color } : undefined}
         >
           Currently Inclined
@@ -82,7 +81,7 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
 
         <motion.div
           {...(isExpanded && { layoutId: `card-tag-${data.id}` })}
-          className={`mt-1 text-xl font-gilroy-light px-8 py-2 rounded-[35px] ${data.buttonbg} text-white`}
+          className={`mt-1 text-md xs:text-xl font-gilroy-light px-8 py-2 rounded-[35px] ${data.buttonbg} text-white`}
           style={data.color ? { backgroundColor: data.color } : undefined}
         >
           {data.subtitle}
@@ -116,7 +115,7 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
             >
               <motion.div
                 layoutId={`card-title-${data.id}`}
-                className={`${data.textcolor} text-4xl font-gilroy-semibold uppercase tracking-tight`}
+                className={`${data.textcolor} text-3xl xs:text-4xl font-gilroy-bold uppercase tracking-tight`}
                 style={data.color ? { color: data.color } : undefined}
               >
                 {data.title}
@@ -124,34 +123,22 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
 
               <motion.div
                 layoutId={`card-subtitle-${data.id}`}
-                className='mt-4 text-gray-600 text-[15px] font-gilroy-regular uppercase tracking-[0.1rem]'
+                className='mt-4 text-gray-600 text-[12px] xs:text-[15px] font-gilroy-regular uppercase tracking-[0.1rem]'
               >
                 Currently Inclined
               </motion.div>
 
               <motion.div
                 layoutId={`card-tag-${data.id}`}
-                className={`mt-1 text-xl font-gilroy-regular px-8 py-2 rounded-xl ${data.buttonbg} text-white`}
+                className={`mt-1 text-md xs:text-xl font-gilroy-regular px-5 xs:px-8 py-2 rounded-xl ${data.buttonbg} text-white`}
                 style={data.color ? { backgroundColor: data.color } : undefined}
               >
                 {data.subtitle}
               </motion.div>
 
-              <div className="mt-6 flex-1 w-full overflow-y-auto">
+              <div className="mt-3 xs:mt-6 flex-1 w-full overflow-y-auto relative">
                 {data.content}
               </div>
-
-              {/* Stats - if available */}
-              {/* {data.stats && data.stats.length > 0 && (
-                <div className="mt-6 w-full space-y-2">
-                    {data.stats.map((stat, index) => (
-                    <div key={index} className="flex justify-between items-center">
-                        <span className="text-gray-600 text-sm font-gilroy-regular">{stat.label}</span>
-                        <span className="text-gray-900 text-lg font-gilroy-bold">{stat.value}</span>
-                    </div>
-                    ))}
-                </div>
-                )} */}
             </motion.div>
           </motion.div>
         )}
