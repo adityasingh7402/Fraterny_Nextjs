@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 interface GalleryCardProps {
@@ -112,26 +112,37 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                 opacity: transform.opacity ?? 1,
             }}
             transition={{
-                type: "spring",
-                stiffness: 100,
-                damping: 20,
-                mass: 1,
+                layout: {
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 30,
+                    mass: 0.8,
+                },
+                default: {
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 20,
+                    mass: 1,
+                }
             }}
             onClick={onClick}
             style={{
                 transformStyle: "preserve-3d",
             }}
-            whileHover={!isExpanded && isActive ? { scale: 1.02, z: 20 } : {}}
+            whileHover={!isExpanded && isActive ? { scale: 1.01, z: 20 } : {}}
         >
-            <div className={`flex flex-col items-center ${isExpanded && isActive ? 'md:flex-row md:gap-8 md:items-stretch' : ''} ${getContainerSizeClasses()}`}>
+            <motion.div layout className={`flex flex-col items-center ${isExpanded && isActive ? 'md:flex-row md:gap-8 md:items-stretch' : ''} ${getContainerSizeClasses()}`}>
                 {/* Header Section - OUTSIDE the white card */}
                 {/* Mobile: Only show on active card. Desktop:Always show unless expanded & active */}
-                <div className={`w-full text-center mb-4 md:mb-6 
+                <motion.div layout
+                    layoutId={`card-header-${cardId}`} className={`w-full text-center mb-4 md:mb-6 
                     ${!isActive ? 'hidden' : ''} 
                     ${isExpanded && isActive ? 'md:hidden' : 'md:block'}`}>
                     {/* Category Heading (e.g., "ASPIRATION") */}
                     {categoryHeading && (
                         <motion.h1
+                        layout
+                            layoutId={`card-heading-${cardId}`}
                             className={`font-gilroy-bold uppercase ${useBlackText ? 'text-black' : 'text-white'}`}
                             initial={false}
                             animate={{
@@ -146,6 +157,8 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                     )}
                     {/* Category Subheading (e.g., "HOW YOU ASPIRE TO BE") */}
                     <motion.p
+                        layout
+                        layoutId={`card-subheading-${cardId}`}
                         className={`font-gilroy-regular tracking-[0.2rem] -mt-3 uppercase ${useBlackText ? 'text-black/80' : 'text-white/80'}`}
                         initial={false}
                         animate={{
@@ -157,12 +170,15 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                     >
                         {categoryText}
                     </motion.p>
-                </div>
+                </motion.div>
 
                 {/* White Card - Contains ONLY the image */}
-                <div className={`clean-card overflow-hidden transition-all duration-500 ${getCardSizeClasses()} ${isExpanded && isActive ? 'md:shrink-0' : ''}`}>
-                    <div className={`relative w-full h-full py-2 bg-white rounded-3xl ${isExpanded && isActive ? '' : 'py-2'}`}>
+                <motion.div layout
+                layoutId={`card-image-${cardId}`} className={`clean-card overflow-hidden ${getCardSizeClasses()} ${isExpanded && isActive ? 'md:shrink-0' : ''}`}>
+                    <motion.div layout className={`relative w-full h-full py-2 bg-white rounded-3xl ${isExpanded && isActive ? '' : 'py-2'}`}>
                         <motion.img
+                            layout
+                            layoutId={`card-img-${cardId}`}
                             src={image}
                             alt={title}
                             className={`w-full h-full object-contain ${isExpanded && isActive ? 'p-1' : 'p-2 md:p-3'}`}
@@ -188,13 +204,15 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                                 Know more
                             </motion.p>
                         </div> */}
-                    </div>
-                </div>
+                    </motion.div>
+                </motion.div>
 
                 {/* Title Section - OUTSIDE and BELOW the white card (or to the right on desktop when expanded) */}
-                <div className={`transition-all duration-500 w-full text-center mt-5 ${isExpanded && isActive ? 'md:flex-1 md:text-left md:bg-white md:rounded-3xl md:p-8 md:flex md:flex-col md:justify-start md:shadow-lg md:mt-0 md:w-auto' : 'md:mt-8'}`}>
+                <motion.div layout layoutId={`card-title-section-${cardId}`} className={`w-full text-center mt-5 ${isExpanded && isActive ? 'md:flex-1 md:text-left md:bg-white md:rounded-3xl md:p-8 md:flex md:flex-col md:justify-start md:shadow-lg md:mt-0 md:w-auto' : 'md:mt-8'}`}>
                     <div className={`${!isActive ? 'hidden md:block' : ''}`}>
                         <motion.h2
+                            layout
+                            layoutId={`card-title-${cardId}`}
                             className="font-gilroy-bold uppercase"
                             style={{ color: color }}
                             initial={false}
@@ -211,30 +229,46 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                     </div>
 
                     {/* Expanded content */}
+                    <AnimatePresence mode="wait">
                     {isExpanded && isActive && (
                         <motion.div
+                            layout
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
                             exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.4, delay: 0.2 }}
+                            transition={{ 
+                                layout: { duration: 0.3 },
+                                opacity: { duration: 0.3 },
+                                height: { duration: 0.3, delay: 0.1 }
+                            }}
                             className="overflow-hidden"
                         >
                             {/* Description - formatted JSX content */}
-                            <div
+                            <motion.div
+                                initial={{ opacity: 0, filter: 'blur(4px)', y: 10 }}
+                                animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
+                                exit={{ opacity: 0, filter: 'blur(4px)', y: 10 }}
+                                transition={{ duration: 0.3, delay: 0.20 }}
                                 className={`font-gilroy-regular text-sm md:text-base leading-relaxed mb-4 md:mb-5 ${isMobile ? 'max-w-md mx-auto' : ''}`}
                                 style={{ color: '#000000' }}
                             >
                                 {description}
-                            </div>
+                            </motion.div>
 
-                            <p
+                            <motion.p
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3, delay: 0.4 }}
                                 className="font-gilroy-regular uppercase tracking-[0.15em] text-xs md:text-sm mb-2 md:mb-5"
                                 style={{ color: color, opacity: 0.8 }}
                             >
                                 CURRENTLY INCLINED
-                            </p>
+                            </motion.p>
 
                             <motion.button
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3, delay: 0.5 }}
                                 className="px-8 md:px-10 py-3 md:py-3.5 text-white rounded-full font-gilroy-regular text-base uppercase"
                                 style={{ backgroundColor: color }}
                                 whileHover={{ scale: 1.05 }}
@@ -244,6 +278,7 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                             </motion.button>
                         </motion.div>
                     )}
+                    </AnimatePresence>
 
                     {/* Click hint for non-expanded state */}
                     {!isExpanded && isActive && (
@@ -257,8 +292,8 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                             Click to expand
                         </motion.p>
                     )}
-                </div>
-            </div>
+                </motion.div>
+            </motion.div>
         </motion.div>
     );
 };
