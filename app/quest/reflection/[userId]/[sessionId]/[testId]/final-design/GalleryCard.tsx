@@ -25,6 +25,16 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
     // Check if this card should use black text (card id 6)
     const useBlackText = cardId === 6 && isActive;
 
+    // Check if this is The Free Spirit card (#545454) - should use card color instead of white
+    const useFreeSpirit = color === '#545454';
+
+    // Determine heading text color
+    const getHeadingColor = () => {
+        if (useBlackText) return 'text-black';
+        if (useFreeSpirit) return 'text-[#545454]';
+        return 'text-white';
+    };
+
     useEffect(() => {
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 768);
@@ -141,9 +151,9 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                     {/* Category Heading (e.g., "ASPIRATION") */}
                     {categoryHeading && (
                         <motion.h1
-                        layout
+                            layout
                             layoutId={`card-heading-${cardId}`}
-                            className={`font-gilroy-bold uppercase ${useBlackText ? 'text-black' : 'text-white'}`}
+                            className={`font-gilroy-bold uppercase ${getHeadingColor()}`}
                             initial={false}
                             animate={{
                                 fontSize: isExpanded && isActive
@@ -159,7 +169,10 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                     <motion.p
                         layout
                         layoutId={`card-subheading-${cardId}`}
-                        className={`font-gilroy-regular tracking-[0.2rem] -mt-3 uppercase ${useBlackText ? 'text-black/80' : 'text-white/80'}`}
+                        className={`font-gilroy-regular tracking-[0.2rem] -mt-3 uppercase ${useBlackText ? 'text-black/80' :
+                                useFreeSpirit ? 'text-[#545454]/80' :
+                                    'text-white/80'
+                            }`}
                         initial={false}
                         animate={{
                             fontSize: isExpanded && isActive
@@ -174,7 +187,7 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
 
                 {/* White Card - Contains ONLY the image */}
                 <motion.div layout
-                layoutId={`card-image-${cardId}`} className={`clean-card overflow-hidden ${getCardSizeClasses()} ${isExpanded && isActive ? 'md:shrink-0' : ''}`}>
+                    layoutId={`card-image-${cardId}`} className={`clean-card overflow-hidden ${getCardSizeClasses()} ${isExpanded && isActive ? 'md:shrink-0' : ''}`}>
                     <motion.div layout className={`relative w-full h-full py-2 bg-white rounded-3xl ${isExpanded && isActive ? '' : 'py-2'}`}>
                         <motion.img
                             layout
@@ -230,54 +243,54 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
 
                     {/* Expanded content */}
                     <AnimatePresence mode="wait">
-                    {isExpanded && isActive && (
-                        <motion.div
-                            layout
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ 
-                                layout: { duration: 0.3 },
-                                opacity: { duration: 0.3 },
-                                height: { duration: 0.3, delay: 0.1 }
-                            }}
-                            className="overflow-hidden"
-                        >
-                            {/* Description - formatted JSX content */}
+                        {isExpanded && isActive && (
                             <motion.div
-                                initial={{ opacity: 0, filter: 'blur(4px)', y: 10 }}
-                                animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
-                                exit={{ opacity: 0, filter: 'blur(4px)', y: 10 }}
-                                transition={{ duration: 0.3, delay: 0.20 }}
-                                className={`font-gilroy-regular text-sm md:text-base leading-relaxed mb-4 md:mb-5 ${isMobile ? 'max-w-md mx-auto' : ''}`}
-                                style={{ color: '#000000' }}
+                                layout
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: "auto" }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{
+                                    layout: { duration: 0.3 },
+                                    opacity: { duration: 0.3 },
+                                    height: { duration: 0.3, delay: 0.1 }
+                                }}
+                                className="overflow-hidden"
                             >
-                                {description}
+                                {/* Description - formatted JSX content */}
+                                <motion.div
+                                    initial={{ opacity: 0, filter: 'blur(4px)', y: 10 }}
+                                    animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
+                                    exit={{ opacity: 0, filter: 'blur(4px)', y: 10 }}
+                                    transition={{ duration: 0.3, delay: 0.20 }}
+                                    className={`font-gilroy-regular text-sm md:text-base leading-relaxed mb-4 md:mb-5 ${isMobile ? 'max-w-md mx-auto' : ''}`}
+                                    style={{ color: '#000000' }}
+                                >
+                                    {description}
+                                </motion.div>
+
+                                <motion.p
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.3, delay: 0.4 }}
+                                    className="font-gilroy-regular uppercase tracking-[0.15em] text-xs md:text-sm mb-2 md:mb-5"
+                                    style={{ color: color, opacity: 0.8 }}
+                                >
+                                    CURRENTLY INCLINED
+                                </motion.p>
+
+                                <motion.button
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.3, delay: 0.5 }}
+                                    className="px-8 md:px-10 py-3 md:py-3.5 text-white rounded-full font-gilroy-regular text-base uppercase"
+                                    style={{ backgroundColor: color }}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    {included}
+                                </motion.button>
                             </motion.div>
-
-                            <motion.p
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.3, delay: 0.4 }}
-                                className="font-gilroy-regular uppercase tracking-[0.15em] text-xs md:text-sm mb-2 md:mb-5"
-                                style={{ color: color, opacity: 0.8 }}
-                            >
-                                CURRENTLY INCLINED
-                            </motion.p>
-
-                            <motion.button
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.3, delay: 0.5 }}
-                                className="px-8 md:px-10 py-3 md:py-3.5 text-white rounded-full font-gilroy-regular text-base uppercase"
-                                style={{ backgroundColor: color }}
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                            >
-                                {included}
-                            </motion.button>
-                        </motion.div>
-                    )}
+                        )}
                     </AnimatePresence>
 
                     {/* Click hint for non-expanded state */}

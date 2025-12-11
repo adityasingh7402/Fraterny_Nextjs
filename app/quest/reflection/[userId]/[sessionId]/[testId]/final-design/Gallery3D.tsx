@@ -83,7 +83,14 @@ const Gallery3D = ({ onColorChange, cards }: Gallery3DProps) => {
             // Extract color from buttonbg (e.g., "bg-[#4dbdfc]" -> "#4dbdfc")
             const buttonbg = cards[currentIndex].buttonbg;
             const colorMatch = buttonbg.match(/#[0-9A-Fa-f]{6}/);
-            const color = colorMatch ? colorMatch[0] : '#4A90A4';
+            let color = colorMatch ? colorMatch[0] : '#4A90A4';
+
+            // Override color for The Free Spirit (#545454) and The Strategist (#000000)
+            // Use Blue #043974 for other sections instead
+            if (color === '#545454' || color === '#000000') {
+                color = '#043974';
+            }
+
             onColorChange(color);
 
             // DEBUG: Log desktop center card data

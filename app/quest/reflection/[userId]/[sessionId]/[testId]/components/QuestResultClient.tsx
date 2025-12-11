@@ -59,7 +59,7 @@ import { AuthBanner } from "../final-design/AuthBanner"
 import { PDFImageViewer } from "../../[testId]/components/PDFImageViewer";
 import { CTA_HEIGHT } from "../../[testId]/utils/constants";
 import FAQIntrospection from "../final-design/FAQIntrospection";
-import Testimonial from "../final-design/Testimonial"; 
+import Testimonial from "../final-design/Testimonial";
 import QuestFooter from "../../../../../quest-mode/sections/QuestFooter";
 import { CardData } from '../final-design/types'
 
@@ -831,10 +831,10 @@ export function QuestResultClient({
               Your <span style={{ color: activeCardColor }}>Primary</span> Pattern
             </h1> */}
             <span className="block text-sm uppercase tracking-[0.3em] text-neutral-400 mb-4 font-gilroy-medium">
-                Primary Pattern
+              Primary Pattern
             </span>
             <h1 className="text-5xl md:text-7xl font-gilroy-bold tracking-tighter text-neutral-900 leading-none">
-                Your <span style={{ color: activeCardColor }}>Primary</span> Pattern
+              Your <span style={{ color: activeCardColor }}>Primary</span> Pattern
             </h1>
 
             {/* Contributor Line */}
@@ -919,6 +919,7 @@ export function QuestResultClient({
                 cards={transformArchetypesToCards()}
                 cardDim={dimensions.card}
                 viewportDim={dimensions.viewport}
+                onColorChange={setActiveCardColor}
               />
             )}
           </div>
