@@ -499,16 +499,16 @@ export const prepareFinalData = (data: typeof mockData) => {
   // Define heading overrides based on context (self/world/aspiration)
   const headingMap = {
     self: {
-      bgHeading: <> SELF VIEW </>,
-      bgSubheading: <> HOW YOU SEE YOURSELF </>
+      bgHeading: "SELF VIEW",
+      bgSubheading: "HOW YOU SEE YOURSELF"
     },
     world: {
-      bgHeading: <>SOCIAL VIEW</>,
-      bgSubheading: <>HOW THE WORLD SEES YOU</>
+      bgHeading: "SOCIAL VIEW",
+      bgSubheading: "HOW THE WORLD SEES YOU"
     },
     aspiration: {
-      bgHeading: <>ASPIRATION</>,
-      bgSubheading: <>HOW YOU ASPIRE TO BE</>
+      bgHeading: "ASPIRATION",
+      bgSubheading: "HOW YOU ASPIRE TO BE"
     }
   };
 
