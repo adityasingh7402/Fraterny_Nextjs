@@ -343,16 +343,14 @@ export default function CalibrateSection({
                                                     if (isFirstTouch && value !== 5) {
                                                         console.log(`✅ APPLYING +2 BONUS!`);
 
-                                                        // Add +2 to depth score
+                                                        // Add +2 to depth score ONLY (not to slider)
                                                         const newDepthScore = depthScore + 2;
                                                         setDepthScore(newDepthScore);
 
-                                                        // Add +2 to the slider value (capped at 10)
-                                                        const bonusValue = Math.min(value + 2, 10);
-
+                                                        // Set slider to the actual dragged value (smooth)
                                                         setSliderValues(prev => ({
                                                             ...prev,
-                                                            [questionKey]: bonusValue
+                                                            [questionKey]: value
                                                         }));
 
                                                         // Mark this slider as touched
@@ -361,7 +359,7 @@ export default function CalibrateSection({
                                                         // Mark bonus as applied for this slider
                                                         setBonusApplied(prev => new Set(prev).add(questionKey));
 
-                                                        console.log(`🎯 ${questionKey}: ${value} → ${bonusValue}, Depth: ${depthScore} → ${newDepthScore}`);
+                                                        console.log(`🎯 ${questionKey}: slider=${value}, Depth: ${depthScore} → ${newDepthScore} (+2 bonus)`);
                                                     } else {
                                                         if (!isFirstTouch) {
                                                             console.log(`⏭️ Skipping bonus - slider already touched`);

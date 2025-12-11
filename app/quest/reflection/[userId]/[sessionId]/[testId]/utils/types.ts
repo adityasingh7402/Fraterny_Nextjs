@@ -79,12 +79,10 @@ export type ResultData = {
     signal2_purpose: string;
     signal3_purpose: string;
     signal4_purpose: string;
-    signal5_purpose: string;
     signal1_description: string;
     signal2_description: string;
     signal3_description: string;
     signal4_description: string;
-    signal5_description: string;
   };
   depth_score: number;
   likert?: {
