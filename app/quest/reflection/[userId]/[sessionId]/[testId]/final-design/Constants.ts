@@ -4,7 +4,7 @@ import { CardData, CardDimensions, Dimensions } from './types';
 
 // Ratio constants derived from original design
 const DESIGN_RATIOS = {
-  viewportAspect: 1.804,      // height/width ratio
+  viewportAspect: 2.0,      // height/width ratio earlier eas 1.804
   cardWidthRatio: 0.7066,     // card width / viewport width
   cardAspect: 2.13,          // card height / card width. Increase the card height
   imageWidthRatio: 0.853,     // image width / card width
@@ -18,7 +18,6 @@ export const calculateDimensions = (viewportWidth: number): {
 } => {
   // Round viewport width to integer first to prevent cumulative errors
   const roundedViewportWidth = Math.round(viewportWidth);
-  
   const viewportHeight = Math.round(roundedViewportWidth * DESIGN_RATIOS.viewportAspect);
   const cardWidth = Math.round(roundedViewportWidth * DESIGN_RATIOS.cardWidthRatio);
   const cardHeight = Math.round(cardWidth * DESIGN_RATIOS.cardAspect);
