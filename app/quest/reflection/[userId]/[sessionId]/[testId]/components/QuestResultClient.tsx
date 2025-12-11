@@ -830,7 +830,7 @@ export function QuestResultClient({
             {/* <h1 className="mb-1 text-4xl md:text-5xl lg:text-6xl font-gilroy-bold tracking-tight text-neutral-900 leading-[1.1]">
               Your <span style={{ color: activeCardColor }}>Primary</span> Pattern
             </h1> */}
-            <span className="block text-sm uppercase tracking-[0.3em] text-neutral-400 mb-4 font-gilroy-medium">
+            <span className="block sm:text-sm text-base uppercase tracking-[0.3em] text-neutral-400 mb-4 font-gilroy-medium">
               Primary Pattern
             </span>
             <h1 className="text-5xl md:text-7xl font-gilroy-bold tracking-tighter text-neutral-900 leading-none">
@@ -938,6 +938,7 @@ export function QuestResultClient({
             }}
             hasAutoTriggered={hasTriggeredFeedback}
             testId={testId}
+            existingLikertData={resultData?.likert}
           />
         </div>
 
@@ -957,7 +958,7 @@ export function QuestResultClient({
             transition={{ duration: 0.6 }}
             className="mb-8 max-w-7xl mx-auto px-6 sm:px-0"
           >
-            <span className="block text-sm uppercase tracking-[0.3em] text-neutral-400 mb-2 font-gilroy-medium">
+            <span className="block text-base sm:text-sm uppercase tracking-[0.3em] text-neutral-400 mb-2 font-gilroy-medium">
               Made from your words
             </span>
             <h1 className="text-5xl md:text-7xl font-gilroy-bold tracking-tighter text-neutral-900 leading-none">
