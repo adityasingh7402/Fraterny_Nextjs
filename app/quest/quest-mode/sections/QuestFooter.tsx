@@ -64,44 +64,48 @@ import { Mail, Instagram, Twitter } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-function QuestFooter() {
+interface QuestFooterProps {
+  backgroundColor?: string;
+}
+
+function QuestFooter({ backgroundColor = '#004A7F' }: QuestFooterProps) {
   return (
-    <div className='w-full bg-[#004A7F]'>
+    <div className='w-full' style={{ backgroundColor, transition: 'background-color 0.5s ease' }}>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12'>
         {/* Logo and Description */}
         <div className='flex flex-col items-start mb-8 sm:mb-10'>
           <div className='mb-4 sm:mb-6'>
-            <Image 
-              src='/Vector.svg' 
-              alt="Quest Footer" 
-              height={80} 
+            <Image
+              src='/Vector.svg'
+              alt="Quest Footer"
+              height={80}
               width={80}
               className='sm:h-24 sm:w-24 invert'
             />
           </div>
-          
+
           <div className="w-full mb-6 text-gray-100 text-base sm:text-lg font-normal font-gilroy-regular leading-relaxed">
             AI-powered psychoanalysis tool that generates a personalized mindset and personality report based on your responses. Built to go beyond traditional personality tests, Quest reveals emotional patterns, blind spots, and growth pathways unique to you.
           </div>
-          
+
           {/* Social Media Icons */}
           <div className='flex space-x-6 sm:space-x-8 mb-8 sm:mb-10'>
-            <Link 
-              href="mailto:quest@fratery.in?subject=Refund Request" 
+            <Link
+              href="mailto:quest@fratery.in?subject=Refund Request"
               aria-label="Email"
               className='hover:opacity-70 transition-opacity'
             >
               <Mail className='h-5 w-5 sm:h-6 sm:w-6 text-gray-100' />
             </Link>
-            <Link 
-              href="https://www.instagram.com/quest.fraterny/" 
+            <Link
+              href="https://www.instagram.com/quest.fraterny/"
               aria-label="Instagram"
               className='hover:opacity-70 transition-opacity'
             >
               <Instagram className='h-5 w-5 sm:h-6 sm:w-6 text-pink-600' />
             </Link>
-            <Link 
-              href="https://x.com/frat_erny" 
+            <Link
+              href="https://x.com/frat_erny"
               aria-label="Twitter"
               className='hover:opacity-70 transition-opacity'
             >
@@ -118,26 +122,26 @@ function QuestFooter() {
               Fraterny
             </h2>
             <div className='flex flex-col gap-2 sm:gap-2.5 text-gray-100'>
-              <Link 
-                href="/quest/quest-mode" 
+              <Link
+                href="/quest/quest-mode"
                 className="text-gray-100 text-sm sm:text-base font-normal font-['Inter'] leading-tight hover:text-[#0284c7] transition-colors"
               >
                 Home
               </Link>
-              <Link 
-                href="https://www.instagram.com/quest.fraterny/" 
+              <Link
+                href="https://www.instagram.com/quest.fraterny/"
                 className="text-gray-100 text-sm sm:text-base font-normal font-['Inter'] leading-tight hover:text-[#0284c7] transition-colors"
               >
                 Instagram
               </Link>
-              <Link 
-                href="https://www.linkedin.com/company/fraterny/" 
+              <Link
+                href="https://www.linkedin.com/company/fraterny/"
                 className="text-gray-100 text-sm sm:text-base font-normal font-['Inter'] leading-tight hover:text-[#0284c7] transition-colors"
               >
                 LinkedIn
               </Link>
-              <Link 
-                href="/blog" 
+              <Link
+                href="/blog"
                 className="text-gray-100 text-sm sm:text-base font-normal font-['Inter'] leading-tight hover:text-[#0284c7] transition-colors"
               >
                 Blog
@@ -151,32 +155,32 @@ function QuestFooter() {
               Support
             </h2>
             <div className='flex flex-col gap-2 sm:gap-2.5'>
-              <Link 
-                href="/privacy-policy" 
+              <Link
+                href="/privacy-policy"
                 className="text-gray-100 text-sm sm:text-base font-normal font-['Inter'] leading-tight hover:text-[#0284c7] transition-colors"
               >
                 Data Privacy
               </Link>
-              <Link 
-                href="/terms-and-conditions" 
+              <Link
+                href="/terms-and-conditions"
                 className="text-gray-100 text-sm sm:text-base font-normal font-['Inter'] leading-tight hover:text-[#0284c7] transition-colors"
               >
                 Terms & Conditions
               </Link>
-              <Link 
-                href="mailto:quest@fratery.in?subject=Refund Request" 
+              <Link
+                href="mailto:quest@fratery.in?subject=Refund Request"
                 className="text-gray-100 text-sm sm:text-base font-normal font-['Inter'] leading-tight hover:text-[#0284c7] transition-colors"
               >
                 Refund
               </Link>
-              <Link 
-                href="mailto:quest@fratery.in?subject=Internship Opportunity" 
+              <Link
+                href="mailto:quest@fratery.in?subject=Internship Opportunity"
                 className="text-gray-100 text-sm sm:text-base font-normal font-['Inter'] leading-tight hover:text-[#0284c7] transition-colors"
               >
                 Internships
               </Link>
-              <Link 
-                href="/quest/begin" 
+              <Link
+                href="/quest/begin"
                 className="text-gray-100 text-sm sm:text-base font-normal font-['Inter'] leading-tight hover:text-[#0284c7] transition-colors"
               >
                 Begin

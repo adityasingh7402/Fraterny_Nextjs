@@ -119,7 +119,7 @@ export default function CalibrateSection({ depthScore, questions, accentColor = 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
 
                     {/* Score / Intro Column */}
-                    <div className="col-span-1 lg:col-span-4 sticky top-10">
+                    <div className="col-span-1 lg:col-span-5 sticky top-10">
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             whileInView={{ opacity: 1, x: 0 }}
@@ -131,10 +131,10 @@ export default function CalibrateSection({ depthScore, questions, accentColor = 
                                 Current Depth Score
                             </span>
                             <div className="flex items-baseline gap-2">
-                                <span className="text-6xl font-gilroy-bold text-neutral-900">
+                                <span className="text-6xl md:text-7xl font-gilroy-bold" style={{ color: accentColor }}>
                                     {depthScore}
                                 </span>
-                                <span className="text-xl text-neutral-400 font-gilroy-medium">/ 100</span>
+                                <span className="text-xl md:text-2xl text-neutral-400 font-gilroy-medium">/ 100</span>
                             </div>
                             <div className="w-full h-1 bg-neutral-200 mt-6 rounded-full overflow-hidden">
                                 <motion.div
@@ -152,7 +152,7 @@ export default function CalibrateSection({ depthScore, questions, accentColor = 
                     </div>
 
                     {/* Sliders Column */}
-                    <div className="col-span-1 lg:col-span-8 flex flex-col gap-12">
+                    <div className="col-span-1 lg:col-span-7 flex flex-col gap-12">
                         {questionKeys.map((key, index) => {
                             const questionNumber = index + 1;
                             const likertKey = `likert${questionNumber}`;

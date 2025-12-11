@@ -949,7 +949,7 @@ export function QuestResultClient({
           />
         </div>
 
-        <div id="pdf-report" className="relative w-full mx-auto py-8 max-w-7xl">
+        <div id="pdf-report" className="relative w-full mx-auto pt-24 pb-8 max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -964,8 +964,8 @@ export function QuestResultClient({
               Private <span style={{ color: activeCardColor }}>Intelligence</span> File
             </h1>
           </motion.div>
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-10">
-            <div className="max-w-xl px-6 sm:px-0">
+          <div className="flex flex-col lg:flex-row justify-center items-start gap-10 lg:gap-12">
+            <div className="w-full lg:w-auto mt-6 max-w-xl px-6 sm:px-0">
               <PDFImageViewer
                 paymentSuccess={paymentSuccess}
                 paymentStatus={assessmentPaymentStatus}
@@ -979,7 +979,7 @@ export function QuestResultClient({
                 pricing={pricing}
               />
             </div>
-            <div>
+            <div className="w-full lg:w-auto lg:flex-1 lg:max-w-2xl">
               <FAQIntrospection />
             </div>
           </div>
@@ -991,7 +991,7 @@ export function QuestResultClient({
         </div>
 
         <div>
-          <QuestFooter />
+          <QuestFooter backgroundColor={activeCardColor} />
         </div>
       </div>
 

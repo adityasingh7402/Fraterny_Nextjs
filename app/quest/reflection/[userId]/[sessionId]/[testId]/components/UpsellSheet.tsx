@@ -78,9 +78,9 @@ export const UpsellSheet: React.FC<UpsellSheetProps> = ({ open, onClose, onPayme
         <motion.div className="fixed inset-0 z-[70]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <div className="absolute inset-0 bg-black/35" onClick={onClose} />
           <motion.div
-            className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-[390px] rounded-t-[28px] bg-white flex flex-col"
-            style={{ 
-              boxShadow: "0 -12px 32px rgba(0,0,0,0.15)", 
+            className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-[390px] md:max-w-[500px] rounded-t-[28px] bg-white flex flex-col"
+            style={{
+              boxShadow: "0 -12px 32px rgba(0,0,0,0.15)",
               border: `1px solid ${tokens.border}`,
               maxHeight: 'calc(100vh - 2rem)',
               minHeight: '60vh'
@@ -92,9 +92,9 @@ export const UpsellSheet: React.FC<UpsellSheetProps> = ({ open, onClose, onPayme
           >
             {/* Fixed Header with Close Button */}
             <div className="flex-shrink-0 relative px-4 pt-4 pb-2">
-              <button 
-                aria-label="Close" 
-                onClick={onClose} 
+              <button
+                aria-label="Close"
+                onClick={onClose}
                 className="absolute right-4 top-4 rounded-full p-2 bg-gray-100 hover:bg-gray-200 transition-colors z-10"
                 style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
               >
