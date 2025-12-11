@@ -70,7 +70,7 @@ export const PDFImageViewer: React.FC<PDFImageViewerProps> = ({ paymentSuccess, 
   return (
     <div className="relative">
       {/* Image Viewer Container */}
-      <div className="h-[calc(100dvh-320px)] w-full rounded-xl overflow-hidden shadow-lg bg-gray-100 relative">
+      <div className="h-[550px] md:h-[650px] w-full rounded-xl overflow-hidden shadow-lg bg-gray-100 relative">
         <div
           ref={containerRef}
           className="w-full h-full overflow-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200"
@@ -119,7 +119,7 @@ export const PDFImageViewer: React.FC<PDFImageViewerProps> = ({ paymentSuccess, 
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>
           </motion.button>
-          
+
           <motion.button
             onClick={handleZoomOut}
             whileHover={{ scale: 1.1 }}
@@ -131,7 +131,7 @@ export const PDFImageViewer: React.FC<PDFImageViewerProps> = ({ paymentSuccess, 
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 12H6" />
             </svg>
           </motion.button>
-          
+
           <motion.button
             onClick={handleReset}
             whileHover={{ scale: 1.1 }}
@@ -153,7 +153,7 @@ export const PDFImageViewer: React.FC<PDFImageViewerProps> = ({ paymentSuccess, 
 
       {/* Unlock Overlay with Blue Gradient */}
       <div className="absolute inset-x-0 bottom-0">
-        <div className="relative rounded-t-2xl border-t border-blue-300/30 p-6" style={{
+        <div className="relative rounded-2xl border-t border-blue-300/30 p-6" style={{
           background: 'linear-gradient(135deg, rgba(12,69,240,1) 0%, rgba(72,185,216,0.95) 100%)'
         }}>
 
