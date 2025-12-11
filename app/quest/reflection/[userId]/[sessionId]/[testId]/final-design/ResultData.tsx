@@ -295,7 +295,7 @@ export const clusters: Cluster[] = [
   {
     name: <div className="flex flex-col items-start leading-6">
       <p className="pb-1"> HEALING </p>
-      <p> HEARTS </p>
+      <p> HEART </p>
     </div>,
     img: '/result/HEALING HEART.webp',
     bgimg: '/result/HEALING HEART (4).webp',
