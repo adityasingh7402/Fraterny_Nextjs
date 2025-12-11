@@ -145,7 +145,7 @@ export const clusters: Cluster[] = [
       <p className="text-sm font-gilroy-light">
         Your personal psychological artifact discusses how the Strategist mask and your current inclination affects you in great detail.
       </p>
-      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6`}>
+      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6 md:hidden`}>
         <div className={`w-2 h-2 rounded-full bg-[#000000]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#000000]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#000000]`}></div>
@@ -190,7 +190,7 @@ export const clusters: Cluster[] = [
       <p className="text-sm font-gilroy-light text-gray-800">
         Your personal psychological artifact discusses how the Hidden Thinker mask and your current inclination affects you in great detail.
       </p>
-      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6`}>
+      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6 md:hidden`}>
         <div className={`w-2 h-2 rounded-full bg-[#043974]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#043974]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#043974]`}></div>
@@ -234,7 +234,7 @@ export const clusters: Cluster[] = [
       <p className="text-sm font-gilroy-light">
         Your personal psychological artifact discusses how the Free Spirit mask and your current inclination affects you in great detail.
       </p>
-      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6`}>
+      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6 md:hidden`}>
         <div className={`w-2 h-2 rounded-full bg-[#545454]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#545454]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#545454]`}></div>
@@ -278,7 +278,7 @@ export const clusters: Cluster[] = [
       <p className="text-sm font-gilroy-light text-gray-800">
         Your personal psychological artifact discusses how the Restless Mind mask and your current inclination affects you in great detail.
       </p>
-      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6`}>
+      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6 md:hidden`}>
         <div className={`w-2 h-2 rounded-full bg-[#1a5a7e]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#1a5a7e]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#1a5a7e]`}></div>
@@ -322,7 +322,7 @@ export const clusters: Cluster[] = [
       <p className="text-sm font-gilroy-light">
         Your personal psychological artifact discusses how the Healing Heart mask and your current inclination affects you in great detail.
       </p>
-      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6`}>
+      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6 md:hidden`}>
         <div className={`w-2 h-2 rounded-full bg-[#0198ac]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#0198ac]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#0198ac]`}></div>
@@ -366,7 +366,7 @@ export const clusters: Cluster[] = [
       <p className="text-sm font-gilroy-light">
         Your personal psychological artifact discusses how the Soul Aligned mask and your current inclination affects you in great detail.
       </p>
-      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6`}>
+      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6 md:hidden`}>
         <div className={`w-2 h-2 rounded-full bg-[#4dbdfc]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#4dbdfc]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#4dbdfc]`}></div>
