@@ -22,12 +22,10 @@ interface SignalsData {
     signal2_purpose: string;
     signal3_purpose: string;
     signal4_purpose: string;
-    signal5_purpose: string;
     signal1_description: string;
     signal2_description: string;
     signal3_description: string;
     signal4_description: string;
-    signal5_description: string;
 }
 
 // Inline styles for the page
@@ -234,8 +232,8 @@ interface ConcertPageProps {
 const ConcertPage = ({ backgroundColor, signalsData }: ConcertPageProps) => {
     const [selectedConcert, setSelectedConcert] = useState<Concert | null>(null);
 
-    // Generate concerts array from signals data
-    const concerts: Concert[] = signalsData ? [1, 2, 3, 4, 5].map((id) => ({
+    // Generate concerts array from signals data - only 4 signals from DB
+    const concerts: Concert[] = signalsData ? [1, 2, 3, 4].map((id) => ({
         id,
         band: signalsData[`signal${id}_purpose` as keyof SignalsData],
         date: `Signal 0${id}`,

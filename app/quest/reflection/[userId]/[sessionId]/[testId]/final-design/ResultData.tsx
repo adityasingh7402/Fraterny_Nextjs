@@ -407,12 +407,10 @@ export const mockData = {
     "signal2_purpose": "Disappearing needs",
     "signal3_purpose": "Deferred grief",
     "signal4_purpose": "Concepts as armor",
-    "signal5_purpose": "Conditional freedom plan",
     "signal1_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
     "signal2_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
     "signal3_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
-    "signal4_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
-    "signal5_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want."
+    "signal4_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want."
   },
   "depth_score": 42
 };
@@ -501,16 +499,16 @@ export const prepareFinalData = (data: typeof mockData) => {
   // Define heading overrides based on context (self/world/aspiration)
   const headingMap = {
     self: {
-      bgHeading: <> SELF VIEW </>,
-      bgSubheading: <> HOW YOU SEE YOURSELF </>
+      bgHeading: "SELF VIEW",
+      bgSubheading: "HOW YOU SEE YOURSELF"
     },
     world: {
-      bgHeading: <>SOCIAL VIEW</>,
-      bgSubheading: <>HOW THE WORLD SEES YOU</>
+      bgHeading: "SOCIAL VIEW",
+      bgSubheading: "HOW THE WORLD SEES YOU"
     },
     aspiration: {
-      bgHeading: <>ASPIRATION</>,
-      bgSubheading: <>HOW YOU ASPIRE TO BE</>
+      bgHeading: "ASPIRATION",
+      bgSubheading: "HOW YOU ASPIRE TO BE"
     }
   };
 
