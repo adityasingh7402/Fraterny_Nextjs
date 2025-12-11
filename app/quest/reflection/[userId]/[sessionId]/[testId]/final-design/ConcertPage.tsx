@@ -90,7 +90,7 @@ const ConcertList = ({
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.4, delay: index * 0.1 }}
-                            onClick={() => onSelectConcert(concert)}
+                            onClick={() => concert.id <= 2 && onSelectConcert(concert)}
                             className="cursor-pointer group"
                         >
                             <div
@@ -113,7 +113,7 @@ const ConcertList = ({
                                         {concert.date} {concert.id !== 1 && <LockIcon className="w-4 h-4" />}
                                     </p>
                                     <h2
-                                        className="font-gilroy-semibold text-3xl md:text-5xl uppercase tracking-tight leading-none transition-all duration-300 flex items-center gap-3"
+                                        className={`font-gilroy-semibold text-3xl md:text-5xl uppercase tracking-tight leading-none transition-all duration-300 flex items-center gap-3 ${concert.id >= 3 ? 'blur-sm' : ''}`}
                                         style={{ color: 'hsl(0 0% 100%)' }}
                                     >
                                         {concert.band}
@@ -170,7 +170,7 @@ const ConcertDetail = ({
                 className="absolute bottom-0 left-0 right-0 rounded-t-3xl overflow-hidden"
                 style={{
                     background: backgroundColor,
-                    maxHeight: '85vh',
+                    height: '50vh',
                     transition: 'background-color 0.5s ease'
                 }}
             >
@@ -183,7 +183,7 @@ const ConcertDetail = ({
                 </div>
 
                 {/* Content */}
-                <div className="px-6 pb-12 overflow-y-auto w-full max-w-7xl mx-auto" style={{ maxHeight: 'calc(85vh - 40px)' }}>
+                <div className="px-6 py-12 overflow-y-auto w-full max-w-7xl mx-auto" style={{ maxHeight: 'calc(95vh - 40px)' }}>
                     {/* Header */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
