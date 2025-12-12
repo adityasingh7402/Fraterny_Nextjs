@@ -831,7 +831,7 @@ export function QuestResultClient({
               Your <span style={{ color: activeCardColor }}>Primary</span> Pattern
             </h1> */}
             <span className="block sm:text-sm text-base uppercase tracking-[0.3em] text-neutral-400 mb-4 font-gilroy-medium">
-              Primary Pattern
+              OPERATING SIGNATURE
             </span>
             <h1 className="text-5xl md:text-7xl font-gilroy-bold tracking-tighter text-neutral-900 leading-none">
               Your <span style={{ color: activeCardColor }}>Primary</span> Pattern
@@ -839,7 +839,7 @@ export function QuestResultClient({
 
             {/* Contributor Line */}
             <p className="text-sm font-gilroy-regular text-neutral-600 mb-10 pb-8 border-b border-neutral-200">
-              Insights compiled for your personal journey
+              Insights compiled from your introspection
             </p>
 
             {/* Body Text with Drop Cap */}
@@ -965,7 +965,11 @@ export function QuestResultClient({
               Private <span style={{ color: activeCardColor }}>Intelligence</span> File
             </h1>
           </motion.div>
-          <div className="flex flex-col lg:flex-row justify-center items-start gap-10 lg:gap-12">
+          {/* Desktop: PDF + FAQ in flex-row, then Testimonials below */}
+          {/* Mobile: PDF, then Testimonials, then FAQ */}
+
+          {/* Desktop layout */}
+          <div className="hidden lg:flex flex-row justify-center items-start gap-10 lg:gap-12">
             <div className="w-full lg:w-auto mt-6 max-w-xl px-6 sm:px-0">
               <PDFImageViewer
                 paymentSuccess={paymentSuccess}
@@ -973,7 +977,6 @@ export function QuestResultClient({
                 onPDFDownload={handlePDFDownload}
                 onUnlockClick={() => {
                   if (!paymentSuccess) {
-                    // googleAnalytics.trackPdfUnlockCTA({...});
                     setUpsellOpen(true);
                   }
                 }}
@@ -984,10 +987,37 @@ export function QuestResultClient({
               <FAQIntrospection />
             </div>
           </div>
-          <div className="mt-0">
-            <Testimonials
-              headerText=""
-            />
+
+          {/* Mobile layout - PDF, then Testimonials, then FAQ */}
+          <div className="flex lg:hidden flex-col gap-10">
+            <div className="w-full mt-6 max-w-xl px-6 sm:px-0 mx-auto">
+              <PDFImageViewer
+                paymentSuccess={paymentSuccess}
+                paymentStatus={assessmentPaymentStatus}
+                onPDFDownload={handlePDFDownload}
+                onUnlockClick={() => {
+                  if (!paymentSuccess) {
+                    setUpsellOpen(true);
+                  }
+                }}
+                pricing={pricing}
+              />
+            </div>
+
+            {/* Testimonials on mobile - appears before FAQ */}
+            <div className="w-full">
+              <Testimonials headerText="" />
+            </div>
+
+            {/* FAQ on mobile - appears after Testimonials */}
+            <div className="w-full max-w-2xl px-6 mx-auto">
+              <FAQIntrospection />
+            </div>
+          </div>
+
+          {/* Testimonials for desktop only - shown below the flex-row */}
+          <div className="hidden lg:block mt-0">
+            <Testimonials headerText="" />
           </div>
         </div>
 

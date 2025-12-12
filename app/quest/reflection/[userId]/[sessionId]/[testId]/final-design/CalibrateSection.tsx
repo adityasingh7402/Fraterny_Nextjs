@@ -210,7 +210,7 @@ export default function CalibrateSection({
                     className="mb-16"
                 >
                     <span className="block text-base sm:text-sm uppercase tracking-[0.3em] text-neutral-400 mb-4 font-gilroy-medium">
-                        Calibrate
+                        Data density Index
                     </span>
                     <h1 className="text-5xl md:text-7xl font-gilroy-bold tracking-tighter text-neutral-900 leading-none">
                         Calibrate Your <span style={{ color: accentColor }}>Depth</span>
@@ -229,7 +229,7 @@ export default function CalibrateSection({
                             className="bg-neutral-50 rounded-2xl p-8 border border-neutral-100"
                         >
                             <span className="block text-xs uppercase tracking-widest text-neutral-500 mb-2 font-gilroy-regular">
-                                Current Depth Score
+                                Current Depth Index
                             </span>
                             <div className="flex items-baseline gap-2">
                                 <span className="text-6xl md:text-7xl font-gilroy-bold" style={{ color: accentColor }}>
@@ -247,7 +247,7 @@ export default function CalibrateSection({
                                 />
                             </div>
                             <p className="mt-6 text-neutral-500 text-sm leading-relaxed font-gilroy-regular">
-                                Your depth score reflects your current alignment with your inner truth. Adjust the sliders to reflect your current state.
+                                This index calculates the density of the psychological data you provided. It represents the difference between a surface scan and a deep-core extraction of your behavioral patterns.  Users with Depth Index greater than 70 love their unique psychological file.
                             </p>
                         </motion.div>
                     </div>
@@ -393,7 +393,7 @@ export default function CalibrateSection({
                                 className="px-8 py-4 rounded-full font-gilroy-bold text-white text-sm uppercase tracking-widest shadow-xl transition-all hover:-translate-y-1 hover:shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed"
                                 style={{ backgroundColor: accentColor }}
                             >
-                                {isSubmitting ? 'Submitting...' : 'Submit Calibration'}
+                                {isSubmitting ? 'Submitting...' : 'Compile My Artifact'}
                             </button>
                         </div>
                     </div>

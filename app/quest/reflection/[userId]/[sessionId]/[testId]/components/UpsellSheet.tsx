@@ -139,13 +139,6 @@ export const UpsellSheet: React.FC<UpsellSheetProps> = ({ open, onClose, onPayme
                 </div>
               </motion.div>
 
-              <div className="mb-4 flex items-center justify-between rounded-xl bg-[#F2F5FA] px-3 py-3 font-gilroy-bold" style={{ border: `1px solid ${tokens.border}` }}>
-                <div className="text-[16px] font-gilroy-semibold" style={{ color: tokens.textDark }}>Incorporate My Feedback</div>
-                <button aria-label="toggle trial" onClick={() => setTrial((t) => !t)} className="relative h-6 w-11 rounded-full" style={{ background: trial ? tokens.accent : "#D1D5DB", boxShadow: "0 10px 30px rgba(12,69,240,0.06)" }}>
-                  <span className="absolute top-1 left-1 h-4 w-4 rounded-full bg-white transition-transform" style={{ transform: `translateX(${trial ? 20 : 0}px)` }} />
-                </button>
-              </div>
-
               {/* Payment Gateway Selection */}
               <div className="pb-4">
                 <div className="text-[14px] font-gilroy-semibold mb-3" style={{ color: tokens.textDark }}>
