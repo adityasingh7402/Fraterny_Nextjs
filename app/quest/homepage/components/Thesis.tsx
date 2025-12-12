@@ -4,14 +4,14 @@ import Link from 'next/link';
 
 export const Thesis: React.FC = () => {
   return (
-    <section className="bg-black text-white py-20 px-6">
+    <section className="bg-black text-white py-20 px-6 black-bg-section">
       <div className="max-w-3xl mx-auto">
         <h3 className="text-gray-400 font-gilroy-semibold mb-6 uppercase tracking-wider text-sm">The <span className="italic text-sm">Quest</span> Mode</h3>
-        
+
         <h2 className="text-3xl md:text-5xl font-bold leading-tight mb-12 font-gilroy-semibold">
-          The dynamics of belief have <span className="gradient-text">changed</span>. 
-          They can <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5f2c82] to-[#49a09d] pr-3 font-gilroy-bold italic">blind</span> you. 
-          Or <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5f2c82] to-[#49a09d] font-gilroy-bold italic">wake</span> you up.
+          The dynamics of belief have <span className="gradient-text">changed</span>.
+          They can <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500 pr-3 font-gilroy-bold italic">blind</span> you.
+          Or <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500 font-gilroy-bold italic">wake</span> you up.
         </h2>
 
         <div className="space-y-8 text-lg md:text-xl text-gray-300 leading-relaxed font-gilroy-regular">
@@ -26,7 +26,7 @@ export const Thesis: React.FC = () => {
           </div>
 
           <p className="font-medium text-white">
-            Thinking you <span className='font-gilroy-bold'>"know yourself"</span> used to be enough. <br/>
+            Thinking you <span className='font-gilroy-bold'>"know yourself"</span> used to be enough. <br />
             Not anymore.
           </p>
 
@@ -35,7 +35,7 @@ export const Thesis: React.FC = () => {
           </p>
 
           <p>
-            The edge now is distance - 
+            The edge now is distance -
             step outside your story, see the frame, then act.
           </p>
 
@@ -47,13 +47,13 @@ export const Thesis: React.FC = () => {
           <div className="pt-8">
             <p className="mb-4">And it all starts with understanding your psychology.</p>
 
-            <Link href = '/quest/quest-mode'>
+            <Link href='/quest/quest-mode'>
               <div className="text-2xl md:text-3xl font-bold text-white flex flex-row items-center gap-4 cursor-pointer underline">
                 Enter: Quest. <span className="text-white font-gilroy-bold italic"><ArrowRight /></span>
               </div>
             </Link>
+          </div>
         </div>
-      </div>
       </div>
     </section>
   );

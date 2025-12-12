@@ -2,8 +2,8 @@ import React from 'react'
 import HeroSection from './homepage/components/HeroSection'
 import Feature from './homepage/components/Feature'
 import { Thesis } from './homepage/components/Thesis'
-import { Testimonials, TestimonialData  } from './homepage/components/Testimonials'
-import {FeaturesGrid} from './homepage/components/FeaturesGrid'
+import { Testimonials, TestimonialData } from './homepage/components/Testimonials'
+import { FeaturesGrid } from './homepage/components/FeaturesGrid'
 import { Pricing, PricingPlan } from './homepage/components/Pricing'
 import { FAQ, FAQItem } from './homepage/components/FAQ'
 import Navigation from '../website-navigation/components/Navigation'
@@ -148,34 +148,34 @@ const pricingPlans: PricingPlan[] = [
 function page() {
   return (
     <div>
-        <Navigation />
-        <HeroSection />
-        <Thesis />
-        <Testimonials title="What our actual users said about Quest by Fraterny" data={testimonials1} />
+      <Navigation />
+      <HeroSection />
+      <Thesis />
+      <Testimonials title="What our actual users said about Quest by Fraterny" data={testimonials1} />
 
-        {/* Feature 0: The Hook */}
-        <section className="bg-black text-white py-24 px-6 text-center">
-            <div className="max-w-3xl mx-auto">
-            <div className="text-gray-500 uppercase tracking-widest text-xs font-gilroy-bold mb-4">What's in it?</div>
-            <h2 className="text-5xl md:text-7xl font-bold mb-8 font-gilroy-bold">Personal Growth on <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500 italic">Ster*ids</span></h2>
-            <p className="text-xl text-gray-400 mb-8 leading-relaxed font-gilroy-medium">
-                Quest curates the best ideas from the world's top thinkers in mental models, business strategy, psychology, philosophy, and productivity.
-            </p>
-            <p className="text-lg text-gray-500 mb-12 font-gilroy-light">
-                These are the ideas that have stood the test of time and helped generations of leaders make better decisions and live better lives.
-            </p>
-            <div className="text-white font-bold text-xl mb-16 font-gilroy-semibold">
-                QUEST brings them all together for you in one place.
-            </div>
-            <div className="inline-block border-b bg-neutral-800 shadow-2xl border-neutral-300 pb-2 text-gray-400 text-sm font-gilroy-medium px-4 py-2 rounded-lg">Pure signal. Zero noise.</div>
-            </div>
-        </section>
+      {/* Feature 0: The Hook */}
+      <section className="bg-black text-white py-24 px-6 text-center black-bg-section">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-gray-500 uppercase tracking-widest text-xs font-gilroy-bold mb-4">What's in it?</div>
+          <h2 className="text-5xl md:text-7xl font-bold mb-8 font-gilroy-bold">Personal Growth on <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500 italic">Ster*ids</span></h2>
+          <p className="text-xl text-gray-400 mb-8 leading-relaxed font-gilroy-medium">
+            Quest curates the best ideas from the world's top thinkers in mental models, business strategy, psychology, philosophy, and productivity.
+          </p>
+          <p className="text-lg text-gray-500 mb-12 font-gilroy-light">
+            These are the ideas that have stood the test of time and helped generations of leaders make better decisions and live better lives.
+          </p>
+          <div className="text-white font-bold text-xl mb-16 font-gilroy-semibold">
+            QUEST brings them all together for you in one place.
+          </div>
+          <div className="inline-block border-b bg-neutral-800 shadow-2xl border-neutral-300 pb-2 text-gray-400 text-sm font-gilroy-medium px-4 py-2 rounded-lg">Pure signal. Zero noise.</div>
+        </div>
+      </section>
 
-        {/* Feature 1 */}
+      {/* Feature 1 */}
       <Feature
         // tag={<div className='font-gilroy-black'></div>}
         tag=<div className="relative overflow-hidden flex items-center justify-center gap-4 w-full rounded-3xl cursor-pointer mt-2">
-          <div 
+          <div
             className="absolute top-0 left-0 w-full h-full rounded-3xl z-0"
             style={{
               background: "linear-gradient(-45deg, #1a1a1a, #ffffff, #6b7280, #d1d5db, #1a1a1a)",
@@ -205,16 +205,16 @@ function page() {
       <Feature
         tag={
           <div className="relative overflow-hidden flex items-center justify-center gap-4 w-full rounded-3xl cursor-pointer mt-2">
-          <div className="absolute top-0 left-0 w-full h-full animate-gradient rounded-3xl z-0"
-          style={{
-            background: "linear-gradient(-45deg, #1a1a1a, #ffffff, #6b7280, #d1d5db, #1a1a1a)",
-            backgroundSize: "400% 400%",
-            animation: "gradient 6s ease infinite",
-          }}></div>
-          <div className=" bg-neutral-800 rounded-3xl flex items-center justify-center gap-4 m-1 w-full relative z-10">
-            <div className="text-gray-300 text-xl font-gilroy-medium px-5 py-1">Insights</div>
+            <div className="absolute top-0 left-0 w-full h-full animate-gradient rounded-3xl z-0"
+              style={{
+                background: "linear-gradient(-45deg, #1a1a1a, #ffffff, #6b7280, #d1d5db, #1a1a1a)",
+                backgroundSize: "400% 400%",
+                animation: "gradient 6s ease infinite",
+              }}></div>
+            <div className=" bg-neutral-800 rounded-3xl flex items-center justify-center gap-4 m-1 w-full relative z-10">
+              <div className="text-gray-300 text-xl font-gilroy-medium px-5 py-1">Insights</div>
+            </div>
           </div>
-        </div>
         }
         title={<div className="font-gilroy-bold"><span className='text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500 italic pr-3'>Visualized</span> X <span className='text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500 italic pr-3'>Philosophy</span></div>}
         subTitle={null}
@@ -232,16 +232,16 @@ function page() {
       <Feature
         tag={
           <div className="relative overflow-hidden flex items-center justify-center gap-4 w-full rounded-3xl cursor-pointer mt-2">
-          <div className="absolute top-0 left-0 w-full h-full animate-gradient rounded-3xl z-0"
-          style={{
-            background: "linear-gradient(-45deg, #1a1a1a, #ffffff, #6b7280, #d1d5db, #1a1a1a)",
-            backgroundSize: "400% 400%",
-            animation: "gradient 6s ease infinite",
-          }}></div>
-          <div className=" bg-neutral-800 rounded-3xl flex items-center justify-center gap-4 m-1 w-full relative z-10">
-            <div className="text-gray-300 text-xl font-gilroy-medium px-5 py-1">Resources</div>
+            <div className="absolute top-0 left-0 w-full h-full animate-gradient rounded-3xl z-0"
+              style={{
+                background: "linear-gradient(-45deg, #1a1a1a, #ffffff, #6b7280, #d1d5db, #1a1a1a)",
+                backgroundSize: "400% 400%",
+                animation: "gradient 6s ease infinite",
+              }}></div>
+            <div className=" bg-neutral-800 rounded-3xl flex items-center justify-center gap-4 m-1 w-full relative z-10">
+              <div className="text-gray-300 text-xl font-gilroy-medium px-5 py-1">Resources</div>
+            </div>
           </div>
-        </div>
         }
         title={<div className="font-gilroy-bold"><span className='text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500 pr-3'>Books</span> <span className='text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500 pr-3'>Podcasts</span> & More</div>}
         subTitle={null}
