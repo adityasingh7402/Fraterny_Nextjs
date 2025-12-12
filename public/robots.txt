@@ -1,7 +1,5 @@
-export async function GET() {
-  const robotsTxt = `# Fraterny.com - Robots.txt for SEO Optimization
+# Fraterny.com - Robots.txt for SEO Optimization
 # Website: https://fraterny.com
-# Generated: ${new Date().toISOString().split('T')[0]}
 
 # Host specification
 Host: fraterny.com
@@ -46,12 +44,4 @@ Allow: *.js
 Allow: *.webp
 Allow: *.jpg
 Allow: *.png
-Allow: *.svg`;
-
-  return new Response(robotsTxt, {
-    headers: {
-      'Content-Type': 'text/plain',
-      'Cache-Control': 'public, max-age=3600, s-maxage=3600',
-    },
-  });
-}
+Allow: *.svg
