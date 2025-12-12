@@ -57,6 +57,12 @@ export async function GET() {
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://fraterny.com/quest</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://fraterny.com/quest/quest-mode</loc>
     <lastmod>${currentDate}</lastmod>
     <changefreq>weekly</changefreq>
@@ -76,12 +82,6 @@ export async function GET() {
   </url>
   <url>
     <loc>https://fraterny.com/know-quest</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://fraterny.com/archeotype</loc>
     <lastmod>${currentDate}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
