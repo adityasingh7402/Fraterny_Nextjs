@@ -1,28 +1,31 @@
 import React from 'react';
 import { Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 const HeroSection: React.FC = () => {
   return (
     <section className="pt-8 pb-32 px-4 md:px-8 max-w-4xl mx-auto flex flex-col items-center text-center bg-[#f7f7f7] min-h-screen">
       {/* Logo */}
       <div className="flex flex-col items-center mb-8">
-        <img src="/quest-transparent-logo.png" alt="Quest Logo" className="w-24 md:w-32 h-auto" />
+        <img src="/Vector.svg" alt="Quest Logo" className="w-24 md:w-32 h-auto" />
       </div>
 
       {/* Headline */}
-      <h1 className="text-4xl md:text-6xl font-sans font-extrabold text-[#222222] leading-tight tracking-tight mb-6">
+      <h1 className="text-4xl md:text-6xl font-gilroy-bold font-extrabold text-[#222222] leading-tight tracking-tight mb-6">
         Understand your mind and get unshakable clarity
       </h1>
 
       {/* Subhead */}
-      <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl leading-relaxed">
-        <span className="italic">Quest</span> decodes the deeper psychological insights hidden in your words to reveal the patterns that quietly drive your life in 20 minutes.
+      <p className="text-lg md:text-xl text-gray-700 mb-8 max-w-2xl leading-relaxed font-gilroy-regular">
+        <span className="italic font-gilroy-semibold">Quest</span> decodes the deeper psychological insights hidden in your words to reveal the patterns that quietly drive your life in 20 minutes.
       </p>
 
       {/* CTA */}
       <div className="mb-8">
-        <button>Enter Quest Mode</button>
+        <Link href="/quest/quest-mode">
+          <button className='px-5 py-2 bg-black text-white rounded-md font-gilroy-semibold tracking-tighter'>Enter Quest Mode</button>
+        </Link>
       </div>
 
       {/* Social Proof */}
@@ -41,7 +44,7 @@ const HeroSection: React.FC = () => {
           <div className="flex text-orange-400">
             {[1, 2, 3, 4, 5].map((s) => <Star key={s} className="w-4 h-4 fill-current" />)}
           </div>
-          <span className="text-sm text-gray-600 font-medium">5100+ happy users</span>
+          <span className="text-sm text-gray-600 font-gilroy-semibold">500+ happy users</span>
         </div>
       </div>
 

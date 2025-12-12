@@ -1,8 +1,8 @@
 import React from 'react';
 
 interface FeatureProps {
-  tag: string;
-  title: string;
+  tag: React.ReactNode; // Can be string or JSX
+  title: React.ReactNode; // Can be string or JSX
   subTitle?: React.ReactNode; // Can be string or JSX
   description: string;
   imageUrl: string;
@@ -31,15 +31,15 @@ const Feature: React.FC<FeatureProps> = ({
 
       <div className="max-w-4xl mx-auto relative z-10 flex flex-col items-center text-center">
         {/* Tag */}
-        <div className="inline-block px-4 py-1 rounded-full border border-gray-700 text-gray-300 text-xs font-semibold uppercase tracking-wider mb-8 bg-gray-900">
+        <div className="pb-4">
           {tag}
         </div>
 
         {/* Title Block */}
         <div className="mb-12 max-w-2xl">
-          <h2 className="text-4xl md:text-6xl font-bold mb-6">{title}</h2>
-          {subTitle && <div className="text-2xl md:text-4xl font-bold text-gray-400 mb-6">{subTitle}</div>}
-          <p className="text-lg text-gray-400 leading-relaxed">
+          <h2 className="text-4xl md:text-6xl font-gilroy-semibold mb-6">{title}</h2>
+          {subTitle && <div className="text-2xl md:text-4xl font-bold text-gray-400 mb-6 font-gilroy-regular">{subTitle}</div>}
+          <p className="text-lg text-gray-400 leading-relaxed font-gilroy-regular">
             {description}
           </p>
         </div>
@@ -49,7 +49,7 @@ const Feature: React.FC<FeatureProps> = ({
             <div className="relative rounded-2xl overflow-hidden border border-gray-800 shadow-2xl bg-gray-900 aspect-[4/3] md:aspect-video">
                  <img 
                     src={imageUrl} 
-                    alt={title} 
+                    alt="Feature Image"
                     className="object-cover w-full h-full opacity-90 hover:opacity-100 transition-opacity duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
@@ -62,12 +62,12 @@ const Feature: React.FC<FeatureProps> = ({
              <div className="mb-6 flex justify-center">
                 <img src={testimonial.avatar} alt={testimonial.author} className="w-16 h-16 rounded-full border-2 border-gray-800" />
              </div>
-             <p className="text-xl md:text-2xl font-serif italic text-gray-300 mb-6">
+             <p className="text-xl md:text-2xl italic text-gray-300 mb-6 font-gilroy-medium">
                 "{testimonial.text}"
              </p>
              <div>
-                <h4 className="font-bold text-white">{testimonial.author}</h4>
-                <p className="text-sm text-gray-500">{testimonial.role}</p>
+                <h4 className="font-gilroy-semibold text-white">{testimonial.author}</h4>
+                <p className="text-sm text-gray-500 font-gilroy-regular">{testimonial.role}</p>
              </div>
           </div>
         )}
