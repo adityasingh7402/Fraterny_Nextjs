@@ -1,5 +1,4 @@
-export async function GET() {
-  const html = `<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Google Site Verification - Fraterny.com</title>
@@ -10,12 +9,4 @@ export async function GET() {
     <p>This file is used to verify ownership of fraterny.com with Google Search Console.</p>
     <p>Replace this content with the verification file provided by Google Search Console.</p>
 </body>
-</html>`;
-
-  return new Response(html, {
-    headers: {
-      'Content-Type': 'text/html',
-      'Cache-Control': 'public, max-age=86400',
-    },
-  });
-}
+</html>
