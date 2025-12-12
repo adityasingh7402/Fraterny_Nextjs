@@ -4,6 +4,7 @@
 import { useState, useMemo } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePathname } from 'next/navigation';
 import { useAuth } from '../../auth/cotexts/AuthContext';
 import Logo from './Logo';
 import DesktopNavigation from './DesktopNavigation';
@@ -12,18 +13,25 @@ import { useScrollEffect } from '../hooks/useScrollEffect';
 
 const Navigation = () => {
   const { signOut, user, authReady } = useAuth();
-  const { isScrolled, isPastHero } = useScrollEffect();
+  const { isScrolled, isPastHero, isInBlackSection } = useScrollEffect();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  
+  const pathname = usePathname();
+
+  // Check if we're on the quest page
+  const isQuestPage = pathname === '/quest';
+
 
   const iconColor = useMemo(() => isScrolled ? '#0A1A2F' : '#FFFFFF', [isScrolled]);
 
   const navClasses = useMemo(
     () =>
-      `fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
-        isScrolled ? 'bg-white/10 backdrop-filter backdrop-blur-lg shadow-lg py-2' : 'py-4'
+      `fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${isInBlackSection
+        ? 'bg-white/95 backdrop-filter backdrop-blur-lg shadow-lg py-2'
+        : isScrolled
+          ? 'bg-white/10 backdrop-filter backdrop-blur-lg shadow-lg py-2'
+          : 'py-4'
       }`,
-    [isScrolled]
+    [isScrolled, isInBlackSection]
   );
 
   const toggleMenu = () => {
@@ -75,9 +83,9 @@ const Navigation = () => {
       opacity: 1,
     },
     transition: {
-        type: 'easeInOut',
-        duration: 0.8,
-        delay: 0.6, 
+      type: 'easeInOut',
+      duration: 0.8,
+      delay: 0.6,
     }
   };
 
@@ -97,12 +105,21 @@ const Navigation = () => {
     );
   }
 
+  // Determine if navbar should be visible
+  const shouldShowNav = isQuestPage ? (isScrolled || isInBlackSection) : true;
+
   return (
-    <motion.nav className={`${navClasses}`}>
+    <motion.nav
+      className={`${navClasses}`}
+      style={{
+        opacity: shouldShowNav ? 1 : 0,
+        pointerEvents: shouldShowNav ? 'auto' : 'none'
+      }}
+    >
       <div className="px-4 sm:px-6">
         <motion.div className="flex items-center justify-between">
           <motion.div>
-                <Logo isPastHero={isPastHero} />
+            <Logo isPastHero={isPastHero} />
           </motion.div>
 
           <motion.div key={authReady ? 'ready' : 'loading'} variants={navItemsVariants} initial="hidden" animate="visible">
@@ -117,28 +134,28 @@ const Navigation = () => {
             aria-expanded={isMenuOpen}
           >
             {isMenuOpen ? (
-              <X  size={24} className='text-white' />
+              <X size={24} className={`${isScrolled || isInBlackSection ? 'text-black' : 'text-white'}`} />
             ) : (
-              <Menu size={24} className='text-white' />
+              <Menu size={24} className={`${isScrolled || isInBlackSection ? 'text-black' : 'text-white'}`} />
             )}
           </motion.button>
 
-          
-         
 
 
 
-        <AnimatePresence>
-          {isMenuOpen && (
-            <MobileNavigation
-              isOpen={isMenuOpen}
-              isScrolled={isScrolled}
-              toggleMenu={toggleMenu}
-              user={user}
-              onSignOut={handleSignOut}
-            />
-          )}
-        </AnimatePresence>
+
+
+          <AnimatePresence>
+            {isMenuOpen && (
+              <MobileNavigation
+                isOpen={isMenuOpen}
+                isScrolled={isScrolled}
+                toggleMenu={toggleMenu}
+                user={user}
+                onSignOut={handleSignOut}
+              />
+            )}
+          </AnimatePresence>
         </motion.div>
       </div>
     </motion.nav>
