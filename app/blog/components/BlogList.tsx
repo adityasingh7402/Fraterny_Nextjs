@@ -18,13 +18,13 @@ interface BlogListProps {
   refetch?: () => void;
 }
 
-const BlogList: React.FC<BlogListProps> = ({ 
-  posts, 
-  isLoading, 
-  error, 
-  selectedCategory, 
-  selectedTag, 
-  setSelectedCategory, 
+const BlogList: React.FC<BlogListProps> = ({
+  posts,
+  isLoading,
+  error,
+  selectedCategory,
+  selectedTag,
+  setSelectedCategory,
   setSelectedTag,
   currentPage,
   totalPages,
@@ -45,13 +45,13 @@ const BlogList: React.FC<BlogListProps> = ({
   };
 
   const cardVariants = {
-    hidden: { 
+    hidden: {
       opacity: 0,
       y: 60,
       scale: 0.8,
       rotateX: 10
     },
-    visible: { 
+    visible: {
       opacity: 1,
       y: 0,
       scale: 1,
@@ -68,8 +68,8 @@ const BlogList: React.FC<BlogListProps> = ({
 
   const loadingVariants = {
     hidden: { opacity: 0, scale: 0.8 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       scale: 1,
       transition: {
         duration: 0.5,
@@ -79,12 +79,12 @@ const BlogList: React.FC<BlogListProps> = ({
   };
 
   const emptyStateVariants = {
-    hidden: { 
+    hidden: {
       opacity: 0,
       y: 40,
       scale: 0.9
     },
-    visible: { 
+    visible: {
       opacity: 1,
       y: 0,
       scale: 1,
@@ -99,17 +99,17 @@ const BlogList: React.FC<BlogListProps> = ({
 
   if (isLoading) {
     return (
-      <motion.div 
+      <motion.div
         className="text-center py-20"
         initial="hidden"
         animate="visible"
       >
-        <motion.div 
+        <motion.div
           className="inline-block h-8 w-8 rounded-full border-4 border-solid border-navy border-r-transparent"
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
         />
-        <motion.p 
+        <motion.p
           className="mt-4 text-gray-600"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -120,7 +120,7 @@ const BlogList: React.FC<BlogListProps> = ({
       </motion.div>
     );
   }
-  
+
   if (error) {
     return (
       <motion.div
@@ -128,23 +128,23 @@ const BlogList: React.FC<BlogListProps> = ({
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <BlogErrorState 
-          message="Failed to load blog posts" 
+        <BlogErrorState
+          message="Failed to load blog posts"
           onRetry={refetch}
           error={error}
         />
       </motion.div>
     );
   }
-  
+
   if (posts !== undefined && posts !== null && posts.length === 0) {
     return (
-      <motion.div 
+      <motion.div
         className="text-center py-20 max-w-7xl mx-auto"
         initial="hidden"
         animate="visible"
       >
-        <motion.h2 
+        <motion.h2
           className="text-2xl font-playfair text-navy mb-4"
           variants={{
             hidden: { opacity: 0, y: 20 },
@@ -153,21 +153,21 @@ const BlogList: React.FC<BlogListProps> = ({
         >
           No matching posts found
         </motion.h2>
-        
-        <motion.p 
+
+        <motion.p
           className="text-gray-600 mb-6"
           variants={{
             hidden: { opacity: 0, y: 20 },
             visible: { opacity: 1, y: 0 }
           }}
         >
-          {selectedCategory || selectedTag ? 
-            'Try changing your filters to see more content.' : 
+          {selectedCategory || selectedTag ?
+            'Try changing your filters to see more content.' :
             "We're working on our first blog posts. Check back soon!"}
         </motion.p>
-        
+
         {(selectedCategory || selectedTag) && (
-          <motion.button 
+          <motion.button
             onClick={() => {
               setSelectedCategory(null);
               setSelectedTag(null);
@@ -198,16 +198,16 @@ const BlogList: React.FC<BlogListProps> = ({
           <motion.div
             key={post.id}
             custom={index}
-            whileHover={{ 
+            whileHover={{
               y: -12,
-              transition: { 
-                type: "spring", 
-                stiffness: 400, 
+              transition: {
+                type: "spring",
+                stiffness: 400,
                 damping: 25,
                 duration: 0.3
               }
             }}
-            whileTap={{ 
+            whileTap={{
               scale: 0.97,
               transition: { duration: 0.1 }
             }}
@@ -221,7 +221,7 @@ const BlogList: React.FC<BlogListProps> = ({
           </motion.div>
         ))}
       </motion.div>
-      
+
       {totalPages > 1 && (
         <motion.div
           className="my-8"
@@ -237,56 +237,110 @@ const BlogList: React.FC<BlogListProps> = ({
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <PaginationPrevious 
-                      href="#" 
+                    <PaginationPrevious
+                      href="#"
                       onClick={(e) => {
                         e.preventDefault();
                         onPageChange(currentPage - 1);
-                      }} 
+                      }}
                       className="transition-colors duration-200"
                       size="default"
                     />
                   </motion.div>
                 </PaginationItem>
               )}
-              
-              {Array.from({ length: totalPages }).map((_, index) => (
-                <PaginationItem key={index}>
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 + (index * 0.05) }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <PaginationLink 
-                      href="#" 
-                      isActive={currentPage === index + 1}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        onPageChange(index + 1);
-                      }}
-                      className="transition-all duration-200"
-                      size="default"
-                    >
-                      {index + 1}
-                    </PaginationLink>
-                  </motion.div>
-                </PaginationItem>
-              ))}
-              
+
+              {(() => {
+                // Smart pagination logic
+                const getPageNumbers = () => {
+                  const pages: (number | string)[] = [];
+                  const showEllipsisThreshold = 7; // Show ellipsis if more than 7 pages
+
+                  if (totalPages <= showEllipsisThreshold) {
+                    // Show all pages if total is small
+                    for (let i = 1; i <= totalPages; i++) {
+                      pages.push(i);
+                    }
+                  } else {
+                    // Always show first page
+                    pages.push(1);
+
+                    // Determine range around current page
+                    const leftBoundary = Math.max(2, currentPage - 1);
+                    const rightBoundary = Math.min(totalPages - 1, currentPage + 1);
+
+                    // Add ellipsis after first page if needed
+                    if (leftBoundary > 2) {
+                      pages.push('ellipsis-start');
+                    }
+
+                    // Add pages around current page
+                    for (let i = leftBoundary; i <= rightBoundary; i++) {
+                      pages.push(i);
+                    }
+
+                    // Add ellipsis before last page if needed
+                    if (rightBoundary < totalPages - 1) {
+                      pages.push('ellipsis-end');
+                    }
+
+                    // Always show last page
+                    pages.push(totalPages);
+                  }
+
+                  return pages;
+                };
+
+                return getPageNumbers().map((page, index) => {
+                  if (typeof page === 'string') {
+                    // Render ellipsis
+                    return (
+                      <PaginationItem key={page}>
+                        <span className="px-4 text-gray-400">...</span>
+                      </PaginationItem>
+                    );
+                  }
+
+                  // Render page number
+                  return (
+                    <PaginationItem key={page}>
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 + (index * 0.05) }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <PaginationLink
+                          href="#"
+                          isActive={currentPage === page}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            onPageChange(page);
+                          }}
+                          className="transition-all duration-200"
+                          size="default"
+                        >
+                          {page}
+                        </PaginationLink>
+                      </motion.div>
+                    </PaginationItem>
+                  );
+                });
+              })()}
+
               {currentPage < totalPages && (
                 <PaginationItem>
                   <motion.div
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <PaginationNext 
-                      href="#" 
+                    <PaginationNext
+                      href="#"
                       onClick={(e) => {
                         e.preventDefault();
                         onPageChange(currentPage + 1);
-                      }} 
+                      }}
                       className="transition-colors duration-200"
                       size="default"
                     />
