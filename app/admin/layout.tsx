@@ -41,12 +41,26 @@ export default function AdminLayout({
         }
 
         const email = user.email.toLowerCase();
-        // Check if email is in the allowed list
-        if (ADMIN_EMAILS.includes(email)) {
-          setIsAuthorized(true);
-        } else {
-          // If logged in but not admin, redirect to home
-          router.push('/');
+
+        // Check admin status via API (checks database first, then fallback)
+        try {
+          const response = await fetch(`/api/admin/emails/check?email=${encodeURIComponent(email)}`);
+          const data = await response.json();
+
+          if (data.success && data.isAdmin) {
+            setIsAuthorized(true);
+          } else {
+            // If API says not admin, redirect to home
+            router.push('/');
+          }
+        } catch (apiError) {
+          console.warn('API check failed, using fallback:', apiError);
+          // Fallback to hardcoded list if API fails
+          if (ADMIN_EMAILS.includes(email)) {
+            setIsAuthorized(true);
+          } else {
+            router.push('/');
+          }
         }
       } catch (error) {
         console.error('Auth check error:', error);

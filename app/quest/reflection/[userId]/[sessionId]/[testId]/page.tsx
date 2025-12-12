@@ -69,13 +69,32 @@ async function getResultData(userId: string, sessionId: string, testId: string) 
     if (parsedResults && parsedResults.archetype) {
       console.log('✅ Using API data - archetype found!');
       console.log('📊 Archetype data:', parsedResults.archetype);
+
+      // Extract likert data from response if available
+      const likertData = response.data?.likert ? {
+        q1: response.data.likert.q1 ? parseInt(response.data.likert.q1) : undefined,
+        q2: response.data.likert.q2 ? parseInt(response.data.likert.q2) : undefined,
+        q3: response.data.likert.q3 ? parseInt(response.data.likert.q3) : undefined,
+        q4: response.data.likert.q4 ? parseInt(response.data.likert.q4) : undefined,
+        q5: response.data.likert.q5 ? parseInt(response.data.likert.q5) : undefined,
+      } : undefined;
+
+      console.log('📊 Likert data from DB:', likertData);
+
       const processedData = prepareFinalData(parsedResults);
+
       console.log('🎯 PROCESSED DATA FOR CLIENT:', {
         self: processedData.archetypes.self?.subtitle,
         world: processedData.archetypes.world?.subtitle,
-        aspiration: processedData.archetypes.aspiration?.subtitle
+        aspiration: processedData.archetypes.aspiration?.subtitle,
+        likert: likertData
       });
-      return processedData;
+
+      // Return with likert data included
+      return {
+        ...processedData,
+        likert: likertData
+      };
     } else {
       console.log('⚠️ No valid archetype in parsed results, falling back to mockData');
       console.log('⚠️ Response structure:', Object.keys(response.data || {}));

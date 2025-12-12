@@ -8,17 +8,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'Quest — Private Introspection',
-  description: 'Answer a short set of private prompts. Your file is composed from your words. ~10–15 minutes.',
-  keywords: ['psychological file',
-    'personal dossier',
-    'identity blueprint',
-    'self-knowledge',
-    'introspection',
-    'aesthetic psychology',
-    'behavior patterns',
-    'personal archetypes',
-    'Fraterny Quest'],
+  title: 'Terms and Conditions - Fraterny',
+  description: 'Read Fraterny\'s terms and conditions to understand the rules and guidelines for using our services, retreats, and platform.',
+  keywords: ['terms and conditions', 'terms of service', 'user agreement', 'legal terms', 'Fraterny'],
   authors: [{ name: 'Fraterny' }],
   creator: 'Fraterny',
   publisher: 'Fraterny',
@@ -40,34 +32,24 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://fraterny.com/terms-and-conditions',
-    title: 'Quest — Open-ended Intospection',
-    description: 'Private prompts. Your words compose your file.',
+    title: 'Terms and Conditions - Fraterny',
+    description: 'Understand the rules and guidelines for using Fraterny services and platform.',
     siteName: 'Fraterny',
     images: [
       {
-        url: 'https://fraterny.com/favicon-32x32.png',
+        url: 'https://fraterny.com/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Quest Self-Awareness by Fraterny',
+        alt: 'Fraterny Terms and Conditions',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Quest — Open-ended Introspection',
-    description: 'Private prompts. Your words compose your file.',
-    images: ['https://fraterny.com/favicon-32x32.png'],
+    title: 'Terms and Conditions - Fraterny',
+    description: 'Understand the rules and guidelines for using Fraterny services.',
+    images: ['https://fraterny.com/og-image.png'],
     creator: '@frat_erny',
-  },
-  icons: {
-    icon: [
-      { url: '/favicon-32x32.png' },
-      { url: '/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
-    ],
-    apple: [
-      { url: '/favicon-32x32.png' },
-    ],
-    shortcut: '/favicon.ico',
   },
 };
 const jsonLd = {

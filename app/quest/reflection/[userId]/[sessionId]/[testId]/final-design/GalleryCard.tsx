@@ -170,8 +170,8 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                         layout
                         layoutId={`card-subheading-${cardId}`}
                         className={`font-gilroy-regular tracking-[0.2rem] -mt-3 uppercase ${useBlackText ? 'text-black/80' :
-                                useFreeSpirit ? 'text-[#545454]/80' :
-                                    'text-white/80'
+                            useFreeSpirit ? 'text-[#545454]/80' :
+                                'text-white/80'
                             }`}
                         initial={false}
                         animate={{
@@ -289,6 +289,18 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                                 >
                                     {included}
                                 </motion.button>
+
+                                {/* Three dots indicator - bottom right */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.3, delay: 0.6 }}
+                                    className="flex flex-row items-end justify-end gap-1 w-full mt-6"
+                                >
+                                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: color }}></div>
+                                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: color }}></div>
+                                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: color }}></div>
+                                </motion.div>
                             </motion.div>
                         )}
                     </AnimatePresence>

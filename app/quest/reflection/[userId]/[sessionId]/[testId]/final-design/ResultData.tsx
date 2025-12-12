@@ -145,7 +145,7 @@ export const clusters: Cluster[] = [
       <p className="text-sm font-gilroy-light">
         Your personal psychological artifact discusses how the Strategist mask and your current inclination affects you in great detail.
       </p>
-      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6`}>
+      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6 md:hidden`}>
         <div className={`w-2 h-2 rounded-full bg-[#000000]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#000000]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#000000]`}></div>
@@ -190,7 +190,7 @@ export const clusters: Cluster[] = [
       <p className="text-sm font-gilroy-light text-gray-800">
         Your personal psychological artifact discusses how the Hidden Thinker mask and your current inclination affects you in great detail.
       </p>
-      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6`}>
+      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6 md:hidden`}>
         <div className={`w-2 h-2 rounded-full bg-[#043974]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#043974]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#043974]`}></div>
@@ -234,7 +234,7 @@ export const clusters: Cluster[] = [
       <p className="text-sm font-gilroy-light">
         Your personal psychological artifact discusses how the Free Spirit mask and your current inclination affects you in great detail.
       </p>
-      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6`}>
+      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6 md:hidden`}>
         <div className={`w-2 h-2 rounded-full bg-[#545454]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#545454]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#545454]`}></div>
@@ -278,7 +278,7 @@ export const clusters: Cluster[] = [
       <p className="text-sm font-gilroy-light text-gray-800">
         Your personal psychological artifact discusses how the Restless Mind mask and your current inclination affects you in great detail.
       </p>
-      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6`}>
+      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6 md:hidden`}>
         <div className={`w-2 h-2 rounded-full bg-[#1a5a7e]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#1a5a7e]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#1a5a7e]`}></div>
@@ -322,7 +322,7 @@ export const clusters: Cluster[] = [
       <p className="text-sm font-gilroy-light">
         Your personal psychological artifact discusses how the Healing Heart mask and your current inclination affects you in great detail.
       </p>
-      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6`}>
+      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6 md:hidden`}>
         <div className={`w-2 h-2 rounded-full bg-[#0198ac]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#0198ac]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#0198ac]`}></div>
@@ -366,7 +366,7 @@ export const clusters: Cluster[] = [
       <p className="text-sm font-gilroy-light">
         Your personal psychological artifact discusses how the Soul Aligned mask and your current inclination affects you in great detail.
       </p>
-      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6`}>
+      <div className={`flex flex-row items-end justify-end gap-1 w-full mt-6 md:hidden`}>
         <div className={`w-2 h-2 rounded-full bg-[#4dbdfc]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#4dbdfc]`}></div>
         <div className={`w-2 h-2 rounded-full bg-[#4dbdfc]`}></div>
@@ -407,12 +407,10 @@ export const mockData = {
     "signal2_purpose": "Disappearing needs",
     "signal3_purpose": "Deferred grief",
     "signal4_purpose": "Concepts as armor",
-    "signal5_purpose": "Conditional freedom plan",
     "signal1_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
     "signal2_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
     "signal3_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
-    "signal4_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want.",
-    "signal5_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want."
+    "signal4_description": "When anxiety about money, worth, or separation rises, you instinctively reach for work and self-reliance. It soothes you quickly, but also postpones rest, emotional risk, and the spiritual life you say you want."
   },
   "depth_score": 42
 };
@@ -501,16 +499,16 @@ export const prepareFinalData = (data: typeof mockData) => {
   // Define heading overrides based on context (self/world/aspiration)
   const headingMap = {
     self: {
-      bgHeading: <> SELF VIEW </>,
-      bgSubheading: <> HOW YOU SEE YOURSELF </>
+      bgHeading: "SELF VIEW",
+      bgSubheading: "HOW YOU SEE YOURSELF"
     },
     world: {
-      bgHeading: <>SOCIAL VIEW</>,
-      bgSubheading: <>HOW THE WORLD SEES YOU</>
+      bgHeading: "SOCIAL VIEW",
+      bgSubheading: "HOW THE WORLD SEES YOU"
     },
     aspiration: {
-      bgHeading: <>ASPIRATION</>,
-      bgSubheading: <>HOW YOU ASPIRE TO BE</>
+      bgHeading: "ASPIRATION",
+      bgSubheading: "HOW YOU ASPIRE TO BE"
     }
   };
 

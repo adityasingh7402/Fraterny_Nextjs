@@ -79,14 +79,19 @@ export type ResultData = {
     signal2_purpose: string;
     signal3_purpose: string;
     signal4_purpose: string;
-    signal5_purpose: string;
     signal1_description: string;
     signal2_description: string;
     signal3_description: string;
     signal4_description: string;
-    signal5_description: string;
   };
   depth_score: number;
+  likert?: {
+    q1?: number;
+    q2?: number;
+    q3?: number;
+    q4?: number;
+    q5?: number;
+  };
 };
 
 export interface User {

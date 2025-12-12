@@ -22,12 +22,10 @@ interface SignalsData {
     signal2_purpose: string;
     signal3_purpose: string;
     signal4_purpose: string;
-    signal5_purpose: string;
     signal1_description: string;
     signal2_description: string;
     signal3_description: string;
     signal4_description: string;
-    signal5_description: string;
 }
 
 // Inline styles for the page
@@ -67,11 +65,11 @@ const ConcertList = ({
                 {/* Header */}
                 <motion.div
                     className="max-w-7xl mx-auto pb-12">
-                    <span className="block text-sm uppercase tracking-[0.3em] text-white/80 mb-4 font-gilroy-medium px-1 sm:px-0">
-                        Behavioural Signals
+                    <span className="block text-base sm:text-sm uppercase tracking-[0.3em] text-white/80 mb-4 font-gilroy-medium px-1 sm:px-0">
+                        Detected Operating Loops
                     </span>
                     <h1 className="text-5xl md:text-7xl font-gilroy-bold tracking-tighter text-white leading-none px-1 sm:px-0">
-                        Your <span className="text-white/50">Behavioural</span> Aspects
+                        Your <span className="text-white/50">BEHAVIORAL</span> SIGNATURES
                     </h1>
                 </motion.div>
 
@@ -234,8 +232,8 @@ interface ConcertPageProps {
 const ConcertPage = ({ backgroundColor, signalsData }: ConcertPageProps) => {
     const [selectedConcert, setSelectedConcert] = useState<Concert | null>(null);
 
-    // Generate concerts array from signals data
-    const concerts: Concert[] = signalsData ? [1, 2, 3, 4, 5].map((id) => ({
+    // Generate concerts array from signals data - only 4 signals from DB
+    const concerts: Concert[] = signalsData ? [1, 2, 3, 4].map((id) => ({
         id,
         band: signalsData[`signal${id}_purpose` as keyof SignalsData],
         date: `Signal 0${id}`,
