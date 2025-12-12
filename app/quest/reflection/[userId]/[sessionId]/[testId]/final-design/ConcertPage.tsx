@@ -66,10 +66,10 @@ const ConcertList = ({
                 <motion.div
                     className="max-w-7xl mx-auto pb-12">
                     <span className="block text-base sm:text-sm uppercase tracking-[0.3em] text-white/80 mb-4 font-gilroy-medium px-1 sm:px-0">
-                        Behavioural Signals
+                        Detected Operating Loops
                     </span>
                     <h1 className="text-5xl md:text-7xl font-gilroy-bold tracking-tighter text-white leading-none px-1 sm:px-0">
-                        Your <span className="text-white/50">Behavioural</span> Aspects
+                        Your <span className="text-white/50">BEHAVIORAL</span> SIGNATURES
                     </h1>
                 </motion.div>
 

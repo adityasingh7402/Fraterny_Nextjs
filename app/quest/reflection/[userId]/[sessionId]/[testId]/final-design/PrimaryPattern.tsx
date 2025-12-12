@@ -29,7 +29,7 @@ export default function PrimaryPattern({ coreLine, pattern, backgroundColor = 'h
                     className="flex flex-col"
                 >
                     <span className="block text-sm uppercase tracking-[0.3em] text-white/60 mb-4 font-gilroy-medium">
-                        Primary Pattern
+                        OPERATING SIGNATURE
                     </span>
                     <h1 className="text-5xl md:text-7xl font-gilroy-bold tracking-tighter text-white mb-8 leading-none">
                         Your <span className="text-white/50 transition-colors duration-500">Primary</span> Pattern
