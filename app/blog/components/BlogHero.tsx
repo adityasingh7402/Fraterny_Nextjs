@@ -68,7 +68,7 @@ const BlogHero: React.FC<BlogHeroProps> = ({ totalPosts }) => {
             animate={titleAnimation.controls}
           >
             <motion.h1
-              className="text-3xl md:text-5xl lg:text-7xl font-gilroy-regular mb-4 text-white"
+              className="text-5xl md:text-6xl lg:text-7xl font-gilroy-regular mb-4 text-white"
               variants={titleAnimation.childVariants}
             >
               Our Blog
