@@ -157,7 +157,8 @@ export const clusters: Cluster[] = [
       "Meta Reader",
       "Build Master",
       "Clutch Caller",
-      "Rogue Operator"
+      "Rogue Operator",
+      "Steadycore"
     ],
   },
   {
