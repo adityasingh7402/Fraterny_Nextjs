@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Users, TrendingUp, DollarSign, Activity, MousePointer, Eye, Trash2, AlertTriangle, ChevronLeft, ChevronRight, Plus } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 import AddInfluencerPopup from './components/AddInfluencerPopup';
 import ViewInfluencerPopup from './components/ViewInfluencerPopup';
 
@@ -68,7 +69,7 @@ export default function AdminInfluencerManagement() {
   const [statusFilter, setStatusFilter] = useState<'' | 'active' | 'inactive' | 'suspended'>('');
   const [minEarnings, setMinEarnings] = useState('');
   const [maxEarnings, setMaxEarnings] = useState('');
-  
+
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [showViewPopup, setShowViewPopup] = useState(false);
   const [showAddPopup, setShowAddPopup] = useState(false);
@@ -100,10 +101,18 @@ export default function AdminInfluencerManagement() {
     }
   };
 
+  const getProfileImageUrl = (storagePath: string | null): string | null => {
+    if (!storagePath) return null;
+    if (storagePath.startsWith('http://') || storagePath.startsWith('https://')) return storagePath;
+    if (storagePath.startsWith('data:')) return storagePath;
+    const { data } = supabase.storage.from('website-images').getPublicUrl(storagePath);
+    return data?.publicUrl || null;
+  };
+
   const fetchInfluencers = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const params = new URLSearchParams({
         page: currentPage.toString(),
@@ -117,7 +126,7 @@ export default function AdminInfluencerManagement() {
 
       const response = await fetch(`/api/admin/influencers?${params}`);
       const result = await response.json();
-      
+
       if (result.success && result.data) {
         setInfluencers(result.data.influencers);
         setPagination(result.data.pagination);
@@ -152,14 +161,14 @@ export default function AdminInfluencerManagement() {
 
   const handleDelete = async () => {
     if (!selectedInfluencer) return;
-    
+
     setDeleting(true);
     try {
       const response = await fetch(`/api/admin/influencers/${selectedInfluencer.id}`, {
         method: 'DELETE',
       });
       const result = await response.json();
-      
+
       if (result.success) {
         toast.success('Influencer deleted successfully');
         setShowDeletePopup(false);
@@ -220,7 +229,7 @@ export default function AdminInfluencerManagement() {
           Add Influencer
         </button>
       </div>
-      
+
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div className="flex flex-col gap-2 rounded-xl p-6 border border-gray-200 bg-white">
@@ -389,8 +398,23 @@ export default function AdminInfluencerManagement() {
                   <tr key={influencer.id} className="hover:bg-gray-50">
                     <td className="py-4 px-4">
                       <div className="flex items-center gap-3">
-                        <div className="flex items-center justify-center w-10 h-10 rounded-full bg-blue-500 text-white font-semibold">
-                          {influencer.name.charAt(0).toUpperCase()}
+                        <div className="relative w-10 h-10 shrink-0">
+                          {influencer.profile_image ? (
+                            <img
+                              src={getProfileImageUrl(influencer.profile_image) || ''}
+                              alt={influencer.name}
+                              className="w-10 h-10 rounded-full object-cover"
+                              onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                                e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                              }}
+                            />
+                          ) : null}
+                          <div
+                            className={`flex items-center justify-center w-10 h-10 rounded-full bg-blue-500 text-white font-semibold absolute top-0 left-0 ${influencer.profile_image ? 'hidden' : ''}`}
+                          >
+                            {influencer.name.charAt(0).toUpperCase()}
+                          </div>
                         </div>
                         <div className="text-sm">
                           <p className="font-medium text-gray-900">{influencer.name}</p>
@@ -398,32 +422,32 @@ export default function AdminInfluencerManagement() {
                         </div>
                       </div>
                     </td>
-                    
+
                     <td className="py-4 px-4">
                       <span className="text-sm font-mono text-gray-900">{influencer.affiliate_code}</span>
                     </td>
-                    
+
                     <td className="py-4 px-4">
                       <span className="text-sm font-medium text-gray-900">{influencer.commission_rate}%</span>
                     </td>
-                    
+
                     <td className="py-4 px-4">
                       <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(influencer.status)}`}>
                         {influencer.status}
                       </span>
                     </td>
-                    
+
                     <td className="py-4 px-4">
                       <span className="text-sm font-medium text-gray-900">{formatCurrency(influencer.total_commission_earned)}</span>
                     </td>
-                    
+
                     <td className="py-4 px-4">
                       <span className="text-sm text-gray-900">{influencer.total_questionnaires} / {influencer.total_signups} / {influencer.total_purchases}</span>
                     </td>
-                    
+
                     <td className="py-4 px-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <button 
+                        <button
                           onClick={() => {
                             setSelectedInfluencer(influencer);
                             setShowViewPopup(true);
@@ -434,7 +458,7 @@ export default function AdminInfluencerManagement() {
                           <Eye className="h-4 w-4" />
                           View
                         </button>
-                        <button 
+                        <button
                           onClick={() => {
                             setSelectedInfluencer(influencer);
                             setShowDeletePopup(true);
@@ -453,7 +477,7 @@ export default function AdminInfluencerManagement() {
             </tbody>
           </table>
         </div>
-        
+
         {/* Pagination */}
         {pagination && pagination.totalPages > 0 && (
           <div className="flex items-center justify-between pt-4">
@@ -468,24 +492,23 @@ export default function AdminInfluencerManagement() {
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
-              
+
               {Array.from({ length: Math.min(pagination.totalPages, 5) }).map((_, i) => {
                 const pageNum = i + 1;
                 return (
-                  <button 
+                  <button
                     key={pageNum}
                     onClick={() => setCurrentPage(pageNum)}
-                    className={`h-9 w-9 rounded-lg text-sm font-medium ${
-                      currentPage === pageNum 
-                        ? 'bg-blue-600 text-white' 
+                    className={`h-9 w-9 rounded-lg text-sm font-medium ${currentPage === pageNum
+                        ? 'bg-blue-600 text-white'
                         : 'border border-gray-300 hover:bg-gray-100'
-                    }`}
+                      }`}
                   >
                     {pageNum}
                   </button>
                 );
               })}
-              
+
               <button
                 onClick={() => setCurrentPage(currentPage + 1)}
                 disabled={currentPage === pagination.totalPages}
@@ -539,7 +562,7 @@ export default function AdminInfluencerManagement() {
               Are you sure you want to delete {selectedInfluencer.name}? This action cannot be undone and will remove all associated records.
             </p>
             <div className="flex justify-end space-x-3">
-              <Button 
+              <Button
                 variant="outline"
                 onClick={() => {
                   setShowDeletePopup(false);
@@ -549,7 +572,7 @@ export default function AdminInfluencerManagement() {
               >
                 Cancel
               </Button>
-              <Button 
+              <Button
                 onClick={handleDelete}
                 disabled={deleting}
                 className="bg-red-600 hover:bg-red-700"

@@ -192,6 +192,18 @@ export async function updateInfluencerProfile(
     if (imageFile) {
       const formData = new FormData();
       formData.append('file', imageFile);
+
+      // Add required fields for the upload API
+      const timestamp = Date.now();
+      const safeName = (updates.name || 'influencer').replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+      const key = `profile-${safeName}-${timestamp}`;
+
+      formData.append('key', key);
+      formData.append('description', `Profile image for ${updates.name || 'Influencer'}`);
+      formData.append('alt_text', `${updates.name || 'Influencer'} Profile Picture`);
+      formData.append('category', 'influencer-profile');
+
+      // folder is not used by the new API but kept just in case
       formData.append('folder', 'influencer-profiles');
 
       const uploadResponse = await fetch('/api/media/upload', {
@@ -200,8 +212,9 @@ export async function updateInfluencerProfile(
       });
 
       const uploadData = await uploadResponse.json();
-      if (uploadData.success && uploadData.data?.path) {
-        profileImagePath = uploadData.data.path;
+      if (uploadData.success && (uploadData.data?.storage_path || uploadData.data?.path)) {
+        // Prefer storage_path as per new API, fallback to path if legacy
+        profileImagePath = uploadData.data.storage_path || uploadData.data.path;
       }
     }
 
@@ -300,11 +313,11 @@ export async function getExchangeRate(): Promise<number> {
   try {
     const response = await fetch('/api/commission?operation=exchange-rate');
     const data = await response.json();
-    
+
     if (data.success && data.data?.rate) {
       return data.data.rate;
     }
-    
+
     return 83.50; // Fallback
   } catch (error) {
     console.error('Failed to fetch exchange rate:', error);
