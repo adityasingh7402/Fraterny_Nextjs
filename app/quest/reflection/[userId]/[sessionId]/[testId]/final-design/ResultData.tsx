@@ -418,7 +418,7 @@ export const mockData = {
 
 
 // Helper function to find which cluster an archetype belongs to and return full cluster data
-const findClusterByArchetype = (archetypeName: string) => {
+export const findClusterByArchetype = (archetypeName: string) => {
   for (const cluster of clusters) {
     const found = cluster.archetypes.includes(archetypeName);
     if (found) {
