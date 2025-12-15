@@ -250,7 +250,7 @@ export default function BlogPostClient({ post }: Props) {
 
             {/* Typography Content */}
             <div className="prose prose-lg max-w-none text-navy font-gilroy-regular
-              [&>h1]:text-[3rem] [&>h1]:font-gilroy-bold [&>h1]:text-navy [&>h1]:mt-12 [&>h1]:mb-6 [&>h1]:leading-tight
+              [&>h1]:text-[2rem] [&>h1]:font-gilroy-bold [&>h1]:text-navy [&>h1]:mt-12 [&>h1]:mb-6 [&>h1]:leading-tight
               [&>h2]:text-2xl [&>h2]:font-gilroy-bold [&>h2]:text-navy [&>h2]:mt-12 [&>h2]:mb-4 [&>h2]:border-b [&>h2]:border-gray-200 [&>h2]:pb-3
               [&>h3]:text-xl [&>h3]:font-gilroy-semibold [&>h3]:text-navy [&>h3]:mt-8 [&>h3]:mb-3
               [&>p]:leading-relaxed [&>p]:text-gray-700 [&>p]:mb-6 [&>p]:font-gilroy-regular
