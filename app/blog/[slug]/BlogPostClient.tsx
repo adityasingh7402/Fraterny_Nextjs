@@ -38,18 +38,23 @@ type Props = {
 export default function BlogPostClient({ post }: Props) {
   const [shareUrl] = useState(typeof window !== 'undefined' ? window.location.href : '');
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
+  const [allTags, setAllTags] = useState<string[]>([]);
+  const [selectedTagFilter, setSelectedTagFilter] = useState<string | null>(null);
 
-  // Fetch related posts by category
+  // Fetch related posts by tags
   useEffect(() => {
     const fetchRelatedPosts = async () => {
-      if (!post.category) return;
+      // If a specific tag is selected, use that; otherwise use post's tags
+      const tagsToFilter = selectedTagFilter ? [selectedTagFilter] : post.tags;
+
+      if (!tagsToFilter || tagsToFilter.length === 0) return;
 
       try {
         const { data, error } = await supabase
           .from('blog_posts')
           .select('*')
           .eq('published', true)
-          .eq('category', post.category)
+          .overlaps('tags', tagsToFilter)
           .neq('id', post.id)
           .order('created_at', { ascending: false })
           .limit(4);
@@ -62,7 +67,36 @@ export default function BlogPostClient({ post }: Props) {
     };
 
     fetchRelatedPosts();
-  }, [post.category, post.id]);
+  }, [post.tags, post.id, selectedTagFilter]);
+
+  // Fetch all available tags
+  useEffect(() => {
+    const fetchAllTags = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('blog_posts')
+          .select('tags')
+          .eq('published', true);
+
+        if (error) throw error;
+
+        if (data) {
+          // Extract and flatten all tags, then get unique values
+          const tagsSet = new Set<string>();
+          data.forEach((post) => {
+            if (post.tags && Array.isArray(post.tags)) {
+              post.tags.forEach((tag: string) => tagsSet.add(tag));
+            }
+          });
+          setAllTags(Array.from(tagsSet).sort());
+        }
+      } catch (err) {
+        console.error('Error fetching all tags:', err);
+      }
+    };
+
+    fetchAllTags();
+  }, []);
 
   const sanitizeContent = (htmlContent: string): string => {
     // Only run in browser environment
@@ -216,6 +250,7 @@ export default function BlogPostClient({ post }: Props) {
 
             {/* Typography Content */}
             <div className="prose prose-lg max-w-none text-navy font-gilroy-regular
+              [&>h1]:text-[3rem] [&>h1]:font-gilroy-bold [&>h1]:text-navy [&>h1]:mt-12 [&>h1]:mb-6 [&>h1]:leading-tight
               [&>h2]:text-2xl [&>h2]:font-gilroy-bold [&>h2]:text-navy [&>h2]:mt-12 [&>h2]:mb-4 [&>h2]:border-b [&>h2]:border-gray-200 [&>h2]:pb-3
               [&>h3]:text-xl [&>h3]:font-gilroy-semibold [&>h3]:text-navy [&>h3]:mt-8 [&>h3]:mb-3
               [&>p]:leading-relaxed [&>p]:text-gray-700 [&>p]:mb-6 [&>p]:font-gilroy-regular
@@ -261,10 +296,20 @@ export default function BlogPostClient({ post }: Props) {
               {/* Related Posts Section */}
               {relatedPosts.length > 0 && (
                 <div className="bg-white rounded-xl border border-gray-200 p-6">
-                  <h3 className="text-lg font-gilroy-bold text-navy mb-4 flex items-center gap-2">
-                    <Tag size={18} className="text-navy" />
-                    More in {post.category}
-                  </h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-gilroy-bold text-navy flex items-center gap-2">
+                      <Tag size={18} className="text-navy" />
+                      {selectedTagFilter ? `Posts tagged: ${selectedTagFilter}` : 'Related Posts'}
+                    </h3>
+                    {selectedTagFilter && (
+                      <button
+                        onClick={() => setSelectedTagFilter(null)}
+                        className="text-xs font-gilroy-medium text-gray-500 hover:text-navy transition-colors"
+                      >
+                        Clear
+                      </button>
+                    )}
+                  </div>
                   <div className="space-y-4">
                     {relatedPosts.map((relatedPost) => (
                       <Link
@@ -299,20 +344,26 @@ export default function BlogPostClient({ post }: Props) {
                 </div>
               )}
 
-              {/* Categories Section */}
-              {post.tags && post.tags.length > 0 && (
+              {/* Browse All Tags Section */}
+              {allTags.length > 0 && (
                 <div className="bg-gray-50 rounded-xl border border-gray-200 p-6">
                   <h3 className="text-sm font-gilroy-bold text-navy mb-3 uppercase tracking-wide">
-                    Topics
+                    Browse by Tags
                   </h3>
                   <div className="flex flex-wrap gap-2">
-                    {post.tags.map((tag) => (
-                      <span
+                    {allTags.map((tag) => (
+                      <button
                         key={tag}
-                        className="inline-flex items-center px-3 py-1 rounded-full text-xs font-gilroy-medium bg-white text-gray-700 border border-gray-200 hover:border-navy hover:text-navy transition-colors cursor-pointer"
+                        onClick={() => setSelectedTagFilter(tag === selectedTagFilter ? null : tag)}
+                        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-gilroy-medium transition-colors cursor-pointer ${tag === selectedTagFilter
+                          ? 'bg-navy text-white border border-navy'
+                          : post.tags?.includes(tag)
+                            ? 'bg-gray-200 text-navy border border-gray-300'
+                            : 'bg-white text-gray-700 border border-gray-200 hover:border-navy hover:text-navy'
+                          }`}
                       >
                         {tag}
-                      </span>
+                      </button>
                     ))}
                   </div>
                 </div>

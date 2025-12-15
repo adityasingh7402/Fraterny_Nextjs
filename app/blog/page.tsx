@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'next/navigation';
 import BlogHero from './components/BlogHero';
 import BlogFilter from './components/BlogFilter';
 import BlogList from './components/BlogList';
@@ -10,11 +11,21 @@ import Navigation from '../website-navigation/components/Navigation';
 import Footer from '../website-navigation/components/Footer';
 
 const BlogPage = () => {
+  const searchParams = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 9;
+
+  // Initialize filters from URL parameters
+  useEffect(() => {
+    const tagParam = searchParams.get('tag');
+    const categoryParam = searchParams.get('category');
+
+    if (tagParam) setSelectedTag(tagParam);
+    if (categoryParam) setSelectedCategory(categoryParam);
+  }, [searchParams]);
 
   // Fetch blog posts
   const { data: postsData, isLoading: postsLoading, error: postsError, refetch: refetchPosts } = useQuery({
@@ -78,7 +89,7 @@ const BlogPage = () => {
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       <BlogHero totalPosts={total} />
-      
+
       <div className="container mx-auto px-6 py-12">
         <BlogFilter
           categories={categories}
@@ -89,7 +100,7 @@ const BlogPage = () => {
           onSelectTag={setSelectedTag}
           onSearch={setSearchQuery}
         />
-        
+
         <BlogList
           posts={posts}
           isLoading={postsLoading}
