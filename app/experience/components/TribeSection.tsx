@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useSectionRevealAnimation } from '../../home/hooks/useSectionRevealAnimation';
 import ResponsiveImage from '@/components/ui/ResponsiveImage';
 
@@ -88,14 +88,15 @@ const journeySteps = [
   ];
 
 const timelineEvents = [
-  { time: "11:30 AM", title: "Brainstorming Breakfasts", description: "Start your day with engaging discussions" },
-  { time: "1:00 PM", title: "Team Activity Afternoons", description: "Collaborative sessions and workshops" },
-  { time: "6:00 PM", title: "Simulation Sunsets", description: "Apply learnings in practical scenarios" },
-  { time: "12:00 AM", title: "Midnight Momentum", description: "Deep conversations and connections" },
+  { time: "11:30 AM", title: <><span className='text-neutral-500'>Brainstorming <br/> Breakfasts</span></>, description: "Start your day with engaging discussions", img: 'https://images.pexels.com/photos/34410598/pexels-photo-34410598.jpeg' },
+  { time: "1:00 PM", title: <><span className='text-neutral-500'>Team Activity <br/> Afternoons</span></>, description: "Collaborative sessions and workshops", img: 'https://images.pexels.com/photos/34410598/pexels-photo-34410598.jpeg' },
+  { time: "6:00 PM", title: <><span className='text-neutral-500'>Simulation <br/> Sunsets</span></>, description: "Apply learnings in practical scenarios", img: 'https://images.pexels.com/photos/34410598/pexels-photo-34410598.jpeg' },
+  { time: "12:00 AM", title: <><span className='text-neutral-500'>Midnight <br/> Momentum</span></>, description: "Deep conversations and connections", img: 'https://images.pexels.com/photos/34410598/pexels-photo-34410598.jpeg' },
 ];
 
 const TribeSection = () => {
   const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   // Simulate progressive image loading
   useEffect(() => {
@@ -228,9 +229,8 @@ const TribeSection = () => {
       {/* Journey Section */}
       <section className="bg-neutral-100 p-5">
         <section className="py-2 md:py-8">
-          <div className="container mx-auto">
+          {/* <div className="container mx-auto">
             <div className="max-w-7xl mx-auto text-left">
-              {/* Journey Title */}
               <motion.div
                 ref={journeyTitleAnimation.ref}
                 variants={journeyTitleAnimation.parentVariants}
@@ -245,7 +245,6 @@ const TribeSection = () => {
                 </motion.h2>
               </motion.div>
 
-              {/* Journey Step Boxes */}
               <motion.div 
                 className="grid grid-cols-1 md:grid-cols-3 gap-6"
                 ref={journeyStepsAnimation.ref}
@@ -287,16 +286,139 @@ const TribeSection = () => {
                 ))}
               </motion.div>
             </div>
+          </div> */}
+
+          <div className="container mx-auto">
+            <div className="max-w-7xl mx-auto">
+              <div className="flex flex-col lg:flex-row gap-10 lg:gap-20">
+                
+                {/* Left Side - Sticky Title (Desktop only) */}
+                <div className="lg:w-1/2 lg:sticky lg:top-20 lg:h-screen hidden lg:flex flex-col justify-center">
+                  <motion.div
+                    ref={journeyTitleAnimation.ref}
+                    variants={journeyTitleAnimation.parentVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className=''
+                  >
+                    <motion.h2 
+                      className="text-5xl md:text-6xl font-gilroy-bold mb-6 text-neutral-900 tracking-tight"
+                      variants={journeyTitleAnimation.childVariants}
+                    >
+                      The Integrated <br />
+                      <span className="text-neutral-500">Fraterny Journey</span>
+                    </motion.h2>
+                    <motion.p
+                      className="text-xl text-neutral-600 font-gilroy-regular max-w-md"
+                      variants={journeyTitleAnimation.childVariants}
+                    >
+                      Follow these steps to unlock your full potential and reshape your reality.
+                    </motion.p>
+                  </motion.div>
+                </div>
+
+                {/* Mobile Title */}
+                <motion.div
+                  className="lg:hidden mb-8"
+                  ref={journeyTitleAnimation.ref}
+                  variants={journeyTitleAnimation.parentVariants}
+                  initial="hidden"
+                  animate={journeyTitleAnimation.controls}
+                >
+                  <motion.h2 
+                    className="text-3xl sm:text-4xl font-gilroy-bold mb-4 text-neutral-700 tracking-tight"
+                    variants={journeyTitleAnimation.childVariants}
+                  >
+                    The Integrated Fraterny Journey
+                  </motion.h2>
+                </motion.div>
+
+                {/* Right Side - Timeline */}
+                <div className="w-full lg:w-1/2" ref={journeyStepsAnimation.ref}>
+                  <div className="relative">
+                    {/* Vertical Line */}
+                    <div 
+                      className="absolute left-[23px] top-0 w-[2px] bg-neutral-300"
+                      style={{ height: `calc(100% - 80px)` }}
+                    />
+
+                    {/* Timeline Items */}
+                    <ul className="space-y-0 relative">
+                      {journeySteps.map((step, index) => (
+                        <motion.li
+                          key={index}
+                          className="relative pb-20 last:pb-0"
+                          initial={{ opacity: 0, x: 50 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ 
+                            duration: 0.6, 
+                            delay: index * 0.15,
+                            ease: [0.22, 1, 0.36, 1]
+                          }}
+                          viewport={{ once: true, margin: "-100px" }}
+                        >
+                          <div className="flex items-start gap-6">
+                            {/* Circle Dot */}
+                            <motion.div 
+                              className="relative z-10 flex-shrink-0 w-12 h-12 bg-white rounded-full border-4 border-neutral-300 shadow-lg"
+                              whileHover={{ scale: 1.15, borderColor: "#404040" }}
+                              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                            />
+
+                            {/* Card */}
+                            <motion.div
+                              className="flex-1 bg-neutral-800 rounded-2xl p-6 md:p-8 shadow-xl border border-neutral-700 relative overflow-hidden"
+                              whileHover={{ 
+                                y: -5, 
+                                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)" 
+                              }}
+                              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                            >
+                              {/* Year/Step Label */}
+                              <span className="text-sm font-mono text-neutral-400 mb-2 block">
+                                Step {step.step}
+                              </span>
+                              
+                              <h3 className="text-2xl md:text-3xl font-gilroy-bold text-white mb-3 tracking-tight">
+                                {step.title}
+                              </h3>
+                              
+                              <p className="text-base md:text-lg font-gilroy-regular text-neutral-300 leading-relaxed mb-6">
+                                {step.description}
+                              </p>
+                              
+                              {step.isButton && (
+                                <motion.button
+                                  onClick={() => window.location.href = step.link}
+                                  className="inline-flex items-center gap-2 px-6 py-3 bg-white text-neutral-900 font-gilroy-bold text-lg rounded-lg shadow-md hover:bg-neutral-100 transition-colors duration-300"
+                                  whileHover={{ scale: 1.05 }}
+                                  whileTap={{ scale: 0.95 }}
+                                >
+                                  Get Started
+                                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                  </svg>
+                                </motion.button>
+                              )}
+                            </motion.div>
+                          </div>
+                        </motion.li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
       </section>
 
       {/* Timeline Section */}
-      <section className="bg-white p-5">
+      {/* <section className="bg-white p-5">
         <section className="py-4 md:py-8">
           <div className="container mx-auto">
             <div className="max-w-7xl mx-auto text-left">
-              {/* Timeline Title */}
+              
               <motion.div
                 ref={timelineTitleAnimation.ref}
                 variants={timelineTitleAnimation.parentVariants}
@@ -311,7 +433,7 @@ const TribeSection = () => {
                 </motion.h2>
               </motion.div>
 
-              {/* Timeline Boxes */}
+              
               <motion.div 
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
                 ref={timelineAnimation.ref}
@@ -346,6 +468,62 @@ const TribeSection = () => {
                       </p>
                     </motion.div>
                   </motion.div>
+                ))}
+              </motion.div>
+            </div>
+          </div>
+        </section>
+      </section> */}
+      <section className="bg-white p-5">
+        <section className="py-4 md:py-8">
+          <div className="container mx-auto">
+            <div className="max-w-7xl mx-auto">
+              {/* Header */}
+              <div className="flex items-center justify-between mb-8">
+                <motion.div
+                  ref={timelineTitleAnimation.ref}
+                  variants={timelineTitleAnimation.parentVariants}
+                  initial="hidden"
+                  animate={timelineTitleAnimation.controls}
+                >
+                  <motion.h2 
+                    className="text-3xl sm:text-4xl md:text-5xl font-gilroy-bold text-neutral-700"
+                    variants={timelineTitleAnimation.childVariants}
+                  >
+                    A Day at <span className="text-neutral-500">Fratvilla</span>
+                  </motion.h2>
+                </motion.div>
+                
+                {/* <motion.button
+                  className="text-sm md:text-base font-gilroy-semibold text-neutral-700 flex items-center gap-2 hover:gap-3 transition-all"
+                  whileHover={{ x: 5 }}
+                >
+                  READ MORE
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </motion.button> */}
+              </div>
+
+              {/* Cards Grid - 12 column system */}
+              <motion.div 
+                layout
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6"
+                ref={timelineAnimation.ref}
+                variants={timelineAnimation.parentVariants}
+                initial="hidden"
+                animate={timelineAnimation.controls}
+              >
+                {timelineEvents.map((event, index) => (
+                  <TimelineCard 
+                    key={index} 
+                    event={event} 
+                    index={index}
+                    variants={timelineAnimation.childVariants}
+                    isExpanded={expandedIndex === index}
+                    onToggle={() => setExpandedIndex(expandedIndex === index ? null : index)}
+                    hasExpanded={expandedIndex !== null}
+                  />
                 ))}
               </motion.div>
             </div>
@@ -484,3 +662,333 @@ const TribeSection = () => {
 };
 
 export default TribeSection;
+
+const TimelineCard = ({ 
+  event, 
+  index, 
+  variants,
+  isExpanded,
+  onToggle,
+  hasExpanded 
+}: any) => {
+  
+  const cardColors = [
+    'bg-green-100',
+    'bg-gray-100', 
+    'bg-blue-100',
+    'bg-yellow-100'
+  ];
+
+  return (
+    <motion.div
+      layout
+      className={`
+        ${cardColors[index % 4]} 
+        rounded-3xl overflow-hidden relative cursor-pointer
+        col-span-1 md:col-span-1 sm:h-72 
+        ${isExpanded ? 'md:col-span-2 lg:col-span-6' : hasExpanded ? 'lg:col-span-2' : 'lg:col-span-3'}
+      `}
+      onClick={() => onToggle()}
+      transition={{
+        layout: { duration: 0.4, ease: [0.22, 1, 0.36, 1] }
+      }}
+    >
+      <motion.div 
+        layout
+        className={`p-6 md:p-8 h-full flex ${isExpanded ? 'flex-col md:flex-row md:gap-6' : 'flex-col'}`}
+      >
+        {/* Text Content */}
+        <motion.div 
+          layout
+          className="flex-1 flex flex-col"
+        >
+          {/* Time */}
+          <motion.div 
+            layout="position"
+            className="mb-4"
+            initial={{ opacity: 0, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, filter: 'blur(0px)' }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+          >
+            <span className="text-2xl md:text-3xl font-gilroy-bold text-neutral-700">
+              {event.time}
+            </span>
+          </motion.div>
+
+          {/* Title */}
+          <motion.h3 
+            layout="position"
+            className={`text-xl md:text-2xl font-gilroy-bold text-neutral-900 mb-3 ${isExpanded ? 'hidden' : ''}`}
+            initial={{ opacity: 0, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, filter: 'blur(0px)' }}
+            transition={{ duration: 0.4, delay: 0.15 }}
+          >
+            {event.title}
+          </motion.h3>
+
+          <motion.div 
+            layout="position"
+            className="flex-grow mb-4"
+            initial={{ opacity: 0, height: 0, filter: 'blur(10px)' }}
+            animate={{ 
+              opacity: 1, 
+              height: 'auto',
+              filter: 'blur(0px)',
+            }}
+            exit={{ 
+              opacity: 0, 
+              height: 0,
+              filter: 'blur(10px)',
+            }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <p className="text-sm md:text-base font-gilroy-regular text-neutral-600 leading-relaxed">
+              {event.description}
+            </p>
+          </motion.div>
+
+          {/* Description - only in expanded */}
+          {/* <AnimatePresence mode="wait">
+            {isExpanded && (
+              <motion.div 
+                layout="position"
+                className="flex-grow mb-4"
+                initial={{ opacity: 0, height: 0, filter: 'blur(10px)' }}
+                animate={{ 
+                  opacity: 1, 
+                  height: 'auto',
+                  filter: 'blur(0px)',
+                }}
+                exit={{ 
+                  opacity: 0, 
+                  height: 0,
+                  filter: 'blur(10px)',
+                }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <p className="text-sm md:text-base font-gilroy-regular text-neutral-600 leading-relaxed">
+                  {event.description}
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence> */}
+
+          {/* Button */}
+          <motion.button
+            layout="position"
+            className={`flex items-center gap-2 text-sm md:text-base font-gilroy-semibold text-neutral-700 self-start group ${isExpanded ? '' : 'hidden'}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggle();
+            }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <motion.div
+              className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-md"
+              animate={{ rotate: isExpanded ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </motion.div>
+          </motion.button>
+        </motion.div>
+
+        {/* Image - only in expanded state */}
+        <AnimatePresence mode="wait">
+          {isExpanded && (
+            <motion.div
+              layout
+              className="mt-6 md:mt-0 w-full md:w-1/2 rounded-2xl overflow-hidden flex-shrink-0"
+              initial={{ 
+                opacity: 0, 
+                scale: 0.9,
+                filter: 'blur(20px)',
+                height: 0
+              }}
+              animate={{ 
+                opacity: 1, 
+                scale: 1,
+                filter: 'blur(0px)',
+                height: 'auto'
+              }}
+              exit={{ 
+                opacity: 0, 
+                scale: 0.9,
+                filter: 'blur(20px)',
+                height: 0
+              }}
+              transition={{ 
+                duration: 0.5, 
+                ease: [0.22, 1, 0.36, 1],
+                delay: 0.1
+              }}
+            >
+              <motion.img 
+                src={event.img}
+                alt={event.title}
+                className="w-full h-[250px] md:h-[300px] object-cover"
+                loading="lazy"
+                initial={{ scale: 1.2 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+
+// const TimelineCard = ({ 
+//   event, 
+//   index, 
+//   variants,
+//   isExpanded,
+//   onToggle,
+//   hasExpanded 
+// }: any) => {
+  
+//   const cardColors = [
+//     'bg-green-100',
+//     'bg-gray-100', 
+//     'bg-blue-100',
+//     'bg-yellow-100'
+//   ];
+
+//   return (
+//     <>
+//       {/* Collapsed Card State */}
+//       <AnimatePresence mode='wait'>
+//         {!isExpanded && (
+//           <motion.div
+//             layoutId={`timeline-card-${index}`}
+//             className={`
+//               ${cardColors[index % 4]} 
+//               rounded-3xl overflow-hidden relative cursor-pointer
+//               col-span-1 md:col-span-1
+//               ${hasExpanded ? 'md:col-span-2' : 'lg:col-span-3'}
+//             `}
+//             onClick={() => onToggle()}
+//             initial={{ opacity: 0 }}
+//             animate={{ opacity: 1 }}
+//             exit={{ opacity: 0 }}
+//             transition={{ duration: 0.4 }}
+//           >
+//             <div className="p-6 md:p-8 h-full flex flex-col">
+//               <motion.div
+//                 layoutId={`timeline-time-${index}`} className="mb-4">
+//                 <span className="text-2xl md:text-3xl font-gilroy-bold text-neutral-700">
+//                   {event.time}
+//                 </span>
+//               </motion.div>
+
+//               <motion.h3 
+//                 layoutId={`timeline-title-${index}`}
+//                 className="text-xl md:text-2xl font-gilroy-bold text-neutral-900 mb-3 min-h-[60px]"
+//               >
+//                 {event.title}
+//               </motion.h3>
+
+//               {/* <motion.p 
+//                 layoutId={`timeline-desc-${index}`}
+//                 className="text-sm md:text-base font-gilroy-regular text-neutral-600 leading-relaxed mb-6 flex-grow line-clamp-3"
+//               >
+//                 {event.description}
+//               </motion.p> */}
+
+//               <motion.button
+//                 className="flex items-center gap-2 text-sm md:text-base font-gilroy-semibold text-neutral-700 self-start group"
+//                 onClick={(e) => {
+//                   e.stopPropagation();
+//                   onToggle();
+//                 }}
+//               >
+//                 <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-md">
+//                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+//                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+//                   </svg>
+//                 </div>
+//               </motion.button>
+//             </div>
+
+            
+//           </motion.div>
+//         )}
+
+//         {isExpanded && (
+//           <motion.div
+//             layoutId={`timeline-card-${index}`}
+//             className={`
+//               ${cardColors[index % 4]}
+//               rounded-3xl overflow-hidden relative cursor-pointer
+//               md:col-span-2 lg:col-span-6
+//             `}
+//             onClick={() => onToggle()}
+//           >
+//             <div className="p-6 md:p-8 h-full flex flex-col md:flex-row md:gap-6">
+//               {/* Text Content */}
+//               <div className="flex-1 flex flex-col">
+//                 {/* <motion.div
+//                 layoutId={`timeline-time-${index}`} className="mb-4">
+//                   <span className="text-2xl md:text-3xl font-gilroy-bold text-neutral-700">
+//                     {event.time}
+//                   </span>
+//                 </motion.div>
+
+//                 <motion.h3
+//                   layoutId={`timeline-title-${index}`}
+//                   className="text-xl md:text-2xl font-gilroy-bold text-neutral-900 mb-3"
+//                 >
+//                   {event.title}
+//                 </motion.h3> */}
+
+//                 <motion.div layoutId={`timeline-desc-${index}`} className="flex-grow">
+//                   <p className="text-sm md:text-base font-gilroy-regular text-neutral-600 leading-relaxed mb-4">
+//                     {event.description}
+//                   </p>
+//                 </motion.div>
+
+//                 <motion.button
+//                   layoutId={`timeline-button-${index}`}
+//                   className="flex items-center gap-2 text-sm md:text-base font-gilroy-semibold text-neutral-700 self-start group"
+//                   onClick={(e) => {
+//                     e.stopPropagation();
+//                     onToggle();
+//                   }}
+//                 >
+//                   <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-md">
+//                     <svg className="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+//                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+//                     </svg>
+//                   </div>
+//                 </motion.button>
+//               </div>
+
+//               {/* Image - only in expanded state */}
+//               <motion.div
+//                   layoutId={`timeline-image-${index}`}
+//                   initial={{ opacity: 0 }}
+//                   animate={{ opacity: 1 }}
+//                   exit={{ opacity: 0 }}
+//                   transition={{ duration: 0.4 }}
+//                 className="mt-6 md:mt-0 w-full md:w-1/2 h-[250px] md:h-auto rounded-2xl overflow-hidden flex-shrink-0"
+//               >
+//                 <ResponsiveImage 
+//                   dynamicKey={`timeline-event-${index}`} 
+//                   alt={event.title}
+//                   className="w-full h-full object-cover"
+//                   loading="lazy"
+//                 />
+//               </motion.div>
+//             </div>
+//           </motion.div>
+//         )}
+//       </AnimatePresence>
+//     </>
+//   );
+// };
