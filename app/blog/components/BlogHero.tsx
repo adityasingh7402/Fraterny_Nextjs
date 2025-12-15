@@ -14,30 +14,30 @@ const BlogHero: React.FC<BlogHeroProps> = ({ totalPosts }) => {
   const overlayOpacity = useTransform(scrollYProgress, [0, 0.5], [0.95, 0.7]);
 
   const titleAnimation = useSectionRevealAnimation({
-      variant: 'slide-right',
-      once: true,
-      duration: 0.8,
-    });
-  
-    const subtitleAnimation = useSectionRevealAnimation({
-      variant: 'fade-right',
-      once: true,
-      delayChildren: 0.2,
-      duration: 0.6
-    });
-  
-    const ctaAnimation = useSectionRevealAnimation({
-      variant: 'fade-up',
-      once: true,
-      delayChildren: 0.3,
-      duration: 0.8
-    });
+    variant: 'slide-right',
+    once: true,
+    duration: 0.8,
+  });
+
+  const subtitleAnimation = useSectionRevealAnimation({
+    variant: 'fade-right',
+    once: true,
+    delayChildren: 0.2,
+    duration: 0.6
+  });
+
+  const ctaAnimation = useSectionRevealAnimation({
+    variant: 'fade-up',
+    once: true,
+    delayChildren: 0.3,
+    duration: 0.8
+  });
 
   return (
     <section className="pt-32 pb-16 bg-navy text-white relative overflow-hidden">
-      <motion.div 
+      <motion.div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
-        style={{ 
+        style={{
           y: backgroundY,
           backgroundImage: "url('/blog.webp')"
         }}
@@ -45,10 +45,10 @@ const BlogHero: React.FC<BlogHeroProps> = ({ totalPosts }) => {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 2.3, ease: "easeOut" }}
       />
-      
-      <motion.div 
+
+      <motion.div
         className="absolute inset-0"
-        style={{ 
+        style={{
           opacity: overlayOpacity,
           background: `linear-gradient(to right, 
             rgba(10, 26, 47, 0.95) 100%,
@@ -57,17 +57,17 @@ const BlogHero: React.FC<BlogHeroProps> = ({ totalPosts }) => {
           )`
         }}
       />
-      
-      <div className="px-6 relative z-10">
-        <div className="max-w-3xl">
-          
+
+      <div className="w-full flex items-center justify-center relative z-10 px-6">
+        <div className="max-w-7xl w-full">
+
           <motion.div
             ref={titleAnimation.ref}
             variants={titleAnimation.parentVariants}
             initial="hidden"
             animate={titleAnimation.controls}
           >
-            <motion.h1 
+            <motion.h1
               className="text-3xl md:text-5xl lg:text-7xl font-gilroy-regular mb-4 text-white"
               variants={titleAnimation.childVariants}
             >
@@ -81,7 +81,7 @@ const BlogHero: React.FC<BlogHeroProps> = ({ totalPosts }) => {
             initial="hidden"
             animate={subtitleAnimation.controls}
           >
-            <motion.p 
+            <motion.p
               className="text-lg md:text-xl lg:text-2xl font-gilroy-medium text-neutral-300"
               variants={subtitleAnimation.childVariants}
             >
