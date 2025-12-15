@@ -50,7 +50,7 @@ import ConcertPage from "../final-design/ConcertPage";
 import PrimaryPattern from '../final-design/PrimaryPattern';
 import CalibrateSection from '../final-design/CalibrateSection';
 import Gallery3D from "../final-design/Gallery3D";
-import { CARDS_DATA, mockData } from '../final-design/ResultData'
+import { CARDS_DATA, mockData, findClusterByArchetype } from '../final-design/ResultData'
 import { useIsMobile } from '@/app/admin/hooks/use-mobile';
 import { VIEWPORT_DIMENSIONS, CARD_DIMENSIONS, calculateDimensions } from '../final-design/Constants';
 import { Skeleton } from "@/components/ui/skeleton"
@@ -734,48 +734,48 @@ export function QuestResultClient({
     const cards = [
       {
         id: 1,
-        title: self?.clusterName || "Unknown",
+        title: findClusterByArchetype(self?.subtitle)?.name || self?.clusterName || "Unknown",
         subtitle: self?.subtitle || "Unknown",
         tag: "SELF VIEW",
-        imageUrl: self?.imgUrl || "/placeholder.png",
+        imageUrl: findClusterByArchetype(self?.subtitle)?.img || self?.imgUrl || "/placeholder.png",
         stats: [],
-        bgGradient: self?.bgUrl || "",
-        icon: self?.icon || null,
-        buttonbg: self?.buttonbg || "bg-gray-500",
-        textcolor: self?.textcolor || "text-gray-500",
+        bgGradient: findClusterByArchetype(self?.subtitle)?.bgimg || self?.bgUrl || "",
+        icon: findClusterByArchetype(self?.subtitle)?.icon || self?.icon || null,
+        buttonbg: findClusterByArchetype(self?.subtitle)?.buttonbg || self?.buttonbg || "bg-gray-500",
+        textcolor: findClusterByArchetype(self?.subtitle)?.textcolor || self?.textcolor || "text-gray-500",
         bgHeading: self?.bgHeading || <>SELF VIEW</>,
         bgSubheading: self?.bgSubheading || <>HOW YOU SEE YOURSELF</>,
-        content: self?.content || <p>Content not available</p>
+        content: findClusterByArchetype(self?.subtitle)?.content || self?.content || <p>Content not available</p>
       },
       {
         id: 2,
-        title: world?.clusterName || "Unknown",
+        title: findClusterByArchetype(world?.subtitle)?.name || world?.clusterName || "Unknown",
         subtitle: world?.subtitle || "Unknown",
         tag: "SOCIAL VIEW",
-        imageUrl: world?.imgUrl || "/placeholder.png",
+        imageUrl: findClusterByArchetype(world?.subtitle)?.img || world?.imgUrl || "/placeholder.png",
         stats: [],
-        bgGradient: world?.bgUrl || "",
-        icon: world?.icon || null,
-        buttonbg: world?.buttonbg || "bg-gray-500",
-        textcolor: world?.textcolor || "text-gray-500",
+        bgGradient: findClusterByArchetype(world?.subtitle)?.bgimg || world?.bgUrl || "",
+        icon: findClusterByArchetype(world?.subtitle)?.icon || world?.icon || null,
+        buttonbg: findClusterByArchetype(world?.subtitle)?.buttonbg || world?.buttonbg || "bg-gray-500",
+        textcolor: findClusterByArchetype(world?.subtitle)?.textcolor || world?.textcolor || "text-gray-500",
         bgHeading: world?.bgHeading || <>SOCIAL VIEW</>,
         bgSubheading: world?.bgSubheading || <>HOW THE WORLD SEES YOU</>,
-        content: world?.content || <p>Content not available</p>
+        content: findClusterByArchetype(world?.subtitle)?.content || world?.content || <p>Content not available</p>
       },
       {
         id: 3,
-        title: aspiration?.clusterName || "Unknown",
+        title: findClusterByArchetype(aspiration?.subtitle)?.name || aspiration?.clusterName || "Unknown",
         subtitle: aspiration?.subtitle || "Unknown",
         tag: "ASPIRATION",
-        imageUrl: aspiration?.imgUrl || "/placeholder.png",
+        imageUrl: findClusterByArchetype(aspiration?.subtitle)?.img || aspiration?.imgUrl || "/placeholder.png",
         stats: [],
-        bgGradient: aspiration?.bgUrl || "",
-        icon: aspiration?.icon || null,
-        buttonbg: aspiration?.buttonbg || "bg-gray-500",
-        textcolor: aspiration?.textcolor || "text-gray-500",
+        bgGradient: findClusterByArchetype(aspiration?.subtitle)?.bgimg || aspiration?.bgUrl || "",
+        icon: findClusterByArchetype(aspiration?.subtitle)?.icon || aspiration?.icon || null,
+        buttonbg: findClusterByArchetype(aspiration?.subtitle)?.buttonbg || aspiration?.buttonbg || "bg-gray-500",
+        textcolor: findClusterByArchetype(aspiration?.subtitle)?.textcolor || aspiration?.textcolor || "text-gray-500",
         bgHeading: aspiration?.bgHeading || <>ASPIRATION</>,
         bgSubheading: aspiration?.bgSubheading || <>HOW YOU ASPIRE TO BE</>,
-        content: aspiration?.content || <p>Content not available</p>
+        content: findClusterByArchetype(aspiration?.subtitle)?.content || aspiration?.content || <p>Content not available</p>
       }
     ];
 
