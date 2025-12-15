@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { Filter, X } from 'lucide-react';
@@ -12,7 +12,7 @@ import { BlogPost } from './components/BlogCard';
 import Navigation from '../website-navigation/components/Navigation';
 import Footer from '../website-navigation/components/Footer';
 
-const BlogPage = () => {
+const BlogPageContent = () => {
   const searchParams = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
@@ -293,6 +293,21 @@ const BlogPage = () => {
       </div>
       <Footer />
     </div>
+  );
+};
+
+const BlogPage = () => {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading blog posts...</p>
+        </div>
+      </div>
+    }>
+      <BlogPageContent />
+    </Suspense>
   );
 };
 
