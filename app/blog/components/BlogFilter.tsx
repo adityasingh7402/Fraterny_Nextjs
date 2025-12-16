@@ -53,7 +53,7 @@ const BlogFilter: React.FC<BlogFilterProps> = ({
   if (!showOnlyFilters) {
     return (
       <motion.div
-        className="bg-white rounded-lg p-6"
+        className="bg-white rounded-lg lg:p-6 sm:p-0"
         variants={slideFromLeft}
         custom={0}
         initial="hidden"
