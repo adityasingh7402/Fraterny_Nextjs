@@ -12,6 +12,7 @@ import { useIsMobile } from '../quest/quest-mode/utils/use-mobile'
 import Navigation from '../website-navigation/components/Navigation'
 import PricingSection from './components/PricingSection'
 import Pricing from './components/Pricing'
+import BentoTestimonialGrid from './components/BentoTestimonialGrid'
 
 const page = () => {
 
@@ -22,8 +23,8 @@ const page = () => {
       <HeroSection />
       <AboutFratVilla />
       <TimelineSection />
+      <BentoTestimonialGrid />
       <Pricing />
-      {/* {!isMobile && <ImageGallery />} */}
       <TribeSection />
       <DepthSection />
       <Footer />

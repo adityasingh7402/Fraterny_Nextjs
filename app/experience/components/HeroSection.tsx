@@ -32,6 +32,8 @@ const HeroSection = () => {
     duration: 0.8
   });
 
+  const overlayOpacity = useTransform(scrollYProgress, [0, 0.5], [0.95, 0.7]);
+
   return (
     <section className="pt-32 pb-16 text-white relative overflow-hidden">
       
@@ -71,7 +73,7 @@ const HeroSection = () => {
             animate={titleAnimation.controls}
           >
             <motion.h1 
-              className="text-3xl md:text-5xl lg:text-7xl font-gilroy-regular mb-4"
+              className="text-3xl md:text-5xl lg:text-7xl font-gilroy-bold mb-4"
               variants={titleAnimation.childVariants}
             >
               <motion.span
@@ -83,7 +85,7 @@ const HeroSection = () => {
             </motion.h1>
           
             <motion.h1 
-              className="text-lg md:text-xl lg:text-2xl font-gilroy-medium text-neutral-300"
+              className="text-lg md:text-xl lg:text-2xl font-gilroy-semibold text-neutral-300"
               variants={titleAnimation.childVariants}
             >
               <motion.span

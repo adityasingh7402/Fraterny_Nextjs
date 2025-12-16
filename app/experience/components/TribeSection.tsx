@@ -227,7 +227,7 @@ const TribeSection = () => {
   return (
     <section className="">
       {/* Journey Section */}
-      <section className="bg-neutral-100 p-5">
+      <section className="bg-black p-5">
         <section className="py-2 md:py-8">
           {/* <div className="container mx-auto">
             <div className="max-w-7xl mx-auto text-left">
@@ -302,14 +302,14 @@ const TribeSection = () => {
                     className=''
                   >
                     <motion.h2 
-                      className="text-5xl md:text-6xl font-gilroy-bold mb-6 text-neutral-900 tracking-tight"
+                      className="text-5xl md:text-6xl font-gilroy-bold mb-6 text-neutral-500 tracking-tight"
                       variants={journeyTitleAnimation.childVariants}
                     >
                       The Integrated <br />
-                      <span className="text-neutral-500">Fraterny Journey</span>
+                      <span className="text-neutral-100">Fraterny Journey</span>
                     </motion.h2>
                     <motion.p
-                      className="text-xl text-neutral-600 font-gilroy-regular max-w-md"
+                      className="text-xl text-neutral-500 font-gilroy-regular max-w-md"
                       variants={journeyTitleAnimation.childVariants}
                     >
                       Follow these steps to unlock your full potential and reshape your reality.
@@ -326,11 +326,18 @@ const TribeSection = () => {
                   animate={journeyTitleAnimation.controls}
                 >
                   <motion.h2 
-                    className="text-3xl sm:text-4xl font-gilroy-bold mb-4 text-neutral-700 tracking-tight"
-                    variants={journeyTitleAnimation.childVariants}
-                  >
-                    The Integrated Fraterny Journey
-                  </motion.h2>
+                      className="text-5xl md:text-6xl font-gilroy-bold mb-6 text-neutral-500 tracking-tight"
+                      variants={journeyTitleAnimation.childVariants}
+                    >
+                      The Integrated <br />
+                      <span className="text-neutral-100">Fraterny Journey</span>
+                    </motion.h2>
+                    <motion.p
+                      className="text-xl text-neutral-500 font-gilroy-regular max-w-md"
+                      variants={journeyTitleAnimation.childVariants}
+                    >
+                      Follow these steps to unlock your full potential and reshape your reality.
+                    </motion.p>
                 </motion.div>
 
                 {/* Right Side - Timeline */}
@@ -379,7 +386,7 @@ const TribeSection = () => {
                                 Step {step.step}
                               </span>
                               
-                              <h3 className="text-2xl md:text-3xl font-gilroy-bold text-white mb-3 tracking-tight">
+                              <h3 className="text-2xl md:text-3xl font-gilroy-bold text-neutral-100 mb-3 tracking-tight">
                                 {step.title}
                               </h3>
                               
@@ -487,7 +494,7 @@ const TribeSection = () => {
                   animate={timelineTitleAnimation.controls}
                 >
                   <motion.h2 
-                    className="text-3xl sm:text-4xl md:text-5xl font-gilroy-bold text-neutral-700"
+                    className="text-5xl sm:text-6xl md:text-7xl font-gilroy-bold text-neutral-700"
                     variants={timelineTitleAnimation.childVariants}
                   >
                     A Day at <span className="text-neutral-500">Fratvilla</span>
@@ -541,12 +548,13 @@ const TribeSection = () => {
             variants={tribeTitleAnimation.parentVariants}
             initial="hidden"
             animate={tribeTitleAnimation.controls}
+            className='mb-12'
           >
             <motion.h2 
-              className="text-3xl sm:text-3xl md:text-4xl font-gilroy-semibold mb-3 sm:mb-4"
+              className="text-5xl sm:text-6xl md:text-7xl font-gilroy-bold text-neutral-700"
               variants={tribeTitleAnimation.childVariants}
             >
-              Play Your Ideal Archetype
+              Play Your Ideal <span className="text-neutral-500">Archeotype</span>
             </motion.h2>
           </motion.div>
           
@@ -685,7 +693,7 @@ const TimelineCard = ({
       className={`
         ${cardColors[index % 4]} 
         rounded-3xl overflow-hidden relative cursor-pointer
-        col-span-1 md:col-span-1 sm:h-72 
+        col-span-1 md:col-span-1 sm:h-96 
         ${isExpanded ? 'md:col-span-2 lg:col-span-6' : hasExpanded ? 'lg:col-span-2' : 'lg:col-span-3'}
       `}
       onClick={() => onToggle()}
@@ -742,7 +750,7 @@ const TimelineCard = ({
             }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
-            <p className="text-sm md:text-base font-gilroy-regular text-neutral-600 leading-relaxed">
+            <p className="text-sm md:text-base font-gilroy-regular text-neutral-600 leading-relaxed flex gap-1 flex-col">
               {event.description}
             </p>
           </motion.div>
@@ -806,19 +814,19 @@ const TimelineCard = ({
                 opacity: 0, 
                 scale: 0.9,
                 filter: 'blur(20px)',
-                height: 0
+              
               }}
               animate={{ 
                 opacity: 1, 
                 scale: 1,
                 filter: 'blur(0px)',
-                height: 'auto'
+                
               }}
               exit={{ 
                 opacity: 0, 
                 scale: 0.9,
                 filter: 'blur(20px)',
-                height: 0
+                
               }}
               transition={{ 
                 duration: 0.5, 
