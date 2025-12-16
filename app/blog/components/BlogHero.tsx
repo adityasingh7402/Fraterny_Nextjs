@@ -59,7 +59,7 @@ const BlogHero: React.FC<BlogHeroProps> = ({ totalPosts }) => {
       />
 
       <div className="w-full flex items-center justify-center relative z-10 px-6">
-        <div className="max-w-7xl w-full">
+        <div className=" w-full">
 
           <motion.div
             ref={titleAnimation.ref}
@@ -68,7 +68,7 @@ const BlogHero: React.FC<BlogHeroProps> = ({ totalPosts }) => {
             animate={titleAnimation.controls}
           >
             <motion.h1
-              className="text-5xl md:text-6xl lg:text-7xl font-gilroy-regular mb-4 text-white"
+              className="text-5xl md:text-6xl lg:text-7xl font-gilroy-bold mb-4 text-white"
               variants={titleAnimation.childVariants}
             >
               Our Blog
@@ -82,7 +82,7 @@ const BlogHero: React.FC<BlogHeroProps> = ({ totalPosts }) => {
             animate={subtitleAnimation.controls}
           >
             <motion.p
-              className="text-lg md:text-xl lg:text-2xl font-gilroy-medium text-neutral-300"
+              className="text-lg md:text-xl lg:text-2xl font-gilroy-semibold text-neutral-400"
               variants={subtitleAnimation.childVariants}
             >
               <span className='text-white font-semibold'>Insights, stories</span>, and <span className='text-white font-semibold'>perspectives</span> from our community

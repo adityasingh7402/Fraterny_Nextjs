@@ -268,7 +268,7 @@ const TimelineSection = () => {
       <div className="sticky top-0 z-10 bg-neutral-100/95 backdrop-blur-sm border-b border-neutral-200">
         <div className="max-w-7xl mx-auto px-6 py-8">
           <motion.h2 
-            className="text-3xl sm:text-4xl md:text-7xl font-gilroy-bold text-neutral-700 tracking-tight"
+            className="text-5xl sm:text-6xl md:text-7xl font-gilroy-bold text-neutral-700 tracking-tight"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}

@@ -75,11 +75,11 @@ const FAQ = () => {
       {/* Hero Section */}
       <section className="pt-32 pb-16 bg-sky-950 text-white">
         <motion.div className="px-6">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-gilroy-regular mb-6">
+          <div className="">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-gilroy-bold mb-6">
               Frequently Asked <span className='text-white font-gilroy-semibold'>Questions</span>
             </h1>
-            <p className="text-xl text-gray-300 font-gilroy-light">
+            <p className="text-xl text-gray-300 font-gilroy-semibold">
               Everything you need to know about the Fraterny experience
             </p>
           </div>

@@ -52,7 +52,7 @@ const FaqSection: React.FC<FaqSectionProps> = ({
 
   return (
     <section 
-      className={`w-full min-h-screen max-w-5xl mx-auto px-6 py-12 ${className}`}
+      className={`w-full min-h-screen max-w-5xl mx-auto px-6 py-12 container ${className}`}
     >
       {/* FAQ Title */}
       <div className="mb-12">
