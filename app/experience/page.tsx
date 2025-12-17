@@ -25,8 +25,8 @@ const page = () => {
       <TimelineSection />
       <BentoTestimonialGrid />
       <Pricing />
-      <TribeSection />
       <DepthSection />
+      <TribeSection />
       <Footer />
     </div>
   )

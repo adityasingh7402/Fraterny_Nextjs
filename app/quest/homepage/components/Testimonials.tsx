@@ -1,60 +1,5 @@
 'use client';
 
-// import React from 'react';
-// import { Star } from 'lucide-react';
-
-// export interface TestimonialData {
-//   name: string;
-//   role: string;
-//   avatar: string;
-//   stars: number;
-//   text: string;
-// }
-
-// interface TestimonialsProps {
-//   title: string;
-//   data: TestimonialData[];
-//   light?: boolean;
-// }
-
-// export const Testimonials: React.FC<TestimonialsProps> = ({ title, data, light = true }) => {
-//   return (
-//     <section className={`py-20 px-4 ${light ? 'bg-white text-black' : 'bg-gray-50 text-black'}`}>
-//       <div className="max-w-4xl mx-auto">
-//         <h2 className="text-3xl md:text-5xl font-gilroy-bold text-center mb-4 leading-tight">
-//           {title}
-//         </h2>
-//         <p className="text-center text-gray-500 mb-12 font-gilroy-semibold">Genuine people, real feedback.</p>
-
-//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-//           {data.map((item, index) => (
-//             <div key={index} className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 flex flex-col h-full">
-//               <div className="flex items-center mb-4">
-//                 <img 
-//                   src={item.avatar} 
-//                   alt={item.name} 
-//                   className="w-12 h-12 rounded-full mr-4 object-cover"
-//                 />
-//                 <div>
-//                   <h4 className="font-bold text-sm font-gilroy-bold">{item.name}</h4>
-//                   <p className="text-md text-gray-500 font-gilroy-semibold">{item.role}</p>
-//                 </div>
-//               </div>
-//               <div className="flex text-orange-400 mb-3">
-//                 {[...Array(item.stars)].map((_, i) => (
-//                   <Star key={i} className="w-4 h-4 fill-current" />
-//                 ))}
-//               </div>
-//               <p className="text-gray-700 text-md leading-relaxed italic font-gilroy-regular">"{item.text}"</p>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//     </section>
-//   );
-// };
-
-
 import React from 'react';
 import { Star } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -80,20 +25,20 @@ export const Testimonials: React.FC<TestimonialsProps> = ({ title, data, light =
   const bottomRow = [...data.slice(midPoint), ...data.slice(midPoint), ...data.slice(midPoint)];
 
   return (
-    <section className="py-12 md:py-20 px-4 overflow-hidden 
-  [-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_20%,black_80%,transparent_100%)]
-  [mask-image:linear-gradient(to_right,transparent_0%,black_20%,black_80%,transparent_100%)]">
+    <section className="py-12 md:py-20 px-4 overflow-hidden">
       <div className="max-w-7xl mx-auto mb-8 md:mb-16">
-        <h2 className="text-2xl md:text-4xl lg:text-5xl font-gilroy-bold text-center mb-3 md:mb-4 leading-tight">
-          {title}
+        <h2 className=" text-center mb-3 md:mb-4 leading-tight">
+          <div className='text-neutral-500 font-gilroy-medium text-xl md:text-4xl lg:text-5xl'>What our actual users said about <br /> <span className='text-neutral-800 font-gilroy-bold
+          text-4xl md:text-5xl lg:text-6xl'>Quest by Fraterny</span></div>
         </h2>
-        <p className="text-center text-gray-500 text-sm md:text-base mb-8 md:mb-12 font-gilroy-semibold">
+        <p className="text-center text-gray-700 text-[15px] md:text-xl mb-8 md:mb-12 font-gilroy-semibold">
           Genuine people, real feedback.
         </p>
       </div>
 
       {/* Top Row - Left to Right */}
-      <div className="mb-4 md:mb-8">
+      <div className="mb-4 md:mb-8 [-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_20%,black_80%,transparent_100%)]
+  [mask-image:linear-gradient(to_right,transparent_0%,black_20%,black_80%,transparent_100%)]">
         <motion.div
           className="flex gap-3 md:gap-6"
           animate={{
@@ -138,7 +83,8 @@ export const Testimonials: React.FC<TestimonialsProps> = ({ title, data, light =
       </div>
 
       {/* Bottom Row - Right to Left */}
-      <div>
+      <div className='[-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_20%,black_80%,transparent_100%)]
+  [mask-image:linear-gradient(to_right,transparent_0%,black_20%,black_80%,transparent_100%)]'>
         <motion.div
           className="flex gap-3 md:gap-6"
           animate={{

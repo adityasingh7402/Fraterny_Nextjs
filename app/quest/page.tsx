@@ -147,34 +147,41 @@ const pricingPlans: PricingPlan[] = [
 
 function page() {
   return (
-    <div>
+    <div className='force-scrolled-nav'>
       <Navigation />
+      <div className='bg-[#f7f7f7]'>
       <HeroSection />
       <Thesis />
-      <Testimonials title="What our actual users said about Quest by Fraterny" data={testimonials1} />
+      <Testimonials title="" data={testimonials1} />
 
       {/* Feature 0: The Hook */}
       <section className="bg-black text-white py-24 px-6 text-center black-bg-section">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-gray-500 uppercase tracking-widest text-xs font-gilroy-bold mb-4">What's in it?</div>
-          <h2 className="text-5xl md:text-7xl font-bold mb-8 font-gilroy-bold">Personal Growth on <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500 italic">Ster*ids</span></h2>
-          <p className="text-xl text-gray-400 mb-8 leading-relaxed font-gilroy-medium">
-            Quest curates the best ideas from the world's top thinkers in mental models, business strategy, psychology, philosophy, and productivity.
+        <div className="max-w-5xl mx-auto">
+          <div className="text-gray-500 uppercase tracking-widest text-xl font-gilroy-bold mb-4">What's in it?</div>
+          <h2 className="text-5xl md:text-7xl font-bold mb-8 font-gilroy-bold">Private Intelligence on Your <span className="text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))] pr-5">Psych*logy</span></h2>
+          <p className="text-xl text-white mb-8 leading-relaxed font-gilroy-medium">
+            As I’ve been building Quest and studying how ambitious, overthinking people actually move through life, I’ve taken tens of thousands of notes from real answers, late-night reflections, and repeating patterns.
           </p>
-          <p className="text-lg text-gray-500 mb-12 font-gilroy-light">
-            These are the ideas that have stood the test of time and helped generations of leaders make better decisions and live better lives.
+          <p className="text-xl text-white mb-12 font-gilroy-medium leading-relaxed">
+            On identity conflicts, family vs freedom, money anxiety, control and trust, validation and ego, self-sabotage, focus and numbness, intensity in relationships, and more. Much more.
           </p>
-          <div className="text-white font-bold text-xl mb-16 font-gilroy-semibold">
-            QUEST brings them all together for you in one place.
+          <div className="text-white font-bold text-xl mb-16 font-gilroy-medium leading-relaxed">
+            Quest turns the sharpest of those patterns into a very powerful self-mapping tool unlike anything else.
           </div>
           <div className="inline-block border-b bg-neutral-800 shadow-2xl border-neutral-300 pb-2 text-gray-400 text-sm font-gilroy-medium px-4 py-2 rounded-lg">Pure signal. Zero noise.</div>
         </div>
       </section>
 
+      <div className='flex flex-col items-center justify-center w-px bg-black lg:w-auto overflow-hidden'>
+          <div className='bg-gradient-to-b from-transparent via-white/90 to-transparent w-px h-48'>
+              {/* Adjust h-24 to your desired height: h-32, h-48, h-64, etc. */}
+          </div>
+      </div>
+
       {/* Feature 1 */}
       <Feature
-        // tag={<div className='font-gilroy-black'></div>}
-        tag=<div className="relative overflow-hidden flex items-center justify-center gap-4 w-full rounded-3xl cursor-pointer mt-2">
+        tag= {
+        <div className="relative overflow-hidden flex items-center justify-center gap-4 w-full rounded-3xl cursor-pointer mt-2">
           <div
             className="absolute top-0 left-0 w-full h-full rounded-3xl z-0"
             style={{
@@ -185,21 +192,26 @@ function page() {
           />
           <div className="bg-neutral-800 rounded-3xl flex items-center justify-center gap-4 m-1 w-full relative z-10">
             <div className="text-gray-300 text-sm font-gilroy-medium px-6 py-2">
-              Mental Models
+              INTROSPECTIVE JOURNALING
             </div>
           </div>
-        </div>
-        title={<div className="font-gilroy-bold">Visualized <span className='text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500 italic pr-3'>Wisdom</span></div>}
+        </div>}
+        title={<div className="font-gilroy-bold ">Introspective <span className='text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))] pr-3'>Precision</span></div>}
         subTitle={null}
-        description="Elite thinking frameworks for management, science, psychology, philosophy, and communication. Upgrade your ability to analyze, decide, and execute."
+        description="Open-ended journaling prompts built from psychology, real behavior patterns, and the inner conflicts of ambitious people. Upgrade your ability to notice your own patterns, process difficult emotions, and make decisions you actually trust."
         imageUrl="https://picsum.photos/800/600?random=101"
         testimonial={{
-          text: "I love the wide range of topics of you can find insights about. There's always something to find related to whatever my current focus topic is, personal or professional.",
-          author: "Vincent W.",
-          role: "Product Manager",
+          text: "love that  my answers keep changing as I do. I can come back to the prompts whenever my focus shifts: career, relationships, family and they still pull out things I hadn’t fully admitted to myself.",
+          author: "Indranil Maiti",
+          role: "Product Developer",
           avatar: "https://picsum.photos/100/100?random=53"
         }}
       />
+      <div className='flex flex-col items-center justify-center w-px bg-black lg:w-auto overflow-hidden'>
+          <div className='bg-gradient-to-b from-transparent via-white/90 to-transparent w-px h-48'>
+              {/* Adjust h-24 to your desired height: h-32, h-48, h-64, etc. */}
+          </div>
+      </div>
 
       {/* Feature 2 */}
       <Feature
@@ -212,21 +224,26 @@ function page() {
                 animation: "gradient 6s ease infinite",
               }}></div>
             <div className=" bg-neutral-800 rounded-3xl flex items-center justify-center gap-4 m-1 w-full relative z-10">
-              <div className="text-gray-300 text-xl font-gilroy-medium px-5 py-1">Insights</div>
+              <div className="text-gray-300 text-xl font-gilroy-medium px-5 py-1">PSYCHOLOGICAL FILE</div>
             </div>
           </div>
         }
-        title={<div className="font-gilroy-bold"><span className='text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500 italic pr-3'>Visualized</span> X <span className='text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500 italic pr-3'>Philosophy</span></div>}
+        title={<div className="font-gilroy-bold"><span className='text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))] pr-3'>Psychology</span> X <span className='text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))] pr-3'>Design</span></div>}
         subTitle={null}
-        description="A powerful collection of leadership and strategy insights combined with timeless maxims on living a fulfilled life. Expand your understanding of what matters in business and in life like never before."
+        description="A crafted psychological file that turns your answers, patterns, and contradictions into a clean, readable artifact you can actually use. Expand your understanding of how your mind works and how to work with it in a way that feels precise, calm, and built for people who think deeply."
         imageUrl="https://picsum.photos/800/600?random=102"
         testimonial={{
-          text: "I wanted to review the way I make (life) decisions and found Mosaic incredibly useful for challenging my current way and come up with a new and improved way to make big and small decisions.",
-          author: "Julia S.",
-          role: "Head of Operations",
+          text: "If you’re an ambitious, self-aware person, Quest’s psychological file is one of the few tools I actually recommend. It turns your raw answers into a structured, readable document that feels like a spec sheet for your mind: something you can revisit, reflect on, and use to make better decisions instead of just collecting more ‘insights’ you forget in a week.",
+          author: "Harsimran Singh",
+          role: "AI Engineer",
           avatar: "https://picsum.photos/100/100?random=54"
         }}
       />
+      <div className='flex flex-col items-center justify-center w-px bg-black lg:w-auto overflow-hidden'>
+          <div className='bg-gradient-to-b from-transparent via-white/90 to-transparent w-px h-48'>
+              {/* Adjust h-24 to your desired height: h-32, h-48, h-64, etc. */}
+          </div>
+      </div>
 
       {/* Feature 3 */}
       <Feature
@@ -243,7 +260,7 @@ function page() {
             </div>
           </div>
         }
-        title={<div className="font-gilroy-bold"><span className='text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500 pr-3'>Books</span> <span className='text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500 pr-3'>Podcasts</span> & More</div>}
+        title={<div className="font-gilroy-bold"><span className='text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))] pr-3'>Books</span> <span className='text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))] pr-3'>Podcasts</span> & More</div>}
         subTitle={null}
         description="Most books, podcasts, and Youtube videos are a waste of your time. These recommendation lists include only the kind of resources you want to tell others about."
         imageUrl="https://picsum.photos/800/600?random=103"
@@ -262,6 +279,7 @@ function page() {
       <FaqSection />
       <Footer />
 
+    </div>
     </div>
   )
 }

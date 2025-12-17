@@ -349,7 +349,7 @@ const DepthSection = () => {
   const bottomRow = [...depthFeatures.slice(midPoint), ...depthFeatures.slice(midPoint), ...depthFeatures.slice(midPoint)];
 
   return (
-    <section className="py-12 md:py-20 px-4 bg-white overflow-hidden 
+    <section className="py-12 md:py-20 px-4 bg-neutral-100 overflow-hidden 
       [-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_20%,black_80%,transparent_100%)]
       [mask-image:linear-gradient(to_right,transparent_0%,black_20%,black_80%,transparent_100%)]">
       

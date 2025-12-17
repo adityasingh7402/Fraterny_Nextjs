@@ -13,12 +13,14 @@ import { useScrollEffect } from '../hooks/useScrollEffect';
 
 const Navigation = () => {
   const { signOut, user, authReady } = useAuth();
-  const { isScrolled, isPastHero, isInBlackSection } = useScrollEffect();
+  const { isScrolled: hookIsScrolled, isPastHero, isInBlackSection } = useScrollEffect();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
 
   // Check if we're on the quest page
   const isQuestPage = pathname === '/quest';
+  const isScrolled = isQuestPage ? true : hookIsScrolled;
+  
 
 
   const iconColor = useMemo(() => isScrolled ? '#0A1A2F' : '#FFFFFF', [isScrolled]);
