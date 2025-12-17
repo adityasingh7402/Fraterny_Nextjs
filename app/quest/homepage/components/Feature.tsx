@@ -36,16 +36,16 @@ const Feature: React.FC<FeatureProps> = ({
         </div>
 
         {/* Title Block */}
-        <div className="mb-12 max-w-2xl">
+        <div className="mb-12 max-w-5xl">
           <h2 className="text-4xl md:text-6xl font-gilroy-semibold mb-6">{title}</h2>
           {subTitle && <div className="text-2xl md:text-4xl font-bold text-gray-400 mb-6 font-gilroy-regular">{subTitle}</div>}
-          <p className="text-lg text-gray-400 leading-relaxed font-gilroy-regular">
+          <p className="text-lg text-white leading-relaxed font-gilroy-regular">
             {description}
           </p>
         </div>
 
         {/* Feature Image */}
-        <div className="w-full max-w-3xl mb-16">
+        <div className="w-full max-w-5xl mb-16">
           <div className="relative rounded-2xl overflow-hidden border border-gray-800 shadow-2xl bg-gray-900 aspect-[4/3] md:aspect-video">
             <img
               src={imageUrl}
@@ -58,7 +58,7 @@ const Feature: React.FC<FeatureProps> = ({
 
         {/* Testimonial Quote */}
         {testimonial && (
-          <div className="max-w-2xl mx-auto text-center">
+          <div className="max-w-5xl mx-auto text-center">
             <div className="mb-6 flex justify-center">
               <img src={testimonial.avatar} alt={testimonial.author} className="w-16 h-16 rounded-full border-2 border-gray-800" />
             </div>

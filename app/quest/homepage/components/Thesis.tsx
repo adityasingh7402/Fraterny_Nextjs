@@ -6,12 +6,12 @@ export const Thesis: React.FC = () => {
   return (
     <section className="bg-black text-white py-20 px-6 black-bg-section">
       <div className="max-w-3xl mx-auto">
-        <h3 className="text-gray-400 font-gilroy-semibold mb-6 uppercase tracking-wider text-sm">The <span className="italic text-sm">Quest</span> Mode</h3>
+        <h3 className="text-gray-400 font-gilroy-semibold mb-6 uppercase tracking-wider text-xl">The <span className=" text-xl">Quest</span> Mode</h3>
 
         <h2 className="text-3xl md:text-5xl font-bold leading-tight mb-12 font-gilroy-semibold">
           The dynamics of belief have <span className="gradient-text">changed</span>.
-          They can <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500 pr-3 font-gilroy-bold italic">blind</span> you.
-          Or <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500 font-gilroy-bold italic">wake</span> you up.
+          They can <span className="text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))] pr-3 font-gilroy-bold">blind</span> you.
+          Or <span className="text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))] font-gilroy-bold">wake</span> you up.
         </h2>
 
         <div className="space-y-8 text-lg md:text-xl text-gray-300 leading-relaxed font-gilroy-regular">
