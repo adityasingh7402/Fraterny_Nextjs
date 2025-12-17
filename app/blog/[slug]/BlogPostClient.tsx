@@ -465,7 +465,7 @@ export default function BlogPostClient({ post }: Props) {
           </div>
 
           {/* Instructions */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/60 text-sm font-gilroy-regular">
+          <div className="hidden md:block absolute bottom-8 left-1/2 -translate-x-1/2 text-white/60 text-sm font-gilroy-regular">
             Press <kbd className="px-2 py-1 bg-white/10 rounded border border-white/20 font-gilroy-semibold">ESC</kbd> or click outside to close
           </div>
         </div>
