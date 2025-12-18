@@ -39,7 +39,7 @@ export default function CustomCursor() {
     return (
         <div
             ref={cursorRef}
-            className="fixed top-0 left-0 w-10 h-10 blur-sm rounded-full pointer-events-none z-[9999] p-[2px] bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))]"
+            className="hidden lg:block fixed top-0 left-0 w-10 h-10 blur-sm rounded-full pointer-events-none z-[9999] p-[2px] bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))]"
             style={{
                 mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
                 WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
