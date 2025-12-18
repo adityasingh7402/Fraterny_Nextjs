@@ -19,10 +19,14 @@ interface TestimonialsProps {
 }
 
 export const Testimonials: React.FC<TestimonialsProps> = ({ title, data, light = true }) => {
-  // Split data into two rows and duplicate for infinite scroll
+  // Split data into two rows and duplicate multiple times for seamless infinite scroll
   const midPoint = Math.ceil(data.length / 2);
-  const topRow = [...data.slice(0, midPoint), ...data.slice(0, midPoint), ...data.slice(0, midPoint)];
-  const bottomRow = [...data.slice(midPoint), ...data.slice(midPoint), ...data.slice(midPoint)];
+  const topRow = [...data.slice(0, midPoint), ...data.slice(0, midPoint), ...data.slice(0, midPoint), ...data.slice(0, midPoint)];
+  const bottomRow = [...data.slice(midPoint), ...data.slice(midPoint), ...data.slice(midPoint), ...data.slice(midPoint)];
+
+  // Calculate the width of one set of cards
+  const cardWidth = 300 + 24; // card width + gap
+  const singleSetWidth = (data.slice(0, midPoint).length * cardWidth);
 
   return (
     <section className="py-12 md:py-20 px-4 overflow-hidden">
@@ -41,14 +45,15 @@ export const Testimonials: React.FC<TestimonialsProps> = ({ title, data, light =
   [mask-image:linear-gradient(to_right,transparent_0%,black_20%,black_80%,transparent_100%)]">
         <motion.div
           className="flex gap-3 md:gap-6"
+          initial={{ x: 0 }}
           animate={{
-            x: [0, -2000],
+            x: [-singleSetWidth, 0],
           }}
           transition={{
             x: {
               repeat: Infinity,
               repeatType: "loop",
-              duration: 50,
+              duration: 30,
               ease: "linear",
             },
           }}
@@ -56,11 +61,11 @@ export const Testimonials: React.FC<TestimonialsProps> = ({ title, data, light =
           {topRow.map((item, index) => (
             <div
               key={index}
-              className="bg-white p-4 md:p-6 rounded-lg md:rounded-xl shadow-lg border border-gray-100 w-[280px] flex-shrink-0"
+              className="bg-white p-4 md:p-6 rounded-lg md:rounded-xl shadow-lg border border-gray-100 w-[280px] md:w-[300px] flex-shrink-0"
             >
               <div className="mb-3 md:mb-4">
                 <svg className="w-6 h-6 md:w-8 md:h-8 text-neutral-900 mb-2 md:mb-3" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                 </svg>
               </div>
               <p className="text-gray-700 text-xs md:text-sm leading-relaxed mb-3 md:mb-4 font-gilroy-regular line-clamp-4 md:line-clamp-none h-20">
@@ -87,14 +92,15 @@ export const Testimonials: React.FC<TestimonialsProps> = ({ title, data, light =
   [mask-image:linear-gradient(to_right,transparent_0%,black_20%,black_80%,transparent_100%)]'>
         <motion.div
           className="flex gap-3 md:gap-6"
+          initial={{ x: -singleSetWidth }}
           animate={{
-            x: [-2000, 0],
+            x: [0, -singleSetWidth],
           }}
           transition={{
             x: {
               repeat: Infinity,
               repeatType: "loop",
-              duration: 50,
+              duration: 30,
               ease: "linear",
             },
           }}
@@ -102,11 +108,11 @@ export const Testimonials: React.FC<TestimonialsProps> = ({ title, data, light =
           {bottomRow.map((item, index) => (
             <div
               key={index}
-              className="bg-white p-4 md:p-6 rounded-lg md:rounded-xl shadow-lg border border-gray-100 w-[300px] flex-shrink-0"
+              className="bg-white p-4 md:p-6 rounded-lg md:rounded-xl shadow-lg border border-gray-100 w-[280px] md:w-[300px] flex-shrink-0"
             >
               <div className="mb-3 md:mb-4">
                 <svg className="w-6 h-6 md:w-8 md:h-8 text-neutral-800 mb-2 md:mb-3" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                 </svg>
               </div>
               <p className="text-gray-700 text-xs md:text-sm leading-relaxed mb-3 md:mb-4 font-gilroy-regular line-clamp-4 md:line-clamp-none h-20">
