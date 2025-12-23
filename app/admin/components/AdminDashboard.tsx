@@ -17,7 +17,7 @@ import {
   AdminPricingManagement,
   AdminEmailManagement,
   VillaEditionsManagement,
-AdminBulkEmailManagement,
+  AdminBulkEmailManagement,
   AdminPageManagement
 } from './placeholders';
 
@@ -95,83 +95,83 @@ const menuItems = [
     label: 'Page Management',
     icon: Layout,
     component: AdminPageManagement
-  }, 
+  },
   {
-    
+
     id: 'newsletter',
     label: 'Newsletter Subscribers',
     icon: Mail,
     component: NewsletterSubscribers
-  }, 
-  {          
+  },
+  {
     id: 'settings',
-  label: 'Website Settings',
-  icon: Settings,
+    label: 'Website Settings',
+    icon: Settings,
     component: WebsiteSettings
-  }, 
-  {          
+  },
+  {
     id: 'admin-emails',
-  label: 'Admin Emails',
-  icon: Shield,
+    label: 'Admin Emails',
+    icon: Shield,
     component: AdminEmailManagement
-  }, 
-  {          
+  },
+  {
     id: 'bulk-emails',
-  label: 'Bulk Email Management',
-  icon: Send,
+    label: 'Bulk Email Management',
+    icon: Send,
     component: AdminBulkEmailManagement
-  }, 
-  {          
+  },
+  {
     id: 'editions',
-  label: 'Villa Editions',
-  icon: Calendar,
+    label: 'Villa Editions',
+    icon: Calendar,
     component: VillaEditionsManagement  // We'll create this component next
-  }, 
-  {          
+  },
+  {
     id: 'influencers',
-  label: 'Influencer Management',
-  icon: UserCheck,
+    label: 'Influencer Management',
+    icon: UserCheck,
     component: AdminInfluencerManagement
-  }, 
-  {          
+  },
+  {
     id: 'users',
-  label: 'User Management',
-  icon: Users,
+    label: 'User Management',
+    icon: Users,
     component: AdminUserManagement
-  }, 
-  {          
+  },
+  {
     id: 'summaries',
-  label: 'Summary Management',
-  icon: FileText,
+    label: 'Summary Management',
+    icon: FileText,
     component: AdminSummaryManagement
-  }, 
-  {          
+  },
+  {
     id: 'payments',
-  label: 'Payment Dashboard',
-  icon: CreditCard,
+    label: 'Payment Dashboard',
+    icon: CreditCard,
     component: AdminQuestPayment
-  }, 
-  {          
+  },
+  {
     id: 'pricing',
-  label: 'Pricing Management',
-  icon: DollarSign,
+    label: 'Pricing Management',
+    icon: DollarSign,
     component: AdminPricingManagement
-  }, 
-  {          
+  },
+  {
     id: 'feedback',
-  label: 'Feedback Management',
-  icon: MessageCircle,
+    label: 'Feedback Management',
+    icon: MessageCircle,
     component: AdminFeedbackManagement
   }
 ];
 
 // Simple Overview Component - EXACT SAME AS ORIGINAL
 const DashboardOverview: React.FC = () => {
-const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-    const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(null);
+  const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(null);
   const [quickStats, setQuickStats] = useState<QuickStats[]>([]);
-  
+
   // Direct API call functions
   const formatQuickStats = (data: DashboardStats): QuickStats[] => {
     return [
@@ -219,18 +219,18 @@ const [loading, setLoading] = useState(true);
   };
 
   const getDashboardInsights = (data: DashboardStats) => {
-    const conversionRate = data.users.totalUsers > 0 
+    const conversionRate = data.users.totalUsers > 0
       ? ((data.summaries.paidSummaries / data.users.totalUsers) * 100).toFixed(1)
       : '0';
-      
+
     const paymentSuccessRate = data.payments.totalTransactions > 0
       ? ((data.payments.successfulPayments / data.payments.totalTransactions) * 100).toFixed(1)
       : '0';
-      
+
     const activeUsersRatio = data.users.totalUsers > 0
       ? ((data.users.activeUsersLast7Days / data.users.totalUsers) * 100).toFixed(1)
       : '0';
-      
+
     const averageRevenue = data.payments.successfulPayments > 0
       ? (data.payments.totalRevenueUSD / data.payments.successfulPayments).toFixed(2)
       : '0';
@@ -251,7 +251,7 @@ const [loading, setLoading] = useState(true);
   const fetchDashboardData = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const response = await fetch('/api/admin/dashboard', {
         method: 'GET',
@@ -265,7 +265,7 @@ const [loading, setLoading] = useState(true);
       }
 
       const data = await response.json();
-      
+
       if (data.success && data.data) {
         setDashboardStats(data.data);
         setQuickStats(formatQuickStats(data.data));
@@ -278,11 +278,11 @@ const [loading, setLoading] = useState(true);
       setLoading(false);
     }
   };
-  
+
   useEffect(() => {
     fetchDashboardData();
   }, []);
-  
+
   // Get icon component based on icon type
   const getIconComponent = (iconType: string) => {
     const iconMap = {
@@ -293,7 +293,7 @@ const [loading, setLoading] = useState(true);
     };
     return iconMap[iconType as keyof typeof iconMap] || Users;
   };
-  
+
   // Get color classes based on color type
   const getColorClasses = (colorType: string) => {
     const colorMap = {
@@ -304,14 +304,14 @@ const [loading, setLoading] = useState(true);
     };
     return colorMap[colorType as keyof typeof colorMap] || colorMap.blue;
   };
-  
+
   return (
     <div className="p-8">
       <div className="mb-8">
         <h1 className="text-3xl font-black text-gray-900 mb-2">Dashboard Overview</h1>
         <p className="text-gray-600">Welcome to the admin dashboard. Here's your business overview.</p>
       </div>
-      
+
       {/* Error State */}
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
@@ -320,7 +320,7 @@ const [loading, setLoading] = useState(true);
             <h3 className="text-red-800 font-semibold">Error Loading Dashboard</h3>
           </div>
           <p className="text-red-600 text-sm mt-1">{error}</p>
-          <button 
+          <button
             onClick={fetchDashboardData}
             className="mt-3 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm"
           >
@@ -328,7 +328,7 @@ const [loading, setLoading] = useState(true);
           </button>
         </div>
       )}
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Quick Stats Cards */}
         {loading ? (
@@ -348,7 +348,7 @@ const [loading, setLoading] = useState(true);
           quickStats.map((stat, index) => {
             const IconComponent = getIconComponent(stat.icon);
             const colors = getColorClasses(stat.color);
-            
+
             return (
               <div key={index} className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex items-center justify-between mb-4">
@@ -370,7 +370,7 @@ const [loading, setLoading] = useState(true);
           })
         )}
       </div>
-      
+
       {/* Regional Revenue Breakdown - More Prominent */}
       {dashboardStats && !loading && (
         <div className="mt-8">
@@ -393,7 +393,7 @@ const [loading, setLoading] = useState(true);
                   PayPal USD + Razorpay INR from Indian users
                 </div>
               </div>
-              
+
               <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="text-lg font-semibold text-blue-800">🌎 International Revenue</h4>
@@ -412,7 +412,7 @@ const [loading, setLoading] = useState(true);
           </div>
         </div>
       )}
-      
+
       {/* Business Insights */}
       {dashboardStats && !loading && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -445,7 +445,7 @@ const [loading, setLoading] = useState(true);
               })()}
             </div>
           </div>
-          
+
           {/* Quick Actions */}
           <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
@@ -501,18 +501,18 @@ const AdminDashboard: React.FC = () => {
   // Get the active component
   const getActiveComponent = () => {
     const activeItem = menuItems.find(item => item.id === activeMenuItem);
-    
+
     if (!activeItem) return <DashboardOverview key={refreshKey} />;
-    
+
     if (activeItem.id === 'overview') {
       return <DashboardOverview key={refreshKey} />;
     }
-    
+
     if (activeItem.component) {
       const Component = activeItem.component;
       return <Component key={refreshKey} />;
     }
-    
+
     return <DashboardOverview key={refreshKey} />;
   };
 
@@ -522,9 +522,8 @@ const AdminDashboard: React.FC = () => {
       <div className={`${sidebarOpen ? 'w-72' : 'w-20'} bg-white border-r border-gray-200 transition-all duration-300 flex flex-col shadow-sm flex-shrink-0`}>
         {/* Sidebar Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <h2 className={`text-xl font-bold text-gray-900 transition-all duration-300 overflow-hidden whitespace-nowrap ${
-            sidebarOpen ? 'opacity-100 max-w-xs' : 'opacity-0 max-w-0'
-          }`}>Admin Panel</h2>
+          <h2 className={`text-xl font-bold text-gray-900 transition-all duration-300 overflow-hidden whitespace-nowrap ${sidebarOpen ? 'opacity-100 max-w-xs' : 'opacity-0 max-w-0'
+            }`}>Admin Panel</h2>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
@@ -539,22 +538,20 @@ const AdminDashboard: React.FC = () => {
             {menuItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeMenuItem === item.id;
-              
+
               return (
                 <li key={item.id}>
                   <button
                     onClick={() => setActiveMenuItem(item.id)}
-                    className={`w-full flex items-center ${sidebarOpen ? 'gap-3 px-3' : 'justify-center px-2'} py-2 rounded-lg transition-colors ${
-                      isActive
+                    className={`w-full flex items-center ${sidebarOpen ? 'gap-3 px-3' : 'justify-center px-2'} py-2 rounded-lg transition-colors ${isActive
                         ? 'bg-blue-50 text-blue-700 border border-blue-200'
                         : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
-                    }`}
+                      }`}
                     title={sidebarOpen ? '' : item.label}
                   >
                     <Icon className={`h-5 w-5 flex-shrink-0 ${isActive ? 'text-blue-600' : 'text-gray-500'}`} />
-                    <span className={`font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${isActive ? 'text-blue-700' : 'text-gray-700'} ${
-                      sidebarOpen ? 'opacity-100 max-w-xs' : 'opacity-0 max-w-0'
-                    }`}>
+                    <span className={`font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${isActive ? 'text-blue-700' : 'text-gray-700'} ${sidebarOpen ? 'opacity-100 max-w-xs' : 'opacity-0 max-w-0'
+                      }`}>
                       {item.label}
                     </span>
                   </button>
@@ -570,9 +567,8 @@ const AdminDashboard: React.FC = () => {
             <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
               <span className="text-white text-sm font-semibold">A</span>
             </div>
-            <div className={`transition-all duration-300 overflow-hidden ${
-              sidebarOpen ? 'opacity-100 max-w-xs' : 'opacity-0 max-w-0'
-            }`}>
+            <div className={`transition-all duration-300 overflow-hidden ${sidebarOpen ? 'opacity-100 max-w-xs' : 'opacity-0 max-w-0'
+              }`}>
               <p className="text-sm font-medium text-gray-900 whitespace-nowrap">Admin User</p>
               <p className="text-xs text-gray-500 whitespace-nowrap">admin@fraterny.com</p>
             </div>
@@ -604,7 +600,7 @@ const AdminDashboard: React.FC = () => {
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-auto">
+        <main className="flex-1 overflow-auto" data-lenis-prevent>
           {getActiveComponent()}
         </main>
       </div>
