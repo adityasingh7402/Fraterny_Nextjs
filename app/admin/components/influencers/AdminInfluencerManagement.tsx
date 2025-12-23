@@ -362,7 +362,7 @@ export default function AdminInfluencerManagement() {
         )}
 
         {/* Data Table */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" data-lenis-prevent>
           <table className="w-full text-left">
             <thead className="border-b border-gray-200">
               <tr>
@@ -500,8 +500,8 @@ export default function AdminInfluencerManagement() {
                     key={pageNum}
                     onClick={() => setCurrentPage(pageNum)}
                     className={`h-9 w-9 rounded-lg text-sm font-medium ${currentPage === pageNum
-                        ? 'bg-blue-600 text-white'
-                        : 'border border-gray-300 hover:bg-gray-100'
+                      ? 'bg-blue-600 text-white'
+                      : 'border border-gray-300 hover:bg-gray-100'
                       }`}
                   >
                     {pageNum}
