@@ -6,6 +6,7 @@ import localFont from 'next/font/local'
 import Script from 'next/script'
 import { Toaster } from '@/components/ui/sonner';
 import { GoogleTagManager } from '@next/third-parties/google'
+import SmoothScrolling from "@/components/SmoothScrolling";
 
 const gilroyRegular = localFont({
   src: '../public/fonts/gillroy/Gilroy-Regular.ttf',
@@ -225,10 +226,12 @@ export default function RootLayout({
         <GoogleTagManager gtmId="GTM-MPD3F25K" />
 
         <div className="">
-          <AuthProvider>
-            <Toaster position="top-right" />
-            {children}
-          </AuthProvider>
+          <SmoothScrolling>
+            <AuthProvider>
+              <Toaster position="top-right" />
+              {children}
+            </AuthProvider>
+          </SmoothScrolling>
         </div>
       </body>
     </html>
