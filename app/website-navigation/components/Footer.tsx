@@ -146,21 +146,21 @@ const Footer = () => {
       <div className="container mx-auto px-6">
         <motion.div 
           className="grid grid-cols-1 md:grid-cols-4 gap-8"
-          ref={footerAnimation.ref}
-          variants={footerAnimation.parentVariants}
-          initial="hidden"
-          animate={footerAnimation.controls}
+          // ref={footerAnimation.ref}
+          // variants={footerAnimation.parentVariants}
+          // initial="hidden"
+          // animate={footerAnimation.controls}
         >
           {/* Brand Section */}
           <motion.div 
             className="space-y-4"
-            variants={footerAnimation.childVariants}
+            // variants={footerAnimation.childVariants}
           >
             <motion.a 
               href="/" 
               className="block"
-              variants={logoVariants}
-              whileHover="hover"
+              // variants={logoVariants}
+              // whileHover="hover"
             >
               <img 
                 src="/lovable-uploads/ffcba562-8c6d-44dc-8607-53afc45d3a57.png" 
@@ -170,12 +170,12 @@ const Footer = () => {
             </motion.a>
             <motion.p 
               className="text-white/80 font-gilroy-semibold"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ 
-                opacity: footerAnimation.isInView ? 1 : 0,
-                y: footerAnimation.isInView ? 0 : 10
-              }}
-              transition={{ delay: 0.3, duration: 0.5 }}
+              // initial={{ opacity: 0, y: 10 }}
+              // animate={{ 
+              //   opacity: footerAnimation.isInView ? 1 : 0,
+              //   y: footerAnimation.isInView ? 0 : 10
+              // }}
+              // transition={{ delay: 0.3, duration: 0.5 }}
             >
               Shared Ambitions
             </motion.p>
@@ -183,30 +183,30 @@ const Footer = () => {
 
           {/* Navigation Section */}
           <motion.div
-            variants={footerAnimation.childVariants}
+            // variants={footerAnimation.childVariants}
           >
             <motion.h3 
               className="text-lg font-gilroy-bold mb-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ 
-                opacity: footerAnimation.isInView ? 1 : 0,
-                y: footerAnimation.isInView ? 0 : 20
-              }}
-              transition={{ delay: 0.2, duration: 0.5 }}
+              // initial={{ opacity: 0, y: 20 }}
+              // animate={{ 
+              //   opacity: footerAnimation.isInView ? 1 : 0,
+              //   y: footerAnimation.isInView ? 0 : 20
+              // }}
+              // transition={{ delay: 0.2, duration: 0.5 }}
             >
               Navigate
             </motion.h3>
             <motion.ul 
               className="space-y-2"
-              variants={{
-                visible: {
-                  transition: {
-                    staggerChildren: 0.1
-                  }
-                }
-              }}
-              initial="hidden"
-              animate={footerAnimation.isInView ? "visible" : "hidden"}
+              // variants={{
+              //   visible: {
+              //     transition: {
+              //       staggerChildren: 0.1
+              //     }
+              //   }
+              // }}
+              // initial="hidden"
+              // animate={footerAnimation.isInView ? "visible" : "hidden"}
             >
               {[
                 { href: "/experience", text: "FratVilla" },
@@ -234,12 +234,12 @@ const Footer = () => {
           >
             <motion.h3 
               className="text-lg font-gilroy-bold mb-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ 
-                opacity: footerAnimation.isInView ? 1 : 0,
-                y: footerAnimation.isInView ? 0 : 20
-              }}
-              transition={{ delay: 0.3, duration: 0.5 }}
+              // initial={{ opacity: 0, y: 20 }}
+              // animate={{ 
+              //   opacity: footerAnimation.isInView ? 1 : 0,
+              //   y: footerAnimation.isInView ? 0 : 20
+              // }}
+              // transition={{ delay: 0.3, duration: 0.5 }}
             >
               Connect
             </motion.h3>
@@ -247,15 +247,15 @@ const Footer = () => {
             {/* Social Media Icons */}
             <motion.div 
               className="flex space-x-4 mb-4"
-              variants={{
-                visible: {
-                  transition: {
-                    staggerChildren: 0.1
-                  }
-                }
-              }}
-              initial="hidden"
-              animate={footerAnimation.isInView ? "visible" : "hidden"}
+              // variants={{
+              //   visible: {
+              //     transition: {
+              //       staggerChildren: 0.1
+              //     }
+              //   }
+              // }}
+              // initial="hidden"
+              // animate={footerAnimation.isInView ? "visible" : "hidden"}
             >
               {/* Instagram */}
               <motion.a 
@@ -266,9 +266,9 @@ const Footer = () => {
                 style={{
                   background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)'
                 }}
-                variants={socialButtonVariants}
-                whileHover="hover"
-                whileTap="tap"
+                // variants={socialButtonVariants}
+                // whileHover="hover"
+                // whileTap="tap"
               >
                 <Instagram size={20} color="white" />
               </motion.a>
@@ -283,9 +283,9 @@ const Footer = () => {
                   width: '36px',
                   height: '36px'
                 }}
-                variants={socialButtonVariants}
-                whileHover="hover"
-                whileTap="tap"
+                // variants={socialButtonVariants}
+                // whileHover="hover"
+                // whileTap="tap"
               >
                 <img src="/lovable-uploads/61ec65a3-b814-47bf-95c0-67d3091504ad.png" alt="X Logo" className="w-5 h-5" />
               </motion.a>
@@ -294,9 +294,9 @@ const Footer = () => {
               <motion.a 
                 href="mailto:support@fraterny.com?subject=User%20Query" 
                 className="bg-cyan-500 hover:bg-cyan-600 p-2 rounded-lg transition-colors shadow-md hover:shadow-lg"
-                variants={socialButtonVariants}
-                whileHover="hover"
-                whileTap="tap"
+                // variants={socialButtonVariants}
+                // whileHover="hover"
+                // whileTap="tap"
               >
                 <Mail size={20} color="white" />
               </motion.a>
@@ -305,15 +305,15 @@ const Footer = () => {
             {/* Legal Links */}
             <motion.ul 
               className="space-y-2"
-              variants={{
-                visible: {
-                  transition: {
-                    staggerChildren: 0.08
-                  }
-                }
-              }}
-              initial="hidden"
-              animate={footerAnimation.isInView ? "visible" : "hidden"}
+              // variants={{
+              //   visible: {
+              //     transition: {
+              //       staggerChildren: 0.08
+              //     }
+              //   }
+              // }}
+              // initial="hidden"
+              // animate={footerAnimation.isInView ? "visible" : "hidden"}
             >
               {[
                 { to: "/terms-and-conditions", text: "Terms and Conditions" },
@@ -326,8 +326,8 @@ const Footer = () => {
                     className="text-white/70 hover:text-white transition-colors font-gilroy-regular"
                   >
                     <motion.span
-                      variants={linkVariants}
-                      whileHover="hover"
+                      // variants={linkVariants}
+                      // whileHover="hover"
                     >
                       {link.text}
                     </motion.span>
@@ -340,7 +340,7 @@ const Footer = () => {
           {/* CTA Section */}
           <motion.div 
             className="flex flex-col items-start"
-            variants={footerAnimation.childVariants}
+            // variants={footerAnimation.childVariants}
           >
             <motion.a 
               href="/quest/begin" 
@@ -359,14 +359,14 @@ const Footer = () => {
         {/* Copyright Section */}
         <motion.div 
           className="text-center mt-12 pt-8 border-t border-white/20"
-          ref={copyrightAnimation.ref}
-          variants={copyrightAnimation.parentVariants}
-          initial="hidden"
-          animate={copyrightAnimation.controls}
+          // ref={copyrightAnimation.ref}
+          // variants={copyrightAnimation.parentVariants}
+          // initial="hidden"
+          // animate={copyrightAnimation.controls}
         >
           <motion.div 
             className="mb-2"
-            variants={copyrightAnimation.childVariants}
+            // variants={copyrightAnimation.childVariants}
           >
             <motion.p 
               className="py-[9px] text-lg text-white font-gilroy-bold"
@@ -376,14 +376,14 @@ const Footer = () => {
             </motion.p>
             <motion.p 
               className="text-white/70 font-gilroy-regular"
-              variants={copyrightAnimation.childVariants}
+              // variants={copyrightAnimation.childVariants}
             >
               <Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link> / <Link href="/terms-of-use" className="hover:text-white transition-colors">Terms of Use</Link> / <Link href="/refund-policy" className="hover:text-white transition-colors">Refund & Cancellation Policy</Link>
             </motion.p>
           </motion.div>
           <motion.p 
             className="text-white/70 font-gilroy-regular"
-            variants={copyrightAnimation.childVariants}
+            // variants={copyrightAnimation.childVariants}
           >
             All Rights Reserved 2025
           </motion.p>

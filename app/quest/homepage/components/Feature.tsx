@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 interface FeatureProps {
   tag: React.ReactNode; // Can be string or JSX
@@ -37,7 +38,7 @@ const Feature: React.FC<FeatureProps> = ({
 
         {/* Title Block */}
         <div className="mb-12 max-w-5xl">
-          <h2 className="text-4xl md:text-6xl font-gilroy-semibold mb-6">{title}</h2>
+          <h2 className="text-5xl md:text-6xl font-gilroy-semibold mb-6">{title}</h2>
           {subTitle && <div className="text-2xl md:text-4xl font-bold text-gray-400 mb-6 font-gilroy-regular">{subTitle}</div>}
           <p className="text-lg text-white leading-relaxed font-gilroy-regular">
             {description}
@@ -47,10 +48,19 @@ const Feature: React.FC<FeatureProps> = ({
         {/* Feature Image */}
         <div className="w-full max-w-5xl mb-16">
           <div className="relative rounded-2xl overflow-hidden border border-gray-800 shadow-2xl bg-gray-900 aspect-[4/3] md:aspect-video">
-            <img
+            {/* <img
               src={imageUrl}
               alt="Feature Image"
               className="object-cover w-full h-full opacity-90 hover:opacity-100 transition-opacity duration-500"
+            /> */}
+            <Image
+              src={imageUrl}
+              alt="Mosaic App Interface"
+              width={0}
+              height={0}
+              sizes="100vw"
+              style={{ width: "100%", height: "auto" }}
+              className=''
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60"></div>
           </div>

@@ -155,6 +155,9 @@ function page() {
         <HeroSection />
         <Thesis />
         <Testimonials title="" data={testimonials1} />
+        {/* <HeroSection />
+        <Thesis />
+        <Testimonials title="" data={testimonials1} /> */}
 
         {/* Feature 0: The Hook */}
         <section className="bg-black text-white py-24 px-6 text-center black-bg-section">
@@ -173,67 +176,92 @@ function page() {
             <div className="inline-block border-b bg-neutral-800 shadow-2xl border-neutral-300 pb-2 text-gray-400 text-sm font-gilroy-medium px-4 py-2 rounded-lg">Pure signal. Zero noise.</div>
           </div>
         </section>
-
-        <div className='flex flex-col items-center justify-center w-px bg-black lg:w-auto overflow-hidden'>
-          <div className='bg-gradient-to-b from-transparent via-white/90 to-transparent w-px h-48'>
-            {/* Adjust h-24 to your desired height: h-32, h-48, h-64, etc. */}
-          </div>
-        </div>
-
-        {/* Feature 1 */}
-        <Feature
-          tag={
-            <div className="relative overflow-hidden flex items-center justify-center gap-4 w-full rounded-3xl cursor-pointer mt-2">
-              <div
-                className="absolute top-0 left-0 w-full h-full rounded-3xl z-0"
-                style={{
-                  background: "linear-gradient(-45deg, #1a1a1a, #ffffff, #6b7280, #d1d5db, #1a1a1a)",
-                  backgroundSize: "400% 400%",
-                  animation: "gradient 6s ease infinite",
-                }}
-              />
-              <div className="bg-neutral-800 rounded-3xl flex items-center justify-center gap-4 m-1 w-full relative z-10">
-                <div className="text-gray-300 text-sm font-gilroy-medium px-6 py-2">
-                  INTROSPECTIVE JOURNALING
-                </div>
-              </div>
-            </div>}
-          title={<div className="font-gilroy-bold ">Introspective <span className='text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))] pr-3'>Precision</span></div>}
-          subTitle={null}
-          description="Open-ended journaling prompts built from psychology, real behavior patterns, and the inner conflicts of ambitious people. Upgrade your ability to notice your own patterns, process difficult emotions, and make decisions you actually trust."
-          imageUrl="https://picsum.photos/800/600?random=101"
-          testimonial={{
-            text: "love that  my answers keep changing as I do. I can come back to the prompts whenever my focus shifts: career, relationships, family and they still pull out things I hadn’t fully admitted to myself.",
-            author: "Indranil Maiti",
-            role: "Product Developer",
-            avatar: "https://picsum.photos/100/100?random=53"
-          }}
-        />
-        <div className='flex flex-col items-center justify-center w-px bg-black lg:w-auto overflow-hidden'>
-          <div className='bg-gradient-to-b from-transparent via-white/90 to-transparent w-px h-48'>
-            {/* Adjust h-24 to your desired height: h-32, h-48, h-64, etc. */}
-          </div>
-        </div>
-
-        {/* Feature 2 */}
-        <Feature
-          tag={
-            <div className="relative overflow-hidden flex items-center justify-center gap-4 w-full rounded-3xl cursor-pointer mt-2">
-              <div className="absolute top-0 left-0 w-full h-full animate-gradient rounded-3xl z-0"
-                style={{
-                  background: "linear-gradient(-45deg, #1a1a1a, #ffffff, #6b7280, #d1d5db, #1a1a1a)",
-                  backgroundSize: "400% 400%",
-                  animation: "gradient 6s ease infinite",
-                }}></div>
-              <div className=" bg-neutral-800 rounded-3xl flex items-center justify-center gap-4 m-1 w-full relative z-10">
-                <div className="text-gray-300 text-xl font-gilroy-medium px-5 py-1">PSYCHOLOGICAL FILE</div>
-              </div>
+        {/* Feature 0: The Hook */}
+        {/* <section className="bg-black text-white py-24 px-6 text-center black-bg-section">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-gray-500 uppercase tracking-widest text-xl font-gilroy-bold mb-4">What's in it?</div>
+            <h2 className="text-5xl md:text-7xl font-bold mb-8 font-gilroy-bold">Private Intelligence on Your <span className="text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))] pr-5">Psych*logy</span></h2>
+            <p className="text-xl text-white mb-8 leading-relaxed font-gilroy-medium">
+              As I’ve been building Quest and studying how ambitious, overthinking people actually move through life, I’ve taken tens of thousands of notes from real answers, late-night reflections, and repeating patterns.
+            </p>
+            <p className="text-xl text-white mb-12 font-gilroy-medium leading-relaxed">
+              On identity conflicts, family vs freedom, money anxiety, control and trust, validation and ego, self-sabotage, focus and numbness, intensity in relationships, and more. Much more.
+            </p>
+            <div className="text-white font-bold text-xl mb-16 font-gilroy-medium leading-relaxed">
+              Quest turns the sharpest of those patterns into a very powerful self-mapping tool unlike anything else.
             </div>
-          }
-          title={<div className="font-gilroy-bold"><span className='text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))] pr-3'>Psychology</span> X <span className='text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))] pr-3'>Design</span></div>}
+            <div className="inline-block border-b bg-neutral-800 shadow-2xl border-neutral-300 pb-2 text-gray-400 text-sm font-gilroy-medium px-4 py-2 rounded-lg">Pure signal. Zero noise.</div>
+          </div>
+        </section> */}
+
+      {/* <div className='flex flex-col items-center justify-center w-px bg-black lg:w-auto overflow-hidden'>
+        <div className='flex flex-col items-center justify-center w-px bg-black lg:w-auto overflow-hidden'>
+          <div className='bg-linear-to-b from-transparent via-white/90 to-transparent w-px h-48'>
+              
+          </div>
+      </div> */}
+      <div className='flex flex-col items-center justify-center bg-black overflow-hidden'>
+        <div className='bg-linear-to-b from-transparent via-white/90 to-transparent w-px h-48'>
+        </div>
+      </div>
+
+      {/* Feature 1 */}
+      <Feature
+        tag= {
+        <div className="relative overflow-hidden flex items-center justify-center gap-4 w-full rounded-3xl cursor-pointer mt-2">
+          <div
+            className="absolute top-0 left-0 w-full h-full rounded-3xl z-0"
+            style={{
+              background: "linear-gradient(-45deg, #1a1a1a, #ffffff, #6b7280, #d1d5db, #1a1a1a)",
+              backgroundSize: "400% 400%",
+              animation: "gradient 6s ease infinite",
+            }}
+          />
+          <div className="bg-neutral-800 rounded-3xl flex items-center justify-center gap-4 m-1 w-full relative z-10">
+            <div className="text-gray-300 text-sm sm:text-xl font-gilroy-medium px-6 py-2">
+              INTROSPECTIVE JOURNALING
+            </div>
+          </div>
+        </div>}
+        title={<div className="font-gilroy-bold">Introspective <span className='text-transparent bg-clip-text bg-[linear-gradient(157deg,var(--color-emerald-200),var(--color-violet-800))] pr-3'>Precision</span></div>}
+        subTitle={null}
+        description="Open-ended journaling prompts built from psychology, real behavior patterns, and the inner conflicts of ambitious people. Upgrade your ability to notice your own patterns, process difficult emotions, and make decisions you actually trust."
+        imageUrl="/quest/quest-introspective.webp"
+        testimonial={{
+          text: "love that  my answers keep changing as I do. I can come back to the prompts whenever my focus shifts: career, relationships, family and they still pull out things I hadn’t fully admitted to myself.",
+          author: "Indranil Maiti",
+          role: "Product Developer",
+          avatar: "https://picsum.photos/100/100?random=53"
+        }}
+      />
+
+      {/* Feature 2 */}
+
+
+      <div className='flex flex-col items-center justify-center bg-black overflow-hidden'>
+        <div className='bg-linear-to-b from-transparent via-white/90 to-transparent w-px h-48'>
+        </div>
+      </div>
+
+
+      <Feature
+        tag={
+          <div className="relative overflow-hidden flex items-center justify-center gap-4 w-full rounded-3xl cursor-pointer mt-2">
+            <div className="absolute top-0 left-0 w-full h-full animate-gradient rounded-3xl z-0"
+              style={{
+                background: "linear-gradient(-45deg, #1a1a1a, #ffffff, #6b7280, #d1d5db, #1a1a1a)",
+                backgroundSize: "400% 400%",
+                animation: "gradient 6s ease infinite",
+              }}></div>
+            <div className=" bg-neutral-800 rounded-3xl flex items-center justify-center gap-4 m-1 w-full relative z-10">
+              <div className="text-gray-300 text-sm sm:text-xl font-gilroy-medium px-5 py-1">PSYCHOLOGICAL FILE</div>
+            </div>
+          </div>
+        }
+          title={<div className="font-gilroy-bold"><span className='text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))]'>Psychology</span> X <span className='text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))] pr-3'>Design</span></div>}
           subTitle={null}
           description="A crafted psychological file that turns your answers, patterns, and contradictions into a clean, readable artifact you can actually use. Expand your understanding of how your mind works and how to work with it in a way that feels precise, calm, and built for people who think deeply."
-          imageUrl="https://picsum.photos/800/600?random=102"
+          imageUrl="/quest/quest-psychology.webp"
           testimonial={{
             text: "If you’re an ambitious, self-aware person, Quest’s psychological file is one of the few tools I actually recommend. It turns your raw answers into a structured, readable document that feels like a spec sheet for your mind: something you can revisit, reflect on, and use to make better decisions instead of just collecting more ‘insights’ you forget in a week.",
             author: "Harsimran Singh",
@@ -241,39 +269,42 @@ function page() {
             avatar: "https://picsum.photos/100/100?random=54"
           }}
         />
-        <div className='flex flex-col items-center justify-center w-px bg-black lg:w-auto overflow-hidden'>
-          <div className='bg-gradient-to-b from-transparent via-white/90 to-transparent w-px h-48'>
-            {/* Adjust h-24 to your desired height: h-32, h-48, h-64, etc. */}
+
+          <div className='flex flex-col items-center justify-center bg-black overflow-hidden'>
+            <div className='bg-linear-to-b from-transparent via-white/90 to-transparent w-px h-48'>
+            </div>
           </div>
+
+          {/* Feature 3 */}
+            <Feature
+              tag={
+                <div className="relative overflow-hidden flex items-center justify-center gap-4 w-full rounded-3xl cursor-pointer mt-2">
+                  <div className="absolute top-0 left-0 w-full h-full animate-gradient rounded-3xl z-0"
+                    style={{
+                      background: "linear-gradient(-45deg, #1a1a1a, #ffffff, #6b7280, #d1d5db, #1a1a1a)",
+                      backgroundSize: "400% 400%",
+                      animation: "gradient 6s ease infinite",
+                    }}></div>
+                  <div className=" bg-neutral-800 rounded-3xl flex items-center justify-center gap-4 m-1 w-full relative z-10">
+                    <div className="text-gray-300 text-sm sm:text-xl font-gilroy-medium px-5 py-1">RESOURCES</div>
+                  </div>
+                </div>
+              }
+              title={<div className="font-gilroy-bold"><span className=' pr-3'>Undeniable</span> <span className='text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))] pr-3'>Depth</span></div>}
+              subTitle={null}
+              description="32 Unique identity masks which tell you how you see yourself, how the world sees you and how you want to be seen. Your answers are analyzed against 600+ personality traits, 90+ belief systems, evolutionary psychology, pattern recognition and multiple perspective lenses."
+              imageUrl="/quest/quest-depth.webp"
+              testimonial={{
+                text: "It is insane how many parameters we are working with. We have achieved very high accuracy while creating completely new systems to translate open-ended answers into deep psychological information.",
+                author: "Aditya Singh",
+                role: "Full Stack Developer",
+                avatar: "https://picsum.photos/100/100?random=55"
+              }}
+            />
         </div>
 
-        {/* Feature 3 */}
-        <Feature
-          tag={
-            <div className="relative overflow-hidden flex items-center justify-center gap-4 w-full rounded-3xl cursor-pointer mt-2">
-              <div className="absolute top-0 left-0 w-full h-full animate-gradient rounded-3xl z-0"
-                style={{
-                  background: "linear-gradient(-45deg, #1a1a1a, #ffffff, #6b7280, #d1d5db, #1a1a1a)",
-                  backgroundSize: "400% 400%",
-                  animation: "gradient 6s ease infinite",
-                }}></div>
-              <div className=" bg-neutral-800 rounded-3xl flex items-center justify-center gap-4 m-1 w-full relative z-10">
-                <div className="text-gray-300 text-xl font-gilroy-medium px-5 py-1">Resources</div>
-              </div>
-            </div>
-          }
-          title={<div className="font-gilroy-bold"><span className='text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))] pr-3'>Books</span> <span className='text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))] pr-3'>Podcasts</span> & More</div>}
-          subTitle={null}
-          description="Most books, podcasts, and Youtube videos are a waste of your time. These recommendation lists include only the kind of resources you want to tell others about."
-          imageUrl="https://picsum.photos/800/600?random=103"
-          testimonial={{
-            text: "All the books I've read and podcasts I've listened to over the past 4-5 months came from Mosaic's recommendations. The value density is ridiculous.",
-            author: "Moritz P.",
-            role: "Senior Strategy Manager",
-            avatar: "https://picsum.photos/100/100?random=55"
-          }}
-        />
-
+        {/* <Testimonials title="More Feedback From People Like You" data={testimonials2} light={true} /> */}
+        {/* <FeaturesGrid />
         {/* <Testimonials title="More Feedback From People Like You" data={testimonials2} light={true} /> */}
         {/* <FeaturesGrid />
       <Pricing plans={pricingPlans} /> */}
@@ -282,7 +313,6 @@ function page() {
         <Footer />
 
       </div>
-    </div>
   )
 }
 
