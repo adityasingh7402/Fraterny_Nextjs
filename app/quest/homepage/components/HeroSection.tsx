@@ -54,28 +54,22 @@ const HeroSection: React.FC = () => {
         </div>
       </div>
 
-      {/* <img
-          src="./quest/quest-hero.webp"
-          alt="Mosaic App Interface"
-          className="pb-8"
-        /> */}
-        <Image
+      {/* Hero Image */}
+      <Image
           src="/quest/quest-hero.webp"
-          alt="Mosaic App Interface"
+          alt="Quest App Interface"
           width={0}
           height={0}
           sizes="100vw"
           style={{ width: "100%", height: "auto" }}
           className='pb-8'
         />
-
-      {/* Hero Image */}
       {/* <div className="relative w-full max-w-2xl mx-auto mb-16">
-        <div className="absolute inset-0 z-10 h-full w-full bottom-0"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-10 h-full w-full bottom-0"></div>
         <img
-          src="./quest/quest-hero.webp"
+          src="https://picsum.photos/800/600?random=100"
           alt="Mosaic App Interface"
-          className="rounded-2xl shadow-2xl border border-gray-200 w-full p-4"
+          className="rounded-2xl shadow-2xl border border-gray-200 w-full"
         />
       </div> */}
 

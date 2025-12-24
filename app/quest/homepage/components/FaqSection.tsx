@@ -67,11 +67,7 @@ const faqs: FaqItem[] = [
     answer: "Your architecture is categorized into one of 32 unique archetypes (Masks) organized into 6 primary clusters. The system identifies your Identity Triad—the specific combination of your Internal Driver (SELF), External Signal (WORLD), and Growth Trajectory (ASPIRE)."
   },
   {
-    question: "How do I access my specific psych file? ",
-    answer: "You may begin the observation process to view a free fragment of your file with a visible aesthetic layout. Once the patterns are synthesized, you may unseal the remainder and receive your full, confidential edition."
-  },
-  {
-    question: "How to maximize my benefit from this Quest?",
+    question: "How to maximize my benefit from the Quest?",
     answer: "Follow these guidelines while answering questions:\n\n1. Give more context - More details you provide, More accurate my analysis will become.\n\n2. Fill your responses like you are chatting with a close friend - This will give me a better understanding of you\n\n3. Be honest - People tend to respond like the person they want to become, but not how they truly are. This makes it difficult for me to analyse you properly\n\n4. Take your time - Don't rush through questions. Try to be accurate but also try to finish it in one sitting."
   },
   {
@@ -85,7 +81,7 @@ const faqs: FaqItem[] = [
   {
     question: "Is my personal information secure?",
     answer: "100%. Your identity is safe and secure. You can even stay anonymous while giving the test."
-  }
+  },
 ];
 
 const FaqSection: React.FC<FaqSectionProps> = ({ 

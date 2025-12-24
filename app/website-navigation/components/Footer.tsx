@@ -370,7 +370,7 @@ const Footer = () => {
           >
             <motion.p 
               className="py-[9px] text-lg text-white font-gilroy-bold"
-              // variants={copyrightAnimation.childVariants}
+              variants={copyrightAnimation.childVariants}
             >
               FRATERNY
             </motion.p>
