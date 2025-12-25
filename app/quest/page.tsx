@@ -194,70 +194,72 @@ function page() {
           </div>
         </section> */}
 
-      {/* <div className='flex flex-col items-center justify-center w-px bg-black lg:w-auto overflow-hidden'>
+        {/* <div className='flex flex-col items-center justify-center w-px bg-black lg:w-auto overflow-hidden'>
         <div className='flex flex-col items-center justify-center w-px bg-black lg:w-auto overflow-hidden'>
           <div className='bg-linear-to-b from-transparent via-white/90 to-transparent w-px h-48'>
               
           </div>
       </div> */}
-      <div className='flex flex-col items-center justify-center bg-black overflow-hidden'>
-        <div className='bg-linear-to-b from-transparent via-white/90 to-transparent w-px h-48'>
-        </div>
-      </div>
-
-      {/* Feature 1 */}
-      <Feature
-        tag= {
-        <div className="relative overflow-hidden flex items-center justify-center gap-4 w-full rounded-3xl cursor-pointer mt-2">
-          <div
-            className="absolute top-0 left-0 w-full h-full rounded-3xl z-0"
-            style={{
-              background: "linear-gradient(-45deg, #1a1a1a, #ffffff, #6b7280, #d1d5db, #1a1a1a)",
-              backgroundSize: "400% 400%",
-              animation: "gradient 6s ease infinite",
-            }}
-          />
-          <div className="bg-neutral-800 rounded-3xl flex items-center justify-center gap-4 m-1 w-full relative z-10">
-            <div className="text-gray-300 text-sm sm:text-xl font-gilroy-medium px-6 py-2">
-              INTROSPECTIVE JOURNALING
-            </div>
+        <div className='flex flex-col items-center justify-center bg-black overflow-hidden'>
+          <div className='bg-linear-to-b from-transparent via-white/90 to-transparent w-px h-48'>
           </div>
-        </div>}
-        title={<div className="font-gilroy-bold">Introspective <span className='text-transparent bg-clip-text bg-[linear-gradient(157deg,var(--color-emerald-200),var(--color-violet-800))] pr-3'>Precision</span></div>}
-        subTitle={null}
-        description="Open-ended journaling prompts built from psychology, real behavior patterns, and the inner conflicts of ambitious people. Upgrade your ability to notice your own patterns, process difficult emotions, and make decisions you actually trust."
-        imageUrl="/quest/quest-introspective.webp"
-        testimonial={{
-          text: "love that  my answers keep changing as I do. I can come back to the prompts whenever my focus shifts: career, relationships, family and they still pull out things I hadn’t fully admitted to myself.",
-          author: "Indranil Maiti",
-          role: "Product Developer",
-          avatar: "https://picsum.photos/100/100?random=53"
-        }}
-      />
-
-      {/* Feature 2 */}
-
-
-      <div className='flex flex-col items-center justify-center bg-black overflow-hidden'>
-        <div className='bg-linear-to-b from-transparent via-white/90 to-transparent w-px h-48'>
         </div>
-      </div>
+
+        <Feature
+          tag={
+            <div className="relative overflow-hidden inline-flex items-center justify-center rounded-full cursor-default mb-4">
+              <div
+                className="absolute inset-0 z-0 scale-110"
+                style={{
+                  background: "linear-gradient(-45deg, #1a1a1a, #ffffff, #6b7280, #d1d5db, #1a1a1a)",
+                  backgroundSize: "400% 400%",
+                  animation: "gradient 6s ease infinite",
+                }}
+              />
+              <div className="bg-neutral-900 rounded-full flex items-center justify-center m-[1.5px] px-6 py-2 relative z-10">
+                <div className="text-gray-300 text-sm md:text-base font-gilroy-bold tracking-widest uppercase">
+                  INTROSPECTIVE JOURNALING
+                </div>
+              </div>
+            </div>}
+          title={<div className="font-gilroy-bold">Introspective <span className='text-transparent bg-clip-text bg-[linear-gradient(157deg,var(--color-emerald-200),var(--color-violet-800))] pr-3'>Precision</span></div>}
+          subTitle={null}
+          description="Open-ended journaling prompts built from psychology, real behavior patterns, and the inner conflicts of ambitious people. Upgrade your ability to notice your own patterns, process difficult emotions, and make decisions you actually trust."
+          imageUrl="/quest/quest-introspective.webp"
+          testimonial={{
+            text: "love that  my answers keep changing as I do. I can come back to the prompts whenever my focus shifts: career, relationships, family and they still pull out things I hadn’t fully admitted to myself.",
+            author: "Indranil Maiti",
+            role: "Product Developer",
+            avatar: "https://picsum.photos/100/100?random=53"
+          }}
+        />
+
+        {/* Feature 2 */}
 
 
-      <Feature
-        tag={
-          <div className="relative overflow-hidden flex items-center justify-center gap-4 w-full rounded-3xl cursor-pointer mt-2">
-            <div className="absolute top-0 left-0 w-full h-full animate-gradient rounded-3xl z-0"
-              style={{
-                background: "linear-gradient(-45deg, #1a1a1a, #ffffff, #6b7280, #d1d5db, #1a1a1a)",
-                backgroundSize: "400% 400%",
-                animation: "gradient 6s ease infinite",
-              }}></div>
-            <div className=" bg-neutral-800 rounded-3xl flex items-center justify-center gap-4 m-1 w-full relative z-10">
-              <div className="text-gray-300 text-sm sm:text-xl font-gilroy-medium px-5 py-1">PSYCHOLOGICAL FILE</div>
-            </div>
+        <div className='flex flex-col items-center justify-center bg-black overflow-hidden'>
+          <div className='bg-linear-to-b from-transparent via-white/90 to-transparent w-px h-48'>
           </div>
-        }
+        </div>
+
+
+        <Feature
+          tag={
+            <div className="relative overflow-hidden inline-flex items-center justify-center rounded-full cursor-default mb-4">
+              <div
+                className="absolute inset-0 z-0 scale-110"
+                style={{
+                  background: "linear-gradient(-45deg, #1a1a1a, #ffffff, #6b7280, #d1d5db, #1a1a1a)",
+                  backgroundSize: "400% 400%",
+                  animation: "gradient 6s ease infinite",
+                }}
+              />
+              <div className="bg-neutral-900 rounded-full flex items-center justify-center m-[1.5px] px-6 py-2 relative z-10">
+                <div className="text-gray-300 text-sm md:text-base font-gilroy-bold tracking-widest uppercase">
+                  PSYCHOLOGICAL FILE
+                </div>
+              </div>
+            </div>}
           title={<div className="font-gilroy-bold"><span className='text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))]'>Psychology</span> X <span className='text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))] pr-3'>Design</span></div>}
           subTitle={null}
           description="A crafted psychological file that turns your answers, patterns, and contradictions into a clean, readable artifact you can actually use. Expand your understanding of how your mind works and how to work with it in a way that feels precise, calm, and built for people who think deeply."
@@ -270,49 +272,52 @@ function page() {
           }}
         />
 
-          <div className='flex flex-col items-center justify-center bg-black overflow-hidden'>
-            <div className='bg-linear-to-b from-transparent via-white/90 to-transparent w-px h-48'>
-            </div>
+        <div className='flex flex-col items-center justify-center bg-black overflow-hidden'>
+          <div className='bg-linear-to-b from-transparent via-white/90 to-transparent w-px h-48'>
           </div>
-
-          {/* Feature 3 */}
-            <Feature
-              tag={
-                <div className="relative overflow-hidden flex items-center justify-center gap-4 w-full rounded-3xl cursor-pointer mt-2">
-                  <div className="absolute top-0 left-0 w-full h-full animate-gradient rounded-3xl z-0"
-                    style={{
-                      background: "linear-gradient(-45deg, #1a1a1a, #ffffff, #6b7280, #d1d5db, #1a1a1a)",
-                      backgroundSize: "400% 400%",
-                      animation: "gradient 6s ease infinite",
-                    }}></div>
-                  <div className=" bg-neutral-800 rounded-3xl flex items-center justify-center gap-4 m-1 w-full relative z-10">
-                    <div className="text-gray-300 text-sm sm:text-xl font-gilroy-medium px-5 py-1">RESOURCES</div>
-                  </div>
-                </div>
-              }
-              title={<div className="font-gilroy-bold"><span className=' pr-3'>Undeniable</span> <span className='text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))] pr-3'>Depth</span></div>}
-              subTitle={null}
-              description="32 Unique identity masks which tell you how you see yourself, how the world sees you and how you want to be seen. Your answers are analyzed against 600+ personality traits, 90+ belief systems, evolutionary psychology, pattern recognition and multiple perspective lenses."
-              imageUrl="/quest/quest-depth.webp"
-              testimonial={{
-                text: "It is insane how many parameters we are working with. We have achieved very high accuracy while creating completely new systems to translate open-ended answers into deep psychological information.",
-                author: "Aditya Singh",
-                role: "Full Stack Developer",
-                avatar: "https://picsum.photos/100/100?random=55"
-              }}
-            />
         </div>
 
-        {/* <Testimonials title="More Feedback From People Like You" data={testimonials2} light={true} /> */}
-        {/* <FeaturesGrid />
-        {/* <Testimonials title="More Feedback From People Like You" data={testimonials2} light={true} /> */}
-        {/* <FeaturesGrid />
-      <Pricing plans={pricingPlans} /> */}
-        {/* <FAQ items={faqItems} /> */}
-        <FaqSection />
-        <Footer />
-
+        {/* Feature 3 */}
+        <Feature
+          tag={
+            <div className="relative overflow-hidden inline-flex items-center justify-center rounded-full cursor-default mb-4">
+              <div
+                className="absolute inset-0 z-0 scale-110"
+                style={{
+                  background: "linear-gradient(-45deg, #1a1a1a, #ffffff, #6b7280, #d1d5db, #1a1a1a)",
+                  backgroundSize: "400% 400%",
+                  animation: "gradient 6s ease infinite",
+                }}
+              />
+              <div className="bg-neutral-900 rounded-full flex items-center justify-center m-[1.5px] px-6 py-2 relative z-10">
+                <div className="text-gray-300 text-sm md:text-base font-gilroy-bold tracking-widest uppercase">
+                  RESOURCES
+                </div>
+              </div>
+            </div>}
+          title={<div className="font-gilroy-bold"><span className=' pr-3'>Undeniable</span> <span className='text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))] pr-3'>Depth</span></div>}
+          subTitle={null}
+          description="32 Unique identity masks which tell you how you see yourself, how the world sees you and how you want to be seen. Your answers are analyzed against 600+ personality traits, 90+ belief systems, evolutionary psychology, pattern recognition and multiple perspective lenses."
+          imageUrl="/quest/quest-depth.webp"
+          testimonial={{
+            text: "It is insane how many parameters we are working with. We have achieved very high accuracy while creating completely new systems to translate open-ended answers into deep psychological information.",
+            author: "Aditya Kumar",
+            role: "Full Stack Developer",
+            avatar: "https://picsum.photos/100/100?random=55"
+          }}
+        />
       </div>
+
+      {/* <Testimonials title="More Feedback From People Like You" data={testimonials2} light={true} /> */}
+      {/* <FeaturesGrid />
+        {/* <Testimonials title="More Feedback From People Like You" data={testimonials2} light={true} /> */}
+      {/* <FeaturesGrid />
+      <Pricing plans={pricingPlans} /> */}
+      {/* <FAQ items={faqItems} /> */}
+      <FaqSection />
+      <Footer />
+
+    </div>
   )
 }
 
