@@ -789,7 +789,7 @@ export function QuestResultClient({
 
   return (
     <div>
-      <div className="w-full min-h-screen overflow-y-auto overflow-x-hidden bg-white">
+      <div className="w-full min-h-screen overflow-x-hidden bg-white">
         <AuthBanner
           onSignIn={handleAuthAction}
           onPayment={handlePayment}
