@@ -47,7 +47,18 @@ const Feature: React.FC<FeatureProps> = ({
 
         {/* Feature Image */}
         <div className="w-full mb-16">
-          <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-neutral-900 aspect-[4/3] md:aspect-video w-full">
+          {/* <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-neutral-900 aspect-4/3 md:aspect-video w-full">
+            <Image
+              src={imageUrl}
+              alt="Feature Image"
+              fill
+              className="object-contain opacity-90 hover:opacity-100 transition-opacity duration-500"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60 pointer-events-none"></div>
+          </div> */}
+          <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-neutral-900 aspect-video w-full">
             <Image
               src={imageUrl}
               alt="Feature Image"

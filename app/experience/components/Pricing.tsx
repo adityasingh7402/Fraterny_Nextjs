@@ -140,20 +140,20 @@ const PricingTier = ({
   return (
     <motion.div 
       className={`p-6 rounded-xl border ${isPopular ? 'border-black shadow-lg' : 'border-gray-200'} bg-white ${className} group cursor-pointer`}
-      variants={cardVariants}
-      initial="hidden"
-      whileInView="visible"
-      whileHover="hover"
-      viewport={{ once: true, margin: "-50px" }}
+      // variants={cardVariants}
+      // initial="hidden"
+      // whileInView="visible"
+      // whileHover="hover"
+      // viewport={{ once: true, margin: "-50px" }}
     >
       {/* Badges with scale animation */}
       <div className="flex flex-wrap gap-2 mb-4">
         {isPopular && (
           <motion.div
-            variants={badgeVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
+            // variants={badgeVariants}
+            // initial="hidden"
+            // whileInView="visible"
+            // viewport={{ once: true }}
           >
             <Badge variant="secondary" className="bg-black text-white font-gilroy-medium">
               Most Popular
@@ -163,11 +163,11 @@ const PricingTier = ({
         
         {applicationsReceived !== null && (
           <motion.div
-            variants={badgeVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            transition={{ delay: animationDelay + 0.25 }}
+            // variants={badgeVariants}
+            // initial="hidden"
+            // whileInView="visible"
+            // viewport={{ once: true }}
+            // transition={{ delay: animationDelay + 0.25 }}
           >
             <Badge variant="outline" className="border-black text-navy bg-transparent font-gilroy-medium">
               {applicationsReceived} Applications received
@@ -178,11 +178,11 @@ const PricingTier = ({
 
       {/* Title with fade up */}
       <motion.h3 
-        className="text-xl font-gilroy-bold font-bold mb-2"
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: animationDelay + 0.1, duration: 0.5 }}
+        className="text-3xl font-gilroy-bold font-bold mb-2"
+        // initial={{ opacity: 0, y: 10 }}
+        // whileInView={{ opacity: 1, y: 0 }}
+        // viewport={{ once: true }}
+        // transition={{ delay: animationDelay + 0.1, duration: 0.5 }}
       >
         {name}
       </motion.h3>
@@ -190,32 +190,32 @@ const PricingTier = ({
       {/* Price section with slide up */}
       <motion.div 
         className="mb-6"
-        variants={priceVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
+        // variants={priceVariants}
+        // initial="hidden"
+        // whileInView="visible"
+        // viewport={{ once: true }}
       >
         {originalPrice && (
           <motion.div 
             className="text-sm text-gray-400 line-through mb-1 font-gilroy-regular"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: animationDelay + 0.4, duration: 0.3 }}
+            // initial={{ opacity: 0 }}
+            // whileInView={{ opacity: 1 }}
+            // transition={{ delay: animationDelay + 0.4, duration: 0.3 }}
           >
             {originalPrice}
           </motion.div>
         )}
         <motion.span 
           className="text-2xl font-gilroy-semibold text-navy"
-          initial={{ scale: 0.8, opacity: 0 }}
-          whileInView={{ scale: 1, opacity: 1 }}
-          transition={{ 
-            type: "spring", 
-            stiffness: 200, 
-            damping: 15, 
-            delay: animationDelay + 0.5 
-          }}
-          style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
+          // initial={{ scale: 0.8, opacity: 0 }}
+          // whileInView={{ scale: 1, opacity: 1 }}
+          // transition={{ 
+          //   type: "spring", 
+          //   stiffness: 200, 
+          //   damping: 15, 
+          //   delay: animationDelay + 0.5 
+          // }}
+          // style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
         >
           {price}
         </motion.span>
@@ -227,26 +227,25 @@ const PricingTier = ({
           <motion.li 
             key={index} 
             className="flex items-center gap-2"
-            variants={featureVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            transition={{ delay: animationDelay + 0.6 + (index * 0.1) }}
-            style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
+            // variants={featureVariants}
+            // initial="hidden"
+            // whileInView="visible"
+            // viewport={{ once: true }}
+            // transition={{ delay: animationDelay + 0.6 + (index * 0.1) }}
           >
             <motion.div
-              initial={{ scale: 0, rotate: -180 }}
-              whileInView={{ scale: 1, rotate: 0 }}
-              transition={{ 
-                type: "spring", 
-                stiffness: 200, 
-                damping: 15, 
-                delay: animationDelay + 0.7 + (index * 0.1) 
-              }}
+              // initial={{ scale: 0, rotate: -180 }}
+              // whileInView={{ scale: 1, rotate: 0 }}
+              // transition={{ 
+              //   type: "spring", 
+              //   stiffness: 200, 
+              //   damping: 15, 
+              //   delay: animationDelay + 0.7 + (index * 0.1) 
+              // }}
             >
               <Check size={18} className="text-black flex-shrink-0" />
             </motion.div>
-            <span className="text-gray-600 font-gilroy-black">{feature}</span>
+            <span className="text-gray-600 font-gilroy-regular">{feature}</span>
           </motion.li>
         ))}
       </ul>
@@ -256,23 +255,22 @@ const PricingTier = ({
         href={ctaLink}
         target="_blank"
         rel="noopener noreferrer"
-        className={`block text-center py-2 px-4 rounded-lg transition-colors ${
+        className={`block text-center py-2 px-4 rounded-lg border border-neutral-100 ${
           isPopular 
             ? ' bg-black text-white hover:bg-opacity-90' 
-            : 'border border-navy text-navy hover:bg-navy hover:text-white'
+            : 'text-navy bg-neutral-400 hover:bg-neutral-900 hover:text-white transition-colors duration-300'
         }`}
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: animationDelay + 0.8, duration: 0.5 }}
-        whileHover={{ 
-          scale: 1.05,
-          boxShadow: isPopular 
-            ? "0 8px 25px rgba(224, 122, 95, 0.3)" 
-            : "0 8px 25px rgba(10, 26, 47, 0.2)"
-        }}
+        // initial={{ opacity: 0, y: 20 }}
+        // whileInView={{ opacity: 1, y: 0 }}
+        // viewport={{ once: true }}
+        // transition={{ delay: animationDelay + 0.8, duration: 0.5 }}
+        // whileHover={{ 
+        //   scale: 1.05,
+        //   boxShadow: isPopular 
+        //     ? "0 8px 25px rgba(224, 122, 95, 0.3)" 
+        //     : "0 8px 25px rgba(10, 26, 47, 0.2)"
+        // }}
         whileTap={{ scale: 0.98 }}
-        style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
       >
         {ctaText}
       </motion.a>

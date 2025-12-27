@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, useScroll, useTransform } from 'framer-motion';
+import Image from 'next/image';
 
 const HeroSection = () => {
 
@@ -8,72 +9,6 @@ const HeroSection = () => {
   const { scrollYProgress } = useScroll();
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
   const overlayOpacity = useTransform(scrollYProgress, [0, 0.5], [0.9, 0.6]);
-
-  // Simple fade animations - no complex scroll triggers for hero section
-
-  // Use React Query powered hook for settings
-  // const { settings, isLoading } = useReactQueryWebsiteSettings();
-  
-  // useEffect(() => {
-  //   if (settings?.registration_close_date) {
-  //     const days = utilsCalculateDaysLeft(settings.registration_close_date);
-  //     setDaysLeft(days);
-  //   }
-  // }, [settings?.registration_close_date]);
-
-  // Animated counter for days left
-  // const renderDaysLeft = () => {
-  //   if (isLoading) {
-  //     return (
-  //       <motion.div 
-  //         className="animate-pulse"
-  //         initial={{ opacity: 0 }}
-  //         animate={{ opacity: 1 }}
-  //         transition={{ duration: 0.3 }}
-  //       >
-  //         <div className="h-6 w-32 bg-gray-200 rounded"></div>
-  //       </motion.div>
-  //     );
-  //   }
-
-  //   if (!settings?.registration_close_date) {
-  //     return null;
-  //   }
-
-  //   if (daysLeft === 0) {
-  //     return (
-  //       <motion.span 
-  //         className="text-red-600 font-semibold"
-  //         initial={{ scale: 0.8, opacity: 0 }}
-  //         animate={{ scale: 1, opacity: 1 }}
-  //         transition={{ type: 'spring', stiffness: 200, damping: 10 }}
-  //         style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600 }}
-  //       >
-  //         Registration Closed
-  //       </motion.span>
-  //     );
-  //   }
-
-  //   if (daysLeft === null) {
-  //     return null;
-  //   }
-
-  //   return (
-  //     <motion.span 
-  //       className="text-terracotta font-semibold"
-  //       initial={{ scale: 0.8, opacity: 0 }}
-  //       animate={{ scale: 1, opacity: 1 }}
-  //       transition={{ 
-  //         type: 'spring', 
-  //         stiffness: 200, 
-  //         damping: 10,
-  //         delay: 0.2 
-  //       }}
-  //     >
-  //       {daysLeft} {daysLeft === 1 ? 'day' : 'days'}
-  //     </motion.span>
-  //   );
-  // };
 
   return (
     <section className="min-h-screen bg-navy text-white relative overflow-hidden flex flex-col items-start justify-center">

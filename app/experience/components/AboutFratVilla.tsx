@@ -276,15 +276,21 @@ const AboutFratVilla = () => {
           animate={isInView ? "visible" : "hidden"}
           variants={headerVariants}
         >
-          {/* <h2 className="text-3xl sm:text-4xl md:text-7xl font-gilroy-bold mb-4 text-neutral-500 tracking-tighter">
-            About <span className='text-neutral-700 tracking-wide'>FratVilla</span>
-          </h2> */}
-          <p className="text-base md:text-lg lg:text-xl font-gilroy-regular text-[#555] max-w-4xl mx-auto leading-relaxed">
+          <h1 className="font-gilroy-semibold text-[#222222] tracking-tight mb-10">
+            <span className='text-neutral-500 text-4xl md:text-7xl'>FratVilla by Fraterny</span> <br/><span className='text-3xl md:text-6xl'>The Journey Outward</span>
+          </h1>
+          <p className="text-lg md:text-2xl text-gray-500 mb-7 sm:mb-20 md:mb-20 max-w-5xl leading-relaxed font-gilroy-regular text-left sm:text-center mx-auto">
+            <span className=" font-gilroy-semibold">Fratvilla is our exclusive, hyper-luxurious 6-day experience for 20 ambitious 
+            individuals in a secret villa. It's an immersive, real-world application of the 
+            principles discovered through Quest, where you'll be surrounded by a curated 
+            group of like-minded peers.</span>
+          </p>
+          {/* <p className="text-base md:text-lg lg:text-xl font-gilroy-regular text-[#555] max-w-4xl mx-auto leading-relaxed">
             Fratvilla is our exclusive, hyper-luxurious 6-day experience for 20 ambitious 
             individuals in a secret villa. It's an immersive, real-world application of the 
             principles discovered through Quest, where you'll be surrounded by a curated 
             group of like-minded peers.
-          </p>
+          </p> */}
         </motion.div>
 
         {/* Second Header */}
@@ -337,7 +343,7 @@ const AboutFratVilla = () => {
                 >
                   <div className='relative'>
                   {/* Content */}
-                  <div className="pr-3 flex flex-col gap-6 sm:gap-4">
+                  <div className="pr-3 flex flex-col gap-1 sm:gap-1">
                     <h3 className="font-gilroy-medium mb-0 sm:mb-8 tracking-tighter pl-4 pr-16 pt-8 md:pl-4 md:pr-16 md:pt-8">
                       {feature.title}
                     </h3>
