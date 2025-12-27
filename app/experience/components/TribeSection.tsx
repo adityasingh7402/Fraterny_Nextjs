@@ -302,7 +302,7 @@ const TribeSection = () => {
                     className=''
                   >
                     <motion.h2 
-                      className="text-5xl md:text-6xl font-gilroy-bold mb-6 text-neutral-500 tracking-tight"
+                      className="text-5xl md:text-6xl font-gilroy-semibold mb-6 text-neutral-500 tracking-tight"
                       variants={journeyTitleAnimation.childVariants}
                     >
                       The Integrated <br />
@@ -326,7 +326,7 @@ const TribeSection = () => {
                   animate={journeyTitleAnimation.controls}
                 >
                   <motion.h2 
-                      className="text-5xl md:text-6xl font-gilroy-bold mb-6 text-neutral-500 tracking-tight"
+                      className="text-5xl md:text-6xl font-gilroy-semibold mb-6 text-neutral-500 tracking-tight"
                       variants={journeyTitleAnimation.childVariants}
                     >
                       The Integrated <br />
@@ -355,8 +355,8 @@ const TribeSection = () => {
                         <motion.li
                           key={index}
                           className="relative pb-20 last:pb-0"
-                          initial={{ opacity: 0, x: 50 }}
-                          whileInView={{ opacity: 1, x: 0 }}
+                          initial={{ opacity: 0, y: 50 }}
+                          whileInView={{ opacity: 1, y: 0 }}
                           transition={{ 
                             duration: 0.6, 
                             delay: index * 0.15,
@@ -494,7 +494,7 @@ const TribeSection = () => {
                   animate={timelineTitleAnimation.controls}
                 >
                   <motion.h2 
-                    className="text-5xl sm:text-6xl md:text-7xl font-gilroy-bold text-neutral-700"
+                    className="text-5xl sm:text-6xl md:text-7xl font-gilroy-semibold text-neutral-700"
                     variants={timelineTitleAnimation.childVariants}
                   >
                     A Day at <span className="text-neutral-500">Fratvilla</span>
@@ -551,10 +551,10 @@ const TribeSection = () => {
             className='mb-12'
           >
             <motion.h2 
-              className="text-5xl sm:text-6xl md:text-7xl font-gilroy-bold text-neutral-700"
+              className="text-5xl sm:text-6xl md:text-7xl font-gilroy-semibold text-neutral-700"
               variants={tribeTitleAnimation.childVariants}
             >
-              Play Your Ideal <span className="text-neutral-500">Archeotype</span>
+              Play Your Ideal <span className="text-neutral-500">Archetype</span>
             </motion.h2>
           </motion.div>
           

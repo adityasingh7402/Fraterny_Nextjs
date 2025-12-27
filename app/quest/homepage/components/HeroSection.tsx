@@ -29,7 +29,7 @@ const HeroSection: React.FC = () => {
         {/* CTA */}
         <div className="mb-8">
           <Link href="/quest/quest-mode">
-            <button className='px-7 py-3 bg-black text-white rounded-md font-gilroy-semibold tracking-tighter sm:text-2xl'>Enter Quest Mode</button>
+            <button className='px-7 py-3 bg-neutral-800 hover:bg-neutral-900 shadow-3xl transition-colors duration-200 text-white rounded-md font-gilroy-semibold tracking-tighter sm:text-2xl'>Enter Quest Mode</button>
           </Link>
         </div>
 

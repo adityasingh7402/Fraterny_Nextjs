@@ -268,7 +268,7 @@ const TimelineSection = () => {
       <div className="sticky top-0 z-10 bg-neutral-100/95 backdrop-blur-sm border-b border-neutral-200">
         <div className="max-w-7xl mx-auto px-6 py-8">
           <motion.h2 
-            className="text-5xl sm:text-6xl md:text-7xl font-gilroy-bold text-neutral-700 tracking-tight"
+            className="text-5xl sm:text-6xl md:text-7xl font-gilroy-semibold text-neutral-700 tracking-tight"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -289,32 +289,6 @@ const TimelineSection = () => {
           />
         ))}
       </div>
-
-      {/* Progress Bar - Fixed at bottom */}
-      {/* <motion.div 
-        className="fixed left-0 right-0 bottom-12 mx-auto w-full max-w-md h-2 bg-neutral-300 rounded-full overflow-hidden z-20"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-        viewport={{ once: true }}
-      >
-        <motion.div 
-          className="h-full bg-neutral-700 origin-left"
-          style={{ scaleX }}
-        />
-      </motion.div> */}
-
-      {/* Mobile responsive hint */}
-      {/* <div className="lg:hidden fixed bottom-24 left-0 right-0 text-center z-20 pointer-events-none">
-        <motion.p 
-          className="text-sm text-neutral-500 font-gilroy-regular"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1 }}
-        >
-          Scroll to explore
-        </motion.p>
-      </div> */}
     </div>
   );
 };

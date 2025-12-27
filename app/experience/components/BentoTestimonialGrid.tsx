@@ -160,11 +160,11 @@ const BentoTestimonialGrid = () => {
           transition={{ duration: 0.6 }}
         >
             <motion.h2 
-                className="text-5xl sm:text-6xl md:text-7xl font-gilroy-bold text-neutral-500"
+                className="text-5xl sm:text-6xl md:text-7xl font-gilroy-semibold text-neutral-500"
             >
                 What Our <span className="text-neutral-100">Community</span> says
             </motion.h2>
-          <p className="text-neutral-500 text-xl font-gilroy-semibold">
+          <p className="text-neutral-100 text-xl font-gilroy-semibold">
             Real transformations from real people
           </p>
         </motion.div>

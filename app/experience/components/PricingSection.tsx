@@ -74,37 +74,37 @@ const FeatureCard = ({ icon: Icon, title, description }: FeatureCardProps) => {
   return (
     <motion.div 
       className="flex gap-4 items-start group cursor-pointer"
-      variants={cardVariants}
-      initial="hidden"
-      whileInView="visible"
-      whileHover="hover"
-      viewport={{ once: true, margin: "-20px" }}
+      // variants={cardVariants}
+      // initial="hidden"
+      // whileInView="visible"
+      // whileHover="hover"
+      // viewport={{ once: true, margin: "-20px" }}
     >
       <motion.div 
         className="p-2 rounded-full bg-navy/5 group-hover:bg-navy/10 transition-colors"
-        variants={iconVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
+        // variants={iconVariants}
+        // initial="hidden"
+        // whileInView="visible"
+        // viewport={{ once: true }}
       >
         <Icon size={24} className="text-navy" />
       </motion.div>
       <div>
         <motion.h3 
           className="font-gilroy-semibold mb-1"
-          initial={{ opacity: 0, x: -10 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.1, duration: 0.4 }}
+          // initial={{ opacity: 0, x: -10 }}
+          // whileInView={{ opacity: 1, x: 0 }}
+          // viewport={{ once: true }}
+          // transition={{ delay: 0.1, duration: 0.4 }}
         >       
           {title}
         </motion.h3>
         <motion.p 
           className="text-gray-600 text-sm font-gilroy-regular"
-          initial={{ opacity: 0, x: -10 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2, duration: 0.4 }}
+          // initial={{ opacity: 0, x: -10 }}
+          // whileInView={{ opacity: 1, x: 0 }}
+          // viewport={{ once: true }}
+          // transition={{ delay: 0.2, duration: 0.4 }}
         >
           {description}
         </motion.p>
@@ -178,20 +178,20 @@ const PricingSection = ({ APPLICATION_FORM_URL, EXECUTIVE_ESCAPE_MAIL, prices }:
             {/* Section Header */}
             <motion.div
               ref={firstSectionHeaderAnimation.ref}
-              variants={firstSectionHeaderAnimation.parentVariants}
-              initial="hidden"
-              animate={firstSectionHeaderAnimation.controls}
+              // variants={firstSectionHeaderAnimation.parentVariants}
+              // initial="hidden"
+              // animate={firstSectionHeaderAnimation.controls}
             >
               <motion.h2 
                 className="text-2xl sm:text-3xl md:text-4xl font-gilroy-bold mb-3 sm:mb-4"
-                variants={firstSectionHeaderAnimation.childVariants}
+                // variants={firstSectionHeaderAnimation.childVariants}
               >
                 The Ultimate 7-Day Retreat
               </motion.h2>
               
               <motion.p 
                 className="text-lg sm:text-xl text-gray-600 mb-8 sm:mb-12 font-gilroy-medium"
-                variants={firstSectionHeaderAnimation.childVariants}
+                // variants={firstSectionHeaderAnimation.childVariants}
               >
                 Curated experiences, deep conversations, and a high-value network that will stay with you for life.
               </motion.p>
@@ -200,12 +200,14 @@ const PricingSection = ({ APPLICATION_FORM_URL, EXECUTIVE_ESCAPE_MAIL, prices }:
             {/* Features Grid */}
             <motion.div 
               className="grid md:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12"
-              ref={firstSectionFeaturesAnimation.ref}
-              variants={firstSectionFeaturesAnimation.parentVariants}
-              initial="hidden"
-              animate={firstSectionFeaturesAnimation.controls}
+              // ref={firstSectionFeaturesAnimation.ref}
+              // variants={firstSectionFeaturesAnimation.parentVariants}
+              // initial="hidden"
+              // animate={firstSectionFeaturesAnimation.controls}
             >
-              <motion.div variants={firstSectionFeaturesAnimation.childVariants}>
+              <motion.div 
+              // variants={firstSectionFeaturesAnimation.childVariants}
+              >
                 <FeatureCard
                   icon={Users}
                   title="Curated Group"
@@ -213,7 +215,9 @@ const PricingSection = ({ APPLICATION_FORM_URL, EXECUTIVE_ESCAPE_MAIL, prices }:
                 />
               </motion.div>
               
-              <motion.div variants={firstSectionFeaturesAnimation.childVariants}>
+              <motion.div 
+              // variants={firstSectionFeaturesAnimation.childVariants}
+              >
                 <FeatureCard
                   icon={Hotel}
                   title="Luxury Stay"
@@ -221,7 +225,9 @@ const PricingSection = ({ APPLICATION_FORM_URL, EXECUTIVE_ESCAPE_MAIL, prices }:
                 />
               </motion.div>
               
-              <motion.div variants={firstSectionFeaturesAnimation.childVariants}>
+              <motion.div 
+              //variants={firstSectionFeaturesAnimation.childVariants}
+              >
                 <FeatureCard
                   icon={Coffee}
                   title="High-Impact Sessions"
@@ -229,7 +235,9 @@ const PricingSection = ({ APPLICATION_FORM_URL, EXECUTIVE_ESCAPE_MAIL, prices }:
                 />
               </motion.div>
               
-              <motion.div variants={firstSectionFeaturesAnimation.childVariants}>
+              <motion.div 
+              // variants={firstSectionFeaturesAnimation.childVariants}
+              >
                 <FeatureCard
                   icon={Award}
                   title="Premium Access"
@@ -248,21 +256,21 @@ const PricingSection = ({ APPLICATION_FORM_URL, EXECUTIVE_ESCAPE_MAIL, prices }:
             
             {/* Section Header */}
             <motion.div
-              ref={secondSectionHeaderAnimation.ref}
-              variants={secondSectionHeaderAnimation.parentVariants}
-              initial="hidden"
-              animate={secondSectionHeaderAnimation.controls}
+              // ref={secondSectionHeaderAnimation.ref}
+              // variants={secondSectionHeaderAnimation.parentVariants}
+              // initial="hidden"
+              // animate={secondSectionHeaderAnimation.controls}
             >
               <motion.h2 
                 className="text-2xl sm:text-3xl md:text-4xl font-gilroy-bold mb-3 sm:mb-4"
-                variants={secondSectionHeaderAnimation.childVariants}
+                // variants={secondSectionHeaderAnimation.childVariants}
               >
                 Private, High-Level Conversations
               </motion.h2>
               
               <motion.p 
                 className="text-lg font-gilroy-medium sm:text-xl text-gray-600 mb-8 sm:mb-12"
-                variants={secondSectionHeaderAnimation.childVariants}
+                // variants={secondSectionHeaderAnimation.childVariants}
               >
                 No structured sessions, no group activities – just a space for networking and deep discussions.
               </motion.p>
@@ -272,11 +280,13 @@ const PricingSection = ({ APPLICATION_FORM_URL, EXECUTIVE_ESCAPE_MAIL, prices }:
             <motion.div 
               className="grid md:grid-cols-2 gap-6 sm:gap-8 mb-8 sm:mb-12"
               ref={secondSectionFeaturesAnimation.ref}
-              variants={secondSectionFeaturesAnimation.parentVariants}
-              initial="hidden"
-              animate={secondSectionFeaturesAnimation.controls}
+              // variants={secondSectionFeaturesAnimation.parentVariants}
+              // initial="hidden"
+              // animate={secondSectionFeaturesAnimation.controls}
             >
-              <motion.div variants={secondSectionFeaturesAnimation.childVariants}>
+              <motion.div 
+              // variants={secondSectionFeaturesAnimation.childVariants}
+              >
                 <FeatureCard
                   icon={Users}
                   title="Exclusive Group"
@@ -284,7 +294,9 @@ const PricingSection = ({ APPLICATION_FORM_URL, EXECUTIVE_ESCAPE_MAIL, prices }:
                 />
               </motion.div>
               
-              <motion.div variants={secondSectionFeaturesAnimation.childVariants}>
+              <motion.div 
+              // variants={secondSectionFeaturesAnimation.childVariants}
+              >
                 <FeatureCard
                   icon={Hotel}
                   title="Private Rooms"
@@ -292,7 +304,9 @@ const PricingSection = ({ APPLICATION_FORM_URL, EXECUTIVE_ESCAPE_MAIL, prices }:
                 />
               </motion.div>
               
-              <motion.div variants={secondSectionFeaturesAnimation.childVariants}>
+              <motion.div 
+              // variants={secondSectionFeaturesAnimation.childVariants}
+              >
                 <FeatureCard
                   icon={Coffee}
                   title="Flexible Schedule"
@@ -300,7 +314,9 @@ const PricingSection = ({ APPLICATION_FORM_URL, EXECUTIVE_ESCAPE_MAIL, prices }:
                 />
               </motion.div>
               
-              <motion.div variants={secondSectionFeaturesAnimation.childVariants}>
+              <motion.div 
+              // variants={secondSectionFeaturesAnimation.childVariants}
+              >
                 <FeatureCard
                   icon={Award}
                   title="Elite Access"
