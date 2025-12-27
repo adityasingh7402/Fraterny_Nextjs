@@ -80,7 +80,7 @@ const HeroSection = () => {
                 variants={titleAnimation.childVariants}
                
               >
-                Fratvilla by Fraterny: The Journey Outward
+                Fratvilla : The Journey Outward
               </motion.span>
             </motion.h1>
           
