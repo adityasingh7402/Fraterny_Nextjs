@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface BlogPost {
   id: string;
@@ -24,6 +25,7 @@ const BlogScrollSection = () => {
       try {
         const response = await fetch('/api/public/quest-blogs');
         const data = await response.json();
+        console.log('Fetched blog posts:', data.posts);
         setPosts(data.posts || []);
       } catch (error) {
         console.error('Failed to fetch blog posts:', error);
@@ -66,18 +68,20 @@ const BlogScrollSection = () => {
   ];
 
   return (
-    <section className="py-12 md:py-20 px-4 bg-white overflow-hidden 
-      [-webkit-mask-image:linear-gradient(to_right,transparent_0%,black_20%,black_80%,transparent_100%)]
-      [mask-image:linear-gradient(to_right,transparent_0%,black_20%,black_80%,transparent_100%)]">
+    <section className="py-12 md:py-20 px-4 bg-white overflow-hidden">
       
       {/* Header */}
       <div className="max-w-7xl mx-auto mb-8 md:mb-16">
-        <h2 className="text-2xl md:text-4xl lg:text-5xl font-gilroy-bold text-center mb-3 md:mb-4 leading-tight">
-          Quest <span className="text-neutral-500">Insights</span>
-        </h2>
-        <p className="text-center text-gray-600 text-sm md:text-base font-gilroy-regular">
-          Explore personality archetypes and behavioral psychology
+        <div className="text-gray-500 uppercase tracking-widest text-xl font-gilroy-bold mb-4">What Mask are you wearing?</div>
+        <h2 className="text-xl md:text-3xl mb-1 font-gilroy-semibold">You don’t wear one face. You wear three. Shaped by where you are, who you're with, and where you're headed.</h2>
+        <p className="text-lg text-neutral-700 mb-8 leading-relaxed font-gilroy-medium hidden md:block">
+            The system breaks the landscape of behavior into six clusters. Each cluster contains 5 to 6 Masks - distinct archetypes with their own rules, instincts, and decision styles.
         </p>
+        <div className="mb-8">
+          <Link href="/quest/quest-mode">
+            <button className='px-7 py-3 bg-neutral-800 hover:bg-neutral-900 shadow-3xl transition-colors duration-200 text-white rounded-md font-gilroy-semibold tracking-tighter sm:text-xl'>Enter Quest Mode</button>
+          </Link>
+        </div>
       </div>
 
       {/* Top Row - Left to Right (Faster, Wider) */}
@@ -85,13 +89,13 @@ const BlogScrollSection = () => {
         <motion.div
           className="flex gap-3 md:gap-6"
           animate={{
-            x: [0, -2400],
+            x: [0, -1800],
           }}
           transition={{
             x: {
               repeat: Infinity,
               repeatType: "loop",
-              duration: 50,
+              duration: 40,
               ease: "linear",
             },
           }}
@@ -99,17 +103,20 @@ const BlogScrollSection = () => {
           {topRow.map((post, index) => (
             <div
               key={`top-${index}`}
-              className="relative bg-neutral-900 rounded-lg md:rounded-xl overflow-hidden w-[420px] md:w-[480px] aspect-[4/5] flex-shrink-0 group cursor-pointer shadow-lg hover:shadow-2xl transition-shadow duration-300"
+              className="relative bg-neutral-900 rounded-lg md:rounded-xl overflow-hidden flex-shrink-0 group cursor-pointer shadow-lg hover:shadow-2xl transition-shadow duration-300"
             >
-              {/* Image */}
-              <Image
-                src={post.imageUrl}
-                fill
-                sizes="(max-width: 768px) 420px, 480px"
-                quality={85}
-                className="object-cover group-hover:scale-105 transition-transform duration-500"
-                alt={post.title}
-              />
+              <Link href={`/blog/${post.slug}`}>
+                <div className="relative w-[420px] md:w-[480px] rounded-2xl overflow-hidden shadow-2xl bg-neutral-700 aspect-video">
+                    <Image
+                    src={post.imageUrl}
+                    alt="Feature Image"
+                    fill
+                    className="object-cover opacity-90 hover:opacity-100 transition-opacity duration-500 p-1 rounded-[12px]"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+                    />
+                    
+                </div>
+                
               
               {/* Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
@@ -133,6 +140,7 @@ const BlogScrollSection = () => {
                   </p>
                 )}
               </div>
+              </Link>
             </div>
           ))}
         </motion.div>
@@ -157,20 +165,23 @@ const BlogScrollSection = () => {
           {bottomRow.map((post, index) => (
             <div
               key={`bottom-${index}`}
-              className="relative bg-neutral-900 rounded-lg md:rounded-xl overflow-hidden w-[380px] md:w-[440px] aspect-[4/5] flex-shrink-0 group cursor-pointer shadow-lg hover:shadow-2xl transition-shadow duration-300"
-            >
-              {/* Image */}
-              <Image
-                src={post.imageUrl}
-                fill
-                sizes="(max-width: 768px) 380px, 440px"
-                quality={85}
-                className="object-cover group-hover:scale-105 transition-transform duration-500"
-                alt={post.title}
-              />
+              className="relative bg-neutral-900 rounded-lg md:rounded-xl overflow-hidden flex-shrink-0 group cursor-pointer shadow-lg hover:shadow-2xl transition-shadow duration-300">
+
+              <Link href={`/blog/${post.slug}`}>
+                <div className="relative w-[420px] md:w-[480px] rounded-2xl overflow-hidden shadow-2xl bg-neutral-900 aspect-video">
+                    <Image
+                    src={post.imageUrl}
+                    alt="Feature Image"
+                    fill
+                    className="object-cover opacity-90 hover:opacity-100 transition-opacity duration-500 p-1 rounded-[12px]"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+                    />
+                </div>
+              
               
               {/* Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+              
               
               {/* Content Overlay */}
               <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
@@ -191,6 +202,7 @@ const BlogScrollSection = () => {
                   </p>
                 )}
               </div>
+                </Link>
             </div>
           ))}
         </motion.div>
