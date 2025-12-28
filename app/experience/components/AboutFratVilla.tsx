@@ -279,8 +279,8 @@ const AboutFratVilla = () => {
           <h1 className="font-gilroy-semibold text-[#222222] tracking-tight mb-10">
             <span className='text-neutral-500 text-4xl md:text-7xl'>FratVilla by Fraterny</span> <br/><span className='text-3xl md:text-6xl'>The Journey Outward</span>
           </h1>
-          <p className="text-lg md:text-2xl text-gray-500 mb-7 sm:mb-20 md:mb-20 max-w-5xl leading-relaxed font-gilroy-regular text-left sm:text-center mx-auto">
-            <span className=" font-gilroy-semibold">Fratvilla is our exclusive, hyper-luxurious 6-day experience for 20 ambitious 
+          <p className="text-lg md:text-2xl text-neutral-500 mb-7 sm:mb-20 md:mb-20 max-w-5xl leading-tight font-gilroy-regular text-left sm:text-center mx-auto">
+            <span className=" font-gilroy-medium">Fratvilla is our exclusive, hyper-luxurious 6-day experience for 20 ambitious 
             individuals in a secret villa. It's an immersive, real-world application of the 
             principles discovered through Quest, where you'll be surrounded by a curated 
             group of like-minded peers.</span>

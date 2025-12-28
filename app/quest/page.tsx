@@ -10,6 +10,7 @@ import Navigation from '../website-navigation/components/Navigation'
 import Footer from '../website-navigation/components/Footer'
 import FaqSection from './homepage/components/FaqSection'
 import CustomCursor from '@/components/CustomCursor'
+import BlogScrollSection from './homepage/components/BlogScrollSection'
 
 const testimonials1: TestimonialData[] = [
   {
@@ -314,6 +315,7 @@ function page() {
       {/* <FeaturesGrid />
       <Pricing plans={pricingPlans} /> */}
       {/* <FAQ items={faqItems} /> */}
+      <BlogScrollSection />
       <FaqSection />
       <Footer />
 

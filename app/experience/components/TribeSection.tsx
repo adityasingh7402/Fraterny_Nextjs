@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useSectionRevealAnimation } from '../../home/hooks/useSectionRevealAnimation';
 import ResponsiveImage from '@/components/ui/ResponsiveImage';
+import { ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 
 // Peer profiles data
 const peers = [
@@ -76,7 +78,7 @@ const journeySteps = [
       title: "Apply for Fratvilla:",
       description: "Use your Quest results to apply for the Fratvilla experience, where you'll be surrounded by a curated group of peers who will challenge and support you.",
       isButton: true,
-      link: "/fratvilla"
+      link: "/experience"
     },
     {
       step: "3",
@@ -94,9 +96,37 @@ const timelineEvents = [
   { time: "12:00 AM", title: <><span className='text-neutral-500'>Midnight <br/> Momentum</span></>, description: "Deep conversations and connections", img: 'https://images.pexels.com/photos/34410598/pexels-photo-34410598.jpeg' },
 ];
 
+const timelineImages = [
+  'https://images.pexels.com/photos/35386131/pexels-photo-35386131.jpeg',
+  'https://images.pexels.com/photos/35361398/pexels-photo-35361398.jpeg',
+  'https://images.pexels.com/photos/35355333/pexels-photo-35355333.jpeg',
+  'https://images.pexels.com/photos/35372560/pexels-photo-35372560.jpeg',
+]
+
 const TribeSection = () => {
   const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const [currentEventIndex, setCurrentEventIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+  const checkMobile = () => {
+    console.log('Checking mobile viewport', window.innerWidth);
+    
+    setIsMobile(window.innerWidth < 640); // 640px = sm breakpoint
+  };
+  
+  checkMobile(); // Check on mount
+  window.addEventListener('resize', checkMobile);
+  
+  return () => window.removeEventListener('resize', checkMobile);
+}, []);
+
+  const handleNextEvent = () => {
+  setCurrentEventIndex((prev) => 
+    prev === timelineEvents.length - 1 ? 0 : prev + 1
+  );
+};
 
   // Simulate progressive image loading
   useEffect(() => {
@@ -167,6 +197,40 @@ const TribeSection = () => {
     once: true,
     duration: 0.8
   });
+
+const timelineCardVariants = {
+  rest: (idx: number) => {
+    // Mobile positions - fan/hand effect
+    const mobilePositions = [
+      { left: 1, top: 0, rotate: -5 },
+      { left: 180, top: 20, rotate: 8 },
+      { left: 10, top: 200, rotate: -10 },
+      { left: 190, top: 230, rotate: 20 }
+    ];
+    
+    // Desktop positions - scattered effect
+    const desktopPositions = [
+      { left: 80, top: 40, rotate: -18 },
+      { left: 260, top: 100, rotate: 3 },
+      { left: 460, top: 20, rotate: -4 },
+      { left: 700, top: 100, rotate: 10 }
+    ];
+    
+    const positions = isMobile ? mobilePositions : desktopPositions;
+    
+    return {
+      left: `${positions[idx].left}px`,
+      top: `${positions[idx].top}px`,
+      rotate: positions[idx].rotate,
+      opacity: 1,
+      transition: { duration: 0.3 }
+    };
+  },
+  hover: (idx: number) => ({
+    opacity: 1,
+    transition: { duration: 0.3 }
+  })
+}
 
   // Card hover variants
   const cardVariants = {
@@ -375,11 +439,6 @@ const TribeSection = () => {
                             {/* Card */}
                             <motion.div
                               className="flex-1 bg-neutral-800 rounded-2xl p-6 md:p-8 shadow-xl border border-neutral-700 relative overflow-hidden"
-                              whileHover={{ 
-                                y: -5, 
-                                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)" 
-                              }}
-                              transition={{ type: "spring", stiffness: 400, damping: 25 }}
                             >
                               {/* Year/Step Label */}
                               <span className="text-sm font-mono text-neutral-400 mb-2 block">
@@ -398,7 +457,6 @@ const TribeSection = () => {
                                 <motion.button
                                   onClick={() => window.location.href = step.link}
                                   className="inline-flex items-center gap-2 px-6 py-3 bg-white text-neutral-900 font-gilroy-bold text-lg rounded-lg shadow-md hover:bg-neutral-100 transition-colors duration-300"
-                                  whileHover={{ scale: 1.05 }}
                                   whileTap={{ scale: 0.95 }}
                                 >
                                   Get Started
@@ -420,72 +478,11 @@ const TribeSection = () => {
         </section>
       </section>
 
-      {/* Timeline Section */}
+
       {/* <section className="bg-white p-5">
         <section className="py-4 md:py-8">
           <div className="container mx-auto">
-            <div className="max-w-7xl mx-auto text-left">
-              
-              <motion.div
-                ref={timelineTitleAnimation.ref}
-                variants={timelineTitleAnimation.parentVariants}
-                initial="hidden"
-                animate={timelineTitleAnimation.controls}
-              >
-                <motion.h2 
-                  className="text-3xl sm:text-3xl md:text-4xl font-gilroy-semibold mb-3 sm:mb-4"
-                  variants={timelineTitleAnimation.childVariants}
-                >
-                  A Day at Fratvilla
-                </motion.h2>
-              </motion.div>
-
-              
-              <motion.div 
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-                ref={timelineAnimation.ref}
-                variants={timelineAnimation.parentVariants}
-                initial="hidden"
-                animate={timelineAnimation.controls}
-              >
-                {timelineEvents.map((event, index) => (
-                  <motion.div
-                    key={index}
-                    variants={timelineAnimation.childVariants}
-                  >
-                    <motion.div 
-                      className="bg-white backdrop-blur-md rounded-xl p-6 md:p-8 text-left border border-cyan-700/20 shadow-lg hover:shadow-xl transition-all duration-500"
-                      variants={cardVariants}
-                      whileHover="hover"
-                    >
-                      <div className="mb-4">
-                        <span className="text-3xl md:text-4xl font-gilroy-bold text-black">
-                          {event.time}
-                        </span>
-                      </div>
-                      <h3 
-                        className="text-xl md:text-2xl font-gilroy-bold text-black italic h-20 mb-3"
-                      >
-                        {event.title}
-                      </h3>
-                      <p 
-                        className="text-[16px] font-gilroy-regular md:text-xl lg:text-xl text-black mt-4 mb-8"
-                      >
-                        {event.description}
-                      </p>
-                    </motion.div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          </div>
-        </section>
-      </section> */}
-      <section className="bg-white p-5">
-        <section className="py-4 md:py-8">
-          <div className="container mx-auto">
             <div className="max-w-7xl mx-auto">
-              {/* Header */}
               <div className="flex items-center justify-between mb-8">
                 <motion.div
                   ref={timelineTitleAnimation.ref}
@@ -500,19 +497,8 @@ const TribeSection = () => {
                     A Day at <span className="text-neutral-500">Fratvilla</span>
                   </motion.h2>
                 </motion.div>
-                
-                {/* <motion.button
-                  className="text-sm md:text-base font-gilroy-semibold text-neutral-700 flex items-center gap-2 hover:gap-3 transition-all"
-                  whileHover={{ x: 5 }}
-                >
-                  READ MORE
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </motion.button> */}
               </div>
 
-              {/* Cards Grid - 12 column system */}
               <motion.div 
                 layout
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6"
@@ -536,6 +522,93 @@ const TribeSection = () => {
             </div>
           </div>
         </section>
+      </section> */}
+      <section className='flex flex-col sm:flex-row items-center justify-center gap-6 max-w-9xl px-4 sm:mx-12 mb-48'>
+        <div className='w-full sm:w-3/4 h-full'>
+          {/* Image show with random rotate and skew effect */}
+          <div className={`relative flex items-center justify-center ${isMobile ? 'h-[400px]' : 'h-96'}`}>
+          {timelineImages.map((imgSrc, idx) => (
+            <motion.div
+                key={`card-${idx}-${isMobile}`}  // Force re-render on mobile change
+                className={`absolute ${isMobile ? 'h-64 w-44' : 'h-96 w-64'}`}
+                initial="rest"
+                animate="rest"  // ADD THIS LINE
+                whileHover="hover"
+                variants={timelineCardVariants}
+                custom={idx}
+              >
+              <Image
+                src={imgSrc}
+                alt={`Mountain ${idx}`}
+                fill
+                fetchPriority='low'
+                className={`w-full h-full object-cover rounded-2xl shadow-md border-2 border-white cursor-pointer`}
+              />
+            </motion.div>
+          ))}
+          </div>
+
+        </div>
+        <div className='w-full h-full flex flex-col items-center pt-32 sm:pt-20'>
+
+          <motion.div 
+            className="text-5xl md:text-6xl font-gilroy-semibold mb-6 text-neutral-500 tracking-tight sm:pl-32"
+            variants={journeyTitleAnimation.childVariants}
+          >
+            How You Spent <br />
+            <span className="text-neutral-700">A Day at Villa</span>
+          </motion.div>
+
+          <motion.div className='flex flex-col w-full pl-4 sm:w-1/2 sm:pl-20 sm:pt-20'>
+            {/* Time */}
+            <motion.div 
+              key={`time-${currentEventIndex}`}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={{ duration: 0.4, type: 'spring', stiffness: 300, damping: 35 }}
+              className="mb-4"
+            >
+              <span className="text-3xl md:text-4xl font-gilroy-bold text-neutral-700">
+                {timelineEvents[currentEventIndex].time}
+              </span>
+            </motion.div>
+
+            {/* Title */}
+            <motion.h2 
+              key={`title-${currentEventIndex}`}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={{ duration: 0.4, type: 'spring', stiffness: 100, damping: 15, delay: 0.1 }}
+              className="text-2xl md:text-3xl font-gilroy-semibold mb-6 text-neutral-900 tracking-tight"
+            >
+              {timelineEvents[currentEventIndex].title}
+            </motion.h2>
+
+            {/* Description */}
+            <motion.p 
+              key={`desc-${currentEventIndex}`}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={{ duration: 0.4, type: 'spring', stiffness: 100, damping: 15, delay: 0.2 }}
+              className="text-lg md:text-xl text-neutral-700 mb-8"
+            >
+              {timelineEvents[currentEventIndex].description}
+            </motion.p>
+
+            {/* Arrow Button */}
+            <motion.button
+              onClick={handleNextEvent}
+              className="flex items-center justify-center w-14 h-14 rounded-full bg-neutral-900 text-white shadow-lg hover:bg-neutral-800 transition-colors"
+              whileTap={{ scale: 0.95 }}
+            >
+              <ArrowRight className="w-6 h-6" />
+            </motion.button>
+          </motion.div>
+        </div>
+
       </section>
       
       {/* Tribe Section */}
