@@ -18,6 +18,7 @@ const PartnerPage = () => {
     const [socialLinks, setSocialLinks] = useState(['']);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [error, setError] = useState('');
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -49,10 +50,46 @@ const PartnerPage = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        setIsSubmitting(false);
-        setIsSubmitted(true);
+        setError('');
+
+        try {
+            const response = await fetch('/api/partner/apply', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    firstName: formData.firstName,
+                    lastName: formData.lastName,
+                    email: formData.email,
+                    contact: formData.contact,
+                    socialLinks: socialLinks,
+                    description: formData.description,
+                }),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                setIsSubmitted(true);
+                // Reset form
+                setFormData({
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    contact: '',
+                    description: '',
+                });
+                setSocialLinks(['']);
+            } else {
+                setError(result.error || 'Failed to submit application. Please try again.');
+            }
+        } catch (err) {
+            console.error('Error submitting application:', err);
+            setError('Network error. Please check your connection and try again.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -290,6 +327,16 @@ const PartnerPage = () => {
                                             </div>
                                         </div>
 
+                                        {error && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: -10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm font-gilroy-medium"
+                                            >
+                                                {error}
+                                            </motion.div>
+                                        )}
+
                                         <button
                                             disabled={isSubmitting}
                                             type="submit"
@@ -320,9 +367,9 @@ const PartnerPage = () => {
                                     <div className="w-24 h-24 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-8 border border-emerald-500/20">
                                         <CheckCircle2 className="w-12 h-12 text-emerald-500" />
                                     </div>
-                                    <h2 className="text-4xl font-gilroy-bold text-black mb-4">Application Sent!</h2>
+                                    <h2 className="text-4xl font-gilroy-bold text-black mb-4">Request Submitted!</h2>
                                     <p className="text-neutral-500 text-lg max-w-sm mx-auto mb-10">
-                                        Thank you for your interest in partnering with Quest. Our team will review your application and reach out to you within 48 hours.
+                                        Your partnership application has been received. We'll review it and notify you when your account is approved. Check your email for updates!
                                     </p>
                                     <button
                                         onClick={() => setIsSubmitted(false)}
