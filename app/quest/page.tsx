@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect } from 'react'
+import React, { useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation';
 import { getDeviceInfo, getIP, getLocation } from '@/utils/userInfo';
 import HeroSection from './homepage/components/HeroSection'
@@ -150,7 +150,8 @@ const pricingPlans: PricingPlan[] = [
   }
 ];
 
-function page() {
+// Separate component for affiliate tracking
+function AffiliateTracker() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -215,8 +216,16 @@ function page() {
     }
   }, [searchParams]);
 
+  return null;
+}
+
+function page() {
+
   return (
     <div className='force-scrolled-nav'>
+      <Suspense fallback={null}>
+        <AffiliateTracker />
+      </Suspense>
       <CustomCursor />
       <Navigation />
       <div className='bg-[#f7f7f7]'>
