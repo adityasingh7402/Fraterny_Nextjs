@@ -246,8 +246,8 @@ export default function AffiliatesPage() {
                   <span>{isSigningIn ? "Signing in..." : "Google Login"}</span>
                 </button>
                 <div className="absolute top-full left-0 right-0 pt-2 text-center pointer-events-none">
-                  <span className="text-xs text-neutral-400 font-gilroy-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                    Already have an account?
+                  <span className="text-xs text-neutral-400 font-gilroy-medium transition-opacity whitespace-nowrap">
+                    Already a partner?
                   </span>
                 </div>
               </div>
@@ -401,8 +401,8 @@ export default function AffiliatesPage() {
                   <span>{isSigningIn ? "Signing in..." : "Google Login"}</span>
                 </button>
                 <div className="absolute top-full left-0 right-0 pt-2 text-center pointer-events-none">
-                  <span className="text-xs text-neutral-400 font-gilroy-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                    Already have an account?
+                  <span className="text-xs text-neutral-400 font-gilroy-medium transition-opacity whitespace-nowrap">
+                    Already a partner?
                   </span>
                 </div>
               </div>

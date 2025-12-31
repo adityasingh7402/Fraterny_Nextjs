@@ -22,12 +22,19 @@ interface AddInfluencerPopupProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  initialData?: {
+    name?: string;
+    email?: string;
+    phone?: string;
+    bio?: string;
+    social_links?: any;
+  } | null;
 }
 
-const AddInfluencerPopup: React.FC<AddInfluencerPopupProps> = ({ isOpen, onClose, onSuccess }) => {
+const AddInfluencerPopup: React.FC<AddInfluencerPopupProps> = ({ isOpen, onClose, onSuccess, initialData }) => {
   const [loading, setLoading] = useState(false);
   const [imageUploading, setImageUploading] = useState(false);
-  
+
   // Form states
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -38,13 +45,52 @@ const AddInfluencerPopup: React.FC<AddInfluencerPopupProps> = ({ isOpen, onClose
   const [profileImage, setProfileImage] = useState('');
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [profileImagePreview, setProfileImagePreview] = useState('');
-  
+
   // Social links
   const [instagram, setInstagram] = useState('');
   const [twitter, setTwitter] = useState('');
   const [youtube, setYoutube] = useState('');
   const [linkedin, setLinkedin] = useState('');
-  
+
+  // Initialize with initialData when it changes or popup opens
+  React.useEffect(() => {
+    if (isOpen && initialData) {
+      setName(initialData.name || '');
+      setEmail(initialData.email || '');
+      setPhone(initialData.phone || '');
+      setBio(initialData.bio || '');
+
+      // Auto-generate code if name exists
+      if (initialData.name) {
+        const generatedCode = generateAffiliateCode(initialData.name);
+        setAffiliateCode(generatedCode);
+      }
+
+      if (initialData.social_links) {
+        // Handle array of strings or object
+        if (Array.isArray(initialData.social_links)) {
+          initialData.social_links.forEach((link: string) => {
+            if (link.includes('instagram')) setInstagram(link);
+            else if (link.includes('twitter') || link.includes('x.com')) setTwitter(link);
+            else if (link.includes('youtube')) setYoutube(link);
+            else if (link.includes('linkedin')) setLinkedin(link);
+          });
+        }
+      }
+    } else if (isOpen && !initialData) {
+      // Reset fields if opening fresh
+      setName('');
+      setEmail('');
+      setPhone('');
+      setAffiliateCode('');
+      setBio('');
+      setInstagram('');
+      setTwitter('');
+      setYoutube('');
+      setLinkedin('');
+    }
+  }, [isOpen, initialData]);
+
   // Payment info
   const [bankName, setBankName] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
@@ -87,7 +133,7 @@ const AddInfluencerPopup: React.FC<AddInfluencerPopupProps> = ({ isOpen, onClose
     }
 
     setProfileImageFile(file);
-    
+
     // Create preview
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -99,7 +145,7 @@ const AddInfluencerPopup: React.FC<AddInfluencerPopupProps> = ({ isOpen, onClose
   // Handle form submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validation
     if (!name.trim()) {
       toast.error('Name is required');
