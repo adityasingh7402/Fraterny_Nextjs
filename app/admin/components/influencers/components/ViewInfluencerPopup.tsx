@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { X, Edit2, Save, User, TrendingUp, MousePointer, DollarSign, Users, Upload, Plus, CheckCircle, XCircle, Clock, Tag, Trash2, AlertTriangle, Calendar } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase';
 
@@ -102,6 +103,10 @@ const ViewInfluencerPopup: React.FC<ViewInfluencerPopupProps> = ({ isOpen, influ
   const [transactionId, setTransactionId] = useState('');
   const [completionNote, setCompletionNote] = useState('Your payment is transferred successfully');
   const [failureReason, setFailureReason] = useState('');
+
+  // Delete Discount Confirm state
+  const [showDeleteDiscountPopup, setShowDeleteDiscountPopup] = useState(false);
+  const [discountToDelete, setDiscountToDelete] = useState<{ id: string; code: string } | null>(null);
 
   const [hasImageFailed, setHasImageFailed] = useState(false);
 
@@ -378,15 +383,22 @@ const ViewInfluencerPopup: React.FC<ViewInfluencerPopupProps> = ({ isOpen, influ
     }
   };
 
-  const handleDeleteDiscount = async (id: string, code: string) => {
-    if (!confirm(`Are you sure you want to delete code "${code}"?`)) return;
+  const handleDeleteDiscount = (id: string, code: string) => {
+    setDiscountToDelete({ id, code });
+    setShowDeleteDiscountPopup(true);
+  };
+
+  const confirmDeleteDiscount = async () => {
+    if (!discountToDelete) return;
 
     try {
-      const response = await fetch(`/api/admin/discounts?id=${id}`, { method: 'DELETE' });
+      const response = await fetch(`/api/admin/discounts?id=${discountToDelete.id}`, { method: 'DELETE' });
       const result = await response.json();
       if (result.success) {
         toast.success("Code deleted");
         fetchDiscounts();
+        setShowDeleteDiscountPopup(false);
+        setDiscountToDelete(null);
       } else {
         toast.error(result.error || "Failed to delete");
       }
@@ -692,7 +704,7 @@ const ViewInfluencerPopup: React.FC<ViewInfluencerPopupProps> = ({ isOpen, influ
                       onError={handleImageError}
                     />
                   ) : (
-                    <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500/5 to-purple-500/5 flex items-center justify-center border-4 border-white shadow-lg text-white font-bold text-4xl z-0">
+                    <div className="w-32 h-32 rounded-full bg-blue-500/5 to-purple-500/5 flex items-center justify-center border-4 border-white shadow-lg text-white font-bold text-4xl z-0">
                       {name.charAt(0).toUpperCase()}
                     </div>
                   )}
@@ -818,17 +830,17 @@ const ViewInfluencerPopup: React.FC<ViewInfluencerPopupProps> = ({ isOpen, influ
 
               {/* Earnings Cards */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="rounded-lg p-4 text-white" style={{ background: 'linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%)' }}>
+                <div className="bg-orange-500 rounded-lg p-4 text-white">
                   <p className="text-sm opacity-90 mb-1">Total Earnings</p>
                   <p className="text-3xl font-bold">{formatCurrency(influencer.total_earnings)}</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg p-4 text-white">
+                <div className="bg-yellow-500 rounded-lg p-4 text-white">
                   <p className="text-sm opacity-90 mb-1">Remaining Balance</p>
                   <p className="text-3xl font-bold">{formatCurrency(influencer.remaining_balance)}</p>
                 </div>
 
-                <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-4 text-white">
+                <div className="bg-blue-500 rounded-lg p-4 text-white">
                   <p className="text-sm opacity-90 mb-1">Total Paid</p>
                   <p className="text-3xl font-bold">{formatCurrency(influencer.total_paid)}</p>
                 </div>
@@ -1242,6 +1254,40 @@ const ViewInfluencerPopup: React.FC<ViewInfluencerPopupProps> = ({ isOpen, influ
               >
                 {processingPayout ? 'Creating...' : 'Create Payout'}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Discount Confirmation */}
+      {showDeleteDiscountPopup && discountToDelete && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-100">
+                <AlertTriangle className="h-6 w-6 text-red-600" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900">Delete Discount Code</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-4">
+              Are you sure you want to delete code <strong>{discountToDelete.code}</strong>? This action cannot be undone.
+            </p>
+            <div className="flex justify-end space-x-3">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setShowDeleteDiscountPopup(false);
+                  setDiscountToDelete(null);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={confirmDeleteDiscount}
+                className="bg-red-600 hover:bg-red-700"
+              >
+                Delete
+              </Button>
             </div>
           </div>
         </div>
