@@ -38,10 +38,10 @@ interface LogoProps {
 
 const Logo: React.FC<LogoProps> = ({ isPastHero, className = '' }) => {
   const pathname = usePathname();
-  const isQuestPage = pathname === '/quest';
-  
-  // Force inverted logo on quest page from the start
-  const shouldInvert = isQuestPage ? true : isPastHero;
+  const isSpecialPage = pathname === '/quest' || pathname === '/partner';
+
+  // Force inverted logo on special pages from the start
+  const shouldInvert = isSpecialPage ? true : isPastHero;
 
   return (
     <Link href="/" className={` ${className}`}>
