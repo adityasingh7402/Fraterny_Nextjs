@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Clock } from 'lucide-react';
+import { X, Check, ArrowRight, CheckCircle } from 'lucide-react';
 import { PaymentGateway } from '../utils/types';
 // import { PaymentGateway } from '../../../services/payments/unifiedPaymentService';
 
@@ -42,9 +42,11 @@ interface UpsellSheetProps {
   open: boolean;
   onClose: () => void;
   onPayment: (gateway: PaymentGateway) => Promise<void>;
-  // onPayment: (gateway: string) => Promise<void>;
   paymentLoading: boolean;
   pricing: DualGatewayPricingData;
+  onApplyCoupon?: (code: string) => Promise<{ success: boolean; message?: string }>;
+  couponApplied?: boolean;
+  onRemoveCoupon?: () => void;
 }
 
 // Utility function to format time
@@ -54,10 +56,26 @@ const formatTime = (s: number): string => {
   return `${m}:${r}`;
 };
 
-export const UpsellSheet: React.FC<UpsellSheetProps> = ({ open, onClose, onPayment, paymentLoading, pricing }) => {
+export const UpsellSheet: React.FC<UpsellSheetProps> = ({ open, onClose, onPayment, paymentLoading, pricing, onApplyCoupon, couponApplied, onRemoveCoupon }) => {
   const [trial, setTrial] = useState(true);
   const [selectedGateway, setSelectedGateway] = useState<PaymentGateway>('razorpay');
   const [seconds, setSeconds] = useState(30 * 60);
+  const [couponCode, setCouponCode] = useState('');
+  const [applyingCoupon, setApplyingCoupon] = useState(false);
+  const [couponMessage, setCouponMessage] = useState<string | null>(null);
+
+  const handleApplyCoupon = async () => {
+    if (!couponCode || !onApplyCoupon) return;
+    setApplyingCoupon(true);
+    setCouponMessage(null);
+    const result = await onApplyCoupon(couponCode);
+    setApplyingCoupon(false);
+    if (!result.success) {
+      setCouponMessage(result.message || 'Invalid code');
+    } else {
+      setCouponMessage(null);
+    }
+  };
 
   useEffect(() => {
     const t = setInterval(() => setSeconds((s) => (s > 0 ? s - 1 : 0)), 1000);
@@ -75,7 +93,7 @@ export const UpsellSheet: React.FC<UpsellSheetProps> = ({ open, onClose, onPayme
   return (
     <AnimatePresence>
       {open && (
-        <motion.div className="fixed inset-0 z-[70]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        <motion.div className="fixed inset-0 z-70" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           <div className="absolute inset-0 bg-black/35" onClick={onClose} />
           <motion.div
             className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-[390px] md:max-w-[500px] rounded-t-[28px] bg-white flex flex-col"
@@ -100,6 +118,7 @@ export const UpsellSheet: React.FC<UpsellSheetProps> = ({ open, onClose, onPayme
               >
                 <X className="h-5 w-5" color={tokens.textDark} />
               </button>
+              {/* Fixed: z-[70] to z-70 in parent div checked below, wait, I need to check line 78 */}
               <div className="pt-6 text-[26px] font-gilroy-regular leading-8" style={{ color: tokens.textDark }}>
                 Own your private <br /><span className="font-gilroy-black text-4xl"> Intelligence File </span>
               </div>
@@ -128,16 +147,78 @@ export const UpsellSheet: React.FC<UpsellSheetProps> = ({ open, onClose, onPayme
                 animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
                 transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
               >
-                <div className="text-[12px] opacity-95"><span>Ends in {formatTime(seconds)}</span></div>
+                <div className="flex justify-between items-start">
+                  <div className="text-[12px] opacity-95"><span>Ends in {formatTime(seconds)}</span></div>
+                  {couponApplied && (
+                    <span className="flex items-center gap-1 bg-white/20 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-medium text-white shadow-sm">
+                      <CheckCircle className="h-3 w-3 fill-white text-blue-500" />
+                      Discount Applied
+                    </span>
+                  )}
+                </div>
                 <div className="mt-1 flex items-baseline gap-2">
-                  <span className="text-[24px] font-gilroy-regular font-[400] text-white">
-                    {pricing.isLoading ? '...' : (selectedGateway === 'razorpay' ? pricing.razorpay.main : pricing.paypal.main)}
-                  </span>
-                  {/* <span className="text-[18px] font-gilroy-regular line-through text-gray-800">
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={pricing.isLoading ? 'loading' : (selectedGateway === 'razorpay' ? pricing.razorpay.main : pricing.paypal.main)}
+                      initial={{ y: -20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: 20, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="text-[40px] font-gilroy-bold text-white block leading-none"
+                    >
+                      {pricing.isLoading ? '...' : (selectedGateway === 'razorpay' ? pricing.razorpay.main : pricing.paypal.main)}
+                    </motion.span>
+                  </AnimatePresence>
+
+                  <span className="text-[20px] font-gilroy-regular line-through text-black/50">
                     {pricing.isLoading ? '...' : (selectedGateway === 'razorpay' ? pricing.razorpay.original : pricing.paypal.original)}
-                  </span> */}
+                  </span>
                 </div>
               </motion.div>
+
+              {/* Discount Code Section */}
+              <div className="mb-6">
+                <div className="text-[14px] font-gilroy-semibold mb-2" style={{ color: tokens.textDark }}>
+                  Have a discount code?
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value)}
+                    disabled={couponApplied || applyingCoupon}
+                    placeholder="Enter code"
+                    className="flex-1 px-3 py-2 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-blue-500 transition-colors uppercase"
+                    style={{ color: tokens.textDark }}
+                  />
+
+                  {couponApplied ? (
+                    <button
+                      onClick={() => {
+                        if (onRemoveCoupon) {
+                          onRemoveCoupon();
+                          setCouponCode('');
+                          setCouponMessage(null);
+                        }
+                      }}
+                      className="px-4 py-2 rounded-xl text-sm font-gilroy-bold transition-all bg-red-100 text-red-600 border border-red-200 hover:bg-red-200 flex items-center gap-2"
+                    >
+                      <span>Remove</span>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={handleApplyCoupon}
+                      disabled={applyingCoupon || !couponCode}
+                      className="px-4 py-2 rounded-xl text-sm font-gilroy-bold transition-all bg-gray-900 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {applyingCoupon ? '...' : 'Apply'}
+                    </button>
+                  )}
+                </div>
+                {couponMessage && (
+                  <p className="text-red-500 text-xs mt-1.5 ml-1 font-gilroy-medium">{couponMessage}</p>
+                )}
+              </div>
 
               {/* Payment Gateway Selection */}
               <div className="pb-4">

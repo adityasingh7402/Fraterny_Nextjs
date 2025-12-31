@@ -8,7 +8,7 @@ const NEXT_PUBLIC_BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://
 export async function createPaymentOrder(orderData: CreateOrderRequest): Promise<CreateOrderResponse> {
   try {
     console.log('📡 Creating payment order:', orderData);
-    
+
     const response = await axios.post(
       `${NEXT_PUBLIC_BACKEND_URL}/api/payments/create-order`,
       orderData,
@@ -30,12 +30,12 @@ export async function createPaymentOrder(orderData: CreateOrderRequest): Promise
     return response.data.data;
   } catch (error: any) {
     console.error('❌ Create order API error:', error);
-    
+
     if (error.response?.status === 422) {
       const details = error.response.data?.detail;
       throw new Error(`Validation error: ${JSON.stringify(details)}`);
     }
-    
+
     throw new Error(error.response?.data?.error || error.message || 'Failed to create payment order');
   }
 }
@@ -44,7 +44,7 @@ export async function createPaymentOrder(orderData: CreateOrderRequest): Promise
 export async function completePayment(paymentData: PaymentCompletionRequest): Promise<void> {
   try {
     console.log('📡 Completing payment:', paymentData);
-    
+
     const response = await axios.post(
       `${NEXT_PUBLIC_BACKEND_URL}/api/payments/complete`,
       paymentData,
@@ -82,30 +82,30 @@ export async function getUserLocationFlag(): Promise<boolean> {
 export async function getBothGatewayPricing(): Promise<UnifiedPricingData> {
   try {
     console.log('💰 Loading pricing for both payment gateways...');
-    
+
     // Call pricing API route
     const response = await axios.get('/api/admin/pricing/display');
     const pricingResult = response.data;
-    
+
     if (!pricingResult.success || !pricingResult.data) {
       throw new Error(pricingResult.error || 'Failed to get pricing data');
     }
-    
+
     console.log(`💰 Using ${pricingResult.source} pricing data`);
-    
+
     const isIndia = await getUserLocationFlag();
-    
+
     // Razorpay pricing
-    const razorpayAmountInCents = isIndia 
-      ? pricingResult.data.razorpay.india.price 
+    const razorpayAmountInCents = isIndia
+      ? pricingResult.data.razorpay.india.price
       : pricingResult.data.razorpay.international.price;
     const razorpayOriginalAmountInCents = isIndia
       ? pricingResult.data.razorpay.india.displayPrice
       : pricingResult.data.razorpay.international.displayPrice;
-    
+
     const razorpayAmount = Math.round(razorpayAmountInCents / 100);
     const razorpayOriginalAmount = Math.round(razorpayOriginalAmountInCents / 100);
-    
+
     // PayPal pricing (always USD)
     const paypalAmountInCents = isIndia
       ? pricingResult.data.paypal.india.price
@@ -113,10 +113,10 @@ export async function getBothGatewayPricing(): Promise<UnifiedPricingData> {
     const paypalOriginalAmountInCents = isIndia
       ? pricingResult.data.paypal.india.displayPrice
       : pricingResult.data.paypal.international.displayPrice;
-    
+
     const paypalAmountInDollars = (paypalAmountInCents / 100).toFixed(2);
     const paypalOriginalAmountInDollars = (paypalOriginalAmountInCents / 100).toFixed(2);
-    
+
     return {
       razorpay: {
         main: isIndia ? `₹${razorpayAmount}` : `$${razorpayAmount}`,
@@ -137,14 +137,14 @@ export async function getBothGatewayPricing(): Promise<UnifiedPricingData> {
     };
   } catch (error) {
     console.error('❌ Error loading gateway pricing:', error);
-    
+
     // Fallback pricing
     const isIndia = await getUserLocationFlag();
     const fallbackRazorpayAmount = isIndia ? 95000 : 2000;
     const fallbackRazorpayOriginal = isIndia ? 120000 : 2500;
     const fallbackPaypalAmount = isIndia ? 1200 : 2000;
     const fallbackPaypalOriginal = isIndia ? 1500 : 2500;
-    
+
     return {
       razorpay: {
         main: isIndia ? `₹${fallbackRazorpayAmount / 100}` : `$${fallbackRazorpayAmount / 100}`,
@@ -170,42 +170,50 @@ export async function getBothGatewayPricing(): Promise<UnifiedPricingData> {
 export function getOrCreateSessionStartTime(): string {
   const key = 'session_start_time';
   let startTime = sessionStorage.getItem(key);
-  
+
   if (startTime) {
     const sessionDate = new Date(startTime);
     const now = new Date();
     const ageMinutes = Math.floor((now.getTime() - sessionDate.getTime()) / (60 * 1000));
-    
+
     if (ageMinutes > 120) {
       sessionStorage.removeItem(key);
       startTime = null;
     }
   }
-  
+
   if (!startTime) {
     startTime = new Date().toISOString();
     sessionStorage.setItem(key, startTime);
   }
-  
+
   return startTime;
 }
 
 // Store payment context (for auth flow)
 // Uses localStorage to survive OAuth redirects
-export function storePaymentContext(sessionId: string, testId: string, gateway: 'razorpay' | 'paypal'): void {
+export function storePaymentContext(
+  sessionId: string,
+  testId: string,
+  gateway: 'razorpay' | 'paypal',
+  couponCode?: string,
+  discountedAmount?: number | string
+): void {
   const context = {
     originalSessionId: sessionId,
     testId,
     sessionStartTime: getOrCreateSessionStartTime(),
     returnUrl: window.location.href,
     timestamp: Date.now(),
-    selectedGateway: gateway
+    selectedGateway: gateway,
+    couponCode,
+    discountedAmount
   };
-  
+
   // Use localStorage instead of sessionStorage to survive OAuth redirects
   localStorage.setItem('payment_context', JSON.stringify(context));
   console.log('💾 Payment context stored in localStorage:', context);
-  
+
   // Also store session data in localStorage
   const sessionData = {
     sessionStartTime: context.sessionStartTime,
@@ -213,22 +221,28 @@ export function storePaymentContext(sessionId: string, testId: string, gateway: 
     testId,
     authenticationRequired: true
   };
-  
+
   localStorage.setItem('session_data', JSON.stringify(sessionData));
 }
 
 // Get stored payment context
-export function getPaymentContext(): { sessionId: string; testId: string; gateway: 'razorpay' | 'paypal' } | null {
+export function getPaymentContext(): {
+  sessionId: string;
+  testId: string;
+  gateway: 'razorpay' | 'paypal';
+  couponCode?: string;
+  discountedAmount?: number | string;
+} | null {
   try {
     const stored = localStorage.getItem('payment_context');
     if (!stored) {
       console.log('❌ No payment context found in localStorage');
       return null;
     }
-    
+
     const context = JSON.parse(stored);
     console.log('🔍 Found payment context in localStorage:', context);
-    
+
     // Validate context age (expire after 1 hour)
     const oneHour = 60 * 60 * 1000;
     if (Date.now() - context.timestamp > oneHour) {
@@ -236,11 +250,13 @@ export function getPaymentContext(): { sessionId: string; testId: string; gatewa
       clearPaymentContext();
       return null;
     }
-    
+
     return {
       sessionId: context.originalSessionId,
       testId: context.testId,
-      gateway: context.selectedGateway || 'razorpay'
+      gateway: context.selectedGateway || 'razorpay',
+      couponCode: context.couponCode,
+      discountedAmount: context.discountedAmount
     };
   } catch (error) {
     console.error('Failed to get payment context:', error);
@@ -280,7 +296,7 @@ export function getSessionData() {
 export function getSessionDuration(): number {
   const sessionData = getSessionData();
   if (!sessionData?.sessionStartTime) return 0;
-  
+
   const start = new Date(sessionData.sessionStartTime);
   const now = new Date();
   return Math.floor((now.getTime() - start.getTime()) / (60 * 1000));
