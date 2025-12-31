@@ -551,111 +551,118 @@ export default function AffiliateDashboard() {
                 </div>
 
                 <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="aff-card">
-                  <div className="aff-profile-header">
-                    <div className="aff-avatar">
-                      {editingProfile && profileImagePreview ? (
-                        <img
-                          src={getProfileImageUrl(profileImagePreview) || ''}
-                          alt="Profile"
-                        />
-                      ) : (
-                        influencer.profile_image ? (
-                          <img src={getProfileImageUrl(influencer.profile_image) || ''} alt="Profile" />
-                        ) : (
-                          <span>{influencer.name.charAt(0)}</span>
-                        )
-                      )}
-
-                      {editingProfile && (
-                        <label className="aff-avatar-upload">
-                          <Upload size={12} />
-                          <input type="file" accept="image/*" onChange={handleImageUpload} hidden />
-                        </label>
-                      )}
-                    </div>
-                    <div className="aff-profile-info">
-                      {editingProfile ? (
-                        <input
-                          type="text"
-                          value={editName}
-                          onChange={(e) => setEditName(e.target.value)}
-                          className="aff-input"
-                          placeholder="Your name"
-                        />
-                      ) : (
-                        <>
-                          <h3>{influencer.name}</h3>
-                          <p>{influencer.email}</p>
-                          <span>Commission Rate: {influencer.commission_rate}%</span>
-                        </>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="aff-form-grid">
-                    <div className="aff-field">
-                      <label>Email</label>
-                      <div className="aff-field-value">{influencer.email}</div>
-                    </div>
-                    <div className="aff-field">
-                      <label>Phone</label>
-                      <div className="aff-field-value">{influencer.phone || 'Not provided'}</div>
-                    </div>
-                  </div>
-
-                  <div className="aff-field">
-                    <label>Bio</label>
-                    {editingProfile ? (
-                      <textarea
-                        value={editBio}
-                        onChange={(e) => setEditBio(e.target.value)}
-                        className="aff-textarea"
-                        rows={3}
-                        placeholder="Tell us about yourself"
-                      />
-                    ) : (
-                      <div className="aff-field-value">{influencer.bio || 'No bio provided'}</div>
-                    )}
-                  </div>
-
-                  <div className="aff-section-title">Social Media Links</div>
-                  <div className="aff-form-grid">
-                    {['Instagram', 'Twitter', 'YouTube', 'LinkedIn'].map((platform) => {
-                      const key = platform.toLowerCase();
-                      const value = editingProfile
-                        ? (key === 'instagram' ? editInstagram : key === 'twitter' ? editTwitter : key === 'youtube' ? editYoutube : editLinkedin)
-                        : influencer.social_links?.[key as keyof typeof influencer.social_links];
-
-                      return (
-                        <div key={platform} className="aff-field">
-                          <label>{platform}</label>
-                          {editingProfile ? (
-                            <input
-                              type="url"
-                              value={value as string || ''}
-                              onChange={(e) => {
-                                if (key === 'instagram') setEditInstagram(e.target.value);
-                                else if (key === 'twitter') setEditTwitter(e.target.value);
-                                else if (key === 'youtube') setEditYoutube(e.target.value);
-                                else if (key === 'linkedin') setEditLinkedin(e.target.value);
-                              }}
-                              className="aff-input"
-                              placeholder={`https://${key}.com/username`}
+                  <div className="aff-profile-split-layout">
+                    {/* LEFT COLUMN: Basic Details */}
+                    <div className="aff-profile-left">
+                      <div className="aff-profile-header">
+                        <div className="aff-avatar">
+                          {editingProfile && profileImagePreview ? (
+                            <img
+                              src={getProfileImageUrl(profileImagePreview) || ''}
+                              alt="Profile"
                             />
                           ) : (
-                            <div className="aff-field-value">
-                              {value ? (
-                                <a href={value as string} target="_blank" rel="noopener noreferrer">
-                                  {value as string}
-                                </a>
-                              ) : (
-                                'Not provided'
-                              )}
-                            </div>
+                            influencer.profile_image ? (
+                              <img src={getProfileImageUrl(influencer.profile_image) || ''} alt="Profile" />
+                            ) : (
+                              <span>{influencer.name.charAt(0)}</span>
+                            )
+                          )}
+
+                          {editingProfile && (
+                            <label className="aff-avatar-upload">
+                              <Upload size={12} />
+                              <input type="file" accept="image/*" onChange={handleImageUpload} hidden />
+                            </label>
                           )}
                         </div>
-                      );
-                    })}
+                        <div className="aff-profile-info">
+                          {editingProfile ? (
+                            <input
+                              type="text"
+                              value={editName}
+                              onChange={(e) => setEditName(e.target.value)}
+                              className="aff-input"
+                              placeholder="Your name"
+                            />
+                          ) : (
+                            <>
+                              <h3>{influencer.name}</h3>
+                              <p>{influencer.email}</p>
+                              <span>Commission Rate: {influencer.commission_rate}%</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="aff-form-grid">
+                        <div className="aff-field">
+                          <label>Email</label>
+                          <div className="aff-field-value">{influencer.email}</div>
+                        </div>
+                        <div className="aff-field">
+                          <label>Phone</label>
+                          <div className="aff-field-value">{influencer.phone || 'Not provided'}</div>
+                        </div>
+                      </div>
+
+                      <div className="aff-field">
+                        <label>Bio</label>
+                        {editingProfile ? (
+                          <textarea
+                            value={editBio}
+                            onChange={(e) => setEditBio(e.target.value)}
+                            className="aff-textarea"
+                            rows={3}
+                            placeholder="Tell us about yourself"
+                          />
+                        ) : (
+                          <div className="aff-field-value">{influencer.bio || 'No bio provided'}</div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* RIGHT COLUMN: Social Media */}
+                    <div className="aff-profile-right">
+                      <div className="aff-form-grid" style={{ gridTemplateColumns: '1fr', gap: '16px' }}>
+                        {['Instagram', 'Twitter', 'YouTube', 'LinkedIn'].map((platform) => {
+                          const key = platform.toLowerCase();
+                          const value = editingProfile
+                            ? (key === 'instagram' ? editInstagram : key === 'twitter' ? editTwitter : key === 'youtube' ? editYoutube : editLinkedin)
+                            : influencer.social_links?.[key as keyof typeof influencer.social_links];
+
+                          return (
+                            <div key={platform} className="aff-field" style={{ marginBottom: 0 }}>
+                              <label>{platform}</label>
+                              {editingProfile ? (
+                                <input
+                                  type="url"
+                                  value={value as string || ''}
+                                  onChange={(e) => {
+                                    if (key === 'instagram') setEditInstagram(e.target.value);
+                                    else if (key === 'twitter') setEditTwitter(e.target.value);
+                                    else if (key === 'youtube') setEditYoutube(e.target.value);
+                                    else if (key === 'linkedin') setEditLinkedin(e.target.value);
+                                  }}
+                                  className="aff-input"
+                                  placeholder={`https://${key}.com/username`}
+                                />
+                              ) : (
+                                <div className="aff-field-value">
+                                  {value ? (
+                                    <a href={value as string} target="_blank" rel="noopener noreferrer">
+                                      {value as string}
+                                    </a>
+                                  ) : (
+                                    'Not provided'
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
                   </div>
 
                   {editingProfile && (

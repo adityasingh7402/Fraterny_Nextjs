@@ -535,6 +535,19 @@
     margin-bottom: 20px;
 }
 
+.aff-profile-split-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-bottom: 24px;
+}
+
+.aff-profile-left,
+.aff-profile-right {
+    display: flex;
+    flex-direction: column;
+}
+
 .aff-field {
     margin-bottom: 16px;
 }
@@ -981,6 +994,11 @@
 
     .aff-container {
         padding: 24px 16px;
+    }
+
+    .aff-profile-split-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
     }
 }
 

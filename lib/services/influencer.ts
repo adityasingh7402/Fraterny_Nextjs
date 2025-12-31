@@ -166,10 +166,10 @@ export async function getPerformanceData(affiliateCode: string): Promise<ApiResp
  */
 export function generateAffiliateLink(affiliateCode: string): string {
   if (typeof window === 'undefined') {
-    return `https://fraterny.com/quest/quest-mode?ref=${affiliateCode}`;
+    return `https://fraterny.com/quest?ref=${affiliateCode}`;
   }
   const baseUrl = window.location.origin;
-  return `${baseUrl}/quest/quest-mode?ref=${affiliateCode}`;
+  return `${baseUrl}/quest?ref=${affiliateCode}`;
 }
 
 /**
