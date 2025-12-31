@@ -18,7 +18,7 @@ const Navigation = () => {
   const pathname = usePathname();
 
   // Check if we're on special pages that need dark nav from start
-  const isSpecialPage = pathname === '/quest' || pathname === '/partner';
+  const isSpecialPage = pathname === '/quest' || pathname === '/partner' || pathname === '/affiliates';
   const isScrolled = isSpecialPage ? true : hookIsScrolled;
 
 
