@@ -171,9 +171,9 @@
 
 'use client'
 
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { init } from 'next/dist/compiled/webpack/webpack';
+import Image from 'next/image';
 
 const features = [
   {
@@ -196,9 +196,30 @@ const features = [
   }
 ];
 
+const timelineImages = [
+  'https://images.pexels.com/photos/35386131/pexels-photo-35386131.jpeg',
+  'https://images.pexels.com/photos/35361398/pexels-photo-35361398.jpeg',
+  'https://images.pexels.com/photos/35355333/pexels-photo-35355333.jpeg',
+  'https://images.pexels.com/photos/35372560/pexels-photo-35372560.jpeg',
+]
+
 const AboutFratVilla = () => {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  const [isMobile, setIsMobile] = useState(false);
+  
+    useEffect(() => {
+    const checkMobile = () => {
+      console.log('Checking mobile viewport', window.innerWidth);
+      
+      setIsMobile(window.innerWidth < 640); // 640px = sm breakpoint
+    };
+    
+    checkMobile(); // Check on mount
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Header animation variants
   const headerVariants = {
@@ -263,6 +284,40 @@ const AboutFratVilla = () => {
     }
   };
 
+  const timelineCardVariants = {
+  rest: (idx: number) => {
+    // Mobile positions - fan/hand effect
+    const mobilePositions = [
+      { left: 1, top: 0, rotate: -5 },
+      { left: 180, top: 20, rotate: 8 },
+      { left: 10, top: 200, rotate: -10 },
+      { left: 190, top: 230, rotate: 20 }
+    ];
+    
+    // Desktop positions - scattered effect
+    const desktopPositions = [
+      { left: 200, top: 40 },
+      { left: 420, top: 100 },
+      { left: 660, top: 20 },
+      { left: 860, top: 100 }
+    ];
+    
+    const positions = isMobile ? mobilePositions : desktopPositions;
+    
+    return {
+      left: `${positions[idx].left}px`,
+      top: `${positions[idx].top}px`,
+      // rotate: positions[idx].rotate,
+      opacity: 1,
+      transition: { duration: 0.3 }
+    };
+  },
+  hover: (idx: number) => ({
+    opacity: 1,
+    transition: { duration: 0.3 }
+  })
+}
+
     const cardRadius = 30; // --r value
     const innerCurveSize = 40; // --s value
   return (
@@ -271,7 +326,7 @@ const AboutFratVilla = () => {
         
         {/* Header Section */}
         <motion.div
-          className="text-center mb-10 md:mb-16"
+          className="text-left sm:text-center mb-10 md:mb-16"
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={headerVariants}
@@ -293,6 +348,33 @@ const AboutFratVilla = () => {
           </p> */}
         </motion.div>
 
+        <div className='w-full h-full mb-10 md:mb-16 '>
+                  {/* Image show with random rotate and skew effect */}
+          <div className={`relative flex items-center justify-center ${isMobile ? 'h-[400px]' : 'h-96'}`}>
+          {timelineImages.map((imgSrc, idx) => (
+            <motion.div
+                key={`card-${idx}-${isMobile}`}  // Force re-render on mobile change
+                className={`absolute ${isMobile ? 'h-64 w-44' : 'h-96 w-64'}`}
+                initial="rest"
+                animate="rest"  // ADD THIS LINE
+                whileHover="hover"
+                variants={timelineCardVariants}
+                custom={idx}
+              >
+              <Image
+                src={imgSrc}
+                alt={`Mountain ${idx}`}
+                fill
+                fetchPriority='low'
+                preload={true}
+                className={`w-full h-full object-cover rounded-2xl shadow-md border-2 border-white cursor-pointer`}
+              />
+            </motion.div>
+          ))}
+          </div>
+
+        </div>
+
         {/* Second Header */}
         {/* <motion.div
           className="text-center mb-10"
@@ -307,7 +389,7 @@ const AboutFratVilla = () => {
 
         {/* Cards Grid */}
         <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 sm:mt-36 mt-28"
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={containerVariants}

@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useSectionRevealAnimation } from './hooks/useSectionRevealAnimation';
 import { ArrowRight } from 'lucide-react';
 import { EnhancedParallaxScroll } from './ui/enhanced-parallax-scroll';
+import { AboutFratVilla } from './AboutFratVilla';
 
 const VillaLabSection = () => {
   // Section header animations
@@ -27,7 +28,7 @@ const VillaLabSection = () => {
       <div className="container mx-auto px-4 sm:px-6">
         
         {/* Section Header with scroll animations */}
-        <motion.div 
+        {/* <motion.div 
           className="mb-8 sm:mb-12"
           ref={headerAnimation.ref}
           variants={headerAnimation.parentVariants}
@@ -49,15 +50,17 @@ const VillaLabSection = () => {
             <span className="font-extrabold" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600 }}>Think</span> hard.{' '}
             <span className="font-extrabold" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600 }}>Vibe</span> harder.
           </motion.p>
-        </motion.div>
+        </motion.div> */}
 
         {/* Enhanced Parallax Gallery */}
-        <div className="mb-8 sm:mb-12">
+        {/* <div className="mb-8 sm:mb-12">
           <EnhancedParallaxScroll className="rounded-xl overflow-hidden shadow-lg border-black-4" />
-        </div>
+        </div> */}
+
+        <AboutFratVilla />
 
         {/* Instagram Link */}
-        <div className="mt-8 sm:mt-12 text-center sm:text-right">
+        {/* <div className="mt-8 sm:mt-12 text-center sm:text-right">
           <a 
             href="https://www.instagram.com/join.fraterny/?hl=en" 
             target="_blank" 
@@ -67,46 +70,8 @@ const VillaLabSection = () => {
             <span className="mr-2">see more</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </a>
-        </div>
+        </div> */}
 
-        {/* CTA Button with scroll trigger */}
-        {/* <motion.div 
-          className="flex justify-center mt-16"
-          ref={ctaAnimation.ref}
-          variants={ctaAnimation.parentVariants}
-          initial="hidden"
-          animate={ctaAnimation.controls}
-        >
-          <motion.div
-            variants={ctaAnimation.childVariants}
-          >
-            <Link 
-              to="https://docs.google.com/forms/d/1TTHQN3gG2ZtC26xlh0lU8HeiMc3qDJhfoU2tOh9qLQM/edit" 
-              className="px-6 py-3 bg-terracotta text-white rounded-lg transition-all duration-300 hover:bg-terracotta hover:scale-105 hover:shadow-lg inline-block group"
-            >
-              <motion.span
-                className="flex items-center gap-2"
-                whileHover={{ x: 5 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              >
-                Apply Now
-                <motion.svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="group-hover:translate-x-1 transition-transform"
-                >
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </motion.svg>
-              </motion.span>
-            </Link>
-          </motion.div>
-        </motion.div> */}
       </div>
     </section>
   );

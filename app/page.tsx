@@ -2,6 +2,7 @@ import dynamic from 'next/dynamic';
 import Navigation from './website-navigation/components/Navigation';
 import HeroSection from './home/HeroSection';
 import Footer from './website-navigation/components/Footer';
+import {AboutQuest} from '../app/home/Aboutquest'
 
 // Lazy load below-the-fold sections for better performance
 const NavalQuoteSection = dynamic(() => import('./home/NavalQuoteSection'), {
@@ -33,6 +34,7 @@ export default function Home() {
       <NavalQuoteSection />
       <VillaLabSection />
       <OurValuesSection />
+      <AboutQuest />
       <HowItWorksSection />
       <Footer />
     </div>
