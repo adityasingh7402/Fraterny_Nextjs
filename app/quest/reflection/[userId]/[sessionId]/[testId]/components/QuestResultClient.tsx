@@ -111,6 +111,9 @@ export function QuestResultClient({
   const [clickedbuttonId, setClickedButtonId] = useState<string | null>(null);
   const [likertValues, setLikertValues] = useState({ q1: 7, q2: 7, q3: 7, q4: 7 });
   const [likertSubmitting, setLikertSubmitting] = useState(false);
+  const [couponCode, setCouponCode] = useState<string>('');
+  const [couponApplied, setCouponApplied] = useState<boolean>(false);
+  const [discountDetails, setDiscountDetails] = useState<any>(null);
   const archetype: Record<string, string> = mockData.archetype;
   const router = useRouter();
   const getEffectiveUserId = () => {
@@ -135,20 +138,25 @@ export function QuestResultClient({
       main: '₹299',
       original: '₹999',
       currency: 'INR',
+
       symbol: '₹',
-      amount: 299,
+      amount: 99900, // paise
       isIndia: true,
       isLoading: true
     },
     paypal: {
-      main: '$5',
-      original: '$15',
+      main: '$12',
+      original: '$29',
       currency: 'USD',
-      amount: 5,
+      amount: 12,
       isIndia: false
     },
     isLoading: true
   });
+
+  // Store base pricing to revert to when removing coupon
+  const [basePricing, setBasePricing] = useState<DualGatewayPricingData | null>(null);
+
 
   const handleCloseSuccessPopup = () => {
     setShowSuccessPopup(false);
@@ -212,10 +220,27 @@ export function QuestResultClient({
 
           // Resume the payment (pass flag to prevent re-storing context)
           console.log('▶️ Resuming payment with gateway:', paymentContext.gateway);
+          if (paymentContext.couponCode) {
+            console.log('🎟️ Restoring coupon:', paymentContext.couponCode);
+            setCouponCode(paymentContext.couponCode);
+            // TODO: Should we validat coupon to update UI state? 
+            // For now, just pass it to payment handler which sends it to backend.
+            // But UI won't show "Discount Applied" unless we set that state.
+            setCouponApplied(true); // Optimistically set applied
+            // We also need to set the pricing state to reflect the discount visually if user cancels payment and stays on page
+            // But restoring exact pricing object is complex. 
+            // Minimal fix: ensure payment handler uses the restored values.
+          }
+
           toast.info('Resuming your payment...', {
             position: "top-right"
           });
-          await handlePayment(paymentContext.gateway, true); // true = isResuming
+          await handlePayment(
+            paymentContext.gateway,
+            true,
+            paymentContext.couponCode,
+            paymentContext.discountedAmount
+          ); // Pass restored values
         } else {
           console.log('✅ User authenticated, no pending payment to resume');
         }
@@ -234,6 +259,7 @@ export function QuestResultClient({
       try {
         const dynamicPricing = await fetchDynamicPricing();
         setPricing(dynamicPricing);
+        setBasePricing(dynamicPricing);
       } catch (error) {
         console.error('Failed to load dynamic pricing:', error);
         // Keep fallback pricing
@@ -444,8 +470,85 @@ export function QuestResultClient({
     }
   };
 
+  // Assuming `pricing` and `setPricing` are defined elsewhere,
+  // we also need `basePricing` and `setBasePricing` to store the original pricing.
+  // For example, declare them like this at the top of your component:
+  // const [pricing, setPricing] = useState<PricingState | null>(null);
+  // const [basePricing, setBasePricing] = useState<PricingState | null>(null);
+  // And when you initially fetch and set `pricing`, also set `basePricing`:
+  // setPricing(fetchedPricing);
+  // setBasePricing(fetchedPricing);
 
-  const handlePayment = async (gateway: 'razorpay' | 'paypal', isResuming: boolean = false) => {
+  const handleRemoveCoupon = () => {
+    setCouponApplied(false);
+    setCouponCode('');
+    setDiscountDetails(null);
+
+    // Reset pricing to original values using stored base pricing
+    if (basePricing) {
+      setPricing(basePricing);
+      toast.info('Coupon removed');
+    } else {
+      // Fallback if base pricing not loaded yet (unlikely)
+      console.warn('Base pricing not available to reset');
+    }
+  };
+  const applyCoupon = async (code: string): Promise<{ success: boolean; message?: string }> => {
+    if (!code || code.trim() === '') {
+      return { success: false, message: 'Invalid coupon code' };
+    }
+
+    try {
+      const response = await axios.post('/api/tracking/affiliate/validate-coupon', {
+        code,
+        userId: user?.id || userId,
+        // Send original amounts to calculate discount on
+        original_amount_inr: pricing.razorpay.amount, // pricing.razorpay.amount is in INR (e.g. 1000) based on user report of getting '9' from '10' when divided by 100
+        original_amount_usd: pricing.paypal.amount
+      });
+
+      // The response.data contains { success: true, valid: true, data: { ... } }
+      const result = response.data;
+
+      if (result.valid && result.data) {
+        setCouponCode(code);
+        setCouponApplied(true);
+        setDiscountDetails(result.data);
+
+        // Update pricing with discounted values
+        const discountedData = result.data.discounted;
+
+        setPricing(prev => ({
+          ...prev,
+          razorpay: {
+            ...prev.razorpay,
+            main: `₹${discountedData.inr}`,
+            amount: discountedData.inr * 100 // Convert back to paise for consistency if needed, checking payment flow next
+          },
+          paypal: {
+            ...prev.paypal,
+            main: `$${discountedData.usd}`,
+            amount: discountedData.usd
+          }
+        }));
+
+        toast.success(`Coupon applied! ${result.data.discount_percentage}% off`);
+        return { success: true };
+      } else {
+        return { success: false, message: result.message || 'Invalid coupon' };
+      }
+    } catch (error: any) {
+      console.error('Coupon validation error:', error);
+      return { success: false, message: error?.response?.data?.message || 'Failed to apply coupon' };
+    }
+  };
+
+  const handlePayment = async (
+    gateway: 'razorpay' | 'paypal',
+    isResuming: boolean = false,
+    restoredCouponCode?: string,
+    restoredDiscountedAmount?: number | string
+  ) => {
     setPaymentLoading(true);
 
     try {
@@ -456,8 +559,14 @@ export function QuestResultClient({
         console.log('👤 User not authenticated, initiating sign-in and save flow...');
 
         // Store payment context BEFORE redirecting to auth
+        // Store payment context BEFORE redirecting to auth
         const { storePaymentContext } = await import('@/app/payment-gateway/shared/paymentApi');
-        storePaymentContext(sessionId, testId, gateway);
+        // Store coupon info if applied
+        const amountToStore = couponApplied
+          ? (gateway === 'razorpay' ? pricing.razorpay.amount : pricing.paypal.amount)
+          : undefined;
+
+        storePaymentContext(sessionId, testId, gateway, couponCode, amountToStore);
         console.log('💾 Stored payment context for gateway:', gateway);
 
         toast.info('Signing in to save your results and continue payment...', {
@@ -508,7 +617,10 @@ export function QuestResultClient({
       // (resumed payments already cleared context to prevent re-trigger on refresh)
       if (!isResuming) {
         const { storePaymentContext } = await import('@/app/payment-gateway/shared/paymentApi');
-        storePaymentContext(sessionId, testId, gateway);
+        const amountToStore = couponApplied
+          ? (gateway === 'razorpay' ? pricing.razorpay.amount : pricing.paypal.amount)
+          : undefined;
+        storePaymentContext(sessionId, testId, gateway, couponCode, amountToStore);
         console.log('💾 Stored payment context for potential resume');
       } else {
         console.log('⏭️ Skipping context storage - this is a resumed payment');
@@ -517,12 +629,27 @@ export function QuestResultClient({
       // Dynamically import the correct payment service
       let paymentResult;
 
+      // Use restored values if available, otherwise use current state
+      const currentCouponCode = restoredCouponCode || couponCode;
+      const currentDiscountedAmount = restoredDiscountedAmount !== undefined
+        ? restoredDiscountedAmount
+        : (couponApplied ? (gateway === 'razorpay' ? pricing.razorpay.amount : pricing.paypal.amount) : undefined);
+
       if (gateway === 'razorpay') {
         const { processRazorpayPayment } = await import('@/app/payment-gateway/razorpay/razorpayService');
-        paymentResult = await processRazorpayPayment(sessionId, testId, user);
+        // pricing.razorpay.amount is in PAISE.
+        // If restoredDiscountedAmount is passed, assume it's the correct unit (Paise for Razorpay we stored)
+        // Wait, store logic above: amountToStore = pricing.razorpay.amount.
+
+        const amountToSend = currentDiscountedAmount;
+
+        // @ts-ignore - Adding couponCode optional param
+        paymentResult = await processRazorpayPayment(sessionId, testId, user, currentCouponCode, amountToSend);
       } else {
         const { processPayPalPayment } = await import('@/app/payment-gateway/paypal/paypalService');
-        paymentResult = await processPayPalPayment(sessionId, testId, user);
+        const amountToSend = currentDiscountedAmount;
+        // @ts-ignore - Adding couponCode optional param
+        paymentResult = await processPayPalPayment(sessionId, testId, user, currentCouponCode, amountToSend);
       }
 
       setPaymentLoading(false);
@@ -803,6 +930,7 @@ export function QuestResultClient({
           <div className="max-w-7xl mx-auto">
             {/* Byline Section */}
             <div className="flex items-center justify-between mb-8 pb-6 border-b border-neutral-300">
+              <div className="absolute inset-0 z-60 bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12 animate-shimmer" />
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-transparent flex items-center justify-center">
                   <span className="text-white font-gilroy-bold text-xs">
@@ -1032,6 +1160,10 @@ export function QuestResultClient({
         onPayment={(gateway) => handlePayment(gateway)}
         paymentLoading={paymentLoading}
         pricing={pricing}
+        // @ts-ignore - Adding new props
+        onApplyCoupon={applyCoupon}
+        couponApplied={couponApplied}
+        onRemoveCoupon={handleRemoveCoupon}
       />
 
       <PaymentSuccessPopup

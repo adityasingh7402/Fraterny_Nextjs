@@ -28,6 +28,7 @@ type SummaryGenerationPartial = Pick<
 type EnrichedTransaction = TransactionDetail & {
   user_data: UserData | null;
   summary_generation: SummaryGenerationPartial | null;
+  influencers: { id: string; name: string; affiliate_code: string } | null;
 };
 
 type PaymentFilters = {
@@ -65,7 +66,7 @@ export async function GET(request: NextRequest) {
 
     // Get filters
     const filters: PaymentFilters = {};
-    
+
     const searchTerm = searchParams.get('searchTerm');
     if (searchTerm) filters.searchTerm = searchTerm;
 
@@ -104,6 +105,11 @@ export async function GET(request: NextRequest) {
         `
         *,
         user_data (*),
+        influencers (
+          id,
+          name,
+          affiliate_code
+        ),
         summary_generation (
           testid,
           quest_pdf,

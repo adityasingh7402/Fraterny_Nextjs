@@ -1,8 +1,8 @@
 // PayPal payment gateway service
 import type { PaymentResult, CreateOrderRequest, PaymentCompletionRequest } from '../shared/types';
-import { 
-  createPaymentOrder, 
-  completePayment, 
+import {
+  createPaymentOrder,
+  completePayment,
   getUserLocationFlag,
   getOrCreateSessionStartTime,
   getSessionData,
@@ -105,7 +105,9 @@ async function loadPayPalSDK(): Promise<void> {
 async function createPayPalOrder(
   sessionId: string,
   testId: string,
-  user: any
+  user: any,
+  couponCode?: string,
+  discountedAmount?: number | string // Amount in Dollars
 ): Promise<any> {
   try {
     console.log('🌐 Creating PayPal order:', { sessionId, testId });
@@ -117,15 +119,25 @@ async function createPayPalOrder(
     const axios = (await import('axios')).default;
     const response = await axios.get('/api/admin/pricing/display');
     const pricingResult = response.data;
-    
+
     if (!pricingResult.success || !pricingResult.data) {
       throw new Error('Failed to get pricing data');
     }
 
     const isIndia = await getUserLocationFlag();
-    const amountInCents = isIndia
-      ? pricingResult.data.paypal.india.price
-      : pricingResult.data.paypal.international.price;
+    let amountInCents: number;
+
+    if (discountedAmount !== undefined) {
+      // Assuming discountedAmount is in Dollars (e.g. 18 or "18.00")
+      // We need to convert to Cents (1800)
+      const amountInDollars = typeof discountedAmount === 'string' ? parseFloat(discountedAmount) : discountedAmount;
+      amountInCents = Math.round(amountInDollars * 100);
+      console.log(`💲 Using discounted amount: $${amountInDollars} -> ${amountInCents} cents`);
+    } else {
+      amountInCents = isIndia
+        ? pricingResult.data.paypal.india.price
+        : pricingResult.data.paypal.international.price;
+    }
 
     // Validate email
     const email = user.email;
@@ -152,11 +164,12 @@ async function createPayPalOrder(
         isIndia: false,
         location: 'INTL',
       },
+      couponCode,
     };
 
     console.log('📡 Calling create-order API for PayPal...');
     const orderResponse = await createPaymentOrder(orderRequest);
-    
+
     console.log('✅ PayPal order created:', orderResponse);
     return orderResponse;
   } catch (error) {
@@ -180,7 +193,7 @@ async function openPayPalPayment(
       // Create a container for PayPal buttons
       const containerId = 'paypal-button-container';
       let container = document.getElementById(containerId);
-      
+
       if (!container) {
         container = document.createElement('div');
         container.id = containerId;
@@ -234,11 +247,11 @@ async function openPayPalPayment(
             shape: 'pill',
             label: 'pay',
           },
-          
+
           // Create order dynamically
           createOrder: (data: any, actions: any) => {
             console.log('🎯 Creating PayPal order dynamically');
-            
+
             googleAnalytics.trackPaymentModalOpened({
               session_id: sessionId,
               order_id: 'paypal_order_creating',
@@ -265,7 +278,7 @@ async function openPayPalPayment(
           // Handle approval
           onApprove: async (data: any, actions: any) => {
             console.log('✅ PayPal payment approved:', data);
-            
+
             try {
               // Capture the payment
               const orderDetails: PayPalOrderData = await actions.order.capture();
@@ -283,7 +296,7 @@ async function openPayPalPayment(
               });
 
               cleanup();
-              
+
               resolve({
                 success: true,
                 paymentData: {
@@ -297,7 +310,7 @@ async function openPayPalPayment(
 
             } catch (captureError) {
               console.error('❌ PayPal capture/completion error:', captureError);
-              
+
               googleAnalytics.trackPaymentFailed({
                 session_id: sessionId,
                 failure_reason: 'PayPal capture/completion failed',
@@ -306,7 +319,7 @@ async function openPayPalPayment(
               });
 
               cleanup();
-              
+
               resolve({
                 success: false,
                 error: 'Failed to complete PayPal payment. Please contact support.',
@@ -317,7 +330,7 @@ async function openPayPalPayment(
           // Handle errors
           onError: (err: any) => {
             console.error('❌ PayPal payment error:', err);
-            
+
             googleAnalytics.trackPaymentFailed({
               session_id: sessionId,
               failure_reason: 'PayPal payment error',
@@ -326,7 +339,7 @@ async function openPayPalPayment(
             });
 
             cleanup();
-            
+
             resolve({
               success: false,
               error: 'PayPal payment failed. Please try again.',
@@ -336,7 +349,7 @@ async function openPayPalPayment(
           // Handle cancellation
           onCancel: (data: any) => {
             console.log('⚠️ PayPal payment cancelled:', data);
-            
+
             googleAnalytics.trackPaymentCancelled({
               session_id: sessionId,
               cancel_reason: 'user_cancelled_paypal',
@@ -344,7 +357,7 @@ async function openPayPalPayment(
             });
 
             cleanup();
-            
+
             resolve({
               success: false,
               error: 'Payment cancelled by user',
@@ -462,7 +475,7 @@ async function completePayPalPayment(
 
     // Track analytics (COMMENTED OUT)
     const { googleAnalytics } = await import('../../../lib/services/googleAnalytics');
-    
+
     googleAnalytics.trackPaymentCompleted({
       session_id: sessionId,
       payment_id: paypalOrderData.id,
@@ -503,7 +516,9 @@ async function completePayPalPayment(
 export async function processPayPalPayment(
   sessionId: string,
   testId: string,
-  user: any
+  user: any,
+  couponCode?: string,
+  discountedAmount?: number | string // Add this parameter
 ): Promise<PaymentResult> {
   try {
     console.log('🚀 Starting PayPal payment flow:', { sessionId, testId });
@@ -512,7 +527,7 @@ export async function processPayPalPayment(
     await loadPayPalSDK();
 
     // Step 2: Create order via backend
-    const orderData = await createPayPalOrder(sessionId, testId, user);
+    const orderData = await createPayPalOrder(sessionId, testId, user, couponCode, discountedAmount);
 
     // Step 3: Open PayPal payment UI
     const paymentResult = await openPayPalPayment(sessionId, testId, orderData);
@@ -520,7 +535,7 @@ export async function processPayPalPayment(
     return paymentResult;
   } catch (error: any) {
     console.error('❌ PayPal payment flow failed:', error);
-    
+
     const errorMessage = error?.message || 'Unknown PayPal error';
     let userFriendlyMessage: string;
 

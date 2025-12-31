@@ -41,6 +41,11 @@ type EnrichedTransaction = {
     total_summary_generation?: number | null;
     total_paid_generation?: number | null;
   } | null;
+  influencers?: {
+    id: string;
+    name: string;
+    affiliate_code: string;
+  } | null;
   summary_generation?: {
     testid?: string | null;
     quest_pdf?: string | null;
@@ -506,6 +511,9 @@ const AdminQuestPayment: React.FC = () => {
                   Amount
                 </th>
                 <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  Referral
+                </th>
+                <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                   Gateway
                 </th>
                 <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
@@ -535,6 +543,9 @@ const AdminQuestPayment: React.FC = () => {
                     </td>
                     <td className="py-4 px-4">
                       <div className="h-4 bg-gray-200 rounded w-16"></div>
+                    </td>
+                    <td className="py-4 px-4">
+                      <div className="h-4 bg-gray-200 rounded w-20"></div>
                     </td>
                     <td className="py-4 px-4">
                       <div className="h-4 bg-gray-200 rounded w-20"></div>
@@ -661,21 +672,31 @@ const AdminQuestPayment: React.FC = () => {
                           {formatCurrency(transaction.total_paid, transaction.gateway, transaction.IsIndia)}
                         </td>
                         <td className="py-4 px-4 text-sm text-gray-600">
+                          {transaction.influencers ? (
+                            <div>
+                              <div className="font-medium text-blue-600">{transaction.influencers.name}</div>
+                              <div className="text-xs font-mono text-gray-500">{transaction.influencers.affiliate_code}</div>
+                            </div>
+                          ) : (
+                            <span className="text-xs text-gray-400">Direct</span>
+                          )}
+                        </td>
+                        <td className="py-4 px-4 text-sm text-gray-600">
                           <span className={`px-2 py-1 text-xs rounded-full ${transaction.gateway === 'Razorpay'
-                              ? 'bg-blue-100 text-blue-800'
-                              : transaction.gateway === 'paypal'
-                                ? 'bg-purple-100 text-purple-800'
-                                : 'bg-gray-100 text-gray-800'
+                            ? 'bg-blue-100 text-blue-800'
+                            : transaction.gateway === 'paypal'
+                              ? 'bg-purple-100 text-purple-800'
+                              : 'bg-gray-100 text-gray-800'
                             }`}>
                             {transaction.gateway === 'Razorpay' ? 'Razorpay' : transaction.gateway === 'paypal' ? 'PayPal' : 'Other'}
                           </span>
                         </td>
                         <td className="py-4 px-4 text-sm text-gray-600">
                           <span className={`px-2 py-1 text-xs rounded-full ${transaction.IsIndia === true
-                              ? 'bg-green-100 text-green-800'
-                              : transaction.IsIndia === false
-                                ? 'bg-orange-100 text-orange-800'
-                                : 'bg-gray-100 text-gray-800'
+                            ? 'bg-green-100 text-green-800'
+                            : transaction.IsIndia === false
+                              ? 'bg-orange-100 text-orange-800'
+                              : 'bg-gray-100 text-gray-800'
                             }`}>
                             {transaction.IsIndia === true ? 'India' : transaction.IsIndia === false ? 'International' : 'Unknown'}
                           </span>
@@ -748,8 +769,8 @@ const AdminQuestPayment: React.FC = () => {
                     key={i + 1}
                     onClick={() => handlePageChange(i + 1)}
                     className={`flex items-center justify-center rounded-lg h-9 w-9 text-sm font-medium ${currentPage === i + 1
-                        ? 'bg-blue-600 text-white'
-                        : 'border border-gray-300 text-gray-600 hover:bg-gray-100'
+                      ? 'bg-blue-600 text-white'
+                      : 'border border-gray-300 text-gray-600 hover:bg-gray-100'
                       }`}
                   >
                     {i + 1}
@@ -761,8 +782,8 @@ const AdminQuestPayment: React.FC = () => {
                   <button
                     onClick={() => handlePageChange(1)}
                     className={`flex items-center justify-center rounded-lg h-9 w-9 text-sm font-medium ${currentPage === 1
-                        ? 'bg-blue-600 text-white'
-                        : 'border border-gray-300 text-gray-600 hover:bg-gray-100'
+                      ? 'bg-blue-600 text-white'
+                      : 'border border-gray-300 text-gray-600 hover:bg-gray-100'
                       }`}
                   >
                     1
@@ -780,8 +801,8 @@ const AdminQuestPayment: React.FC = () => {
                           key={pageNum}
                           onClick={() => handlePageChange(pageNum)}
                           className={`flex items-center justify-center rounded-lg h-9 w-9 text-sm font-medium ${currentPage === pageNum
-                              ? 'bg-blue-600 text-white'
-                              : 'border border-gray-300 text-gray-600 hover:bg-gray-100'
+                            ? 'bg-blue-600 text-white'
+                            : 'border border-gray-300 text-gray-600 hover:bg-gray-100'
                             }`}
                         >
                           {pageNum}
@@ -799,8 +820,8 @@ const AdminQuestPayment: React.FC = () => {
                     <button
                       onClick={() => handlePageChange(pagination.totalPages)}
                       className={`flex items-center justify-center rounded-lg h-9 w-9 text-sm font-medium ${currentPage === pagination.totalPages
-                          ? 'bg-blue-600 text-white'
-                          : 'border border-gray-300 text-gray-600 hover:bg-gray-100'
+                        ? 'bg-blue-600 text-white'
+                        : 'border border-gray-300 text-gray-600 hover:bg-gray-100'
                         }`}
                     >
                       {pagination.totalPages}
@@ -852,7 +873,7 @@ const AdminQuestPayment: React.FC = () => {
 
             <div className="p-6 space-y-6">
               {/* Transaction Overview */}
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4">
+              <div className="bg-linear-to-r from-blue-50 to-indigo-50 rounded-lg p-4">
                 <h4 className="text-lg font-semibold text-gray-900 mb-3">Transaction Overview</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   <div>
@@ -953,16 +974,16 @@ const AdminQuestPayment: React.FC = () => {
                   <div>
                     <p className="text-sm font-medium text-gray-600">Status</p>
                     <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-xs font-medium ${selectedTransactionDetails.status === 'success'
-                        ? 'bg-green-100 text-green-800'
-                        : selectedTransactionDetails.status === 'Start'
-                          ? 'bg-orange-100 text-orange-800'
-                          : 'bg-red-100 text-red-800'
+                      ? 'bg-green-100 text-green-800'
+                      : selectedTransactionDetails.status === 'Start'
+                        ? 'bg-orange-100 text-orange-800'
+                        : 'bg-red-100 text-red-800'
                       }`}>
                       <span className={`w-1.5 h-1.5 rounded-full ${selectedTransactionDetails.status === 'success'
-                          ? 'bg-green-600'
-                          : selectedTransactionDetails.status === 'Start'
-                            ? 'bg-orange-600'
-                            : 'bg-red-600'
+                        ? 'bg-green-600'
+                        : selectedTransactionDetails.status === 'Start'
+                          ? 'bg-orange-600'
+                          : 'bg-red-600'
                         }`}></span>
                       {selectedTransactionDetails.status === 'success' ? 'Success' : selectedTransactionDetails.status === 'Start' ? 'Attempted' : 'Disputed'}
                     </span>
@@ -986,13 +1007,20 @@ const AdminQuestPayment: React.FC = () => {
                     <p className="text-sm font-medium text-gray-600">Coupon</p>
                     <p className="text-sm text-gray-900">{selectedTransactionDetails.coupon || 'None'}</p>
                   </div>
+                  {selectedTransactionDetails.influencers && (
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Referral</p>
+                      <p className="text-sm font-bold text-blue-600">{selectedTransactionDetails.influencers.name}</p>
+                      <p className="text-xs font-mono text-gray-500">{selectedTransactionDetails.influencers.affiliate_code}</p>
+                    </div>
+                  )}
                   <div>
                     <p className="text-sm font-medium text-gray-600">Gateway</p>
                     <span className={`px-2 py-1 text-xs rounded-full font-medium ${selectedTransactionDetails.gateway === 'Razorpay'
-                        ? 'bg-blue-100 text-blue-800'
-                        : selectedTransactionDetails.gateway === 'paypal'
-                          ? 'bg-purple-100 text-purple-800'
-                          : 'bg-gray-100 text-gray-800'
+                      ? 'bg-blue-100 text-blue-800'
+                      : selectedTransactionDetails.gateway === 'paypal'
+                        ? 'bg-purple-100 text-purple-800'
+                        : 'bg-gray-100 text-gray-800'
                       }`}>
                       {selectedTransactionDetails.gateway === 'Razorpay' ? 'Razorpay' : selectedTransactionDetails.gateway === 'paypal' ? 'PayPal' : 'Other'}
                     </span>
@@ -1000,8 +1028,8 @@ const AdminQuestPayment: React.FC = () => {
                   <div>
                     <p className="text-sm font-medium text-gray-600">Location</p>
                     <span className={`px-2 py-1 text-xs rounded-full font-medium ${selectedTransactionDetails.IsIndia === true
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-orange-100 text-orange-800'
+                      ? 'bg-green-100 text-green-800'
+                      : 'bg-orange-100 text-orange-800'
                       }`}>
                       {selectedTransactionDetails.IsIndia ? 'India' : 'International'}
                     </span>

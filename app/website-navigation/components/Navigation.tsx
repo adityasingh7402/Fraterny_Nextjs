@@ -17,10 +17,10 @@ const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
 
-  // Check if we're on the quest page
-  const isQuestPage = pathname === '/quest';
-  const isScrolled = isQuestPage ? true : hookIsScrolled;
-  
+  // Check if we're on special pages that need dark nav from start
+  const isSpecialPage = pathname === '/quest' || pathname === '/partner' || pathname === '/affiliates';
+  const isScrolled = isSpecialPage ? true : hookIsScrolled;
+
 
 
   const iconColor = useMemo(() => isScrolled ? '#0A1A2F' : '#FFFFFF', [isScrolled]);
@@ -108,7 +108,7 @@ const Navigation = () => {
   }
 
   // Determine if navbar should be visible
-  const shouldShowNav = isQuestPage ? (isScrolled || isInBlackSection) : true;
+  const shouldShowNav = isSpecialPage ? (isScrolled || isInBlackSection) : true;
 
   return (
     <motion.nav

@@ -1,8 +1,8 @@
 // Razorpay payment gateway service
 import type { PaymentResult, CreateOrderRequest, PaymentCompletionRequest } from '../shared/types';
-import { 
-  createPaymentOrder, 
-  completePayment, 
+import {
+  createPaymentOrder,
+  completePayment,
   getUserLocationFlag,
   getOrCreateSessionStartTime,
   getSessionData,
@@ -69,7 +69,9 @@ async function loadRazorpaySDK(): Promise<void> {
 async function createRazorpayOrder(
   sessionId: string,
   testId: string,
-  user: any
+  user: any,
+  couponCode?: string,
+  discountedAmount?: number // Add this to accept the calculated amount from frontend
 ): Promise<any> {
   try {
     console.log('📱 Creating Razorpay order:', { sessionId, testId });
@@ -81,15 +83,24 @@ async function createRazorpayOrder(
     const axios = (await import('axios')).default;
     const response = await axios.get('/api/admin/pricing/display');
     const pricingResult = response.data;
-    
+
     if (!pricingResult.success || !pricingResult.data) {
       throw new Error('Failed to get pricing data');
     }
 
     const isIndia = await getUserLocationFlag();
-    const amount = isIndia
-      ? pricingResult.data.razorpay.india.price
-      : pricingResult.data.razorpay.international.price;
+
+    // Use discountedAmount if provided, otherwise fetch standard pricing
+    let amount: number;
+
+    if (discountedAmount !== undefined) {
+      amount = discountedAmount;
+    } else {
+      amount = isIndia
+        ? pricingResult.data.razorpay.india.price
+        : pricingResult.data.razorpay.international.price;
+    }
+
     const currency = isIndia ? 'INR' : 'USD';
 
     // Validate email
@@ -117,11 +128,12 @@ async function createRazorpayOrder(
         isIndia,
         location: isIndia ? 'IN' : 'INTL',
       },
+      couponCode,
     };
 
     console.log('📡 Calling create-order API for Razorpay...');
     const orderResponse = await createPaymentOrder(orderRequest);
-    
+
     console.log('✅ Razorpay order created:', orderResponse);
     return orderResponse;
   } catch (error) {
@@ -148,7 +160,7 @@ async function openRazorpayModal(
           order_id: orderData.razorpayOrderId,
           handler: (response: RazorpayResponse) => {
             console.log('✅ Payment successful:', response);
-            
+
             // Track payment success (COMMENTED OUT)
             googleAnalytics.trackPaymentSuccess({
               session_id: orderData.paymentSessionId,
@@ -156,7 +168,7 @@ async function openRazorpayModal(
               order_id: response.razorpay_order_id,
               amount: orderData.amount
             });
-            
+
             resolve({
               success: true,
               paymentData: response,
@@ -172,14 +184,14 @@ async function openRazorpayModal(
           modal: {
             ondismiss: () => {
               console.log('⚠️ Payment modal dismissed by user');
-              
+
               // Track payment cancellation (COMMENTED OUT)
               googleAnalytics.trackPaymentCancelled({
                 session_id: orderData.paymentSessionId,
                 cancel_reason: 'user_dismissed',
                 amount: orderData.amount
               });
-              
+
               resolve({
                 success: false,
                 error: 'Payment cancelled by user',
@@ -204,7 +216,7 @@ async function openRazorpayModal(
         // Handle payment failure
         rzp.on('payment.failed', (response: any) => {
           console.error('❌ Payment failed:', response);
-          
+
           // Track payment failure (COMMENTED OUT)
           googleAnalytics.trackPaymentFailed({
             session_id: orderData.paymentSessionId,
@@ -212,7 +224,7 @@ async function openRazorpayModal(
             error_code: response.error?.code || 'unknown',
             amount: orderData.amount
           });
-          
+
           resolve({
             success: false,
             error: response.error?.description || 'Payment failed',
@@ -304,7 +316,7 @@ async function completeRazorpayPayment(
 
     // Track completion analytics (COMMENTED OUT)
     const { googleAnalytics } = await import('../../../lib/services/googleAnalytics');
-    
+
     googleAnalytics.trackPaymentCompleted({
       session_id: sessionData.originalSessionId,
       payment_id: paymentData.razorpay_payment_id,
@@ -327,7 +339,9 @@ async function completeRazorpayPayment(
 export async function processRazorpayPayment(
   sessionId: string,
   testId: string,
-  user: any
+  user: any,
+  couponCode?: string,
+  discountedAmount?: number // Add this parameter
 ): Promise<PaymentResult> {
   try {
     console.log('🚀 Starting Razorpay payment flow:', { sessionId, testId });
@@ -336,7 +350,7 @@ export async function processRazorpayPayment(
     await loadRazorpaySDK();
 
     // Step 2: Create order via backend
-    const orderData = await createRazorpayOrder(sessionId, testId, user);
+    const orderData = await createRazorpayOrder(sessionId, testId, user, couponCode, discountedAmount);
 
     // Step 3: Get user info
     const userInfo = {
@@ -360,7 +374,7 @@ export async function processRazorpayPayment(
     return paymentResult;
   } catch (error: any) {
     console.error('❌ Razorpay payment flow failed:', error);
-    
+
     const errorMessage = error?.message || 'Unknown Razorpay error';
     let userFriendlyMessage: string;
 

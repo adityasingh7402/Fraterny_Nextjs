@@ -40,6 +40,7 @@ export interface CreateOrderRequest {
   gateway: PaymentGateway;
   sessionStartTime: string;
   isIndia: boolean;
+  couponCode?: string;
   metadata: {
     userAgent: string;
     timestamp: string;
