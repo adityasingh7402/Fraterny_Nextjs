@@ -285,7 +285,7 @@ const PartnerPage = () => {
                                                     onChange={handleInputChange}
                                                     rows={4}
                                                     placeholder="Tell us what impresses you about Quest and how you can add value..."
-                                                    className="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-12 py-4 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all resize-none font-gilroy-medium"
+                                                    className="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-12 py-3 focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-all resize-none font-gilroy-medium"
                                                 />
                                             </div>
                                         </div>
