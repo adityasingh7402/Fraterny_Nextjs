@@ -179,6 +179,45 @@ const Footer = () => {
             >
               Shared Ambitions
             </motion.p>
+
+            <motion.div 
+              className="flex space-x-4 mb-4"
+            >
+              {/* Instagram */}
+              <motion.a 
+                href="https://www.instagram.com/join.fraterny/?hl=en" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="p-2 rounded-lg transition-colors shadow-md hover:shadow-lg" 
+                style={{
+                  background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)'
+                }}
+              >
+                <Instagram size={20} color="white" />
+              </motion.a>
+
+              {/* X/Twitter */}
+              <motion.a 
+                href="https://x.com/frat_erny" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="bg-black p-2 rounded-lg transition-colors flex items-center justify-center shadow-md hover:shadow-lg" 
+                style={{
+                  width: '36px',
+                  height: '36px'
+                }}
+              >
+                <img src="/lovable-uploads/61ec65a3-b814-47bf-95c0-67d3091504ad.png" alt="X Logo" className="w-5 h-5" />
+              </motion.a>
+
+              {/* Email */}
+              <motion.a 
+                href="mailto:support@fraterny.com?subject=User%20Query" 
+                className="bg-cyan-500 hover:bg-cyan-600 p-2 rounded-lg transition-colors shadow-md hover:shadow-lg"
+              >
+                <Mail size={20} color="white" />
+              </motion.a>
+            </motion.div>
           </motion.div>
 
           {/* Navigation Section */}
@@ -210,8 +249,8 @@ const Footer = () => {
             >
               {[
                 { href: "/experience", text: "FratVilla" },
-                { href: "/quest/quest-mode", text: "Quest" },
-                { href: "/process", text: "Process" },
+                { href: "/quest", text: "Quest" },
+                // { href: "/process", text: "Process" },
                 { href: "/faq", text: "FAQ" }
               ].map((link, index) => (
                 <motion.li key={link.href} variants={linkVariants}>
@@ -234,30 +273,15 @@ const Footer = () => {
           >
             <motion.h3 
               className="text-lg font-gilroy-bold mb-4"
-              // initial={{ opacity: 0, y: 20 }}
-              // animate={{ 
-              //   opacity: footerAnimation.isInView ? 1 : 0,
-              //   y: footerAnimation.isInView ? 0 : 20
-              // }}
-              // transition={{ delay: 0.3, duration: 0.5 }}
             >
-              Connect
+              Policies
             </motion.h3>
             
             {/* Social Media Icons */}
-            <motion.div 
+            {/* <motion.div 
               className="flex space-x-4 mb-4"
-              // variants={{
-              //   visible: {
-              //     transition: {
-              //       staggerChildren: 0.1
-              //     }
-              //   }
-              // }}
-              // initial="hidden"
-              // animate={footerAnimation.isInView ? "visible" : "hidden"}
             >
-              {/* Instagram */}
+              
               <motion.a 
                 href="https://www.instagram.com/join.fraterny/?hl=en" 
                 target="_blank" 
@@ -266,14 +290,11 @@ const Footer = () => {
                 style={{
                   background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)'
                 }}
-                // variants={socialButtonVariants}
-                // whileHover="hover"
-                // whileTap="tap"
               >
                 <Instagram size={20} color="white" />
               </motion.a>
 
-              {/* X/Twitter */}
+              
               <motion.a 
                 href="https://x.com/frat_erny" 
                 target="_blank" 
@@ -283,37 +304,22 @@ const Footer = () => {
                   width: '36px',
                   height: '36px'
                 }}
-                // variants={socialButtonVariants}
-                // whileHover="hover"
-                // whileTap="tap"
               >
                 <img src="/lovable-uploads/61ec65a3-b814-47bf-95c0-67d3091504ad.png" alt="X Logo" className="w-5 h-5" />
               </motion.a>
 
-              {/* Email */}
+              
               <motion.a 
                 href="mailto:support@fraterny.com?subject=User%20Query" 
                 className="bg-cyan-500 hover:bg-cyan-600 p-2 rounded-lg transition-colors shadow-md hover:shadow-lg"
-                // variants={socialButtonVariants}
-                // whileHover="hover"
-                // whileTap="tap"
               >
                 <Mail size={20} color="white" />
               </motion.a>
-            </motion.div>
+            </motion.div> */}
             
             {/* Legal Links */}
             <motion.ul 
               className="space-y-2"
-              // variants={{
-              //   visible: {
-              //     transition: {
-              //       staggerChildren: 0.08
-              //     }
-              //   }
-              // }}
-              // initial="hidden"
-              // animate={footerAnimation.isInView ? "visible" : "hidden"}
             >
               {[
                 { to: "/terms-and-conditions", text: "Terms and Conditions" },
@@ -339,19 +345,43 @@ const Footer = () => {
 
           {/* CTA Section */}
           <motion.div 
-            className="flex flex-col items-start"
+            className="flex flex-col items-start gap-2"
             // variants={footerAnimation.childVariants}
           >
             <motion.a 
-              href="/quest/begin" 
+              href="/quest" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="px-8 py-3 bg-white text-cyan-700 rounded-lg hover:bg-opacity-90 transition-colors font-gilroy-bold shadow-md hover:shadow-lg"
+              className="px-8 py-3 bg-neutral-600 text-neutral-200 rounded-lg hover:bg-opacity-90 transition-colors font-gilroy-bold shadow-md hover:shadow-lg"
               whileTap="tap"
               initial="hidden"
               animate={footerAnimation.isInView ? "visible" : "hidden"}
             >
               Start Quest
+            </motion.a>
+
+            <motion.a 
+              href="/experience" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="px-8 py-3 bg-neutral-600 text-neutral-200 rounded-lg hover:bg-opacity-90 transition-colors font-gilroy-bold shadow-md hover:shadow-lg"
+              whileTap="tap"
+              initial="hidden"
+              animate={footerAnimation.isInView ? "visible" : "hidden"}
+            >
+              Explore our Villa
+            </motion.a>
+
+            <motion.a 
+              href="/affiliates" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="px-8 py-3 bg-neutral-600 text-neutral-200 rounded-lg hover:bg-opacity-90 transition-colors font-gilroy-bold shadow-md hover:shadow-lg"
+              whileTap="tap"
+              initial="hidden"
+              animate={footerAnimation.isInView ? "visible" : "hidden"}
+            >
+              Partner with Us
             </motion.a>
           </motion.div>
         </motion.div>
