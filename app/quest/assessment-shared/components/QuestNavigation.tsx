@@ -130,7 +130,7 @@ export function QuestNavigation({
     const completionTime = new Date().toISOString();
     const startTimeValue = startTime || new Date().toISOString();
     const durationMinutes = (new Date().getTime() - new Date(startTimeValue).getTime()) / (1000 * 60);
-     
+
 
     const responses = allQuestions?.map((question, index) => {
       const response = workingSession?.responses?.[question.id];
@@ -229,14 +229,19 @@ export function QuestNavigation({
     // Get referred_by from localStorage
     const referredBy = localStorage.getItem('referred_by') || null;
 
-    // Get development mode from localStorage
+    // DEBUG: Check what devMode is actually read as
     const devMode = localStorage.getItem('quest_dev_mode') || null;
+    console.log('🔍 [SUBMISSION-DEBUG] Read quest_dev_mode from localStorage:', devMode);
+
+    // Explicitly check for skip_agent
+    const finalMode = devMode === 'skip_agent' ? 'development' : undefined;
+    console.log('🔍 [SUBMISSION-DEBUG] Calculated final mode:', finalMode);
 
     return {
       response: responses,
       user_data: userData,
       referred_by: referredBy,
-      mode: devMode === 'skip_agent' || devMode === 'skip_input' ? 'development' : undefined,
+      mode: finalMode,
       assessment_metadata: {
         session_id: workingSession?.id || '',
         start_time: startTime,
@@ -482,48 +487,48 @@ export function QuestNavigation({
       };
 
 
-const getAnonymousModeFromDOM = (): boolean => {
-  const allToggles = document.querySelectorAll('[data-anonymous-mode]');
-  
-  console.log('ðŸ” [ANON-READ] Found total toggles:', allToggles.length);
-  
-  if (allToggles.length === 0) {
-    return false;
-  }
-  
-  // If only 1 toggle, use it (mobile case)
-  if (allToggles.length === 1) {
-    const isAnonymous = allToggles[0].getAttribute('data-anonymous-mode') === 'true';
-    console.log('ðŸ” [ANON-READ] Single toggle found:', {
-      dataAttribute: allToggles[0].getAttribute('data-anonymous-mode'),
-      result: isAnonymous
-    });
-    return isAnonymous;
-  }
-  
-  // If 2+ toggles, find the VISIBLE one (desktop case)
-  let visibleToggle: HTMLElement | null = null;
-  allToggles.forEach((toggle, index) => {
-    const toggleElement = toggle as HTMLElement;
-    const isVisible = toggleElement.offsetParent !== null;
-    console.log(`ðŸ” [ANON-READ] Toggle #${index}: visible=${isVisible}, data=${toggleElement.getAttribute('data-anonymous-mode')}`);
-    if (isVisible) {
-      visibleToggle = toggleElement;
-    }
-  });
-  
-  // log here visibleToggle result
-  console.log('ðŸ” [ANON-READ] Visible toggle selected:', visibleToggle);
+      const getAnonymousModeFromDOM = (): boolean => {
+        const allToggles = document.querySelectorAll('[data-anonymous-mode]');
 
-  
-  const isAnonymous = visibleToggle ? (visibleToggle as any).getAttribute('data-anonymous-mode') === 'true' : false;
-  console.log('ðŸ” [ANON-READ] Selected visible toggle:', {
-    found: !!visibleToggle,
-    result: isAnonymous
-  });
-  
-  return isAnonymous;
-};
+        console.log('ðŸ” [ANON-READ] Found total toggles:', allToggles.length);
+
+        if (allToggles.length === 0) {
+          return false;
+        }
+
+        // If only 1 toggle, use it (mobile case)
+        if (allToggles.length === 1) {
+          const isAnonymous = allToggles[0].getAttribute('data-anonymous-mode') === 'true';
+          console.log('ðŸ” [ANON-READ] Single toggle found:', {
+            dataAttribute: allToggles[0].getAttribute('data-anonymous-mode'),
+            result: isAnonymous
+          });
+          return isAnonymous;
+        }
+
+        // If 2+ toggles, find the VISIBLE one (desktop case)
+        let visibleToggle: HTMLElement | null = null;
+        allToggles.forEach((toggle, index) => {
+          const toggleElement = toggle as HTMLElement;
+          const isVisible = toggleElement.offsetParent !== null;
+          console.log(`ðŸ” [ANON-READ] Toggle #${index}: visible=${isVisible}, data=${toggleElement.getAttribute('data-anonymous-mode')}`);
+          if (isVisible) {
+            visibleToggle = toggleElement;
+          }
+        });
+
+        // log here visibleToggle result
+        console.log('ðŸ” [ANON-READ] Visible toggle selected:', visibleToggle);
+
+
+        const isAnonymous = visibleToggle ? (visibleToggle as any).getAttribute('data-anonymous-mode') === 'true' : false;
+        console.log('ðŸ” [ANON-READ] Selected visible toggle:', {
+          found: !!visibleToggle,
+          result: isAnonymous
+        });
+
+        return isAnonymous;
+      };
 
       if (currentQuestion.type === 'text_input') {
         //const currentTextarea = document.querySelector('textarea');
@@ -538,7 +543,7 @@ const getAnonymousModeFromDOM = (): boolean => {
           });
         });
 
-        
+
         if (currentTextarea) {
           const selectedTags = getSelectedTagsFromQuestionCard();
 
@@ -583,9 +588,9 @@ const getAnonymousModeFromDOM = (): boolean => {
                 isAnonymous: false
               });
               console.log('ðŸ”¥ [NAV-DEBUG] About to call submitResponse');
-                console.log('ðŸ”¥ [NAV-DEBUG] Question:', currentQuestion.id);
-                console.log('ðŸ”¥ [NAV-DEBUG] Response being saved:', textOnlyResponse);
-                console.log('ðŸ”¥ [NAV-DEBUG] IsAnonymousMode from DOM:', isAnonymousMode);
+              console.log('ðŸ”¥ [NAV-DEBUG] Question:', currentQuestion.id);
+              console.log('ðŸ”¥ [NAV-DEBUG] Response being saved:', textOnlyResponse);
+              console.log('ðŸ”¥ [NAV-DEBUG] IsAnonymousMode from DOM:', isAnonymousMode);
               submitResponse(currentQuestion.id, textOnlyResponse, selectedTags);
             }
           } else if (currentQuestion.enableCityAutocomplete) {
@@ -613,15 +618,15 @@ const getAnonymousModeFromDOM = (): boolean => {
         const currentSelect = document.querySelector('select') as HTMLSelectElement;
         console.log('ðŸ” [DEBUG-DROPDOWN] Select element found:', currentSelect);
         console.log('ðŸ” [DEBUG-DROPDOWN] Selected value:', currentSelect?.value);
-        
+
         if (currentSelect && currentSelect.value) {
           const dropdownValue = currentSelect.value;
           console.log('ðŸ’¾ Saving dropdown value:', dropdownValue);
-          
+
           const selectedTags = getSelectedTagsFromQuestionCard();
           submitResponse(currentQuestion.id, dropdownValue, selectedTags);
         }
-      } 
+      }
       else if (currentQuestion.type === 'multiple_choice') {
         // Handle multiple choice questions
         const selectedRadio = document.querySelector(`input[name="question-${currentQuestion.id}"]:checked`) as HTMLInputElement;
@@ -644,7 +649,7 @@ const getAnonymousModeFromDOM = (): boolean => {
         if (rankingContainer) {
           //const explanationTextarea = rankingContainer.querySelector('textarea');
           const explanationTextarea = Array.from(document.querySelectorAll('textarea'))
-  .find(ta => ta.placeholder === 'Write one sentence explaining why...' && ta.offsetParent !== null);
+            .find(ta => ta.placeholder === 'Write one sentence explaining why...' && ta.offsetParent !== null);
           const explanation = explanationTextarea ? explanationTextarea.value.trim() : '';
 
           // Get existing response (which has the ranking order from drag events)
@@ -895,47 +900,47 @@ const getAnonymousModeFromDOM = (): boolean => {
 
 
       const getAnonymousModeFromDOM = (): boolean => {
-  const allToggles = document.querySelectorAll('[data-anonymous-mode]');
-  
-  console.log('ðŸ” [ANON-READ] Found total toggles:', allToggles.length);
-  
-  if (allToggles.length === 0) {
-    return false;
-  }
-  
-  // If only 1 toggle, use it (mobile case)
-  if (allToggles.length === 1) {
-    const isAnonymous = allToggles[0].getAttribute('data-anonymous-mode') === 'true';
-    console.log('ðŸ” [ANON-READ] Single toggle found:', {
-      dataAttribute: allToggles[0].getAttribute('data-anonymous-mode'),
-      result: isAnonymous
-    });
-    return isAnonymous;
-  }
-  
-  // If 2+ toggles, find the VISIBLE one (desktop case)
-  let visibleToggle: HTMLElement | null = null;
-  allToggles.forEach((toggle, index) => {
-    const toggleElement = toggle as HTMLElement;
-    const isVisible = toggleElement.offsetParent !== null;
-    console.log(`ðŸ” [ANON-READ] Toggle #${index}: visible=${isVisible}, data=${toggleElement.getAttribute('data-anonymous-mode')}`);
-    if (isVisible) {
-      visibleToggle = toggleElement;
-    }
-  });
-  
-  // log here visibleToggle result
-  console.log('ðŸ” [ANON-READ] Visible toggle selected:', visibleToggle);
+        const allToggles = document.querySelectorAll('[data-anonymous-mode]');
 
-  
-  const isAnonymous = visibleToggle ? (visibleToggle as any).getAttribute('data-anonymous-mode') === 'true' : false;
-  console.log('ðŸ” [ANON-READ] Selected visible toggle:', {
-    found: !!visibleToggle,
-    result: isAnonymous
-  });
-  
-  return isAnonymous;
-};
+        console.log('ðŸ” [ANON-READ] Found total toggles:', allToggles.length);
+
+        if (allToggles.length === 0) {
+          return false;
+        }
+
+        // If only 1 toggle, use it (mobile case)
+        if (allToggles.length === 1) {
+          const isAnonymous = allToggles[0].getAttribute('data-anonymous-mode') === 'true';
+          console.log('ðŸ” [ANON-READ] Single toggle found:', {
+            dataAttribute: allToggles[0].getAttribute('data-anonymous-mode'),
+            result: isAnonymous
+          });
+          return isAnonymous;
+        }
+
+        // If 2+ toggles, find the VISIBLE one (desktop case)
+        let visibleToggle: HTMLElement | null = null;
+        allToggles.forEach((toggle, index) => {
+          const toggleElement = toggle as HTMLElement;
+          const isVisible = toggleElement.offsetParent !== null;
+          console.log(`ðŸ” [ANON-READ] Toggle #${index}: visible=${isVisible}, data=${toggleElement.getAttribute('data-anonymous-mode')}`);
+          if (isVisible) {
+            visibleToggle = toggleElement;
+          }
+        });
+
+        // log here visibleToggle result
+        console.log('ðŸ” [ANON-READ] Visible toggle selected:', visibleToggle);
+
+
+        const isAnonymous = visibleToggle ? (visibleToggle as any).getAttribute('data-anonymous-mode') === 'true' : false;
+        console.log('ðŸ” [ANON-READ] Selected visible toggle:', {
+          found: !!visibleToggle,
+          result: isAnonymous
+        });
+
+        return isAnonymous;
+      };
 
       // Save current response before going back (copy from handleNext)
       if (currentQuestion.type === 'text_input') {

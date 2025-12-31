@@ -71,6 +71,7 @@ export function QuestIntro({
     // Handle development mode
     if (skipAgent || skipInput) {
       const mode = skipAgent ? 'skip_agent' : 'skip_input';
+      console.log('🔍 [INTRO-DEBUG] Saving dev mode:', mode);
       saveDevMode(mode);
 
       if (skipInput) {
