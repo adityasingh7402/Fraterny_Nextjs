@@ -390,7 +390,7 @@ export const AboutQuest = ({ className }: AboutQuestProps) => {
             </p>
             <div className="mb-8">
                 <Link href="/quest">
-                    <button className='px-7 py-3 bg-neutral-800 hover:bg-neutral-900 shadow-3xl transition-colors duration-200 text-white rounded-md font-gilroy-semibold tracking-tighter sm:text-2xl'>Start Your Quest</button>
+                    <button className='px-7 py-3 bg-neutral-800 hover:bg-neutral-900 shadow-3xl transition-colors duration-200 text-white rounded-md font-gilroy-semibold tracking-tighter sm:text-2xl'>Enter Quest Mode</button>
                 </Link>
             </div>
           </motion.div>
