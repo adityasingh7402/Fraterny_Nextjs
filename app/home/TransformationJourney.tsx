@@ -168,7 +168,7 @@ const TransformationJourney = () => {
               transition={{ duration: 0.8 }}
               className="text-sm md:text-base tracking-[0.2em] uppercase font-gilroy-regular text-[#D4C5A3] opacity-80 mb-4"
             >
-              FRATERNY LAB
+              FRATERNY...
             </motion.h1>
             <motion.span
               initial={{ opacity: 0, y: 30 }}
@@ -206,9 +206,7 @@ const TransformationJourney = () => {
               <span className='text-neutral-100 italic font-gilroy-regular'>Transform</span> Your Life?
             </p>
             <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="mt-8 px-8 py-4 bg-neutral-600 text-neutral-100 border border-neutral-200 rounded-full font-gilroy-medium text-lg tracking-tighter"
+              className="mt-8  font-gilroy-medium text-3xl tracking-tighter"
             >
               Begin Your Journey
               <CircleArrowDown className="ml-2 inline-block" />
