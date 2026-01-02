@@ -108,6 +108,9 @@ const AdminSummaryManagement: React.FC = () => {
   const [showBulkDeletePopup, setShowBulkDeletePopup] = useState(false);
   const [bulkDeleting, setBulkDeleting] = useState(false);
 
+  // PDF Generation state
+  const [generatingPdf, setGeneratingPdf] = useState(false);
+
   // Fetch summary statistics
   const fetchSummaryStats = async () => {
     try {
@@ -407,6 +410,68 @@ const AdminSummaryManagement: React.FC = () => {
     }
   };
 
+  // Generate PDF function
+  const generatePdf = async () => {
+    if (!selectedSummaryDetails) return;
+
+    setGeneratingPdf(true);
+    try {
+      const payload = {
+        user_id: selectedSummaryDetails.user_id,
+        test_id: selectedSummaryDetails.testid
+      };
+
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_TEST_URL;
+
+      if (!backendUrl) {
+        toast.error('Configuration Error', {
+          description: 'Backend URL is not configured (NEXT_PUBLIC_BACKEND_TEST_URL)'
+        });
+        setGeneratingPdf(false);
+        return;
+      }
+
+      const url = `${backendUrl}/api/pdf-generate/`;
+
+      console.log('🚀 Generating PDF with:', { url, payload });
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      // Try to parse JSON response, but handle if it's not JSON
+      let result;
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.indexOf("application/json") !== -1) {
+        result = await response.json();
+      } else {
+        result = { message: await response.text() };
+      }
+
+      if (response.ok) {
+        toast.success('PDF Generation Initiated', {
+          description: 'The request has been sent to the backend.'
+        });
+      } else {
+        toast.error('Failed to Generate PDF', {
+          description: result.error || result.message || 'Unknown error occurred'
+        });
+      }
+
+    } catch (error: any) {
+      console.error('PDF Generation error:', error);
+      toast.error('Error', {
+        description: error.message || 'An unexpected error occurred'
+      });
+    } finally {
+      setGeneratingPdf(false);
+    }
+  };
+
   // Clear selected summaries when page changes
   const clearSelections = () => {
     setSelectedSummaryIds([]);
@@ -542,8 +607,8 @@ const AdminSummaryManagement: React.FC = () => {
         {/* Total Summaries Card */}
         <div
           className={`flex flex-col gap-2 rounded-xl p-6 border cursor-pointer transition-all duration-200 ${!hasActiveFilters()
-              ? 'border-blue-400 bg-blue-50 shadow-md'
-              : 'border-gray-200 bg-white hover:bg-blue-50 hover:border-blue-300 hover:shadow-sm'
+            ? 'border-blue-400 bg-blue-50 shadow-md'
+            : 'border-gray-200 bg-white hover:bg-blue-50 hover:border-blue-300 hover:shadow-sm'
             }`}
           onClick={() => {
             // Clear all filters to show total summaries
@@ -568,8 +633,8 @@ const AdminSummaryManagement: React.FC = () => {
         {/* Paid Summaries Card */}
         <div
           className={`flex flex-col gap-2 rounded-xl p-6 border cursor-pointer transition-all duration-200 ${paymentStatus === 'success'
-              ? 'border-green-400 bg-green-50 shadow-md transform scale-105'
-              : 'border-gray-200 bg-white hover:bg-green-50 hover:border-green-300 hover:shadow-sm'
+            ? 'border-green-400 bg-green-50 shadow-md transform scale-105'
+            : 'border-gray-200 bg-white hover:bg-green-50 hover:border-green-300 hover:shadow-sm'
             }`}
           onClick={() => {
             // Toggle paid summaries filter (preserve other filters)
@@ -607,8 +672,8 @@ const AdminSummaryManagement: React.FC = () => {
         {/* Completed Summaries Card */}
         <div
           className={`flex flex-col gap-2 rounded-xl p-6 border cursor-pointer transition-all duration-200 ${status === 'Complete'
-              ? 'border-orange-400 bg-orange-50 shadow-md transform scale-105'
-              : 'border-gray-200 bg-white hover:bg-orange-50 hover:border-orange-300 hover:shadow-sm'
+            ? 'border-orange-400 bg-orange-50 shadow-md transform scale-105'
+            : 'border-gray-200 bg-white hover:bg-orange-50 hover:border-orange-300 hover:shadow-sm'
             }`}
           onClick={() => {
             // Toggle completed summaries filter (preserve other filters)
@@ -646,8 +711,8 @@ const AdminSummaryManagement: React.FC = () => {
         {/* Failed Payments Card */}
         <div
           className={`flex flex-col gap-2 rounded-xl p-6 border cursor-pointer transition-all duration-200 ${paymentStatus === 'ERROR'
-              ? 'border-red-400 bg-red-50 shadow-md transform scale-105'
-              : 'border-gray-200 bg-white hover:bg-red-50 hover:border-red-300 hover:shadow-sm'
+            ? 'border-red-400 bg-red-50 shadow-md transform scale-105'
+            : 'border-gray-200 bg-white hover:bg-red-50 hover:border-red-300 hover:shadow-sm'
             }`}
           onClick={() => {
             // Toggle failed payments filter (preserve other filters)
@@ -685,8 +750,8 @@ const AdminSummaryManagement: React.FC = () => {
         {/* Average Quality Score Card */}
         <div
           className={`flex flex-col gap-2 rounded-xl p-6 border cursor-pointer transition-all duration-200 ${minQualityScore === 70
-              ? 'border-purple-400 bg-purple-50 shadow-md transform scale-105'
-              : 'border-gray-200 bg-white hover:bg-purple-50 hover:border-purple-300 hover:shadow-sm'
+            ? 'border-purple-400 bg-purple-50 shadow-md transform scale-105'
+            : 'border-gray-200 bg-white hover:bg-purple-50 hover:border-purple-300 hover:shadow-sm'
             }`}
           onClick={() => {
             // Toggle high quality filter (70+)
@@ -983,13 +1048,13 @@ const AdminSummaryManagement: React.FC = () => {
                         {/* Payment Status */}
                         <td className="py-4 px-4">
                           <span className={`px-2 py-1 text-xs rounded-full ${summary.payment_status === 'success' || summary.payment_status === 'completed' ? 'bg-green-100 text-green-800' :
-                              summary.payment_status === 'Start' ? 'bg-yellow-100 text-yellow-800' :
-                                summary.payment_status === null || summary.payment_status === 'NULL' ? 'bg-gray-100 text-gray-800' :
-                                  (summary.payment_status && (
-                                    summary.payment_status.toLowerCase().includes('failed') ||
-                                    summary.payment_status.toLowerCase().includes('error')
-                                  )) ? 'bg-red-100 text-red-800' :
-                                    'bg-gray-100 text-gray-800'
+                            summary.payment_status === 'Start' ? 'bg-yellow-100 text-yellow-800' :
+                              summary.payment_status === null || summary.payment_status === 'NULL' ? 'bg-gray-100 text-gray-800' :
+                                (summary.payment_status && (
+                                  summary.payment_status.toLowerCase().includes('failed') ||
+                                  summary.payment_status.toLowerCase().includes('error')
+                                )) ? 'bg-red-100 text-red-800' :
+                                  'bg-gray-100 text-gray-800'
                             }`}>
                             {summary.payment_status || 'NULL'}
                           </span>
@@ -998,8 +1063,8 @@ const AdminSummaryManagement: React.FC = () => {
                         {/* Status */}
                         <td className="py-4 px-4">
                           <span className={`px-2 py-1 text-xs rounded-full ${summary.status === 'Complete' || summary.status === 'completed' ? 'bg-blue-100 text-blue-800' :
-                              summary.status === 'Failed' ? 'bg-red-100 text-red-800' :
-                                'bg-gray-100 text-gray-800'
+                            summary.status === 'Failed' ? 'bg-red-100 text-red-800' :
+                              'bg-gray-100 text-gray-800'
                             }`}>
                             {summary.status || 'N/A'}
                           </span>
@@ -1009,9 +1074,9 @@ const AdminSummaryManagement: React.FC = () => {
                         <td className="py-4 px-4">
                           {summary.qualityscore ? (
                             <span className={`px-2 py-1 text-xs rounded-full font-semibold ${parseInt(summary.qualityscore) >= 80 ? 'bg-green-100 text-green-800' :
-                                parseInt(summary.qualityscore) >= 60 ? 'bg-yellow-100 text-yellow-800' :
-                                  parseInt(summary.qualityscore) >= 40 ? 'bg-orange-100 text-orange-800' :
-                                    'bg-red-100 text-red-800'
+                              parseInt(summary.qualityscore) >= 60 ? 'bg-yellow-100 text-yellow-800' :
+                                parseInt(summary.qualityscore) >= 40 ? 'bg-orange-100 text-orange-800' :
+                                  'bg-red-100 text-red-800'
                               }`}>
                               {summary.qualityscore}
                             </span>
@@ -1385,8 +1450,33 @@ const AdminSummaryManagement: React.FC = () => {
               )}
             </div>
 
-            <div className="sticky bottom-0 bg-white border-t border-gray-200 p-6">
-              <button onClick={closeDetailsPopup} className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 cursor-pointer">Close</button>
+            <div className="sticky bottom-0 bg-white border-t border-gray-200 p-6 flex justify-end gap-3">
+              <button
+                onClick={closeDetailsPopup}
+                className="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 cursor-pointer font-medium"
+              >
+                Close
+              </button>
+              <button
+                onClick={generatePdf}
+                disabled={generatingPdf}
+                className="flex items-center justify-center px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer font-bold shadow-sm transition-all"
+              >
+                {generatingPdf ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <FileStack className="mr-2 h-4 w-4" />
+                    Pdf Generate
+                  </>
+                )}
+              </button>
             </div>
           </div>
         </div>
