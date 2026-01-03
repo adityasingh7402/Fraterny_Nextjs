@@ -1,12 +1,12 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import { 
-  ArrowLeft, 
-  Filter, 
-  MoreVertical, 
-  Home, 
-  FileText, 
+import {
+  ArrowLeft,
+  Filter,
+  MoreVertical,
+  Home,
+  FileText,
   CreditCard,
   Calendar,
   BarChart3,
@@ -77,32 +77,32 @@ interface QuestAssessmentDashboardProps {
 // Assessment types with their corresponding icons and colors
 const getAssessmentType = (index: number) => {
   const types = [
-    { 
-      name: "Personality Assessment", 
-      icon: FileText, 
-      bgColor: "bg-blue-100", 
-      iconColor: "text-blue-500" 
-    },
-    { 
-      name: "Cognitive Ability Test", 
-      icon: FileText, 
-      bgColor: "bg-blue-100", 
+    {
+      name: "Personality Assessment",
+      icon: FileText,
+      bgColor: "bg-blue-100",
       iconColor: "text-blue-500"
     },
-    { 
-      name: "Emotional Intelligence Quiz", 
-      icon: FileText, 
-      bgColor: "bg-blue-100", 
-      iconColor: "text-blue-500" 
+    {
+      name: "Cognitive Ability Test",
+      icon: FileText,
+      bgColor: "bg-blue-100",
+      iconColor: "text-blue-500"
     },
-    { 
-      name: "Career Aptitude Test", 
-      icon: FileText, 
-      bgColor: "bg-blue-100", 
-      iconColor: "text-blue-500" 
+    {
+      name: "Emotional Intelligence Quiz",
+      icon: FileText,
+      bgColor: "bg-blue-100",
+      iconColor: "text-blue-500"
+    },
+    {
+      name: "Career Aptitude Test",
+      icon: FileText,
+      bgColor: "bg-blue-100",
+      iconColor: "text-blue-500"
     }
   ];
-  
+
   return types[index % types.length];
 };
 
@@ -139,9 +139,11 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [assessmentToDelete, setAssessmentToDelete] = useState<DashboardTest | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [helpModalOpen, setHelpModalOpen] = useState(false);
+  const [assessmentForHelp, setAssessmentForHelp] = useState<DashboardTest | null>(null);
   const stopPollingRef = React.useRef<(() => void) | null>(null);
   const router = useRouter();
-  const userId  = user?.id;
+  const userId = user?.id;
   const [archetypeData, setArchetypeData] = useState<{ cluster: Cluster; archetype: Archetype } | null>(null);
   const [archetypeLoading, setArchetypeLoading] = useState(false);
 
@@ -176,9 +178,9 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
   // Helper function to refresh dashboard data
   const fetchUpdatedAssessmentData = async (): Promise<DashboardTest[] | null> => {
     console.log('Refreshing assessment data for user:', userId);
-    
+
     if (!user?.id) return null;
-    
+
     try {
       const response = await axios.get<DashboardApiResponse>(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/userdashboard/${userId}`
@@ -235,7 +237,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
         }
       } catch (err: any) {
         console.error('Assessment data fetch error:', err);
-        
+
         if (err.code === 'ECONNABORTED') {
           setError('Request timeout - please try again');
         } else if (err.response?.status === 404) {
@@ -288,7 +290,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
       }
 
       const latestAssessment = data[0]; // Latest assessment (already sorted)
-      
+
       try {
         setArchetypeLoading(true);
         const response = await axios.get(
@@ -301,7 +303,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
         }
 
         const archetypeName = resultsData?.['Mind Card']?.personality_type || resultsData?.['Mind Card']?.name;
-        
+
         if (archetypeName) {
           for (const cluster of clusters) {
             const foundArchetype = cluster.archetypes.find(
@@ -334,6 +336,12 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
   const handleFeedback = (testData: DashboardTest) => {
     setOpenMenuId(null);
     router.push(`/quest/reflection/${testData.userid}/${testData.sessionid}/${testData.testid}`);
+  };
+
+  const handleHelp = (testData: DashboardTest) => {
+    setOpenMenuId(null);
+    setAssessmentForHelp(testData);
+    setHelpModalOpen(true);
   };
 
   const handleDelete = (testData: DashboardTest) => {
@@ -400,11 +408,11 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
         link.href = testData.quest_pdf;
         link.download = `Quest-Report-${formatDate(testData.testtaken)}.pdf`;
         link.target = '_blank';
-        
+
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        
+
         toast.success('Downloading your PDF report!');
       } catch (error) {
         console.error('PDF download error:', error);
@@ -453,7 +461,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
 
       // Dynamically import the correct payment service
       let paymentResult;
-      
+
       if (selectedGateway === 'razorpay') {
         const { processRazorpayPayment } = await import('@/app/payment-gateway/razorpay/razorpayService');
         paymentResult = await processRazorpayPayment(selectedAssessment.sessionid, selectedAssessment.testid, user);
@@ -468,7 +476,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
       if (paymentResult.success) {
         console.log('✅ Payment successful, starting status polling...');
         setUpsellOpen(false);
-        
+
         toast.success('Payment successful! Verifying...', {
           position: "top-right"
         });
@@ -486,7 +494,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
           async (completedStatus) => {
             // Payment completed callback
             console.log('✅ Payment verified!', completedStatus);
-            
+
             toast.success('Payment verified successfully!', {
               position: "top-right",
               duration: 5000
@@ -510,7 +518,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
 
         // Store cleanup function
         stopPollingRef.current = stopPolling;
-        
+
       } else {
         // Payment failed or cancelled
         console.log('❌ Payment failed:', paymentResult.error);
@@ -518,7 +526,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
           position: "top-right"
         });
       }
-      
+
     } catch (error: any) {
       console.error('Payment error:', error);
       setPaymentModalLoading(false);
@@ -536,9 +544,9 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
           <div className="w-16 h-16 border-4 border-gray-200 border-t-blue-400 rounded-full animate-spin mx-auto mb-6"></div>
           <p className="text-lg text-gray-700 font-gilroy-bold">Loading payment history...</p>
           <div className="flex justify-center gap-1 mt-4">
-            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{animation: 'pulse 0.5s infinite alternate', animationDelay: '0s'}}></div>
-            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{animation: 'pulse 0.5s infinite alternate', animationDelay: '0.2s'}}></div>
-            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{animation: 'pulse 0.5s infinite alternate', animationDelay: '0.4s'}}></div>
+            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{ animation: 'pulse 0.5s infinite alternate', animationDelay: '0s' }}></div>
+            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{ animation: 'pulse 0.5s infinite alternate', animationDelay: '0.2s' }}></div>
+            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{ animation: 'pulse 0.5s infinite alternate', animationDelay: '0.4s' }}></div>
           </div>
         </div>
       </div>
@@ -553,9 +561,9 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
           <div className="w-16 h-16 border-4 border-gray-200 border-t-blue-400 rounded-full animate-spin mx-auto mb-6"></div>
           <p className="text-lg text-gray-700 font-gilroy-bold">Loading previous results...</p>
           <div className="flex justify-center gap-1 mt-4">
-            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{animation: 'pulse 0.5s infinite alternate', animationDelay: '0s'}}></div>
-            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{animation: 'pulse 0.5s infinite alternate', animationDelay: '0.2s'}}></div>
-            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{animation: 'pulse 0.5s infinite alternate', animationDelay: '0.4s'}}></div>
+            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{ animation: 'pulse 0.5s infinite alternate', animationDelay: '0s' }}></div>
+            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{ animation: 'pulse 0.5s infinite alternate', animationDelay: '0.2s' }}></div>
+            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{ animation: 'pulse 0.5s infinite alternate', animationDelay: '0.4s' }}></div>
           </div>
         </div>
       </div>
@@ -575,7 +583,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
             <div className="w-6"></div>
           </div>
         </header>
-        
+
         <main className="p-4">
           <div className="text-center py-16">
             <div className="w-12 h-12 text-red-500 mx-auto mb-4">⚠️</div>
@@ -594,110 +602,110 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
   }
 
   // Render Archetype Cards Section
-const renderArchetypeSection = () => {
-  if (archetypeLoading) {
-    return (
-      <div className="flex items-center justify-center py-16">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 font-gilroy-bold">Loading your insights...</p>
+  const renderArchetypeSection = () => {
+    if (archetypeLoading) {
+      return (
+        <div className="flex items-center justify-center py-16">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600 font-gilroy-bold">Loading your insights...</p>
+          </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
 
-  if (!archetypeData) {
-    return (
-      <div className="bg-white rounded-xl shadow-md p-6 text-center mb-6">
-        <Brain className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-        <p className="text-gray-600 font-gilroy-regular mb-4">
-          Complete an assessment to discover your archetype
-        </p>
-        <button
-          onClick={() => router.push('/quest/begin')}
-          className="px-6 py-3 bg-gradient-to-br from-cyan-600 to-blue-800 hover:from-cyan-600 hover:to-blue-800 text-white font-gilroy-bold rounded-lg transition-all duration-200 transform hover:scale-105"
-        >
-          Start Quest
-        </button>
-      </div>
-    );
-  }
-
-  const latestAssessment = data[0];
-
-  return (
-    <div className="relative mb-6">
-      <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 scrollbar-hide">
-        {/* Card 1: SELF */}
-        <div className="flex-shrink-0 w-full snap-center h-[600px]">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="bg-gradient-to-br from-white to-blue-50 rounded-3xl overflow-hidden border border-blue-100 h-full flex flex-col"
+    if (!archetypeData) {
+      return (
+        <div className="bg-white rounded-xl shadow-md p-6 text-center mb-6">
+          <Brain className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <p className="text-gray-600 font-gilroy-regular mb-4">
+            Complete an assessment to discover your archetype
+          </p>
+          <button
+            onClick={() => router.push('/quest/begin')}
+            className="px-6 py-3 bg-gradient-to-br from-cyan-600 to-blue-800 hover:from-cyan-600 hover:to-blue-800 text-white font-gilroy-bold rounded-lg transition-all duration-200 transform hover:scale-105"
           >
-            <div className="relative h-56 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 z-10"></div>
-              <motion.img 
-                src={archetypeData.cluster.img} 
-                alt={archetypeData.cluster.name}
-                className="w-full h-full object-cover transform scale-105"
-              />
-              <div className="absolute top-4 right-4 z-20">
-                <motion.div 
-                  initial={{ x: 20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                  className="inline-flex items-center gap-2.5 px-4 py-2 bg-gradient-to-br from-cyan-600 to-blue-800 rounded-full shadow-lg"
-                >
-                  <User className="w-4 h-4 text-white" />
-                  <span className="text-[11px] font-gilroy-bold text-white uppercase tracking-[0.08em] leading-none">How You See Yourself</span>
-                </motion.div>
+            Start Quest
+          </button>
+        </div>
+      );
+    }
+
+    const latestAssessment = data[0];
+
+    return (
+      <div className="relative mb-6">
+        <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 scrollbar-hide">
+          {/* Card 1: SELF */}
+          <div className="flex-shrink-0 w-full snap-center h-[600px]">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="bg-gradient-to-br from-white to-blue-50 rounded-3xl overflow-hidden border border-blue-100 h-full flex flex-col"
+            >
+              <div className="relative h-56 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 z-10"></div>
+                <motion.img
+                  src={archetypeData.cluster.img}
+                  alt={archetypeData.cluster.name}
+                  className="w-full h-full object-cover transform scale-105"
+                />
+                <div className="absolute top-4 right-4 z-20">
+                  <motion.div
+                    initial={{ x: 20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="inline-flex items-center gap-2.5 px-4 py-2 bg-gradient-to-br from-cyan-600 to-blue-800 rounded-full shadow-lg"
+                  >
+                    <User className="w-4 h-4 text-white" />
+                    <span className="text-[11px] font-gilroy-bold text-white uppercase tracking-[0.08em] leading-none">How You See Yourself</span>
+                  </motion.div>
+                </div>
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600"></div>
               </div>
-              <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600"></div>
-            </div>
-            
-            <div className="px-6 pt-5 pb-7 relative flex-1 flex flex-col">
-              <div>
+
+              <div className="px-6 pt-5 pb-7 relative flex-1 flex flex-col">
+                <div>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.1 }}
+                    className="inline-flex items-center gap-2.5 mb-2 px-5 py-2.5 bg-gradient-to-br from-cyan-600 to-blue-800 text-white font-gilroy-bold text-xs rounded-full uppercase tracking-wider shadow-lg backdrop-blur-sm border border-white/20"
+                  >
+                    {archetypeData.cluster.name}
+                  </motion.div>
+
+                  <motion.h2
+                    initial={{ y: 10, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="text-[28px] font-gilroy-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-blue-900 mb-4 leading-tight tracking-tight"
+                  >
+                    {archetypeData.archetype.name}
+                  </motion.h2>
+                </div>
+
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.1 }}
-                  className="inline-flex items-center gap-2.5 mb-2 px-5 py-2.5 bg-gradient-to-br from-cyan-600 to-blue-800 text-white font-gilroy-bold text-xs rounded-full uppercase tracking-wider shadow-lg backdrop-blur-sm border border-white/20"
-                >
-                  {archetypeData.cluster.name}
-                </motion.div>
-                
-                <motion.h2 
                   initial={{ y: 10, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.2 }}
-                  className="text-[28px] font-gilroy-bold text-transparent bg-clip-text bg-gradient-to-r from-gray-900 to-blue-900 mb-4 leading-tight tracking-tight"
+                  transition={{ delay: 0.3 }}
+                  className="text-gray-600 font-gilroy-regular text-base leading-[1.7] tracking-wide"
                 >
-                  {archetypeData.archetype.name}
-                </motion.h2>
-              </div>
-              
-              <motion.div 
-                initial={{ y: 10, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="text-gray-600 font-gilroy-regular text-base leading-[1.7] tracking-wide"
-              >
-                {archetypeData.archetype.contexts.self}
-              </motion.div>
-              
-              <div className="flex items-center gap-3 mt-6 pt-5 border-t border-blue-100">
-                <div className="flex-1 h-[2px] bg-gradient-to-r from-blue-300 to-transparent rounded-full"></div>
-                <Brain className="w-5 h-5 text-blue-500 flex-shrink-0" />
-                <div className="flex-1 h-[2px] bg-gradient-to-l from-blue-300 to-transparent rounded-full"></div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
+                  {archetypeData.archetype.contexts.self}
+                </motion.div>
 
-        {/* Card 2: WORLD */}
-        {/* <div className="flex-shrink-0 w-full snap-center h-[600px]">
+                <div className="flex items-center gap-3 mt-6 pt-5 border-t border-blue-100">
+                  <div className="flex-1 h-[2px] bg-gradient-to-r from-blue-300 to-transparent rounded-full"></div>
+                  <Brain className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                  <div className="flex-1 h-[2px] bg-gradient-to-l from-blue-300 to-transparent rounded-full"></div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Card 2: WORLD */}
+          {/* <div className="flex-shrink-0 w-full snap-center h-[600px]">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -779,8 +787,8 @@ const renderArchetypeSection = () => {
           </motion.div>
         </div> */}
 
-        {/* Card 3: ASPIRE */}
-        {/* <div className="flex-shrink-0 w-full snap-center h-[600px]">
+          {/* Card 3: ASPIRE */}
+          {/* <div className="flex-shrink-0 w-full snap-center h-[600px]">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -861,16 +869,16 @@ const renderArchetypeSection = () => {
             </div>
           </motion.div>
         </div> */}
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
   return (
     <div className="relative bg-gray-50 font-gilroy-regular">
       <div className="relative z-10">
 
-         {renderArchetypeSection()}
+        {renderArchetypeSection()}
 
         {/* Header */}
         <header className="bg-gradient-to-br from-cyan-600 to-blue-800 rounded-xl shadow-sm sticky top-0 z-10">
@@ -886,157 +894,157 @@ const renderArchetypeSection = () => {
         <main className="">
 
           <div className="w-full py-4">
-        {data.length === 0 ? (
-          // Empty state
-          <div className="text-center py-16">
-            <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-gilroy-semibold text-gray-900 mb-2">No Results Found</h3>
-            <p className="text-gray-600 font-gilroy-regular mb-6">You haven't completed any Results yet.</p>
-            <button
-            onClick={() => router.push('/quest/begin')}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-gilroy-semibold"
-            >
-              Take Your First Assessment
-            </button>
-          </div>
-        ) : (
-          // Assessment list
-          <div className="space-y-4">
-            {data.map((assessment, index) => {
-              const assessmentType = getAssessmentType(index);
-              const IconComponent = assessmentType.icon;
-              
-              return (
-                <motion.div
-                  key={assessment.testid}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="bg-neutral-100 rounded-lg shadow-xl p-4 hover:shadow-md transition-shadow cursor-pointer"
-                  onClick={() => handleAssessmentClick(assessment)}
+            {data.length === 0 ? (
+              // Empty state
+              <div className="text-center py-16">
+                <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-gilroy-semibold text-gray-900 mb-2">No Results Found</h3>
+                <p className="text-gray-600 font-gilroy-regular mb-6">You haven't completed any Results yet.</p>
+                <button
+                  onClick={() => router.push('/quest/begin')}
+                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-gilroy-semibold"
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center flex-1">
-                      <div className={`${assessmentType.bgColor} p-3 rounded-lg mr-4`}>
-                        <IconComponent className={`w-6 h-6 ${assessmentType.iconColor}`} />
-                      </div>
-                      <div className="flex-1">
-                        <h2 className="font-gilroy-semibold text-gray-800">{formatAssessmentName(assessment.testtaken)}</h2>
-                        <p className="text-sm font-gilroy-regular text-gray-500">
-                          Completed on {formatDate(assessment.testtaken)}
-                        </p>
-                        
-                        {/* Payment/PDF Status */}
-                        <div className="mt-2">
-                          {assessment.ispaymentdone !== "success" ? (
-                            // State 1: Payment not done - show unlock button
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                googleAnalytics.trackPdfUnlockCTAFromDashboard({
-                                  session_id: assessment.sessionid,
-                                  test_id: assessment.testid,
-                                  user_state: user?.id ? 'logged_in' : 'anonymous'
-                                });
-                                handlePaidReport(assessment);
-                              }}
-                              disabled={paymentLoading === assessment.sessionid}
-                              className="bg-gradient-to-br from-cyan-700 to-blue-900 inline-flex items-center px-3 py-1 text-xs font-gilroy-semibold rounded-full border border-gray-300 text-white bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                              {paymentLoading === assessment.sessionid ? (
-                                <>
-                                  <div className="w-3 h-3 mr-1 animate-spin border border-gray-500 border-t-transparent rounded-full"></div>
-                                  Processing...
-                                </>
+                  Take Your First Assessment
+                </button>
+              </div>
+            ) : (
+              // Assessment list
+              <div className="space-y-4">
+                {data.map((assessment, index) => {
+                  const assessmentType = getAssessmentType(index);
+                  const IconComponent = assessmentType.icon;
+
+                  return (
+                    <motion.div
+                      key={assessment.testid}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="bg-neutral-100 rounded-lg shadow-xl p-4 hover:shadow-md transition-shadow cursor-pointer"
+                      onClick={() => handleAssessmentClick(assessment)}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center flex-1">
+                          <div className={`${assessmentType.bgColor} p-3 rounded-lg mr-4`}>
+                            <IconComponent className={`w-6 h-6 ${assessmentType.iconColor}`} />
+                          </div>
+                          <div className="flex-1">
+                            <h2 className="font-gilroy-semibold text-gray-800">{formatAssessmentName(assessment.testtaken)}</h2>
+                            <p className="text-sm font-gilroy-regular text-gray-500">
+                              Completed on {formatDate(assessment.testtaken)}
+                            </p>
+
+                            {/* Payment/PDF Status */}
+                            <div className="mt-2">
+                              {assessment.ispaymentdone !== "success" ? (
+                                // State 1: Payment not done - show unlock button
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    googleAnalytics.trackPdfUnlockCTAFromDashboard({
+                                      session_id: assessment.sessionid,
+                                      test_id: assessment.testid,
+                                      user_state: user?.id ? 'logged_in' : 'anonymous'
+                                    });
+                                    handlePaidReport(assessment);
+                                  }}
+                                  disabled={paymentLoading === assessment.sessionid}
+                                  className="bg-gradient-to-br from-cyan-700 to-blue-900 inline-flex items-center px-3 py-1 text-xs font-gilroy-semibold rounded-full border border-gray-300 text-white bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                  {paymentLoading === assessment.sessionid ? (
+                                    <>
+                                      <div className="w-3 h-3 mr-1 animate-spin border border-gray-500 border-t-transparent rounded-full"></div>
+                                      Processing...
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Lock className="w-3 h-3 mr-1" />
+                                      Unlock Full Report
+                                    </>
+                                  )}
+                                </button>
+                              ) : assessment.quest_status === "working" ? (
+                                // State 2: Payment done but PDF still generating
+                                <div className="inline-flex items-center px-3 py-1 text-xs font-gilroy-regular text-orange-600 bg-orange-50 rounded-full">
+                                  <Clock className="w-3 h-3 mr-1" />
+                                  <span>PDF generating</span>
+                                </div>
+                              ) : assessment.quest_status === "generated" ? (
+                                // State 3: Payment done and PDF ready
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handlePaidReport(assessment);
+                                  }}
+                                  className="inline-flex items-center px-3 py-1 text-xs font-gilroy-semibold rounded-full text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                                >
+                                  <Download className="w-3 h-3 mr-1" />
+                                  Get Your PDF
+                                </button>
                               ) : (
-                                <>
-                                  <Lock className="w-3 h-3 mr-1" />
-                                  Unlock Full Report
-                                </>
+                                // Fallback: Payment done but PDF status unknown
+                                <div className="inline-flex items-center px-3 py-1 text-xs font-gilroy-regular text-orange-600 bg-orange-50 rounded-full">
+                                  <Clock className="w-3 h-3 mr-1" />
+                                  <span>Processing</span>
+                                </div>
                               )}
-                            </button>
-                          ) : assessment.quest_status === "working" ? (
-                            // State 2: Payment done but PDF still generating
-                            <div className="inline-flex items-center px-3 py-1 text-xs font-gilroy-regular text-orange-600 bg-orange-50 rounded-full">
-                              <Clock className="w-3 h-3 mr-1" />
-                              <span>PDF generating</span>
                             </div>
-                          ) : assessment.quest_status === "generated" ? (
-                            // State 3: Payment done and PDF ready
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handlePaidReport(assessment);
-                              }}
-                              className="inline-flex items-center px-3 py-1 text-xs font-gilroy-semibold rounded-full text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-                            >
-                              <Download className="w-3 h-3 mr-1" />
-                              Get Your PDF
-                            </button>
-                          ) : (
-                            // Fallback: Payment done but PDF status unknown
-                            <div className="inline-flex items-center px-3 py-1 text-xs font-gilroy-regular text-orange-600 bg-orange-50 rounded-full">
-                              <Clock className="w-3 h-3 mr-1" />
-                              <span>Processing</span>
+                          </div>
+                        </div>
+
+                        {/* Menu dropdown */}
+                        <div className="relative">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setOpenMenuId(openMenuId === assessment.testid ? null : assessment.testid);
+                            }}
+                            className="text-gray-500 hover:text-gray-700 p-1 transition-colors"
+                          >
+                            <MoreVertical className="w-5 h-5" />
+                          </button>
+
+                          {openMenuId === assessment.testid && (
+                            <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-30 border border-gray-100">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleView(assessment);
+                                }}
+                                className="flex items-center w-full text-left px-4 py-2 text-sm font-gilroy-regular text-gray-700 hover:bg-gray-100 transition-colors"
+                              >
+                                <Eye className="w-4 h-4 mr-2" />
+                                View
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleHelp(assessment);
+                                }}
+                                className="flex items-center w-full text-left px-4 py-2 text-sm font-gilroy-regular text-gray-700 hover:bg-gray-100 transition-colors"
+                              >
+                                <MessageCircle className="w-4 h-4 mr-2 text-blue-600" />
+                                Help
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDelete(assessment);
+                                }}
+                                className="flex items-center w-full text-left px-4 py-2 text-sm font-gilroy-regular text-red-600 hover:bg-gray-100 transition-colors"
+                              >
+                                <Trash2 className="w-4 h-4 mr-2" />
+                                Delete
+                              </button>
                             </div>
                           )}
                         </div>
                       </div>
-                    </div>
-                    
-                    {/* Menu dropdown */}
-                    <div className="relative">
-                      <button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setOpenMenuId(openMenuId === assessment.testid ? null : assessment.testid);
-                        }}
-                        className="text-gray-500 hover:text-gray-700 p-1 transition-colors"
-                      >
-                        <MoreVertical className="w-5 h-5" />
-                      </button>
-                      
-                      {openMenuId === assessment.testid && (
-                        <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-lg z-30 border border-gray-100">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleView(assessment);
-                            }}
-                            className="flex items-center w-full text-left px-4 py-2 text-sm font-gilroy-regular text-gray-700 hover:bg-gray-100 transition-colors"
-                          >
-                            <Eye className="w-4 h-4 mr-2" />
-                            View
-                          </button>
-                          {/* <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleFeedback(assessment);
-                            }}
-                            className="flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                          >
-                            <MessageCircle className="w-4 h-4 mr-2" />
-                            Feedback
-                          </button> */}
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDelete(assessment);
-                            }}
-                            className="flex items-center w-full text-left px-4 py-2 text-sm font-gilroy-regular text-red-600 hover:bg-gray-100 transition-colors"
-                          >
-                            <Trash2 className="w-4 h-4 mr-2" />
-                            Delete
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        )}
+                    </motion.div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </main>
 
@@ -1070,7 +1078,7 @@ const renderArchetypeSection = () => {
 
       {/* Click outside to close menu */}
       {openMenuId && !deleteConfirmOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-[5]"
           onClick={() => setOpenMenuId(null)}
         />
@@ -1098,6 +1106,18 @@ const renderArchetypeSection = () => {
           assessmentName={assessmentToDelete ? formatAssessmentName(assessmentToDelete.testtaken) : ''}
         />
       )}
+
+      {/* Help Request Modal */}
+      <HelpRequestModal
+        open={helpModalOpen}
+        onClose={() => {
+          setHelpModalOpen(false);
+          setAssessmentForHelp(null);
+        }}
+        assessment={assessmentForHelp}
+        user={user}
+        formatAssessmentName={formatAssessmentName}
+      />
     </div>
   );
 };
@@ -1136,8 +1156,8 @@ const UpsellSheetComponent: React.FC<UpsellSheetComponentProps> = ({ open, onClo
           <div className="absolute inset-0 bg-black/35" onClick={onClose} />
           <motion.div
             className="absolute inset-x-0 bottom-0 mx-auto w-full max-w-[390px] rounded-t-[28px] bg-white flex flex-col"
-            style={{ 
-              boxShadow: "0 -12px 32px rgba(0,0,0,0.15)", 
+            style={{
+              boxShadow: "0 -12px 32px rgba(0,0,0,0.15)",
               border: `1px solid ${tokens.border}`,
               maxHeight: 'calc(100vh - 2rem)',
               minHeight: '60vh'
@@ -1149,9 +1169,9 @@ const UpsellSheetComponent: React.FC<UpsellSheetComponentProps> = ({ open, onClo
           >
             {/* Fixed Header with Close Button */}
             <div className="flex-shrink-0 relative px-4 pt-4 pb-2">
-              <button 
-                aria-label="Close" 
-                onClick={onClose} 
+              <button
+                aria-label="Close"
+                onClick={onClose}
                 className="absolute right-4 top-4 rounded-full p-2 bg-gray-100 hover:bg-gray-200 transition-colors z-10"
                 style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
               >
@@ -1288,21 +1308,21 @@ interface DeleteConfirmationModalProps {
   assessmentName: string;
 }
 
-const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({ 
-  open, 
-  onClose, 
-  onConfirm, 
-  loading, 
-  assessmentName 
+const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
+  open,
+  onClose,
+  onConfirm,
+  loading,
+  assessmentName
 }) => {
   // Create a portal-like effect by rendering at the very top level
   if (!open) return null;
-  
+
   return (
-    <div 
+    <div
       className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center p-4"
-      style={{ 
-        zIndex: 999999, 
+      style={{
+        zIndex: 999999,
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         position: 'fixed',
         width: '100vw',
@@ -1312,7 +1332,7 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
     >
       <motion.div
         className="bg-white rounded-2xl p-6 w-full max-w-sm mx-auto relative"
-        style={{ 
+        style={{
           boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
           zIndex: 999999
         }}
@@ -1326,17 +1346,17 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
         <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 bg-red-100 rounded-full">
           <AlertTriangle className="w-6 h-6 text-red-600" />
         </div>
-        
+
         {/* Title */}
         <h3 className="text-lg font-gilroy-bold text-gray-900 text-center mb-2">
           Delete Assessment?
         </h3>
-        
+
         {/* Description */}
         <p className="text-sm font-gilroy-regular text-gray-600 text-center mb-6">
           Are you sure you want to delete the assessment from <span className="font-gilroy-semibold text-gray-800">{assessmentName}</span>? This action cannot be undone.
         </p>
-        
+
         {/* Buttons */}
         <div className="flex gap-3">
           <button
@@ -1361,6 +1381,192 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
             )}
           </button>
         </div>
+      </motion.div>
+    </div>
+  );
+};
+
+// Help Request Modal Component
+interface HelpRequestModalProps {
+  open: boolean;
+  onClose: () => void;
+  assessment: DashboardTest | null;
+  user: any;
+  formatAssessmentName: (date: string) => string;
+}
+
+const HelpRequestModal: React.FC<HelpRequestModalProps> = ({
+  open,
+  onClose,
+  assessment,
+  user,
+  formatAssessmentName
+}) => {
+  const [problem, setProblem] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  // Extract display name from user metadata
+  const userMetadata = user?.user_metadata || {};
+  const displayName = userMetadata.full_name ||
+    (userMetadata.first_name ? `${userMetadata.first_name} ${userMetadata.last_name || ''}` : '') ||
+    user?.email?.split('@')[0] || 'User';
+
+  if (!open) return null;
+
+  const handleSubmit = async () => {
+    if (!problem.trim()) {
+      toast.error('Please describe your problem or enquiry');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // Using new dedicated help request endpoint via relative path
+      await axios.post('/api/help/submit', {
+        user_id: user?.id,
+        user_name: displayName,
+        test_id: assessment?.testid,
+        user_query: problem
+      });
+
+      setSubmitted(true);
+      toast.success('Your message has been sent!');
+    } catch (error) {
+      console.error('Help submission error:', error);
+      toast.error('Failed to send message. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleClose = () => {
+    setSubmitted(false);
+    setProblem('');
+    onClose();
+  };
+
+  return (
+    <div
+      className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center p-4"
+      style={{
+        zIndex: 999999,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        position: 'fixed',
+        width: '100vw',
+        height: '100vh'
+      }}
+      onClick={handleClose}
+    >
+      <motion.div
+        className="bg-white rounded-2xl p-6 w-full max-w-md mx-auto relative"
+        style={{
+          boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+          zIndex: 999999
+        }}
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.8, opacity: 0 }}
+        transition={{ type: "spring", stiffness: 400, damping: 25, duration: 0.2 }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {!submitted ? (
+          <>
+            {/* Header Icon */}
+            <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 bg-blue-100 rounded-full">
+              <MessageCircle className="w-6 h-6 text-blue-600" />
+            </div>
+
+            {/* Title */}
+            <h3 className="text-lg font-gilroy-bold text-gray-900 text-center mb-2">
+              Need Help?
+            </h3>
+
+            <p className="text-sm font-gilroy-regular text-gray-500 text-center mb-6 px-2">
+              Please share your concern. We'll get back to you as soon as possible.
+            </p>
+
+            {/* Context Info */}
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              <div className="bg-gray-50/80 rounded-xl p-3 border border-gray-100">
+                <p className="text-[10px] text-blue-600 font-gilroy-bold uppercase tracking-wider mb-1">User Name</p>
+                <p className="text-xs font-gilroy-semibold text-gray-800 truncate">{displayName}</p>
+              </div>
+
+              <div className="bg-gray-50/80 rounded-xl p-3 border border-gray-100">
+                <p className="text-[10px] text-blue-600 font-gilroy-bold uppercase tracking-wider mb-1">Assessment</p>
+                <p className="text-xs font-gilroy-semibold text-gray-800 truncate">
+                  {assessment ? formatAssessmentName(assessment.testtaken) : 'Loading...'}
+                </p>
+              </div>
+            </div>
+
+            {/* Textarea */}
+            <div className="mb-8">
+              <label className="block text-[10px] text-gray-400 font-gilroy-bold uppercase tracking-widest mb-2 px-1">
+                Description
+              </label>
+              <textarea
+                autoFocus
+                value={problem}
+                onChange={(e) => setProblem(e.target.value)}
+                placeholder="Can you please explain what happened? We are here to help you."
+                className="w-full h-36 p-4 text-sm font-gilroy-medium bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:bg-white focus:border-blue-500 outline-none transition-all resize-none shadow-inner"
+              />
+            </div>
+
+            {/* Buttons */}
+            <div className="flex gap-3">
+              <button
+                onClick={handleClose}
+                disabled={loading}
+                className="flex-1 px-4 py-3 text-sm font-gilroy-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSubmit}
+                disabled={loading || !problem.trim()}
+                className="flex-[1.5] px-4 py-3 text-sm font-gilroy-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition-all shadow-lg shadow-blue-500/10 disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {loading ? (
+                  <>
+                    <div className="w-4 h-4 animate-spin border-2 border-white border-t-transparent rounded-full" />
+                    <span>Processing...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Submit</span>
+                    <MessageCircle className="w-4 h-4 ml-1" />
+                  </>
+                )}
+              </button>
+            </div>
+          </>
+        ) : (
+          <div className="text-center py-6">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", damping: 15 }}
+              className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-100"
+            >
+              <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+              </svg>
+            </motion.div>
+            <h3 className="text-xl font-gilroy-bold text-gray-900 mb-3">Message Sent!</h3>
+            <p className="text-sm font-gilroy-medium text-gray-500 mb-10 px-4">
+              Our team has received your enquiry. We'll get back to you within 24 hours.
+            </p>
+            <button
+              onClick={handleClose}
+              className="w-full px-4 py-3.5 text-sm font-gilroy-bold text-white bg-gray-900 hover:bg-black rounded-xl transition-all shadow-xl shadow-gray-200"
+            >
+              Back to Results
+            </button>
+          </div>
+        )}
       </motion.div>
     </div>
   );
