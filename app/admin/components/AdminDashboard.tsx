@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Users, DollarSign, FileText, CreditCard, BarChart3, Menu, X, MessageCircle, TrendingUp, AlertCircle, Image, Mail, PieChart, Settings, UserCheck, Calendar, Shield, RefreshCw, Send, Layout } from 'lucide-react';
+import { Users, DollarSign, FileText, CreditCard, BarChart3, Menu, X, MessageCircle, TrendingUp, AlertCircle, Image, Mail, PieChart, Settings, UserCheck, Calendar, Shield, RefreshCw, Send, Layout, Copy, CheckCircle, Clock, Search, ExternalLink } from 'lucide-react';
 // Import placeholder components (these will be replaced with real migrations)
 import {
   AdminUserManagement,
@@ -165,6 +165,171 @@ const menuItems = [
   }
 ];
 
+interface RecentActivity {
+  helpRequests: any[];
+  villaApplications: any[];
+  overallFeedback: any[];
+}
+
+const RecentActivityTabs: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<'help' | 'villa' | 'feedback'>('help');
+  const [data, setData] = useState<RecentActivity | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const resp = await fetch('/api/admin/dashboard/recent-activity');
+      const result = await resp.json();
+      if (result.success) {
+        setData(result.data);
+      }
+    } catch (err) {
+      console.error('Error fetching recent activity:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const copyToClipboard = (text: string, id: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  const tabs = [
+    { id: 'help', label: 'Help Requests', count: data?.helpRequests.length || 0 },
+    { id: 'villa', label: 'Villa Applications', count: data?.villaApplications.length || 0 },
+    { id: 'feedback', label: 'User Feedback', count: data?.overallFeedback.length || 0 },
+  ];
+
+  const renderContent = () => {
+    if (loading) {
+      return (
+        <div className="flex items-center justify-center h-64">
+          <RefreshCw className="h-8 w-8 text-blue-500 animate-spin" />
+        </div>
+      );
+    }
+
+    if (!data) return null;
+
+    const items = activeTab === 'help' ? data.helpRequests : activeTab === 'villa' ? data.villaApplications : data.overallFeedback;
+
+    if (items.length === 0) {
+      return (
+        <div className="flex flex-col items-center justify-center h-64 text-gray-500">
+          <Clock className="h-12 w-12 mb-2 opacity-20" />
+          <p>No activity in the last 10 days</p>
+        </div>
+      );
+    }
+
+    return (
+      <div className="overflow-y-auto max-h-[400px] pr-2 space-y-4 pt-4">
+        {items.map((item: any) => {
+          const id = item.id || item.application_id;
+          const name = item.user_name || (item.first_name ? `${item.first_name} ${item.last_name}` : 'Unknown User');
+          const comment = item.user_query || item.feedback || `Villa App: ${item.purpose_of_visit || 'No purpose'}`;
+          const date = new Date(item.created_at || item.submitted_at).toLocaleDateString();
+
+          // Collect all IDs to display
+          const displayIds = [
+            { label: 'ID', value: id },
+            { label: 'User', value: item.user_id },
+            { label: 'Test', value: item.test_id || item.testid || item.selected_test_id },
+            { label: 'Session', value: item.test_session_id }
+          ].filter(i => i.value);
+
+          return (
+            <div key={id} className="bg-gray-50 border border-gray-200 rounded-xl p-4 hover:border-blue-300 transition-all group">
+              <div className="flex justify-between items-start mb-2">
+                <div>
+                  <h4 className="font-bold text-gray-900 flex items-center gap-2">
+                    {name}
+                    <span className="text-xs font-normal text-gray-500 bg-gray-200 px-2 py-0.5 rounded-full">{date}</span>
+                  </h4>
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1">
+                    {displayIds.map((idItem, idx) => (
+                      <div key={idx} className="flex items-center gap-1.5 bg-white border border-gray-100 px-2 py-0.5 rounded-md shadow-sm">
+                        <span className="text-[10px] uppercase font-bold text-gray-400">{idItem.label}:</span>
+                        <span className="text-[10px] font-mono text-gray-600 truncate max-w-[80px]">{idItem.value}</span>
+                        <button
+                          onClick={() => copyToClipboard(idItem.value.toString(), `${id}-${idItem.label}`)}
+                          className="text-gray-300 hover:text-blue-600 transition-colors"
+                          title={`Copy ${idItem.label} ID`}
+                        >
+                          {copiedId === `${id}-${idItem.label}` ? <CheckCircle className="h-2.5 w-2.5 text-green-500" /> : <Copy className="h-2.5 w-2.5" />}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {activeTab === 'villa' && (
+                  <span className={`px-2 py-1 rounded text-xs font-bold uppercase shrink-0 ${item.approval_status === 'pending' ? 'bg-orange-100 text-orange-700' :
+                    item.approval_status === 'approved' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                    }`}>
+                    {item.approval_status}
+                  </span>
+                )}
+              </div>
+              <p className="text-gray-700 text-sm line-clamp-3 bg-white p-3 rounded-lg border border-gray-100 italic break-words overflow-hidden">
+                {comment}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col h-full">
+      <div className="px-6 py-4 border-b border-gray-200 bg-gray-50/50">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+            <Clock className="h-5 w-5 text-blue-600" />
+            Recent Activity (10 Days)
+          </h3>
+          <button
+            onClick={fetchData}
+            className="p-1.5 rounded-lg hover:bg-gray-200 transition-colors"
+          >
+            <RefreshCw className={`h-4 w-4 text-gray-500 ${loading ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
+
+        <div className="flex gap-2">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as any)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === tab.id
+                ? 'bg-blue-600 text-white shadow-md'
+                : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+                }`}
+            >
+              {tab.label}
+              <span className={`px-1.5 py-0.5 rounded-full text-[10px] ${activeTab === tab.id ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-600'
+                }`}>
+                {tab.count}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="p-6 pt-0">
+        {renderContent()}
+      </div>
+    </div>
+  );
+};
+
 // Simple Overview Component - EXACT SAME AS ORIGINAL
 const DashboardOverview: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -219,8 +384,9 @@ const DashboardOverview: React.FC = () => {
   };
 
   const getDashboardInsights = (data: DashboardStats) => {
-    const conversionRate = data.users.totalUsers > 0
-      ? ((data.summaries.paidSummaries / data.users.totalUsers) * 100).toFixed(1)
+    // Conversion Rate: Percentage of summaries that resulted in a paid purchase
+    const conversionRate = data.summaries.totalSummaries > 0
+      ? ((data.summaries.paidSummaries / data.summaries.totalSummaries) * 100).toFixed(1)
       : '0';
 
     const paymentSuccessRate = data.payments.totalTransactions > 0
@@ -231,15 +397,34 @@ const DashboardOverview: React.FC = () => {
       ? ((data.users.activeUsersLast7Days / data.users.totalUsers) * 100).toFixed(1)
       : '0';
 
-    const averageRevenue = data.payments.successfulPayments > 0
-      ? (data.payments.totalRevenueUSD / data.payments.successfulPayments).toFixed(2)
+    // Calculate average revenue separately for USD and INR
+    // USD payments = international + India USD (PayPal from India)
+    // INR payments = India INR (Razorpay from India)
+    const totalUSDPayments = data.payments.internationalRevenueUSD + data.payments.indiaRevenueUSD;
+    const totalINRPayments = data.payments.indiaRevenueINR;
+
+    // Estimate payment counts based on revenue ratios
+    const totalRevenue = data.payments.totalRevenueUSD + data.payments.totalRevenueINR;
+    const usdRevenueRatio = totalRevenue > 0 ? totalUSDPayments / totalRevenue : 0;
+    const inrRevenueRatio = totalRevenue > 0 ? totalINRPayments / totalRevenue : 0;
+
+    const estimatedUSDPayments = Math.round(data.payments.successfulPayments * usdRevenueRatio);
+    const estimatedINRPayments = Math.round(data.payments.successfulPayments * inrRevenueRatio);
+
+    const averageRevenueUSD = estimatedUSDPayments > 0
+      ? (totalUSDPayments / estimatedUSDPayments).toFixed(2)
+      : '0';
+
+    const averageRevenueINR = estimatedINRPayments > 0
+      ? (totalINRPayments / estimatedINRPayments).toFixed(0)
       : '0';
 
     return {
       businessMetrics: {
         conversionRate,
         paymentSuccessRate,
-        averageRevenue
+        averageRevenueUSD,
+        averageRevenueINR
       },
       userEngagement: {
         activeUsersRatio
@@ -310,6 +495,11 @@ const DashboardOverview: React.FC = () => {
       <div className="mb-8">
         <h1 className="text-3xl font-black text-gray-900 mb-2">Dashboard Overview</h1>
         <p className="text-gray-600">Welcome to the admin dashboard. Here's your business overview.</p>
+      </div>
+
+      {/* Recent Activity Tabs - Top Section */}
+      <div className="mb-8">
+        <RecentActivityTabs />
       </div>
 
       {/* Error State */}
@@ -425,7 +615,7 @@ const DashboardOverview: React.FC = () => {
                 return (
                   <>
                     <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                      <span className="text-sm font-medium text-gray-600">Conversion Rate</span>
+                      <span className="text-sm font-medium text-gray-600">Summary Conversion Rate</span>
                       <span className="text-lg font-bold text-green-600">{insights.businessMetrics.conversionRate}%</span>
                     </div>
                     <div className="flex justify-between items-center py-2 border-b border-gray-100">
@@ -438,7 +628,9 @@ const DashboardOverview: React.FC = () => {
                     </div>
                     <div className="flex justify-between items-center py-2">
                       <span className="text-sm font-medium text-gray-600">Avg Revenue per Payment</span>
-                      <span className="text-lg font-bold text-orange-600">${insights.businessMetrics.averageRevenue}</span>
+                      <span className="text-lg font-bold text-orange-600">
+                        ${insights.businessMetrics.averageRevenueUSD} / ₹{insights.businessMetrics.averageRevenueINR}
+                      </span>
                     </div>
                   </>
                 );
@@ -484,6 +676,7 @@ const DashboardOverview: React.FC = () => {
           </div>
         </div>
       )}
+
     </div>
   );
 };
@@ -544,8 +737,8 @@ const AdminDashboard: React.FC = () => {
                   <button
                     onClick={() => setActiveMenuItem(item.id)}
                     className={`w-full flex items-center ${sidebarOpen ? 'gap-3 px-3' : 'justify-center px-2'} py-2 rounded-lg transition-colors ${isActive
-                        ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                        : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                      ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                       }`}
                     title={sidebarOpen ? '' : item.label}
                   >
