@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { FileStack, CheckCircle, Clock, TrendingUp, ChevronLeft, ChevronRight, Trash2, AlertTriangle, Copy, Check, Eye, Download } from 'lucide-react';
+import { FileStack, CheckCircle, Clock, TrendingUp, ChevronLeft, ChevronRight, Trash2, AlertTriangle, Copy, Check, Eye, Download, MessageSquare, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 // Types (matching API response structure)
@@ -101,6 +101,13 @@ const AdminSummaryManagement: React.FC = () => {
 
   // Copy functionality state
   const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  // Help Requests state
+  const [showHelpRequestsPopup, setShowHelpRequestsPopup] = useState(false);
+  const [helpRequests, setHelpRequests] = useState<any[]>([]);
+  const [loadingHelpRequests, setLoadingHelpRequests] = useState(false);
+  const [selectedHelpQuery, setSelectedHelpQuery] = useState<any | null>(null);
+  const [showQueryDetailPopup, setShowQueryDetailPopup] = useState(false);
 
   // Bulk selection state
   const [selectedSummaryIds, setSelectedSummaryIds] = useState<number[]>([]);
@@ -410,6 +417,58 @@ const AdminSummaryManagement: React.FC = () => {
     }
   };
 
+  // Help Requests handlers
+  const fetchHelpRequests = async () => {
+    setLoadingHelpRequests(true);
+    try {
+      const resp = await fetch('/api/admin/help-requests');
+      const result = await resp.json();
+      if (result.success) {
+        setHelpRequests(result.data);
+      }
+    } catch (err) {
+      console.error('Error fetching help requests:', err);
+      toast.error('Failed to fetch help requests');
+    } finally {
+      setLoadingHelpRequests(false);
+    }
+  };
+
+  const toggleHelpRequestResolved = async (id: number, currentStatus: boolean) => {
+    try {
+      const resp = await fetch('/api/admin/help-requests', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, resolved: !currentStatus })
+      });
+      const result = await resp.json();
+      if (result.success) {
+        setHelpRequests(prev => prev.map(req => req.id === id ? { ...req, resolved: !currentStatus } : req));
+        toast.success(`Marked as ${!currentStatus ? 'resolved' : 'unresolved'}`);
+      }
+    } catch (err) {
+      console.error('Error updating help request:', err);
+      toast.error('Failed to update status');
+    }
+  };
+
+  const deleteHelpRequest = async (id: number) => {
+    if (!confirm('Are you sure you want to delete this query?')) return;
+    try {
+      const resp = await fetch(`/api/admin/help-requests?id=${id}`, {
+        method: 'DELETE'
+      });
+      const result = await resp.json();
+      if (result.success) {
+        setHelpRequests(prev => prev.filter(req => req.id !== id));
+        toast.success('Query deleted');
+      }
+    } catch (err) {
+      console.error('Error deleting help request:', err);
+      toast.error('Failed to delete query');
+    }
+  };
+
   // Generate PDF function
   const generatePdf = async () => {
     if (!selectedSummaryDetails) return;
@@ -541,6 +600,7 @@ const AdminSummaryManagement: React.FC = () => {
   useEffect(() => {
     fetchSummaryStats();
     fetchSummariesData();
+    fetchHelpRequests();
   }, []);
 
   // Fetch data when page changes (except for the initial page 1 load)
@@ -599,7 +659,24 @@ const AdminSummaryManagement: React.FC = () => {
     <div className="p-8">
       {/* Page Header */}
       <div className="flex flex-wrap justify-between items-center gap-3 mb-8">
-        <p className="text-gray-900 text-3xl font-black leading-tight tracking-[-0.033em]">Summary Management</p>
+        <div className="flex items-center justify-between w-full">
+          <p className="text-gray-900 text-3xl font-black leading-tight tracking-[-0.033em]">Summary Management</p>
+          <button
+            onClick={() => {
+              setShowHelpRequestsPopup(true);
+              fetchHelpRequests();
+            }}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-lg hover:bg-blue-700 transition-all shadow-sm cursor-pointer relative group"
+          >
+            <MessageSquare className="h-4 w-4" />
+            <span>Queries</span>
+            {helpRequests.filter(r => !r.resolved).length > 0 && (
+              <span className="flex items-center justify-center bg-red-500 text-white text-[10px] min-w-[1.25rem] h-5 px-1 rounded-full border-2 border-blue-600 group-hover:border-blue-700 transition-colors">
+                {helpRequests.filter(r => !r.resolved).length}
+              </span>
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Statistics Cards */}
@@ -1481,6 +1558,188 @@ const AdminSummaryManagement: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Help Requests Popup */}
+      {showHelpRequestsPopup && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-6xl w-full max-h-[90vh] flex flex-col">
+            <div className="bg-white border-b border-gray-200 p-6 flex-shrink-0">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <MessageSquare className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900">User Help Queries</h3>
+                </div>
+                <button onClick={() => setShowHelpRequestsPopup(false)} className="text-gray-400 hover:text-gray-600 text-2xl font-semibold cursor-pointer">×</button>
+              </div>
+            </div>
+
+            <div className="p-6 flex-1 overflow-auto">
+              {loadingHelpRequests ? (
+                <div className="flex flex-col items-center justify-center h-64 gap-4">
+                  <div className="h-12 w-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                  <p className="text-gray-500 font-medium">Fetching queries...</p>
+                </div>
+              ) : helpRequests.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-64 text-gray-500 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+                  <MessageSquare className="h-12 w-12 mb-3 opacity-20" />
+                  <p className="font-medium text-lg">No queries found</p>
+                  <p className="text-sm">User queries will appear here when submitted.</p>
+                </div>
+              ) : (
+                <div className="overflow-y-auto rounded-xl border border-gray-200 shadow-sm max-h-[500px]" data-lenis-prevent>
+                  <table className="w-full text-left table-fixed">
+                    <thead className="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
+                      <tr>
+                        <th className="py-4 px-4 text-xs font-bold text-gray-600 uppercase tracking-wider w-[100px]">Date</th>
+                        <th className="py-4 px-4 text-xs font-bold text-gray-600 uppercase tracking-wider w-[150px]">User Details</th>
+                        <th className="py-4 px-4 text-xs font-bold text-gray-600 uppercase tracking-wider w-[180px]">IDs (Copy)</th>
+                        <th className="py-4 px-4 text-xs font-bold text-gray-600 uppercase tracking-wider">Query</th>
+                        <th className="py-4 px-4 text-xs font-bold text-gray-600 uppercase tracking-wider w-[120px]">Status</th>
+                        <th className="py-4 px-4 text-xs font-bold text-gray-600 uppercase tracking-wider text-right w-[150px]">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {helpRequests.map((req) => (
+                        <tr key={req.id} className="hover:bg-gray-50/50 transition-colors">
+                          <td className="py-4 px-4">
+                            <div className="text-sm text-gray-900 font-medium">{new Date(req.created_at).toLocaleDateString()}</div>
+                            <div className="text-xs text-gray-500">{new Date(req.created_at).toLocaleTimeString()}</div>
+                          </td>
+                          <td className="py-4 px-4">
+                            <div className="text-sm font-bold text-gray-900 truncate" title={req.user_name || 'Anonymous'}>{req.user_name || 'Anonymous'}</div>
+                            <div className="text-xs text-gray-500 font-mono mt-1 opacity-70">UUID: {req.user_id?.substring(0, 8)}...</div>
+                          </td>
+                          <td className="py-4 px-4">
+                            <div className="flex flex-col gap-2">
+                              {/* Test ID */}
+                              <div className="flex items-center justify-between gap-1.5 bg-white border border-gray-100 px-2 py-1 rounded shadow-sm">
+                                <span className="text-[9px] font-bold text-gray-400 uppercase shrink-0">T:</span>
+                                <span className="text-[10px] font-mono text-gray-600 truncate">{req.test_id || 'N/A'}</span>
+                                <button
+                                  onClick={() => copyToClipboard(req.test_id || '')}
+                                  className="text-gray-300 hover:text-blue-600 transition-colors shrink-0"
+                                >
+                                  {copiedId === req.test_id ? <CheckCircle className="h-3 w-3 text-green-500" /> : <Copy className="h-3 w-3" />}
+                                </button>
+                              </div>
+                              {/* User ID */}
+                              <div className="flex items-center justify-between gap-1.5 bg-white border border-gray-100 px-2 py-1 rounded shadow-sm">
+                                <span className="text-[9px] font-bold text-gray-400 uppercase shrink-0">U:</span>
+                                <span className="text-[10px] font-mono text-gray-600 truncate">{req.user_id || 'N/A'}</span>
+                                <button
+                                  onClick={() => copyToClipboard(req.user_id || '')}
+                                  className="text-gray-300 hover:text-blue-600 transition-colors shrink-0"
+                                >
+                                  {copiedId === req.user_id ? <CheckCircle className="h-3 w-3 text-green-500" /> : <Copy className="h-3 w-3" />}
+                                </button>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="py-4 px-4">
+                            <div className="w-full">
+                              <p className="text-sm text-gray-700 leading-relaxed italic border-l-2 border-blue-200 pl-3 line-clamp-2 break-words overflow-hidden">
+                                {req.user_query}
+                              </p>
+                              {req.user_query && req.user_query.length > 50 && (
+                                <button
+                                  onClick={() => {
+                                    setSelectedHelpQuery(req);
+                                    setShowQueryDetailPopup(true);
+                                  }}
+                                  className="text-[10px] text-blue-600 font-bold hover:underline mt-1 cursor-pointer uppercase tracking-wider block"
+                                >
+                                  [View Full Query]
+                                </button>
+                              )}
+                            </div>
+                          </td>
+                          <td className="py-4 px-4">
+                            {req.resolved ? (
+                              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200">
+                                <CheckCircle className="h-3 w-3" />
+                                RESOLVED
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-orange-100 text-orange-700 border border-orange-200">
+                                <Clock className="h-3 w-3" />
+                                PENDING
+                              </span>
+                            )}
+                          </td>
+                          <td className="py-4 px-4 text-right">
+                            <div className="flex items-center justify-end gap-2">
+                              <button
+                                onClick={() => toggleHelpRequestResolved(req.id, req.resolved)}
+                                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-sm cursor-pointer ${req.resolved
+                                  ? 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                  : 'bg-green-600 text-white hover:bg-green-700'
+                                  }`}
+                              >
+                                {req.resolved ? 'Mark Pending' : 'Mark Resolved'}
+                              </button>
+                              <button
+                                onClick={() => deleteHelpRequest(req.id)}
+                                className="p-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors cursor-pointer"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+
+            <div className="sticky bottom-0 bg-gray-50 border-t border-gray-200 p-6 flex justify-between items-center flex-shrink-0 rounded-b-lg">
+              <div className="text-sm text-gray-500 font-medium">
+                Showing {helpRequests.length} queries
+              </div>
+              <button
+                onClick={() => setShowHelpRequestsPopup(false)}
+                className="px-6 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 cursor-pointer font-bold transition-all shadow-sm"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Full Query Detail Popup */}
+      {showQueryDetailPopup && selectedHelpQuery && (
+        <div className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-xl shadow-xl max-w-xl w-full flex flex-col border border-gray-200">
+            <div className="border-b border-gray-100 p-4 flex justify-between items-center bg-gray-50/50 rounded-t-xl">
+              <h3 className="font-bold text-gray-900">Query from {selectedHelpQuery.user_name}</h3>
+              <button
+                onClick={() => setShowQueryDetailPopup(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="p-6 overflow-y-auto max-h-[60vh]">
+              <p className="text-gray-700 text-base leading-relaxed whitespace-pre-wrap break-words overflow-hidden">
+                {selectedHelpQuery.user_query}
+              </p>
+            </div>
+            <div className="p-4 border-t border-gray-100 flex justify-end bg-gray-50/50 rounded-b-xl">
+              <button
+                onClick={() => setShowQueryDetailPopup(false)}
+                className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer font-bold text-sm"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

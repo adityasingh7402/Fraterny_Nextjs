@@ -278,8 +278,8 @@ const RecentActivityTabs: React.FC = () => {
                   </span>
                 )}
               </div>
-              <p className="text-gray-700 text-sm line-clamp-3 bg-white p-3 rounded-lg border border-gray-100 italic">
-                "{comment}"
+              <p className="text-gray-700 text-sm line-clamp-3 bg-white p-3 rounded-lg border border-gray-100 italic break-words overflow-hidden">
+                {comment}
               </p>
             </div>
           );
