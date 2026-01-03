@@ -33,7 +33,7 @@ export const PDFImageViewer: React.FC<PDFImageViewerProps> = ({ paymentSuccess, 
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const images = ['sample1.jpg', 'sample2.jpg', 'sample3.jpg', 'sample4.jpg', 'sample5.png'];
+  const images = ['sample1.png', 'sample4.jpg', 'sample5.png'];
 
   const handleZoomIn = () => {
     setZoom(prev => Math.min(prev + 0.2, 3)); // Max zoom 3x
@@ -74,6 +74,7 @@ export const PDFImageViewer: React.FC<PDFImageViewerProps> = ({ paymentSuccess, 
         <div
           ref={containerRef}
           className="w-full h-full overflow-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200"
+          data-lenis-prevent
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
