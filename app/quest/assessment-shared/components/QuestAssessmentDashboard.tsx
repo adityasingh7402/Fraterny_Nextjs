@@ -979,7 +979,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
                                   className="inline-flex items-center px-3 py-1 text-xs font-gilroy-semibold rounded-full text-white bg-blue-600 hover:bg-blue-700 transition-colors"
                                 >
                                   <Download className="w-3 h-3 mr-1" />
-                                  Get Your PDF
+                                  Get Your File
                                 </button>
                               ) : (
                                 // Fallback: Payment done but PDF status unknown
