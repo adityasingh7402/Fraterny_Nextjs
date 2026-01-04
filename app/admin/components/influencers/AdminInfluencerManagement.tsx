@@ -126,6 +126,23 @@ export default function AdminInfluencerManagement() {
         .eq('id', selectedApplication.id);
 
       if (error) throw error;
+
+      // Send rejection email
+      try {
+        await fetch('/api/admin/influencers/notify-status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: selectedApplication.id,
+            status: 'rejected',
+            name: `${selectedApplication.first_name} ${selectedApplication.last_name}`,
+            email: selectedApplication.email
+          })
+        });
+      } catch (emailErr) {
+        console.error("Failed to send rejection email", emailErr);
+      }
+
       toast.success("Application rejected");
       setShowRejectPopup(false);
       setSelectedApplication(null);
@@ -757,6 +774,23 @@ export default function AdminInfluencerManagement() {
                 .eq('id', applicationToConvert.id);
 
               if (error) throw error;
+
+              // Send approval email
+              try {
+                await fetch('/api/admin/influencers/notify-status', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    id: applicationToConvert.id,
+                    status: 'approved',
+                    name: applicationToConvert.name,
+                    email: applicationToConvert.email
+                  })
+                });
+              } catch (emailErr) {
+                console.error("Failed to send approval email", emailErr);
+              }
+
               toast.success("Application marked as approved");
               fetchApplications();
             } catch (err) {
