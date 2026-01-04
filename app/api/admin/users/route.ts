@@ -120,10 +120,10 @@ async function detectDuplicateGroups(): Promise<DuplicateGroup[]> {
 
     // Group users by IP address and device fingerprint
     const groups = new Map<string, UserData[]>();
-    
+
     usersData?.forEach(user => {
       let groupKey = '';
-      
+
       // Group by IP address and device fingerprint only
       const ipInfo = userIpMap.get(user.user_id);
       if (ipInfo?.ip_address) {
@@ -131,7 +131,7 @@ async function detectDuplicateGroups(): Promise<DuplicateGroup[]> {
       } else {
         groupKey = `unique:${user.user_id}`; // Unique user (no IP data)
       }
-      
+
       if (!groups.has(groupKey)) {
         groups.set(groupKey, []);
       }
@@ -140,7 +140,7 @@ async function detectDuplicateGroups(): Promise<DuplicateGroup[]> {
 
     // Convert to DuplicateGroup format and filter groups with multiple users
     const duplicateGroups: DuplicateGroup[] = [];
-    
+
     groups.forEach((users, groupKey) => {
       if (users.length > 1) {
         // Sort users to determine primary (registered > anonymous, more paid gens, more recent)
@@ -149,21 +149,21 @@ async function detectDuplicateGroups(): Promise<DuplicateGroup[]> {
           if (a.is_anonymous !== b.is_anonymous) {
             return a.is_anonymous === false ? -1 : 1;
           }
-          
+
           // More paid generations
           const aPaidGens = a.total_paid_generation || 0;
           const bPaidGens = b.total_paid_generation || 0;
           if (aPaidGens !== bPaidGens) {
             return bPaidGens - aPaidGens;
           }
-          
+
           // More total generations
           const aTotalGens = a.total_summary_generation || 0;
           const bTotalGens = b.total_summary_generation || 0;
           if (aTotalGens !== bTotalGens) {
             return bTotalGens - aTotalGens;
           }
-          
+
           // More recent activity
           const aLastUsed = a.last_used ? new Date(a.last_used).getTime() : 0;
           const bLastUsed = b.last_used ? new Date(b.last_used).getTime() : 0;
@@ -223,22 +223,22 @@ async function getUserStats(): Promise<UserStats> {
     // Count anonymous users - check for various possible values
     const anonymousUsers = data?.filter(user => {
       const anonymousValue = user.is_anonymous;
-      return anonymousValue === 'TRUE' || 
-             anonymousValue === 'true' || 
-             anonymousValue === '1' || 
-             anonymousValue === 1 ||
-             (typeof anonymousValue === 'boolean' && anonymousValue === true);
+      return anonymousValue === 'TRUE' ||
+        anonymousValue === 'true' ||
+        anonymousValue === '1' ||
+        anonymousValue === 1 ||
+        (typeof anonymousValue === 'boolean' && anonymousValue === true);
     }).length || 0;
-    
+
     // Active users: users who have used the system in the last 30 days
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    const activeUsers = data?.filter(user => 
+    const activeUsers = data?.filter(user =>
       user.last_used && new Date(user.last_used) >= thirtyDaysAgo
     ).length || 0;
 
     // Total generations (sum of all paid generations)
-    const totalGenerations = data?.reduce((sum, user) => 
+    const totalGenerations = data?.reduce((sum, user) =>
       sum + (user.total_paid_generation || 0), 0
     ) || 0;
 
@@ -266,7 +266,7 @@ async function getTotalUniqueUsersCount(): Promise<number> {
   try {
     // Get all duplicate groups
     const duplicateGroups = await detectDuplicateGroups();
-    
+
     // Get all users
     const { data: usersData, error: usersError } = await supabaseAdmin
       .from('user_data')
@@ -278,12 +278,12 @@ async function getTotalUniqueUsersCount(): Promise<number> {
     }
 
     const totalUsers = usersData?.length || 0;
-    
+
     // Calculate total duplicate users (not counting primary users)
     const totalDuplicateUsers = duplicateGroups.reduce((sum, group) => {
       return sum + group.duplicateUsers.length; // Only count duplicates, not primary
     }, 0);
-    
+
     // Unique users = Total users - Duplicate users
     return totalUsers - totalDuplicateUsers;
   } catch (error: any) {
@@ -298,7 +298,7 @@ async function getTotalUniqueUsersCount(): Promise<number> {
 async function mergeDuplicateUsers(groupKey: string): Promise<DeleteUserResponse> {
   try {
     console.log('🔄 Starting merge process for group:', groupKey);
-    
+
     const duplicateGroup = await getDuplicateGroupUsers(groupKey);
     if (!duplicateGroup || duplicateGroup.users.length < 2) {
       return {
@@ -310,7 +310,7 @@ async function mergeDuplicateUsers(groupKey: string): Promise<DeleteUserResponse
 
     const primaryUser = duplicateGroup.primaryUser;
     const duplicateUsers = duplicateGroup.duplicateUsers;
-    
+
     console.log('👑 Primary user:', primaryUser.user_id);
     console.log('🔄 Duplicates to merge:', duplicateUsers.map(u => u.user_id));
 
@@ -321,7 +321,7 @@ async function mergeDuplicateUsers(groupKey: string): Promise<DeleteUserResponse
     const totalPaidGeneration = duplicateGroup.users.reduce(
       (sum, user) => sum + (user.total_paid_generation || 0), 0
     );
-    
+
     // Find the most recent last_used date
     const mostRecentDate = duplicateGroup.users.reduce((latest, user) => {
       if (!user.last_used) return latest;
@@ -345,13 +345,13 @@ async function mergeDuplicateUsers(groupKey: string): Promise<DeleteUserResponse
     // Step 2: Update related records to point to primary user
     for (const duplicateUser of duplicateUsers) {
       console.log(`🔄 Updating references for user: ${duplicateUser.user_id}`);
-      
+
       // Update summary_question_answer records
       const { error: questionAnswerError } = await supabaseAdmin
         .from('summary_question_answer')
         .update({ user_id: primaryUser.user_id })
         .eq('user_id', duplicateUser.user_id);
-      
+
       if (questionAnswerError) {
         console.error('❌ Error updating summary_question_answer:', questionAnswerError);
         return {
@@ -360,13 +360,13 @@ async function mergeDuplicateUsers(groupKey: string): Promise<DeleteUserResponse
           error: `Failed to update question answer records: ${questionAnswerError.message}`
         };
       }
-      
+
       // Update summary_generation records
       const { error: summaryError } = await supabaseAdmin
         .from('summary_generation')
         .update({ user_id: primaryUser.user_id })
         .eq('user_id', duplicateUser.user_id);
-      
+
       if (summaryError) {
         console.error('❌ Error updating summary_generation:', summaryError);
         return {
@@ -381,7 +381,7 @@ async function mergeDuplicateUsers(groupKey: string): Promise<DeleteUserResponse
         .from('transaction_details')
         .update({ user_id: primaryUser.user_id })
         .eq('user_id', duplicateUser.user_id);
-      
+
       if (transactionError) {
         console.error('❌ Error updating transaction_details:', transactionError);
         return {
@@ -398,7 +398,7 @@ async function mergeDuplicateUsers(groupKey: string): Promise<DeleteUserResponse
       .from('user_data')
       .update(mergedUserData)
       .eq('user_id', primaryUser.user_id);
-    
+
     if (updateError) {
       console.error('❌ Error updating primary user:', updateError);
       return {
@@ -415,7 +415,7 @@ async function mergeDuplicateUsers(groupKey: string): Promise<DeleteUserResponse
         .from('user_data')
         .delete()
         .eq('user_id', duplicateUser.user_id);
-      
+
       if (deleteError) {
         console.error('❌ Error deleting duplicate user:', deleteError);
         return {
@@ -428,7 +428,7 @@ async function mergeDuplicateUsers(groupKey: string): Promise<DeleteUserResponse
 
     console.log('✅ Merge completed successfully!');
     console.log(`📊 Merged ${duplicateUsers.length} duplicate(s) into primary user: ${primaryUser.user_id}`);
-    
+
     return {
       success: true,
       message: `Successfully merged ${duplicateUsers.length} duplicate users. New totals: ${totalSummaryGeneration} total generations, ${totalPaidGeneration} paid generations.`,
@@ -448,12 +448,12 @@ async function mergeDuplicateUsers(groupKey: string): Promise<DeleteUserResponse
  * Merge duplicate users with a custom primary user (manually selected)
  */
 async function mergeDuplicateUsersWithCustomPrimary(
-  groupKey: string, 
+  groupKey: string,
   primaryUserId: string
 ): Promise<DeleteUserResponse> {
   try {
     console.log('🔄 Starting custom merge process for group:', groupKey, 'with primary:', primaryUserId);
-    
+
     const duplicateGroup = await getDuplicateGroupUsers(groupKey);
     if (!duplicateGroup || duplicateGroup.users.length < 2) {
       return {
@@ -475,7 +475,7 @@ async function mergeDuplicateUsersWithCustomPrimary(
 
     // Create new group structure with custom primary
     const customDuplicateUsers = duplicateGroup.users.filter(u => u.user_id !== primaryUserId);
-    
+
     console.log('👑 Custom primary user:', customPrimaryUser.user_id);
     console.log('🔄 Duplicates to merge:', customDuplicateUsers.map(u => u.user_id));
 
@@ -486,7 +486,7 @@ async function mergeDuplicateUsersWithCustomPrimary(
     const totalPaidGeneration = duplicateGroup.users.reduce(
       (sum, user) => sum + (user.total_paid_generation || 0), 0
     );
-    
+
     // Find the most recent last_used date
     const mostRecentDate = duplicateGroup.users.reduce((latest, user) => {
       if (!user.last_used) return latest;
@@ -510,13 +510,13 @@ async function mergeDuplicateUsersWithCustomPrimary(
     // Step 2: Update related records to point to custom primary user
     for (const duplicateUser of customDuplicateUsers) {
       console.log(`🔄 Updating references for user: ${duplicateUser.user_id}`);
-      
+
       // Update summary_question_answer records
       const { error: questionAnswerError } = await supabaseAdmin
         .from('summary_question_answer')
         .update({ user_id: customPrimaryUser.user_id })
         .eq('user_id', duplicateUser.user_id);
-      
+
       if (questionAnswerError) {
         console.error('❌ Error updating summary_question_answer:', questionAnswerError);
         return {
@@ -525,13 +525,13 @@ async function mergeDuplicateUsersWithCustomPrimary(
           error: `Failed to update question answer records: ${questionAnswerError.message}`
         };
       }
-      
+
       // Update summary_generation records
       const { error: summaryError } = await supabaseAdmin
         .from('summary_generation')
         .update({ user_id: customPrimaryUser.user_id })
         .eq('user_id', duplicateUser.user_id);
-      
+
       if (summaryError) {
         console.error('❌ Error updating summary_generation:', summaryError);
         return {
@@ -546,7 +546,7 @@ async function mergeDuplicateUsersWithCustomPrimary(
         .from('transaction_details')
         .update({ user_id: customPrimaryUser.user_id })
         .eq('user_id', duplicateUser.user_id);
-      
+
       if (transactionError) {
         console.error('❌ Error updating transaction_details:', transactionError);
         return {
@@ -563,7 +563,7 @@ async function mergeDuplicateUsersWithCustomPrimary(
       .from('user_data')
       .update(mergedUserData)
       .eq('user_id', customPrimaryUser.user_id);
-    
+
     if (updateError) {
       console.error('❌ Error updating custom primary user:', updateError);
       return {
@@ -580,7 +580,7 @@ async function mergeDuplicateUsersWithCustomPrimary(
         .from('user_data')
         .delete()
         .eq('user_id', duplicateUser.user_id);
-      
+
       if (deleteError) {
         console.error('❌ Error deleting duplicate user:', deleteError);
         return {
@@ -593,7 +593,7 @@ async function mergeDuplicateUsersWithCustomPrimary(
 
     console.log('✅ Custom merge completed successfully!');
     console.log(`📊 Merged ${customDuplicateUsers.length} duplicate(s) into custom primary user: ${customPrimaryUser.user_id}`);
-    
+
     return {
       success: true,
       message: `Successfully merged ${customDuplicateUsers.length} duplicate users into selected primary. New totals: ${totalSummaryGeneration} total generations, ${totalPaidGeneration} paid generations.`,
@@ -613,10 +613,10 @@ async function mergeDuplicateUsersWithCustomPrimary(
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    
+
     // Check for special operations
     const operation = searchParams.get('operation');
-    
+
     // Handle stats operation
     if (operation === 'stats') {
       const stats = await getUserStats();
@@ -625,7 +625,7 @@ export async function GET(request: NextRequest) {
         data: stats
       });
     }
-    
+
     // Handle unique count operation
     if (operation === 'unique-count') {
       const uniqueCount = await getTotalUniqueUsersCount();
@@ -634,7 +634,7 @@ export async function GET(request: NextRequest) {
         data: { uniqueUsersCount: uniqueCount }
       });
     }
-    
+
     // Handle duplicate groups operation
     if (operation === 'duplicate-groups') {
       const duplicateGroups = await detectDuplicateGroups();
@@ -643,7 +643,7 @@ export async function GET(request: NextRequest) {
         data: { duplicateGroups }
       });
     }
-    
+
     // Handle get duplicate group operation
     if (operation === 'duplicate-group' && searchParams.get('groupKey')) {
       const groupKey = searchParams.get('groupKey')!;
@@ -659,10 +659,10 @@ export async function GET(request: NextRequest) {
         data: duplicateGroup
       });
     }
-    
+
     // Check if duplicate detection is requested
     const withDuplicateDetection = searchParams.get('withDuplicateDetection') === 'true';
-    
+
     // Pagination
     const page = parseInt(searchParams.get('page') || '1');
     const pageSize = parseInt(searchParams.get('pageSize') || '20');
@@ -773,13 +773,13 @@ export async function GET(request: NextRequest) {
         const email = (user.email || '').toLowerCase();
         const userId = (user.user_id || '').toLowerCase();
         const mobile = (user.mobile_number || '').toLowerCase();
-        
-        return !(userName.includes(excludeTerm) || 
-                email.includes(excludeTerm) || 
-                userId.includes(excludeTerm) || 
-                mobile.includes(excludeTerm));
+
+        return !(userName.includes(excludeTerm) ||
+          email.includes(excludeTerm) ||
+          userId.includes(excludeTerm) ||
+          mobile.includes(excludeTerm));
       });
-      
+
       totalFilteredRecords = filteredData.length;
       const startIndex = (page - 1) * pageSize;
       const endIndex = startIndex + pageSize;
@@ -791,7 +791,7 @@ export async function GET(request: NextRequest) {
       try {
         const duplicateGroups = await detectDuplicateGroups();
         const duplicateGroupsMap = new Map();
-        
+
         // Create a map of primary user IDs for each group
         duplicateGroups.forEach(group => {
           group.users.forEach((user, index) => {
@@ -835,9 +835,9 @@ export async function GET(request: NextRequest) {
     // Calculate filtered statistics if filters applied
     let filteredStats: UserStats | undefined;
 
-    const hasFilters = filters.searchTerm || filters.excludeTerm || filters.dateFrom || 
-                       filters.dateTo || filters.isAnonymous !== null || filters.gender || 
-                       filters.ageFrom || filters.ageTo;
+    const hasFilters = filters.searchTerm || filters.excludeTerm || filters.dateFrom ||
+      filters.dateTo || filters.isAnonymous !== null || filters.gender ||
+      filters.ageFrom || filters.ageTo;
 
     if (hasFilters) {
       let statsQuery = supabaseAdmin.from('user_data').select('*');
@@ -872,11 +872,11 @@ export async function GET(request: NextRequest) {
           const email = (user.email || '').toLowerCase();
           const userId = (user.user_id || '').toLowerCase();
           const mobile = (user.mobile_number || '').toLowerCase();
-          
-          return !(userName.includes(excludeTerm) || 
-                  email.includes(excludeTerm) || 
-                  userId.includes(excludeTerm) || 
-                  mobile.includes(excludeTerm));
+
+          return !(userName.includes(excludeTerm) ||
+            email.includes(excludeTerm) ||
+            userId.includes(excludeTerm) ||
+            mobile.includes(excludeTerm));
         });
       }
 
@@ -890,13 +890,71 @@ export async function GET(request: NextRequest) {
           const val = user.is_anonymous;
           return val === 'TRUE' || val === 'true' || val === '1' || val === 1 || val === true;
         }).length,
-        activeUsers: completeFilteredData.filter((user: any) => 
+        activeUsers: completeFilteredData.filter((user: any) =>
           user.last_used && new Date(user.last_used) >= thirtyDaysAgo
         ).length,
-        totalGenerations: completeFilteredData.reduce((sum: number, user: any) => 
+        totalGenerations: completeFilteredData.reduce((sum: number, user: any) =>
           sum + (user.total_paid_generation || 0), 0
         )
       };
+    }
+
+    // Calculate real-time generation counts from summary_generation table
+    console.log('📊 Calculating real-time generation counts...');
+
+    // Get all user IDs from the filtered data
+    const userIds = filteredData.map((user: any) => user.user_id);
+
+    if (userIds.length > 0) {
+      // Fetch all summary_generation records for these users
+      const { data: summaries } = await supabaseAdmin
+        .from('summary_generation')
+        .select('user_id, status, payment_status')
+        .in('user_id', userIds);
+
+      // Calculate counts per user
+      const generationCounts = new Map<string, { total: number; paid: number }>();
+
+      summaries?.forEach((summary) => {
+        const uid = summary.user_id;
+        if (!uid) return;
+
+        if (!generationCounts.has(uid)) {
+          generationCounts.set(uid, { total: 0, paid: 0 });
+        }
+
+        const counts = generationCounts.get(uid)!;
+
+        // Count TOTAL: Only count if status = 'Complete'
+        const isComplete = summary.status === 'Complete' ||
+          summary.status === 'complete' ||
+          summary.status === 'COMPLETE';
+
+        if (isComplete) {
+          counts.total++;
+        }
+
+        // Count PAID: Only count if payment_status = 'success'
+        const isPaid = summary.payment_status === 'success' ||
+          summary.payment_status === 'Success' ||
+          summary.payment_status === 'SUCCESS';
+
+        if (isPaid) {
+          counts.paid++;
+        }
+      });
+
+      // Inject the calculated counts into user data
+      filteredData = filteredData.map((user: any) => {
+        const counts = generationCounts.get(user.user_id);
+        return {
+          ...user,
+          total_summary_generation: counts?.total || 0,
+          total_paid_generation: counts?.paid || 0
+        };
+      });
+
+      console.log(`✅ Calculated generation counts for ${generationCounts.size} users`);
     }
 
     return NextResponse.json({
@@ -931,7 +989,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     console.log('🗑️ Starting cascade delete for user:', userId);
-    
+
     // Step 1: Delete related records in summary_question_answer table
     console.log('📝 Deleting question answers...');
     const { error: questionError } = await supabaseAdmin
@@ -991,7 +1049,7 @@ export async function DELETE(request: NextRequest) {
         { status: 500 }
       );
     }
-    
+
     console.log('✅ User deleted successfully!');
     return NextResponse.json({
       success: true,
@@ -1087,10 +1145,10 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      const mergeResult = primaryUserId 
+      const mergeResult = primaryUserId
         ? await mergeDuplicateUsersWithCustomPrimary(groupKey, primaryUserId)
         : await mergeDuplicateUsers(groupKey);
-      
+
       return NextResponse.json(mergeResult);
     }
 
