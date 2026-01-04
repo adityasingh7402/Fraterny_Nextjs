@@ -24,7 +24,7 @@ const APPROVE_TEMPLATE = `<!DOCTYPE html>
     <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden;">
         <!-- Header -->
         <div class="mobile-header" style="padding: 32px 40px 24px 40px; border-bottom: 1px solid #e5e5e5;">
-            <h1 style="margin: 0; font-family: 'Gilroy-Bold', sans-serif; font-size: 28px; font-weight: 700; color: #1a1a1a; letter-spacing: -1px;">FRAT.</h1>
+            <img src="https://fraterny.com/email_logo.png" alt="Fraterny" height="28" style="display: block; height: 28px; width: auto; border: 0;">
         </div>
 
         <!-- Content -->
@@ -70,7 +70,7 @@ const REJECT_TEMPLATE = `<!DOCTYPE html>
     <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden;">
         <!-- Header -->
         <div class="mobile-header" style="padding: 32px 40px 24px 40px; border-bottom: 1px solid #e5e5e5;">
-            <h1 style="margin: 0; font-family: 'Gilroy-Bold', sans-serif; font-size: 28px; font-weight: 700; color: #1a1a1a; letter-spacing: -1px;">FRAT.</h1>
+            <img src="https://fraterny.com/email_logo.png" alt="Fraterny" height="28" style="display: block; height: 28px; width: auto; border: 0;">
         </div>
 
         <!-- Content -->
