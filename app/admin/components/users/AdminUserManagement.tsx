@@ -608,6 +608,49 @@ const AdminUserManagement: React.FC = () => {
     }
   }, [currentPage]); // Only depend on currentPage
 
+  // Sync generation counters
+  const handleSyncCounters = async () => {
+    if (!confirm('This will recalculate generation counters for ALL users from the summary_generation table. Continue?')) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      console.log('🔄 Starting sync counters...');
+      const response = await fetch('/api/admin/users/sync-counters', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({})
+      });
+
+      console.log('📡 Response status:', response.status);
+      const data = await response.json();
+      console.log('📊 Response data:', data);
+
+      if (data.success) {
+        toast.success(data.message || `Synced counters for ${data.updated} users`);
+        console.log('✅ Sync successful, refreshing data...');
+
+        // Refresh data
+        await fetchUserStats();
+        await fetchUniqueUsersCount();
+        await fetchUsersData();
+
+        console.log('✅ Data refreshed!');
+      } else {
+        console.error('❌ Sync failed:', data.error);
+        toast.error(data.error || 'Failed to sync counters');
+      }
+    } catch (error: any) {
+      console.error('❌ Sync error:', error);
+      toast.error(error.message || 'Failed to sync counters');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Helper function to check if any filters are active (based on applied filters, not input states)
   const hasActiveFilters = () => {
     const hasFilters = !!(appliedFilters.searchTerm || appliedFilters.excludeTerm || appliedFilters.dateFrom ||
@@ -622,6 +665,15 @@ const AdminUserManagement: React.FC = () => {
       <div className="p-8">
         <div className="flex flex-wrap justify-between items-center gap-3 mb-8">
           <p className="text-gray-900 text-3xl font-black leading-tight tracking-[-0.033em]">User Management</p>
+          <button
+            onClick={handleSyncCounters}
+            disabled={loading}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold transition-colors"
+            title="Recalculate generation counters from database"
+          >
+            <Activity className="h-4 w-4" />
+            Sync Counters
+          </button>
         </div>
 
         {/* Statistics Cards */}
@@ -688,8 +740,8 @@ const AdminUserManagement: React.FC = () => {
           {/* Total Generations Card */}
           <div
             className={`flex flex-col gap-2 rounded-xl p-6 border cursor-pointer transition-colors duration-200 ${appliedFilters.minPaidGeneration
-                ? 'border-purple-300 bg-purple-50'
-                : 'border-gray-200 bg-white hover:bg-purple-50 hover:border-purple-300'
+              ? 'border-purple-300 bg-purple-50'
+              : 'border-gray-200 bg-white hover:bg-purple-50 hover:border-purple-300'
               }`}
             onClick={() => {
               // Filter to show only users with paid generations
@@ -1111,8 +1163,8 @@ const AdminUserManagement: React.FC = () => {
                           </td>
                           <td className="py-4 px-4">
                             <span className={`px-2 py-1 text-xs rounded-full ${isAnonymous
-                                ? 'bg-orange-100 text-orange-800'
-                                : 'bg-green-100 text-green-800'
+                              ? 'bg-orange-100 text-orange-800'
+                              : 'bg-green-100 text-green-800'
                               }`}>
                               {isAnonymous ? 'Anonymous' : 'Registered'}
                             </span>
@@ -1179,8 +1231,8 @@ const AdminUserManagement: React.FC = () => {
                       key={i + 1}
                       onClick={() => handlePageChange(i + 1)}
                       className={`flex items-center justify-center rounded-lg h-9 w-9 text-sm font-medium ${currentPage === i + 1
-                          ? 'bg-blue-600 text-white'
-                          : 'border border-gray-300 text-gray-600 hover:bg-gray-100'
+                        ? 'bg-blue-600 text-white'
+                        : 'border border-gray-300 text-gray-600 hover:bg-gray-100'
                         }`}
                     >
                       {i + 1}
@@ -1192,8 +1244,8 @@ const AdminUserManagement: React.FC = () => {
                     <button
                       onClick={() => handlePageChange(1)}
                       className={`flex items-center justify-center rounded-lg h-9 w-9 text-sm font-medium ${currentPage === 1
-                          ? 'bg-blue-600 text-white'
-                          : 'border border-gray-300 text-gray-600 hover:bg-gray-100'
+                        ? 'bg-blue-600 text-white'
+                        : 'border border-gray-300 text-gray-600 hover:bg-gray-100'
                         }`}
                     >
                       1
@@ -1211,8 +1263,8 @@ const AdminUserManagement: React.FC = () => {
                             key={pageNum}
                             onClick={() => handlePageChange(pageNum)}
                             className={`flex items-center justify-center rounded-lg h-9 w-9 text-sm font-medium ${currentPage === pageNum
-                                ? 'bg-blue-600 text-white'
-                                : 'border border-gray-300 text-gray-600 hover:bg-gray-100'
+                              ? 'bg-blue-600 text-white'
+                              : 'border border-gray-300 text-gray-600 hover:bg-gray-100'
                               }`}
                           >
                             {pageNum}
@@ -1230,8 +1282,8 @@ const AdminUserManagement: React.FC = () => {
                       <button
                         onClick={() => handlePageChange(pagination.totalPages)}
                         className={`flex items-center justify-center rounded-lg h-9 w-9 text-sm font-medium ${currentPage === pagination.totalPages
-                            ? 'bg-blue-600 text-white'
-                            : 'border border-gray-300 text-gray-600 hover:bg-gray-100'
+                          ? 'bg-blue-600 text-white'
+                          : 'border border-gray-300 text-gray-600 hover:bg-gray-100'
                           }`}
                       >
                         {pagination.totalPages}
