@@ -185,7 +185,7 @@ export const UpsellSheet: React.FC<UpsellSheetProps> = ({ open, onClose, onPayme
                   <input
                     type="text"
                     value={couponCode}
-                    onChange={(e) => setCouponCode(e.target.value)}
+                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                     disabled={couponApplied || applyingCoupon}
                     placeholder="Enter code"
                     className="flex-1 px-3 py-2 rounded-xl border border-gray-200 text-sm focus:outline-none focus:border-blue-500 transition-colors uppercase"

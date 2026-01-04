@@ -25,9 +25,10 @@ interface PDFImageViewerProps {
     };
     isLoading: boolean;
   };
+  isCheckingPayment?: boolean;
 }
 
-export const PDFImageViewer: React.FC<PDFImageViewerProps> = ({ paymentSuccess, onUnlockClick, paymentStatus, onPDFDownload, pricing }) => {
+export const PDFImageViewer: React.FC<PDFImageViewerProps> = ({ paymentSuccess, onUnlockClick, paymentStatus, onPDFDownload, pricing, isCheckingPayment = false }) => {
   const [zoom, setZoom] = useState(1);
   const [dragStart, setDragStart] = useState<{ x: number; y: number } | null>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -159,67 +160,75 @@ export const PDFImageViewer: React.FC<PDFImageViewerProps> = ({ paymentSuccess, 
         }}>
 
           <div className="relative z-10">
-            {/* Pricing Section - Only show when payment not done */}
-            {paymentStatus?.ispaymentdone !== "success" && (
-              <div className="flex items-center justify-center gap-3 mb-2">
-                <span className="text-4xl font-gilroy-bold text-white">
-                  {pricing.isLoading ? '...' : pricing.razorpay.main}
-                </span>
-                {/* <span className="text-xl font-gilroy-regular line-through text-white/70">
-                  {pricing.isLoading ? '...' : pricing.razorpay.original}
-                </span> */}
+            {isCheckingPayment ? (
+              <div className="flex flex-col items-center justify-center py-4">
+                <span className="text-white/90 font-gilroy-medium animate-pulse">Verifying access...</span>
               </div>
-            )}
-
-            {/* 35+ Pages PDF Label - Always visible */}
-            <div className="flex items-center justify-center gap-1 text-sm text-white/90 mb-4">
-              <FileText className="h-4 w-4 text-white/90" />
-              <span className="font-gilroy-regular">Your Mind Printed</span>
-            </div>
-
-            {/* Centered Button */}
-            <div className="flex justify-center">
-              {paymentStatus?.ispaymentdone === "success" ? (
-                paymentStatus.quest_status === "generated" ? (
-                  // Payment done and PDF ready - show download button
-                  <motion.button
-                    onClick={onPDFDownload}
-                    whileTap={{ scale: 0.98 }}
-                    className="font-gilroy-semibold flex items-center bg-black justify-center rounded-full px-6 py-2.5 text-[14px] font-[700] text-white gap-2"
-                    style={{
-                      width: '280px'
-                    }}
-                    aria-label="Download PDF report"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    Get Your File
-                  </motion.button>
-                ) : (
-                  // Payment done but PDF still generating
-                  <div className="flex items-center justify-center rounded-full px-6 py-2.5 text-[14px] font-[700] text-white bg-white/20 gap-2" style={{ width: '280px' }}>
-                    PDF Generating...
+            ) : (
+              <>
+                {/* Pricing Section - Only show when payment not done */}
+                {paymentStatus?.ispaymentdone !== "success" && (
+                  <div className="flex items-center justify-center gap-3 mb-2">
+                    <span className="text-4xl font-gilroy-bold text-white">
+                      {pricing.isLoading ? '...' : pricing.razorpay.main}
+                    </span>
+                    {/* <span className="text-xl font-gilroy-regular line-through text-white/70">
+                      {pricing.isLoading ? '...' : pricing.razorpay.original}
+                    </span> */}
                   </div>
-                )
-              ) : (
-                // Payment not done - show unlock button
-                <motion.button
-                  onClick={onUnlockClick}
-                  whileTap={{ scale: 0.98 }}
-                  className="font-gilroy-semibold flex items-center justify-center rounded-full px-6 py-2.5 text-[14px] font-[700] text-black"
-                  style={{
-                    background: 'rgba(255,255,255,0.95)',
-                    boxShadow: "0 10px 20px rgba(255,255,255,0.20)",
-                    width: '280px'
-                  }}
-                  aria-label="Unlock full PDF report"
-                >
-                  Get a Personal Artifact
-                </motion.button>
-              )}
+                )}
 
-            </div>
+                {/* 35+ Pages PDF Label - Always visible */}
+                <div className="flex items-center justify-center gap-1 text-sm text-white/90 mb-4">
+                  <FileText className="h-4 w-4 text-white/90" />
+                  <span className="font-gilroy-regular">Your Mind Printed</span>
+                </div>
+
+                {/* Centered Button */}
+                <div className="flex justify-center">
+                  {paymentStatus?.ispaymentdone === "success" ? (
+                    paymentStatus.quest_status === "generated" ? (
+                      // Payment done and PDF ready - show download button
+                      <motion.button
+                        onClick={onPDFDownload}
+                        whileTap={{ scale: 0.98 }}
+                        className="font-gilroy-semibold flex items-center bg-black justify-center rounded-full px-6 py-2.5 text-[14px] font-[700] text-white gap-2"
+                        style={{
+                          width: '280px'
+                        }}
+                        aria-label="Download PDF report"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Get Your File
+                      </motion.button>
+                    ) : (
+                      // Payment done but PDF still generating
+                      <div className="flex items-center justify-center rounded-full px-6 py-2.5 text-[14px] font-[700] text-white bg-white/20 gap-2" style={{ width: '280px' }}>
+                        PDF Generating...
+                      </div>
+                    )
+                  ) : (
+                    // Payment not done - show unlock button
+                    <motion.button
+                      onClick={onUnlockClick}
+                      whileTap={{ scale: 0.98 }}
+                      className="font-gilroy-semibold flex items-center justify-center rounded-full px-6 py-2.5 text-[14px] font-[700] text-black"
+                      style={{
+                        background: 'rgba(255,255,255,0.95)',
+                        boxShadow: "0 10px 20px rgba(255,255,255,0.20)",
+                        width: '280px'
+                      }}
+                      aria-label="Unlock full PDF report"
+                    >
+                      Get a Personal Artifact
+                    </motion.button>
+                  )}
+
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
