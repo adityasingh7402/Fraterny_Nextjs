@@ -109,12 +109,12 @@ export function QuestResultClient({
   const [selectedPrediction, setSelectedPrediction] = useState<any>(null);
   const [selectedFinding, setSelectedFinding] = useState<string | null>(null);
   const [clickedbuttonId, setClickedButtonId] = useState<string | null>(null);
-  const [likertValues, setLikertValues] = useState({ q1: 7, q2: 7, q3: 7, q4: 7 });
-  const [likertSubmitting, setLikertSubmitting] = useState(false);
+
   const [couponCode, setCouponCode] = useState<string>('');
   const [couponApplied, setCouponApplied] = useState<boolean>(false);
   const [discountDetails, setDiscountDetails] = useState<any>(null);
   const archetype: Record<string, string> = mockData.archetype;
+  const [isCheckingPayment, setIsCheckingPayment] = useState(true);
   const router = useRouter();
   const getEffectiveUserId = () => {
     return userId;
@@ -262,7 +262,12 @@ export function QuestResultClient({
         setBasePricing(dynamicPricing);
       } catch (error) {
         console.error('Failed to load dynamic pricing:', error);
-        // Keep fallback pricing
+        // Keep fallback pricing but ensure loading state is false
+        setPricing(prev => {
+          const updated = { ...prev, isLoading: false };
+          setBasePricing(updated);
+          return updated;
+        });
       }
     };
 
@@ -272,6 +277,7 @@ export function QuestResultClient({
   // Check for existing payment status on mount
   useEffect(() => {
     const checkPaymentStatus = async () => {
+      setIsCheckingPayment(true);
       try {
         const existingStatus = await checkExistingPaymentStatus(sessionId, testId);
 
@@ -282,6 +288,8 @@ export function QuestResultClient({
         }
       } catch (error) {
         console.error('Error checking existing payment:', error);
+      } finally {
+        setIsCheckingPayment(false);
       }
     };
     checkPaymentStatus();
@@ -741,37 +749,7 @@ export function QuestResultClient({
   //   }
   // };
 
-  const handleLikertSubmit = async () => {
-    setLikertSubmitting(true);
-    try {
-      console.log(likertValues, testId);
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/likert/`, {
-        test_id: testId,
-        q1: String(likertValues.q1),
-        q2: String(likertValues.q2),
-        q3: String(likertValues.q3),
-        q4: String(likertValues.q4)
-      });
-      console.log(response.data);
 
-      if (response.data.status === 200) {
-        toast.success(response.data.Message || 'Successfully updated the likert', {
-          position: "top-right"
-        });
-      } else {
-        toast.error(response.data.Message || 'Failed to update', {
-          position: "top-right"
-        });
-      }
-    } catch (error: any) {
-      console.error('Likert submission error:', error);
-      toast.error(error?.response?.data?.Message || 'Failed to update the likert', {
-        position: "top-right"
-      });
-    } finally {
-      setLikertSubmitting(false);
-    }
-  };
 
   const [activeCardColor, setActiveCardColor] = useState<string>('#0394A3');
   const isMobile = useIsMobile();
@@ -1109,6 +1087,7 @@ export function QuestResultClient({
                   }
                 }}
                 pricing={pricing}
+                isCheckingPayment={isCheckingPayment}
               />
             </div>
             <div className="w-full lg:w-auto lg:flex-1 lg:max-w-2xl">
@@ -1129,6 +1108,7 @@ export function QuestResultClient({
                   }
                 }}
                 pricing={pricing}
+                isCheckingPayment={isCheckingPayment}
               />
             </div>
 

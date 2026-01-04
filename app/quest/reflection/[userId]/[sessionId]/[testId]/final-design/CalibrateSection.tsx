@@ -179,7 +179,7 @@ export default function CalibrateSection({
             console.log('Calibration response:', response.data);
 
             if (response.data.status === 200) {
-                toast.success(response.data.Message || 'Successfully updated calibration', {
+                toast.success(response.data.Message || 'Psych File successfully updated', {
                     position: "top-right"
                 });
             } else {
