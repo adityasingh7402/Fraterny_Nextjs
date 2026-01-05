@@ -233,7 +233,7 @@ export default function CalibrateSection({
                             </span>
                             <div className="flex items-baseline gap-2">
                                 <span className="text-6xl md:text-7xl font-gilroy-bold" style={{ color: accentColor }}>
-                                    {depthScore}
+                                    {Math.min(100, depthScore)}
                                 </span>
                                 <span className="text-xl md:text-2xl text-neutral-400 font-gilroy-medium">/ 100</span>
                             </div>
@@ -242,7 +242,7 @@ export default function CalibrateSection({
                                     className="h-full rounded-full"
                                     style={{ backgroundColor: accentColor }}
                                     initial={{ width: 0 }}
-                                    whileInView={{ width: `${depthScore}%` }}
+                                    whileInView={{ width: `${Math.min(100, depthScore)}%` }}
                                     transition={{ duration: 1, ease: "easeOut" }}
                                 />
                             </div>
