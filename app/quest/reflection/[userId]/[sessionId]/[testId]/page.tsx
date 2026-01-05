@@ -3,6 +3,7 @@ import { QuestResultClient } from './components/QuestResultClient';
 import { mockData } from './final-design/ResultData';
 import { prepareFinalData } from './final-design/ResultData';
 import axios from 'axios';
+import { supabase } from '@/lib/supabase';
 
 type Props = {
   params: Promise<{  // ← params is now a Promise
@@ -71,13 +72,39 @@ async function getResultData(userId: string, sessionId: string, testId: string) 
       console.log('📊 Archetype data:', parsedResults.archetype);
 
       // Extract likert data from response if available
-      const likertData = response.data?.likert ? {
-        q1: response.data.likert.q1 ? parseInt(response.data.likert.q1) : undefined,
-        q2: response.data.likert.q2 ? parseInt(response.data.likert.q2) : undefined,
-        q3: response.data.likert.q3 ? parseInt(response.data.likert.q3) : undefined,
-        q4: response.data.likert.q4 ? parseInt(response.data.likert.q4) : undefined,
-        q5: response.data.likert.q5 ? parseInt(response.data.likert.q5) : undefined,
-      } : undefined;
+
+      // Fetch likert data directly from DB to ensure we have it
+      let likertData = undefined;
+
+      try {
+        const { data: dbLikert, error: dbError } = await supabase
+          .from('summary_generation')
+          .select('likertq1, likertq2, likertq3, likertq4')
+          .eq('testid', testId)
+          .single();
+
+        if (dbLikert && !dbError) {
+          console.log('✅ Fetched Likert data directly from DB:', dbLikert);
+          likertData = {
+            q1: dbLikert.likertq1,
+            q2: dbLikert.likertq2,
+            q3: dbLikert.likertq3,
+            q4: dbLikert.likertq4,
+            q5: 5 // Default q5 as we don't track it in calibration sometimes
+          };
+        } else {
+          // Fallback to response data if DB fetch fails
+          likertData = response.data?.likert ? {
+            q1: response.data.likert.q1 ? parseInt(response.data.likert.q1) : undefined,
+            q2: response.data.likert.q2 ? parseInt(response.data.likert.q2) : undefined,
+            q3: response.data.likert.q3 ? parseInt(response.data.likert.q3) : undefined,
+            q4: response.data.likert.q4 ? parseInt(response.data.likert.q4) : undefined,
+            q5: response.data.likert.q5 ? parseInt(response.data.likert.q5) : undefined,
+          } : undefined;
+        }
+      } catch (err) {
+        console.error('Error fetching direct likert data:', err);
+      }
 
       console.log('📊 Likert data from DB:', likertData);
 
