@@ -330,7 +330,7 @@ export const AboutQuest = ({ className }: AboutQuestProps) => {
               variants={imageVariants}
             >
               <Image
-                src='/quest/quest-hero.webp'
+                src='/quest/quest-hero-v2.webp'
                 alt="Quest introspective journaling interface"
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
