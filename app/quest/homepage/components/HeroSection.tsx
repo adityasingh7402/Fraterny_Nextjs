@@ -56,7 +56,7 @@ const HeroSection: React.FC = () => {
 
       {/* Hero Image */}
       <Image
-          src="/quest/quest-hero.webp"
+          src="/quest/quest-hero-v2.webp"
           alt="Quest App Interface"
           width={0}
           height={0}

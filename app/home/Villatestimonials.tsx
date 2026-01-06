@@ -71,10 +71,11 @@ const VillaTestimonials = () => {
 
           {/* Navigation Arrows */}
           <div className="flex items-center gap-3 mt-4">
-            <button
+            <motion.button
               onClick={handlePrev}
               className="w-10 h-10 rounded-full bg-neutral-900 text-white flex items-center justify-center hover:bg-neutral-800 transition-colors"
               aria-label="Previous testimonials"
+              whileTap={{ scale: 0.9 }}
             >
               <svg
                 width="20"
@@ -88,11 +89,12 @@ const VillaTestimonials = () => {
               >
                 <path d="M15 18l-6-6 6-6" />
               </svg>
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               onClick={handleNext}
               className="w-10 h-10 rounded-full border-2 border-neutral-900 text-neutral-900 flex items-center justify-center hover:bg-neutral-900 hover:text-white transition-colors"
               aria-label="Next testimonials"
+              whileTap={{ scale: 0.9 }}
             >
               <svg
                 width="20"
@@ -106,7 +108,7 @@ const VillaTestimonials = () => {
               >
                 <path d="M9 18l6-6-6-6" />
               </svg>
-            </button>
+            </motion.button>
           </div>
         </div>
 
