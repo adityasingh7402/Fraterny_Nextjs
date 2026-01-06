@@ -70,7 +70,7 @@ export const questSections: QuestionSection[] = [
         sectionId: 'section_1',
         placeholder: 'Give more context to your upbringing in different locations.  You can write multiple locations and timelines.',
         enableCityAutocomplete: true,
-        allowAnonymous: true, 
+        allowAnonymous: true,
         isInfo: true,
         infoText: 'Your surroundings helps in understanding the cultural and environmental influences on your upbringing. When combined with other answers, this can provide valuable insights into your thinking patterns and behavior based on you living in a single location vs multiple locations, rural vs urban, developed country vs developing country, cosmopolitan society vs homogenous society. '
       }
@@ -102,7 +102,7 @@ export const questSections: QuestionSection[] = [
         sectionId: 'section_2',
         allowTags: true,
         isInfo: true,
-        infoText: 'Everyone is destined face emotional, psychological and situational consequences of the situations that were out of their control. This question gives me more context on what’s valuable to you, your unmet desires, possible motivations and even your emotional maturity.',
+        infoText: 'Everyone is destined to face emotional, psychological and situational consequences of the situations that were out of their control. This question gives me more context on what’s valuable to you, your unmet desires, possible motivations and even your emotional maturity.',
         placeholder: 'You can write more than 1 thing if you want. Even a small change you would have liked is helpful.'
       },
       {
