@@ -119,7 +119,7 @@ export default function Questlandinglayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className='overflow-hidden h-full w-full fixed inset-0'>
+    <div className='min-h-screen w-full'>
       <Script
         id="website-jsonld"
         type="application/ld+json"
