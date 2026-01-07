@@ -64,13 +64,13 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon-32x32.png' },
-      { url: '/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
+      { url: '/Vector.svg' },
+      { url: '/Vector.svg', type: 'image/svg+xml', sizes: '32x32' },
     ],
     apple: [
-      { url: '/favicon-32x32.png' },
+      { url: '/Vector.svg' },
     ],
-    shortcut: '/favicon.ico',
+    shortcut: '/Vector.svg',
   },
 };
 const jsonLd = {

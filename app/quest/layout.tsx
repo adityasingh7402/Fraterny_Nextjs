@@ -4,12 +4,15 @@ import Script from 'next/script';
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 5,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
+  interactiveWidget: 'resizes-content',
 };
 
 export const metadata: Metadata = {
-  title: 'Quest Mode — Your Psychological File | Fraterny',
-  description: 'Compose a private psychological file from your own words. See a precise fragment free. Access your full edition when ready.',
+  title: 'Quest | Fraterny',
+  description: 'Unlock your true potential with Quest by Fraterny. A private, aesthetic psychological file built from your words. Preview a fragment free; keep your full copy if it feels true.',
   keywords: ['psychological file',
     'personal dossier',
     'identity blueprint',
@@ -34,28 +37,28 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://fraterny.com/quest/quest-mode',
+    canonical: 'https://fraterny.com/quest',
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://fraterny.com/quest/quest-mode',
-    title: 'Quest Mode — Your Psychological File | Fraterny',
-    description: 'A private, aesthetic psychological file built from your words. Preview a fragment free; keep your full copy if it feels true.',
+    url: 'https://fraterny.com/quest',
+    title: 'Quest | Fraterny',
+    description: 'Unlock your true potential with Quest by Fraterny. A private, aesthetic psychological file built from your words. Preview a fragment free; keep your full copy if it feels true.',
     siteName: 'Fraterny',
     images: [
       {
         url: 'https://fraterny.com/Questfavicon.ico',
         width: 1200,
         height: 630,
-        alt: 'Quest — Private Psychological File by Fraterny',
+        alt: 'Quest — Unlock Your True Potential with Fraterny',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Quest Mode — Your Psychological File | Fraterny',
-    description: 'Compose a private psychological file from your words. Preview a precise fragment free; access the full edition when ready.',
+    title: 'Quest | Fraterny',
+    description: 'Unlock your true potential with Quest by Fraterny. A private, aesthetic psychological file built from your words. Preview a fragment free; keep your full copy if it feels true.',
     images: ['https://fraterny.com/Questfavicon.ico'],
     creator: '@frat_erny',
   },
@@ -73,7 +76,7 @@ export const metadata: Metadata = {
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'Fraterny — Quest Mode',
+  name: 'Fraterny — Quest',
   description: 'Quest composes confidential psychological files from user-written answers. Preview a fragment; access your full edition when ready.',
   url: 'https://fraterny.com',
   potentialAction: {
@@ -95,7 +98,7 @@ const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'Fraterny',
-  description: 'Quest by Fraterny composes aesthetic intelligence files—private psychological artifacts built from your words.',
+  description: 'Fraterny — Quest',
   url: 'https://fraterny.com',
   logo: 'https://www.fraterny.com/og-image2.png',
   contactPoint: {
@@ -110,13 +113,13 @@ const organizationJsonLd = {
   ],
 };
 
-export default function QuestLayout({
+export default function Questlandinglayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <div className='overflow-hidden h-full w-full fixed inset-0'>
       <Script
         id="website-jsonld"
         type="application/ld+json"
