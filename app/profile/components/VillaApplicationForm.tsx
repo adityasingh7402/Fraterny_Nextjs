@@ -78,7 +78,7 @@ const villaApplicationSchema = z.object({
   dob: z.string().optional(),
   currentOccupationStatus: z.string().min(1, 'Current Occupation Status is required'),
   company: z.string().optional(),
-  
+
   // Emergency Contact
   emergencyName: z.string().min(0, 'Emergency contact name is required'),
   emergencyPhone: z.string().min(0, 'Emergency contact phone is required'),
@@ -86,10 +86,10 @@ const villaApplicationSchema = z.object({
   // social media
   socialPlatform: z.string().min(1, 'Please select a platform'),
   socialLink: z.string().min(1, 'Social link is required'),
-  
+
   // Quest Data
   selectedTestId: z.string().min(1, 'Please select a Quest assessment'),
-  
+
   // Villa Booking Details
   // checkInDate: z.string().min(1, 'Check-in date is required'),
   // checkOutDate: z.string().min(1, 'Check-out date is required'),
@@ -104,7 +104,7 @@ const villaApplicationSchema = z.object({
       socialLink: z.string().url('Please enter a valid URL')
     })
   ).optional(),
-  
+
   // Additional Info
   purposeOfVisit: z.string().min(1, 'Purpose of visit is required'),
   specialRequests: z.string().optional(),
@@ -226,15 +226,15 @@ export function VillaApplicationForm({ className = '', onSuccess }: VillaApplica
         if (response.data.status === 200) {
           // Filter only completed and paid assessments
           const completedTests = response.data.data
-          
+
           // Sort by date (latest first)
           const sortedTests = completedTests.sort((a, b) => {
             return new Date(b.testtaken).getTime() - new Date(a.testtaken).getTime();
           });
-          
+
           setQuestData(sortedTests);
           console.log('Filtered and sorted Quest data:', sortedTests);
-          
+
         }
       } catch (error) {
         console.error('Failed to fetch Quest data:', error);
@@ -256,12 +256,12 @@ export function VillaApplicationForm({ className = '', onSuccess }: VillaApplica
         const result = await response.json();
 
         if (!result.success) {
-        throw new Error(result.error || 'Failed to fetch editions');
+          throw new Error(result.error || 'Failed to fetch editions');
         }
 
-        const data = result.data; 
+        const data = result.data;
         console.log('Fetched villa editions:', data);
-        
+
         // Filter only active editions that are not sold out and are in the future
         const today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -275,14 +275,14 @@ export function VillaApplicationForm({ className = '', onSuccess }: VillaApplica
             isActive,
             notSoldOut,
             passed: isActive && notSoldOut
-        });
-  
-        // Removed date check for now - showing all active editions
-        return isActive && notSoldOut;
+          });
+
+          // Removed date check for now - showing all active editions
+          return isActive && notSoldOut;
         }).sort((a: VillaEdition, b: VillaEdition) => a.displayOrder - b.displayOrder);
 
         console.log('Filtered available editions:', availableEditions);
-        
+
         setEditions(availableEditions);
       } catch (error) {
         console.error('Error loading editions:', error);
@@ -357,7 +357,7 @@ export function VillaApplicationForm({ className = '', onSuccess }: VillaApplica
         break;
       case 4:
         fieldsToValidate = ['termsAccepted'];
-      break;
+        break;
     }
 
     const isValid = await form.trigger(fieldsToValidate);
@@ -372,132 +372,132 @@ export function VillaApplicationForm({ className = '', onSuccess }: VillaApplica
 
   // Form submission
   const onSubmit = async (data: VillaApplicationFormData) => {
-  setIsSubmitting(true);
+    setIsSubmitting(true);
 
-  try {
-    // Prepare comprehensive submission data
-    const submissionData = {
-      // User Information
-      userId: user?.id,
-      userEmail: user?.email,
-      
-      // Personal Details
-      personalDetails: {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        phone: data.phone,
-        location: data.location,
-        dob: data.dob || null,
-        currentOccupationStatus: data.currentOccupationStatus,
-        company: data.company || null,
-      },
-      
-      // Emergency Contact
-      emergencyContact: {
-        name: data.emergencyName,
-        phone: data.emergencyPhone,
-      },
-      
-      // Social Media
-      socialMedia: {
-        platform: data.socialPlatform,
-        link: data.socialLink,
-      },
-      
-      // Quest Assessment
-      questAssessment: {
-        selectedTestId: data.selectedTestId,
-        testDetails: selectedTest ? {
-          testId: selectedTest.testid,
-          sessionId: selectedTest.sessionid,
-          testTaken: selectedTest.testtaken,
-          paymentStatus: selectedTest.ispaymentdone,
-          questPdf: selectedTest.quest_pdf,
-          questStatus: selectedTest.quest_status,
-        } : null,
-      },
-      
-      // Villa Edition Selection
-      villaEdition: {
-        selectedEditionId: data.selectedEditionId,
-        editionDetails: selectedEdition ? {
-          id: selectedEdition.id,
-          startDate: selectedEdition.startDate,
-          endDate: selectedEdition.endDate,
-          timeFrame: selectedEdition.timeFrame,
-          allocationStatus: selectedEdition.allocationStatus,
-          totalSeats: selectedEdition.totalSeats,
-          allotedSeats: selectedEdition.allotedSeats,
-        } : null,
-      },
-      
-      // Accompanying Persons
-      accompanyingPersons: {
-        count: data.numberOfAccompanyingPersons,
-        persons: data.accompanyingPersons || [],
-      },
-      
-      // Booking Details
-      bookingDetails: {
-        numberOfGuests: data.numberOfGuests,
-        numberOfRooms: data.numberOfRooms,
-        purposeOfVisit: data.purposeOfVisit,
-        specialRequests: data.specialRequests || null,
-        dietaryRequirements: data.dietaryRequirements || null,
-        referralSource: data.referralSource || null,
-      },
-      
-      // Metadata
-      metadata: {
-        submittedAt: new Date().toISOString(),
-        status: 'pending',
-        applicationVersion: '1.0',
-        submissionSource: 'web',
-      },
-    };
+    try {
+      // Prepare comprehensive submission data
+      const submissionData = {
+        // User Information
+        userId: user?.id,
+        userEmail: user?.email,
 
-    // Console log formatted JSON
-    console.log('='.repeat(80));
-    console.log('VILLA APPLICATION SUBMISSION DATA');
-    console.log('='.repeat(80));
-    console.log(JSON.stringify(submissionData, null, 2));
-    console.log('='.repeat(80));
-    
-    // Also log as a single line for easy copying
-    console.log('JSON (single line):', JSON.stringify(submissionData));
-    console.log('='.repeat(80));
+        // Personal Details
+        personalDetails: {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          phone: data.phone,
+          location: data.location,
+          dob: data.dob || null,
+          currentOccupationStatus: data.currentOccupationStatus,
+          company: data.company || null,
+        },
 
-    // Submit to API
-    const [response] = await Promise.all([
-      axios.post('/api/villa/application', submissionData),
-      new Promise(resolve => setTimeout(resolve, 1500)) // 1.5 second minimum
-    ]);
+        // Emergency Contact
+        emergencyContact: {
+          name: data.emergencyName,
+          phone: data.emergencyPhone,
+        },
 
-    if (!response.data.success) {
-      throw new Error(response.data.error || 'Submission failed');
+        // Social Media
+        socialMedia: {
+          platform: data.socialPlatform,
+          link: data.socialLink,
+        },
+
+        // Quest Assessment
+        questAssessment: {
+          selectedTestId: data.selectedTestId,
+          testDetails: selectedTest ? {
+            testId: selectedTest.testid,
+            sessionId: selectedTest.sessionid,
+            testTaken: selectedTest.testtaken,
+            paymentStatus: selectedTest.ispaymentdone,
+            questPdf: selectedTest.quest_pdf,
+            questStatus: selectedTest.quest_status,
+          } : null,
+        },
+
+        // Villa Edition Selection
+        villaEdition: {
+          selectedEditionId: data.selectedEditionId,
+          editionDetails: selectedEdition ? {
+            id: selectedEdition.id,
+            startDate: selectedEdition.startDate,
+            endDate: selectedEdition.endDate,
+            timeFrame: selectedEdition.timeFrame,
+            allocationStatus: selectedEdition.allocationStatus,
+            totalSeats: selectedEdition.totalSeats,
+            allotedSeats: selectedEdition.allotedSeats,
+          } : null,
+        },
+
+        // Accompanying Persons
+        accompanyingPersons: {
+          count: data.numberOfAccompanyingPersons,
+          persons: data.accompanyingPersons || [],
+        },
+
+        // Booking Details
+        bookingDetails: {
+          numberOfGuests: data.numberOfGuests,
+          numberOfRooms: data.numberOfRooms,
+          purposeOfVisit: data.purposeOfVisit,
+          specialRequests: data.specialRequests || null,
+          dietaryRequirements: data.dietaryRequirements || null,
+          referralSource: data.referralSource || null,
+        },
+
+        // Metadata
+        metadata: {
+          submittedAt: new Date().toISOString(),
+          status: 'pending',
+          applicationVersion: '1.0',
+          submissionSource: 'web',
+        },
+      };
+
+      // Console log formatted JSON
+      console.log('='.repeat(80));
+      console.log('VILLA APPLICATION SUBMISSION DATA');
+      console.log('='.repeat(80));
+      console.log(JSON.stringify(submissionData, null, 2));
+      console.log('='.repeat(80));
+
+      // Also log as a single line for easy copying
+      console.log('JSON (single line):', JSON.stringify(submissionData));
+      console.log('='.repeat(80));
+
+      // Submit to API
+      const [response] = await Promise.all([
+        axios.post('/api/villa/application', submissionData),
+        new Promise(resolve => setTimeout(resolve, 1500)) // 1.5 second minimum
+      ]);
+
+      if (!response.data.success) {
+        throw new Error(response.data.error || 'Submission failed');
+      }
+      console.log('Application ID:', response.data.data.applicationId);
+      setIsSuccess(true);
+
+      // if (onSuccess) {
+      //   onSuccess();
+      // }
+
+      // Reset form
+      // form.reset();
+      // setCurrentStep(1);
+      // setSelectedTest(null);
+      // setSelectedEdition(null);
+      // setAccompanyingCount(0);
+
+    } catch (error) {
+      console.error('Application submission error:', error);
+      setSubmissionError(error instanceof Error ? error.message : 'Failed to submit application. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
-    console.log('Application ID:', response.data.data.applicationId);
-    setIsSuccess(true);
-    
-    // if (onSuccess) {
-    //   onSuccess();
-    // }
-
-    // Reset form
-    // form.reset();
-    // setCurrentStep(1);
-    // setSelectedTest(null);
-    // setSelectedEdition(null);
-    // setAccompanyingCount(0);
-    
-  } catch (error) {
-    console.error('Application submission error:', error);
-    setSubmissionError(error instanceof Error ? error.message : 'Failed to submit application. Please try again.');
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  };
 
   // Step content renderer
   const renderStepContent = () => {
@@ -688,10 +688,10 @@ export function VillaApplicationForm({ className = '', onSuccess }: VillaApplica
               <FormItem>
                 <FormLabel className='font-gilroy-bold text-lg'>Profile Link <span className="text-red-500">*</span></FormLabel>
                 <FormControl className='relative font-gilroy-regular'>
-                  <Input 
-                    {...field} 
+                  <Input
+                    {...field}
                     type="url"
-                    placeholder="https://..." 
+                    placeholder="https://..."
                   />
                 </FormControl>
                 <FormMessage />
@@ -790,12 +790,11 @@ export function VillaApplicationForm({ className = '', onSuccess }: VillaApplica
               key={test.testid}
               whileTap={{ scale: 0.98 }}
               onClick={() => handleTestSelect(test)}
-              className={`p-4 rounded-lg border-2 cursor-pointer transition-all shadow-sky-400 ${
-                selectedTest?.testid === test.testid
-                  ? 'border-sky-200 bg-cyan-50 bg-gradient-to-br from-cyan-600 to-blue-900 shadow-md hover:shadow-lg text-white'
-                  : 'border-gray-200 hover:border-sky-700 bg-gradient-to-br from-cyan-500 to-blue-500 shadow-md hover:shadow-lg text-white'
-              }`}
-              
+              className={`p-4 rounded-lg border-2 cursor-pointer transition-all shadow-sky-400 ${selectedTest?.testid === test.testid
+                ? 'border-sky-200 bg-cyan-50 bg-gradient-to-br from-cyan-600 to-blue-900 shadow-md hover:shadow-lg text-white'
+                : 'border-gray-200 hover:border-sky-700 bg-gradient-to-br from-cyan-500 to-blue-500 shadow-md hover:shadow-lg text-white'
+                }`}
+
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
@@ -938,11 +937,11 @@ export function VillaApplicationForm({ className = '', onSuccess }: VillaApplica
                     {editions.map((edition) => {
                       const isSelected = field.value === edition.id;
                       const daysCount = Math.ceil(
-                        (new Date(edition.endDate).getTime() - new Date(edition.startDate).getTime()) / 
+                        (new Date(edition.endDate).getTime() - new Date(edition.startDate).getTime()) /
                         (1000 * 60 * 60 * 24)
                       );
                       const seatsLeft = edition.totalSeats - edition.allotedSeats;
-                      
+
                       return (
                         <div
                           key={edition.id}
@@ -952,8 +951,8 @@ export function VillaApplicationForm({ className = '', onSuccess }: VillaApplica
                           }}
                           className={`
                             relative border-2 rounded-lg p-4 cursor-pointer transition-all
-                            ${isSelected 
-                              ? 'border-navy bg-navy/5' 
+                            ${isSelected
+                              ? 'border-navy bg-navy/5'
                               : 'border-gray-200 hover:border-navy/50 bg-white'
                             }
                           `}
@@ -970,7 +969,7 @@ export function VillaApplicationForm({ className = '', onSuccess }: VillaApplica
                                 className="w-4 h-4 text-navy border-gray-300 focus:ring-navy"
                               />
                             </div>
-                            
+
                             <div className="flex-1">
                               <div className="flex items-center justify-between mb-2">
                                 <div className="flex items-center gap-2">
@@ -981,24 +980,24 @@ export function VillaApplicationForm({ className = '', onSuccess }: VillaApplica
                                 </div>
                                 <span className="text-sm text-gray-500">({daysCount} days)</span>
                               </div>
-                              
+
                               {edition.timeFrame && (
                                 <p className="text-sm text-gray-600 mb-2">
                                   {edition.timeFrame}
                                 </p>
                               )}
-                              
+
                               <div className="flex items-center gap-3">
                                 <span className={`
                                   px-2 py-1 text-xs font-medium rounded-full
-                                  ${edition.allocationStatus === 'available' 
-                                    ? 'bg-green-100 text-green-800' 
+                                  ${edition.allocationStatus === 'available'
+                                    ? 'bg-green-100 text-green-800'
                                     : 'bg-yellow-100 text-yellow-800'
                                   }
                                 `}>
                                   {edition.allocationStatus === 'available' ? 'Available' : 'Limited'}
                                 </span>
-                                
+
                                 <span className="text-sm text-gray-600 flex items-center gap-1">
                                   <Users className="w-4 h-4" />
                                   {seatsLeft} seats remaining
@@ -1027,12 +1026,12 @@ export function VillaApplicationForm({ className = '', onSuccess }: VillaApplica
             <FormLabel className='font-gilroy-bold text-lg'>
               Number of Accompanying Persons <span className="text-red-500">*</span>
             </FormLabel>
-            <Select 
+            <Select
               onValueChange={(value) => {
                 const count = parseInt(value);
                 field.onChange(count);
                 setAccompanyingCount(count);
-                
+
                 // Initialize empty array for accompanying persons
                 if (count > 0) {
                   const emptyPersons = Array.from({ length: count }, () => ({
@@ -1044,7 +1043,7 @@ export function VillaApplicationForm({ className = '', onSuccess }: VillaApplica
                 } else {
                   form.setValue('accompanyingPersons', []);
                 }
-              }} 
+              }}
               value={field.value?.toString()}
             >
               <FormControl className='relative font-gilroy-regular'>
@@ -1082,17 +1081,17 @@ export function VillaApplicationForm({ className = '', onSuccess }: VillaApplica
               Please provide details for each person accompanying you
             </p>
           </div>
-          
+
           {Array.from({ length: accompanyingCount }).map((_, index) => (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className="border border-gray-200 rounded-lg p-6 bg-gray-50"
             >
               <h4 className="text-md font-gilroy-bold text-navy mb-4 flex items-center gap-2">
                 <User className="w-5 h-5" />
                 Accompanying Person {index + 1}
               </h4>
-              
+
               <div className="space-y-4">
                 {/* Name Field */}
                 <FormField
@@ -1105,9 +1104,9 @@ export function VillaApplicationForm({ className = '', onSuccess }: VillaApplica
                         Full Name <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
-                        <Input 
+                        <Input
                           className='font-gilroy-regular'
-                          {...field} 
+                          {...field}
                           placeholder="Enter full name"
                         />
                       </FormControl>
@@ -1115,7 +1114,7 @@ export function VillaApplicationForm({ className = '', onSuccess }: VillaApplica
                     </FormItem>
                   )}
                 />
-                
+
                 {/* Date of Birth Field */}
                 <FormField
                   control={form.control}
@@ -1126,9 +1125,9 @@ export function VillaApplicationForm({ className = '', onSuccess }: VillaApplica
                         Date of Birth <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
-                        <Input 
+                        <Input
                           className='font-gilroy-regular'
-                          {...field} 
+                          {...field}
                           type="date"
                         />
                       </FormControl>
@@ -1136,7 +1135,7 @@ export function VillaApplicationForm({ className = '', onSuccess }: VillaApplica
                     </FormItem>
                   )}
                 />
-                
+
                 {/* Social Link Field */}
                 <FormField
                   control={form.control}
@@ -1147,8 +1146,8 @@ export function VillaApplicationForm({ className = '', onSuccess }: VillaApplica
                         Public Social Link <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
-                        <Input 
-                          {...field} 
+                        <Input
+                          {...field}
                           type="url"
                           placeholder="https://linkedin.com/in/... or https://instagram.com/..."
                           className='font-gilroy-regular'
@@ -1167,7 +1166,7 @@ export function VillaApplicationForm({ className = '', onSuccess }: VillaApplica
         </div>
       )}
 
-      
+
       {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
           control={form.control}
@@ -1501,165 +1500,163 @@ export function VillaApplicationForm({ className = '', onSuccess }: VillaApplica
 
   return (
     <div className={`max-w-7xl w-full mx-auto ${className}`}>
-      <div className="bg-white rounded-lg shadow-lg p-6 md:p-8">
+      <div className="bg-white rounded-lg shadow-lg p-4 md:p-8">
 
-      {isSubmitting && (
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-        <div className="bg-white rounded-lg p-8 max-w-md mx-4 text-center">
-          <Loader2 className="h-12 w-12 animate-spin text-cyan-600 mx-auto mb-4" />
-          <h3 className="text-xl font-gilroy-bold text-gray-900 mb-2">
-            Submitting Your Application
-          </h3>
-          <p className="text-gray-600 font-gilroy-regular">
-            Please wait while we process your application...
-          </p>
-        </div>
-      </div>
-    )}
-
-    {/* Success Screen */}
-    {isSuccess && (
-      <div className="text-center py-12">
-        <div className="mb-6">
-          <CheckCircle2 className="h-20 w-20 text-green-500 mx-auto mb-4" />
-          <h2 className="text-3xl font-gilroy-bold text-gray-900 mb-2">
-            Application Submitted Successfully!
-          </h2>
-          <p className="text-gray-600 font-gilroy-regular text-lg">
-            Thank you for applying to Fratvilla. We'll review your application and get back to you soon.
-          </p>
-        </div>
-      </div>
-    )}
-
-    {/* Error Screen */}
-    {submissionError && (
-      <div className="text-center py-12">
-        <div className="mb-6">
-          <AlertCircle className="h-20 w-20 text-red-500 mx-auto mb-4" />
-          <h2 className="text-3xl font-gilroy-bold text-gray-900 mb-2">
-            Submission Failed
-          </h2>
-          <p className="text-gray-600 font-gilroy-regular text-lg mb-4">
-            {submissionError}
-          </p>
-        </div>
-        <Button
-          onClick={() => setSubmissionError(null)}
-          className="font-gilroy-semibold bg-gradient-to-r from-sky-500 to-cyan-500"
-        >
-          Try Again
-        </Button>
-      </div>
-    )}
-
-      {!isSuccess && !submissionError && (
-        <>
-
-        {/* Progress Steps */}
-        <motion.div variants={itemVariants} className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            {[1, 2, 3, 4].map((step) => (
-              <React.Fragment key={step}>
-                <div className="flex flex-col items-center">
-                  <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors ${
-                      currentStep > step
-                        ? 'bg-sky-600 text-white'
-                        : currentStep === step
-                        ? 'bg-cyan-600 text-white'
-                        : 'bg-gray-200 text-gray-600'
-                    }`}
-                  >
-                    {currentStep > step ? <Check className="h-5 w-5" /> : step}
-                  </div>
-                  <span className="text-xs font-gilroy-regular mt-2 text-gray-600 text-center">
-                    {step === 1 && 'Personal'}
-                    {step === 2 && 'Quest'}
-                    {step === 3 && 'Villa'}
-                    {step === 4 && 'Review'}
-                  </span>
-                </div>
-                {step < 4 && (
-                  <div
-                    className={`flex-1 h-1 mx-2 transition-colors ${
-                      currentStep > step ? 'bg-sky-600' : 'bg-gray-200'
-                    }`}
-                  />
-                )}
-              </React.Fragment>
-            ))}
+        {isSubmitting && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-8 max-w-md mx-4 text-center">
+              <Loader2 className="h-12 w-12 animate-spin text-cyan-600 mx-auto mb-4" />
+              <h3 className="text-xl font-gilroy-bold text-gray-900 mb-2">
+                Submitting Your Application
+              </h3>
+              <p className="text-gray-600 font-gilroy-regular">
+                Please wait while we process your application...
+              </p>
+            </div>
           </div>
-        </motion.div>
+        )}
 
-        {/* Form */}
-        <motion.div variants={itemVariants}>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <AnimatePresence mode="wait">{renderStepContent()}</AnimatePresence>
+        {/* Success Screen */}
+        {isSuccess && (
+          <div className="text-center py-12">
+            <div className="mb-6">
+              <CheckCircle2 className="h-20 w-20 text-green-500 mx-auto mb-4" />
+              <h2 className="text-3xl font-gilroy-bold text-gray-900 mb-2">
+                Application Submitted Successfully!
+              </h2>
+              <p className="text-gray-600 font-gilroy-regular text-lg">
+                Thank you for applying to Fratvilla. We'll review your application and get back to you soon.
+              </p>
+            </div>
+          </div>
+        )}
 
-              {/* Navigation Buttons */}
-              <div className="flex items-center justify-between pt-6 border-t">
-                {currentStep > 1 ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={prevStep}
-                  disabled={currentStep === 1}
-                  className={`flex items-center font-gilroy-semibold tracking-[-1px] text-black hover:bg-gray-100 hover:shadow-lg cursor-pointer ${currentStep === 1 ? 'opacity-10 cursor-not-allowed' : ''}
+        {/* Error Screen */}
+        {submissionError && (
+          <div className="text-center py-12">
+            <div className="mb-6">
+              <AlertCircle className="h-20 w-20 text-red-500 mx-auto mb-4" />
+              <h2 className="text-3xl font-gilroy-bold text-gray-900 mb-2">
+                Submission Failed
+              </h2>
+              <p className="text-gray-600 font-gilroy-regular text-lg mb-4">
+                {submissionError}
+              </p>
+            </div>
+            <Button
+              onClick={() => setSubmissionError(null)}
+              className="font-gilroy-semibold bg-gradient-to-r from-sky-500 to-cyan-500"
+            >
+              Try Again
+            </Button>
+          </div>
+        )}
+
+        {!isSuccess && !submissionError && (
+          <>
+
+            {/* Progress Steps */}
+            <motion.div variants={itemVariants} className="mb-8">
+              <div className="flex items-center justify-between mb-4">
+                {[1, 2, 3, 4].map((step) => (
+                  <React.Fragment key={step}>
+                    <div className="flex flex-col items-center">
+                      <div
+                        className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors ${currentStep > step
+                          ? 'bg-sky-600 text-white'
+                          : currentStep === step
+                            ? 'bg-cyan-600 text-white'
+                            : 'bg-gray-200 text-gray-600'
+                          }`}
+                      >
+                        {currentStep > step ? <Check className="h-5 w-5" /> : step}
+                      </div>
+                      <span className="text-xs font-gilroy-regular mt-2 text-gray-600 text-center">
+                        {step === 1 && 'Personal'}
+                        {step === 2 && 'Quest'}
+                        {step === 3 && 'Villa'}
+                        {step === 4 && 'Review'}
+                      </span>
+                    </div>
+                    {step < 4 && (
+                      <div
+                        className={`flex-1 h-1 mx-2 transition-colors ${currentStep > step ? 'bg-sky-600' : 'bg-gray-200'
+                          }`}
+                      />
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Form */}
+            <motion.div variants={itemVariants}>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  <AnimatePresence mode="wait">{renderStepContent()}</AnimatePresence>
+
+                  {/* Navigation Buttons */}
+                  <div className="flex items-center justify-between pt-6 border-t">
+                    {currentStep > 1 ? (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={prevStep}
+                        disabled={currentStep === 1}
+                        className={`flex items-center font-gilroy-semibold tracking-[-1px] text-black hover:bg-gray-100 hover:shadow-lg cursor-pointer ${currentStep === 1 ? 'opacity-10 cursor-not-allowed' : ''}
                   ${currentStep === totalSteps ? '' : ''}`}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                  Previous
-                </Button>
-                ):(
-                  <div></div>
-                )}
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                        Previous
+                      </Button>
+                    ) : (
+                      <div></div>
+                    )}
 
-                {/* <div className="text-sm text-gray-600 font-gilroy-regular">
+                    {/* <div className="text-sm text-gray-600 font-gilroy-regular">
                   Step {currentStep} of {totalSteps}
                 </div> */}
 
-                {currentStep < totalSteps ? (
-                  <Button
-                    type="button"
-                    onClick={nextStep}
-                    className="flex items-center font-gilroy-semibold tracking-[-1px] bg-gradient-to-r from-sky-500 to-cyan-500 shadow-md border-amber-500 hover:bg-amber-400 hover:shadow-xl text-white"
-                  >
-                    Next
-                    <ChevronRight className="h-4 w-4 ml-1" />
-                  </Button>
-                ) : (
-                  <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                    onClick={() => {
-                      console.log('Submit button clicked!');
-                      console.log('Current form values:', form.getValues());
-                      console.log('Form errors:', form.formState.errors);
-                    }}
-                    className="flex items-center font-gilroy-semibold tracking-[-1px] bg-gradient-to-r from-sky-500 to-cyan-500 shadow-md border-amber-500 hover:bg-amber-400 hover:shadow-xl text-white"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        Submitting...
-                      </>
+                    {currentStep < totalSteps ? (
+                      <Button
+                        type="button"
+                        onClick={nextStep}
+                        className="flex items-center font-gilroy-semibold tracking-[-1px] bg-gradient-to-r from-sky-500 to-cyan-500 shadow-md border-amber-500 hover:bg-amber-400 hover:shadow-xl text-white"
+                      >
+                        Next
+                        <ChevronRight className="h-4 w-4 ml-1" />
+                      </Button>
                     ) : (
-                      <>
-                        <Check className="h-4 w-4" />
-                        Submit 
-                      </>
+                      <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        onClick={() => {
+                          console.log('Submit button clicked!');
+                          console.log('Current form values:', form.getValues());
+                          console.log('Form errors:', form.formState.errors);
+                        }}
+                        className="flex items-center font-gilroy-semibold tracking-[-1px] bg-gradient-to-r from-sky-500 to-cyan-500 shadow-md border-amber-500 hover:bg-amber-400 hover:shadow-xl text-white"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                            Submitting...
+                          </>
+                        ) : (
+                          <>
+                            <Check className="h-4 w-4" />
+                            Submit
+                          </>
+                        )}
+                      </Button>
                     )}
-                  </Button>
-                )}
-              </div>
-            </form>
-          </Form>
-        </motion.div>
+                  </div>
+                </form>
+              </Form>
+            </motion.div>
 
-        </>
-      )}
+          </>
+        )}
       </div>
     </div>
   );

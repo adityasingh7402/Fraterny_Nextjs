@@ -71,6 +71,8 @@ interface DashboardTest {
 
 interface QuestAssessmentDashboardProps {
   className?: string;
+  hideHeader?: boolean;
+  hideArchetype?: boolean;
 }
 
 
@@ -106,7 +108,7 @@ const getAssessmentType = (index: number) => {
   return types[index % types.length];
 };
 
-const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ className = '' }) => {
+const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ className = '', hideHeader = false, hideArchetype = false }) => {
   const { user } = useAuth();
   const [data, setData] = useState<DashboardTest[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -878,17 +880,19 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
     <div className="relative bg-gray-50 font-gilroy-regular">
       <div className="relative z-10">
 
-        {renderArchetypeSection()}
+        {!hideArchetype && renderArchetypeSection()}
 
         {/* Header */}
-        <header className="bg-gradient-to-br from-cyan-600 to-blue-800 rounded-xl shadow-sm sticky top-0 z-10">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex justify-center items-center">
-              <h1 className="text-xl md:text-2xl lg:text-3xl text-center font-gilroy-semibold text-white tracking-tighter">Result</h1>
-              <div className="w-6"></div>
+        {!hideHeader && (
+          <header className="bg-gradient-to-br from-cyan-600 to-blue-800 rounded-xl shadow-sm sticky top-0 z-10 mx-4 md:mx-0">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+              <div className="flex justify-center items-center">
+                <h1 className="text-xl md:text-2xl lg:text-3xl text-center font-gilroy-semibold text-white tracking-tighter">Result</h1>
+                <div className="w-6"></div>
+              </div>
             </div>
-          </div>
-        </header>
+          </header>
+        )}
 
         {/* Main Content */}
         <main className="">

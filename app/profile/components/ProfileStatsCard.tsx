@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { 
-  User, Mail, Phone, Calendar, Shield, CheckCircle, Clock, 
-  XCircle, MapPin, Briefcase, Building, Bell, Edit
+import {
+  User, Mail, Phone, Calendar, Shield, CheckCircle, Clock,
+  XCircle, MapPin, Briefcase, Building, Bell, Edit, AlertTriangle
 } from 'lucide-react';
 import { useAuth } from '../../../app/auth/cotexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -16,8 +16,8 @@ interface ProfileStatsCardProps {
   onEditClick?: () => void;
 }
 
-export default function ProfileStatsCard({ 
-  variant = 'detailed', 
+export default function ProfileStatsCard({
+  variant = 'detailed',
   className = '',
   onEditClick
 }: ProfileStatsCardProps) {
@@ -33,7 +33,7 @@ export default function ProfileStatsCard({
   // 🟡 Step 1: Loading Skeleton (keep as is)
   if (isLoading) {
     return (
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="bg-white dark:bg-slate-900 rounded-lg p-6 border border-slate-200/50 dark:border-slate-700/50 shadow-sm animate-pulse"
@@ -172,10 +172,10 @@ export default function ProfileStatsCard({
             userMetadata.notification_preference === 'all'
               ? 'All Notifications'
               : userMetadata.notification_preference === 'important'
-              ? 'Important Only'
-              : userMetadata.notification_preference === 'none'
-              ? 'No Notifications'
-              : 'All Notifications',
+                ? 'Important Only'
+                : userMetadata.notification_preference === 'none'
+                  ? 'No Notifications'
+                  : 'All Notifications',
           icon: Bell,
           color: 'text-amber-600',
           bgColor: 'bg-amber-50',
@@ -190,127 +190,118 @@ export default function ProfileStatsCard({
     <motion.div
       initial="hidden"
       animate="visible"
-      className={` bg-white mx-auto dark:bg-slate-900 rounded-xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm overflow-hidden ${className}`}
+      className={`mx-auto max-w-7xl px-4 md:px-6 py-6 md:py-8 ${className}`}
     >
-      {/* Header */}
-      <div className="bg-gradient-to-br from-cyan-600 to-blue-800 p-6 md:p-8 text-white">
-        <div className="flex justify-between items-start">
-          <motion.div variants={itemVariants} className="flex-1">
-            <h2 className="text-2xl md:text-3xl font-gilroy-bold mb-2 text-shadow-lg">Account Information</h2>
-            <p className="text-sm md:text-base font-gilroy-medium text-white/80 text-shadow-lg">
-              Your personal details and account status
-            </p>
-          </motion.div>
-          
-          <motion.div variants={itemVariants}>
-            <Button 
-              size="sm"
-              className="font-gilroy-semibold tracking-[-0.8px] bg-white/20 hover:bg-white/30 text-white shadow-md hover:shadow-xl"
-              onClick={() => router.push('/profile?tab=security')}
-            >
-              <Edit className="h-4 w-4 mr-2" />
-              Edit Profile
-            </Button>
-          </motion.div>
-        </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+        {/* Left Column: Personal Context */}
+        <div className="lg:col-span-4 space-y-6">
+          <div className="bg-white border border-neutral-200 p-5 md:p-6 rounded-2xl shadow-sm">
+            <div className="flex justify-between items-start mb-4">
+              <h2 className="text-xl font-gilroy-bold text-neutral-900">Personal</h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 text-blue-600 hover:text-blue-700 font-gilroy-bold text-xs"
+                onClick={() => router.push('/profile?tab=security')}
+              >
+                <Edit className="h-3.5 w-3.5 mr-1.5" />
+                Edit
+              </Button>
+            </div>
 
-        <motion.div 
-          variants={itemVariants}
-          className="mt-4 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white/10"
-        >
-          <Shield className="h-4 w-4 mr-2" />
-          <span className='font-gilroy-bold tracking-[-0.2px]'>
-            Account Status: {userMetadata.email_verified ? 'Verified' : 'Awaiting Verification'}
-          </span>
-          {userMetadata.email_verified ? (
-            <CheckCircle className="h-4 w-4 ml-2 text-green-300" />
-          ) : (
-            <XCircle className="h-4 w-4 ml-2 text-amber-300" />
-          )}
-        </motion.div>
-      </div>
-
-      {/* Main Content */}
-      <div className="px-6 md:px-8 pt-6 pb-8">
-        {userBio && (
-          <motion.div 
-            variants={itemVariants}
-            className="mb-8 pb-6 border-b border-slate-200 dark:border-slate-700"
-          >
-            <h3 className="text-lg font-medium text-navy mb-3">About</h3>
-            <p className="text-gray-700 dark:text-gray-300">{userBio}</p>
-          </motion.div>
-        )}
-
-        {/* Sections */}
-        <div className="space-y-8">
-          {profileSections.map((section) => (
-            <motion.div key={section.id} variants={itemVariants} className="space-y-4">
-              <h3 className="font-gilroy-bold text-lg text-navy border-b border-slate-200 dark:border-slate-700 pb-2">
-                {section.title}
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-6">
-                {section.items.map((item) => (
-                  <div key={item.id} className="flex space-x-4">
-                    <div className={`p-3 h-10 w-10 rounded-full flex-shrink-0 ${item.bgColor}`}>
-                      <item.icon className={`h-4 w-4 ${item.color}`} />
-                    </div>
-                    <div>
-                      <div className="font-gilroy-regular text-sm text-gray-500 dark:text-slate-400">
-                        {item.label}
-                      </div>
-                      <div className="font-gilroy-semibold text-navy dark:text-white">
-                        {item.value}
-                      </div>
-                      {'verified' in item && (
-                        <div className="mt-1">
-                          {item.verified ? (
-                            <span className="flex items-center text-xs text-green-600 dark:text-green-400">
-                              <CheckCircle className="w-3 h-3 mr-1" /> Verified
-                            </span>
-                          ) : (
-                            <span className="flex items-center text-xs text-amber-600 dark:text-amber-400">
-                              <XCircle className="w-3 h-3 mr-1" /> Not verified
-                            </span>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Missing Info Prompt */}
-        {(!userMetadata.first_name || !userMetadata.phone || !userMetadata.location || !userMetadata.job_title || !userMetadata.company) && (
-          <motion.div 
-            variants={itemVariants}
-            className="mt-8 p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800/50"
-          >
-            <div className="flex items-center">
-              <div className="ml-3">
-                <h3 className="text-sm font-gilroy-regular text-amber-800 dark:text-amber-300">
-                  Your profile is incomplete
-                </h3>
-                <div className="mt-2 text-sm font-gilroy-semibold text-amber-700 dark:text-amber-400">
-                  <p>Complete your profile to get the most out of your experience.</p>
+            <div className="space-y-6">
+              <div className="flex items-center p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                <Shield className="h-5 w-5 text-blue-600 mr-3" />
+                <div>
+                  <p className="text-[10px] font-gilroy-bold text-neutral-400 uppercase tracking-widest">Verification Status</p>
+                  <p className="text-sm font-gilroy-bold text-neutral-900">
+                    {userMetadata.email_verified ? 'Identity Verified' : 'Pending Verification'}
+                  </p>
                 </div>
               </div>
-              <div className="ml-auto pl-3">
-                <Button
-                  onClick={() => router.push('/profile?tab=security')}
-                  size="sm"
-                  className="font-gilroy-semibold tracking-[-1px] bg-amber-300 shadow-md border-amber-500 hover:bg-amber-400 hover:shadow-xl text-amber-800"
-                >
-                  Complete Profile
-                </Button>
+
+              {userBio && (
+                <div>
+                  <p className="text-[10px] font-gilroy-bold text-neutral-400 uppercase tracking-widest mb-2">Short Bio</p>
+                  <p className="text-sm text-neutral-600 font-gilroy-medium italic leading-relaxed">"{userBio}"</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="lg:col-span-8">
+          <div className="bg-white border border-neutral-200 p-5 md:p-6 rounded-2xl shadow-sm h-full">
+            <h2 className="text-xl font-gilroy-bold text-neutral-900 mb-6 border-b border-neutral-100 pb-3">Master Records</h2>
+
+            <div className="space-y-6 md:space-y-8">
+              {profileSections.map((section) => (
+                <div key={section.id}>
+                  <h3 className="text-xs font-gilroy-bold text-neutral-400 uppercase tracking-widest mb-6 px-1">
+                    {section.title}
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {section.items.map((item) => (
+                      <div key={item.id} className="flex items-start group">
+                        <div className={`p-2.5 rounded-xl transition-transform group-hover:scale-105 duration-300 ${item.bgColor}`}>
+                          <item.icon className={`h-4.5 w-4.5 ${item.color}`} />
+                        </div>
+                        <div className="ml-3.5">
+                          <p className="text-[10px] font-gilroy-medium text-neutral-400 mb-0.5">{item.label}</p>
+                          <p className="font-gilroy-bold text-neutral-900 text-sm">{item.value}</p>
+                          {'verified' in item && (
+                            <div className="mt-1">
+                              {item.verified ? (
+                                <span className="flex items-center text-[10px] font-gilroy-bold text-green-600">
+                                  <CheckCircle className="w-3 h-3 mr-1" /> SECURE
+                                </span>
+                              ) : (
+                                <span className="flex items-center text-[10px] font-gilroy-bold text-amber-600">
+                                  <XCircle className="w-3 h-3 mr-1" /> UNVERIFIED
+                                </span>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Missing Info Prompt */}
+      {(!userMetadata.first_name || !userMetadata.phone || !userMetadata.location || !userMetadata.job_title || !userMetadata.company) && (
+        <motion.div
+          variants={itemVariants}
+          className="mt-8 p-6 bg-amber-50 rounded-2xl border border-amber-200"
+        >
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center">
+              <div className="bg-amber-100 p-3 rounded-2xl">
+                <AlertTriangle className="h-6 w-6 text-amber-600" />
+              </div>
+              <div className="ml-4">
+                <h3 className="text-lg font-gilroy-bold text-amber-900">
+                  Profile Incomplete
+                </h3>
+                <p className="text-sm font-gilroy-medium text-amber-700">
+                  Complete your profile to unlock full Master Voyager features.
+                </p>
               </div>
             </div>
-          </motion.div>
-        )}
-      </div>
+            <Button
+              onClick={() => router.push('/profile?tab=security')}
+              className="w-full md:w-auto font-gilroy-bold bg-amber-600 hover:bg-amber-700 text-white rounded-2xl px-8 h-12"
+            >
+              Finish Profile
+            </Button>
+          </div>
+        </motion.div>
+      )}
     </motion.div>
   );
 }
