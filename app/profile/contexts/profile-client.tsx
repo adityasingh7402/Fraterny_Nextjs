@@ -6,6 +6,8 @@ import { User } from '@supabase/supabase-js';
 import ProfileLayout from '../components/ProfileLayout';
 import ProfileHeader from '../components/ProfileHeader';
 import ProfileNavigation from '../components/ProfileNavigation';
+import Navigation from '../../website-navigation/components/Navigation';
+import Footer from '../../website-navigation/components/Footer';
 
 // ============================================
 // TYPE DEFINITIONS
@@ -33,19 +35,19 @@ const VALID_TABS = ['overview', 'history', 'application', 'security'] as const;
 // CLIENT COMPONENT
 // ============================================
 
-export default function ProfileClientLayout({ 
-  children, 
-  user 
+export default function ProfileClientLayout({
+  children,
+  user
 }: ProfileClientLayoutProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
-  
+
   // Get tab from URL query params
   const tabParam = searchParams.get('tab') || 'overview';
   const initialTab = VALID_TABS.includes(tabParam as any) ? tabParam : 'overview';
-  
+
   const [activeTab, setActiveTab] = useState(initialTab);
-  
+
   // Update state when URL changes
   useEffect(() => {
     const newTab = searchParams.get('tab') || 'overview';
@@ -53,7 +55,7 @@ export default function ProfileClientLayout({
       setActiveTab(newTab);
     }
   }, [searchParams]);
-  
+
   // Fallback: client-side auth check (belt & suspenders)
   useEffect(() => {
     if (!user) {
@@ -61,14 +63,20 @@ export default function ProfileClientLayout({
       router.push('/auth');
     }
   }, [user, router]);
-  
+
   return (
     <ProfileContext.Provider value={{ activeTab, setActiveTab }}>
-      <ProfileLayout>
-        <ProfileHeader />
-        <ProfileNavigation activeTab={activeTab} />
-        {children}
-      </ProfileLayout>
+      <div className="flex flex-col min-h-screen">
+        <Navigation />
+        <ProfileLayout>
+          <ProfileHeader />
+          <ProfileNavigation activeTab={activeTab} />
+          <main className="grow">
+            {children}
+          </main>
+        </ProfileLayout>
+        <Footer />
+      </div>
     </ProfileContext.Provider>
   );
 }
