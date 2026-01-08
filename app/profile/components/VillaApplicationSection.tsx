@@ -75,76 +75,42 @@ export function VillaApplicationSection({ className = '' }: VillaApplicationSect
 
   return (
     <motion.div
-      //variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className={`bg-white dark:bg-slate-900 rounded-xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm overflow-hidden ${className}`}
+      className={`mx-auto max-w-7xl px-6 py-8 ${className}`}
     >
-      {/* Header Section - Matching QuestHistory style */}
-      <div className="bg-gradient-to-br from-cyan-600 to-blue-800 p-6 md:p-8 text-white">
-        <div className="flex justify-between items-start">
+      <div className="bg-white border border-neutral-200 p-0 md:p-6 rounded-2xl shadow-sm overflow-hidden">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 border-b border-neutral-100 p-4">
           <motion.div variants={itemVariants} className="flex-1">
-            <h2 className="text-2xl md:text-3xl font-gilroy-bold mb-2">
+            <h2 className="text-xl md:text-2xl font-gilroy-bold text-neutral-900 mb-1">
               Villa Application
             </h2>
-            <p className="text-sm md:text-base font-gilroy-medium text-white/80">
-              Apply for an exclusive stay at Fratvilla
+            <p className="text-xs font-gilroy-medium text-neutral-500">
+              Apply for an exclusive stay at the Fraterny villa.
             </p>
           </motion.div>
 
-          <motion.div variants={itemVariants}>
-            <div className="flex items-center space-x-2">
-              <Home className="h-6 w-6" />
-            </div>
+          <motion.div variants={itemVariants} className="bg-blue-50 p-3 rounded-2xl">
+            <Home className="h-6 w-6 text-blue-600" />
           </motion.div>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <motion.div variants={itemVariants} className="px-6 md:px-8 pt-6 pb-8">
-        {hasSubmittedApplication ? (
-          // Success State
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="space-y-6"
-          >
-            <div className="bg-sky-100 border-2 border-sky-400 rounded-xl p-8 text-center">
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2, type: 'spring' }}
-              >
-                <CheckCircle className="w-20 h-20 text-green-600 mx-auto mb-4" />
-              </motion.div>
-              <h3 className="text-2xl font-bold text-gray-900 font-gilroy-bold mb-2">
-                Application Submitted Successfully!
+        <motion.div variants={itemVariants} className="">
+          {hasSubmittedApplication ? (
+            <div className="bg-blue-50 border border-blue-100 rounded-2xl p-8 text-center">
+              <CheckCircle className="w-16 h-16 text-blue-600 mx-auto mb-4" />
+              <h3 className="text-2xl font-gilroy-bold text-neutral-900 mb-2">
+                Application Submitted
               </h3>
-              <p className="text-gray-600 font-gilroy-semibold mb-6">
-                Thank you for your application. Our team will review it and get back to you within
-                2-3 business days.
+              <p className="text-neutral-500 font-gilroy-medium mb-6">
+                Our team is reviewing your profile. Expect a response within 48 hours.
               </p>
-              <div className="bg-white rounded-lg p-4 mb-6">
-                <p className="text-sm text-gray-600 font-gilroy-regular">
-                  You'll receive a confirmation email at{' '}
-                  <span className="font-medium text-gray-900">{user?.email}</span>
-                </p>
-              </div>
-              {/* <Button
-                onClick={() => setHasSubmittedApplication(false)}
-                variant="outline"
-                className="mx-auto"
-              >
-                <Edit className="w-4 h-4 mr-2" />
-                Submit Another Application
-              </Button> */}
             </div>
-          </motion.div>
-        ) : (
-          <VillaApplicationForm />
-        )}
-      </motion.div>
+          ) : (
+            <VillaApplicationForm />
+          )}
+        </motion.div>
+      </div>
     </motion.div>
   );
 }

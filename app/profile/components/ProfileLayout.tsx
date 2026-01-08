@@ -8,8 +8,8 @@ interface ProfileLayoutProps {
 
 const ProfileLayout = ({ children }: ProfileLayoutProps) => {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-full bg-white shadow-sm overflow-hidden">
+    <div className="min-h-screen bg-[#FDFCFB] dark:bg-slate-950">
+      <div className="w-full">
         {children}
       </div>
     </div>

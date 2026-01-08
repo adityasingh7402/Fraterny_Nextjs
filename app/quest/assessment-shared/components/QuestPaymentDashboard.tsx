@@ -36,10 +36,11 @@ interface PaymentTransaction {
 
 interface QuestPaymentDashboardProps {
   className?: string;
+  hideHeader?: boolean;
 }
 
 
-const QuestPaymentDashboard: React.FC<QuestPaymentDashboardProps> = ({ className = '' }) => {
+const QuestPaymentDashboard: React.FC<QuestPaymentDashboardProps> = ({ className = '', hideHeader = false }) => {
   const { user } = useAuth();
   const [payments, setPayments] = useState<PaymentTransaction[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -65,7 +66,7 @@ const QuestPaymentDashboard: React.FC<QuestPaymentDashboardProps> = ({ className
   // Format currency helper function with gateway-based logic
   const formatCurrency = (amount: number | null, isIndia: boolean | null, gateway?: 'razorpay' | 'paypal' | null): string => {
     if (amount === null) return 'N/A';
-    
+
     // Gateway-based currency logic
     if (gateway === 'paypal') {
       // PayPal always shows dollar (ignore isIndia)
@@ -212,7 +213,7 @@ const QuestPaymentDashboard: React.FC<QuestPaymentDashboardProps> = ({ className
             if (!a.paymentDate && !b.paymentDate) return 0;
             if (!a.paymentDate) return 1;
             if (!b.paymentDate) return -1;
-            
+
             const dateA = new Date(a.paymentDate).getTime();
             const dateB = new Date(b.paymentDate).getTime();
             return dateB - dateA; // Descending order (latest first)
@@ -252,9 +253,9 @@ const QuestPaymentDashboard: React.FC<QuestPaymentDashboardProps> = ({ className
           <div className="w-16 h-16 border-4 border-gray-200 border-t-blue-400 rounded-full animate-spin mx-auto mb-6"></div>
           <p className="text-lg text-gray-700 font-gilroy-bold">Loading assessments...</p>
           <div className="flex justify-center gap-1 mt-4">
-            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{animation: 'pulse 0.5s infinite alternate', animationDelay: '0s'}}></div>
-            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{animation: 'pulse 0.5s infinite alternate', animationDelay: '0.2s'}}></div>
-            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{animation: 'pulse 0.5s infinite alternate', animationDelay: '0.4s'}}></div>
+            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{ animation: 'pulse 0.5s infinite alternate', animationDelay: '0s' }}></div>
+            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{ animation: 'pulse 0.5s infinite alternate', animationDelay: '0.2s' }}></div>
+            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{ animation: 'pulse 0.5s infinite alternate', animationDelay: '0.4s' }}></div>
           </div>
         </div>
       </div>
@@ -269,9 +270,9 @@ const QuestPaymentDashboard: React.FC<QuestPaymentDashboardProps> = ({ className
           <div className="w-16 h-16 border-4 border-gray-200 border-t-blue-400 rounded-full animate-spin mx-auto mb-6"></div>
           <p className="text-lg text-gray-700 font-gilroy-bold">Loading payment history...</p>
           <div className="flex justify-center gap-1 mt-4">
-            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{animation: 'pulse 0.5s infinite alternate', animationDelay: '0s'}}></div>
-            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{animation: 'pulse 0.5s infinite alternate', animationDelay: '0.2s'}}></div>
-            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{animation: 'pulse 0.5s infinite alternate', animationDelay: '0.4s'}}></div>
+            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{ animation: 'pulse 0.5s infinite alternate', animationDelay: '0s' }}></div>
+            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{ animation: 'pulse 0.5s infinite alternate', animationDelay: '0.2s' }}></div>
+            <div className="w-2 h-2 bg-blue-600 rounded-full" style={{ animation: 'pulse 0.5s infinite alternate', animationDelay: '0.4s' }}></div>
           </div>
         </div>
       </div>
@@ -311,7 +312,8 @@ const QuestPaymentDashboard: React.FC<QuestPaymentDashboardProps> = ({ className
   return (
     <div className="relative bg-gray-50 font-gilroy-regular">
       {/* Header */}
-      <header className="bg-gradient-to-br from-cyan-600 to-blue-800 rounded-xl shadow-sm sticky top-0 z-10">
+      {!hideHeader && (
+        <header className="bg-gradient-to-br from-cyan-600 to-blue-800 rounded-xl shadow-sm sticky top-0 z-10 mx-4 md:mx-0">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex justify-center items-center">
               <h1 className="text-xl md:text-2xl lg:text-3xl text-center font-gilroy-semibold text-white tracking-tighter">Payment</h1>
@@ -319,6 +321,7 @@ const QuestPaymentDashboard: React.FC<QuestPaymentDashboardProps> = ({ className
             </div>
           </div>
         </header>
+      )}
 
       {/* Main Content */}
       <main className="p-4 pb-24">
@@ -360,8 +363,8 @@ const QuestPaymentDashboard: React.FC<QuestPaymentDashboardProps> = ({ className
                           {payment.paymentStatus === 'success' ? 'Paid' : payment.paymentStatus === 'failed' ? 'Failed' : payment.paymentStatus === 'Start' ? 'Started' : 'Due'}
                           {payment.paymentDate ? ` on ${formatDate(payment.paymentDate)}` : ''}
                         </h2>
-                        <p 
-                          className=" text-xs font-gilroy-regular text-gray-500 cursor-pointer hover:text-gray-700 transition-colors" 
+                        <p
+                          className=" text-xs font-gilroy-regular text-gray-500 cursor-pointer hover:text-gray-700 transition-colors"
                           onClick={() => {
                             if (payment.razorpayPaymentId) {
                               navigator.clipboard.writeText(payment.razorpayPaymentId);

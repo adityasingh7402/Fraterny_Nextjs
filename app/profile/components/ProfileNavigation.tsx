@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 interface ProfileNavigationProps {
   activeTab: string;
@@ -14,39 +15,51 @@ interface ProfileNavigationProps {
 const ProfileNavigation = ({ activeTab }: ProfileNavigationProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  
+
   const tabs = [
-    { id: 'overview', label: 'Overview' },
-    { id: 'history', label: 'Quest History' },
-    { id: 'application', label: 'Application' },
-    { id: 'security', label: 'Manage Your Account' },
+    { id: 'overview', label: 'Overview', mobileLabel: 'Overview' },
+    { id: 'history', label: 'Quest History', mobileLabel: 'History' },
+    { id: 'application', label: 'Application', mobileLabel: 'Villa' },
+    { id: 'security', label: 'Manage Your Account', mobileLabel: 'Settings' },
   ];
-  
+
   return (
-    <div className="bg-gradient-to-r from-cyan-600 to-blue-800 border-b border-gray-200 overflow-x-auto sm:px-20">
-      <nav className="mx-auto flex gap-4 lg:gap-10 max-w-7xl px-6" aria-label="Profile navigation">
+    <div className="bg-white dark:bg-slate-950 border-b border-neutral-200 sticky top-0 z-30">
+      <nav className="mx-auto flex gap-6 md:gap-8 max-w-7xl px-6 overflow-x-auto scrollbar-hide no-scrollbar" aria-label="Profile navigation">
         {tabs.map(tab => {
           const params = new URLSearchParams(searchParams.toString());
           params.set('tab', tab.id);
           const href = `${pathname}?${params.toString()}`;
-          
+          const isActive = activeTab === tab.id;
+
           return (
             <Link
               key={tab.id}
               href={href}
               replace
               className={cn(
-                "inline-block py-4 px-3 text-lg font-gilroy-regular border-b-2 whitespace-nowrap transition-colors",
-                activeTab === tab.id
-                  ? "border-navy text-black"
-                  : "border-transparent text-white hover:border-gray-300"
+                "relative py-4 text-sm md:text-base font-gilroy-bold whitespace-nowrap transition-all duration-300 shrink-0",
+                isActive
+                  ? "text-blue-600 dark:text-blue-400"
+                  : "text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"
               )}
-              aria-current={activeTab === tab.id ? "page" : undefined}
+              aria-current={isActive ? "page" : undefined}
             >
-              {tab.label}
+              <span className="hidden md:inline">{tab.label}</span>
+              <span className="md:hidden">{tab.mobileLabel}</span>
+              {isActive && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600"
+                  initial={false}
+                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                />
+              )}
             </Link>
           );
         })}
+        {/* Spacer for mobile scroll edge */}
+        <div className="w-8 shrink-0 md:hidden" aria-hidden="true" />
       </nav>
     </div>
   );
