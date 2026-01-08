@@ -15,15 +15,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: 'View your personalized Quest assessment results with detailed insights into your personality, strengths, and recommendations.',
 
     icons: {
-      icon: [
-        { url: '/favicon-32x32.png' },
-        { url: '/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
-      ],
-      apple: [
-        { url: '/favicon-32x32.png' },
-      ],
-      shortcut: '/favicon.ico',
-    },
+    icon: [
+      { url: '/VectorW.svg' },
+      { url: '/VectorW.svg', type: 'image/svg+xml', sizes: '32x32' },
+    ],
+    apple: [
+      { url: '/VectorW.svg' },
+    ],
+    shortcut: '/VectorW.svg',
+  },
 
     // Social media preview images
     openGraph: {
