@@ -61,13 +61,13 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/Vector.svg' },
-      { url: '/Vector.svg', type: 'image/svg+xml', sizes: '32x32' },
+      { url: '/VectorW.svg' },
+      { url: '/VectorW.svg', type: 'image/svg+xml', sizes: '32x32' },
     ],
     apple: [
-      { url: '/Vector.svg' },
+      { url: '/VectorW.svg' },
     ],
-    shortcut: '/Vector.svg',
+    shortcut: '/VectorW.svg',
   },
 };
 const jsonLd = {
