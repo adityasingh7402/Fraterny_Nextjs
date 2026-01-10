@@ -14,6 +14,7 @@ import Footer from '../website-navigation/components/Footer'
 import FaqSection from './homepage/components/FaqSection'
 import CustomCursor from '@/components/CustomCursor'
 import BlogScrollSection from './homepage/components/BlogScrollSection'
+import QuestPDFView from './homepage/components/QuestPDFView';
 
 const testimonials1: TestimonialData[] = [
   {
@@ -232,9 +233,6 @@ function page() {
         <HeroSection />
         <Thesis />
         <Testimonials title="" data={testimonials1} />
-        {/* <HeroSection />
-        <Thesis />
-        <Testimonials title="" data={testimonials1} /> */}
 
         {/* Feature 0: The Hook */}
         <section className="bg-black text-white py-24 px-6 text-center black-bg-section">
@@ -253,30 +251,6 @@ function page() {
             <div className="inline-block border-b bg-neutral-800 shadow-2xl border-neutral-300 pb-2 text-gray-400 text-sm font-gilroy-medium px-4 py-2 rounded-lg">Pure signal. Zero noise.</div>
           </div>
         </section>
-        {/* Feature 0: The Hook */}
-        {/* <section className="bg-black text-white py-24 px-6 text-center black-bg-section">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-gray-500 uppercase tracking-widest text-xl font-gilroy-bold mb-4">What's in it?</div>
-            <h2 className="text-5xl md:text-7xl font-bold mb-8 font-gilroy-bold">Private Intelligence on Your <span className="text-transparent bg-clip-text bg-[linear-gradient(157deg,theme(colors.emerald.200),theme(colors.violet.800))] pr-5">Psych*logy</span></h2>
-            <p className="text-xl text-white mb-8 leading-relaxed font-gilroy-medium">
-              As I’ve been building Quest and studying how ambitious, overthinking people actually move through life, I’ve taken tens of thousands of notes from real answers, late-night reflections, and repeating patterns.
-            </p>
-            <p className="text-xl text-white mb-12 font-gilroy-medium leading-relaxed">
-              On identity conflicts, family vs freedom, money anxiety, control and trust, validation and ego, self-sabotage, focus and numbness, intensity in relationships, and more. Much more.
-            </p>
-            <div className="text-white font-bold text-xl mb-16 font-gilroy-medium leading-relaxed">
-              Quest turns the sharpest of those patterns into a very powerful self-mapping tool unlike anything else.
-            </div>
-            <div className="inline-block border-b bg-neutral-800 shadow-2xl border-neutral-300 pb-2 text-gray-400 text-sm font-gilroy-medium px-4 py-2 rounded-lg">Pure signal. Zero noise.</div>
-          </div>
-        </section> */}
-
-        {/* <div className='flex flex-col items-center justify-center w-px bg-black lg:w-auto overflow-hidden'>
-        <div className='flex flex-col items-center justify-center w-px bg-black lg:w-auto overflow-hidden'>
-          <div className='bg-linear-to-b from-transparent via-white/90 to-transparent w-px h-48'>
-              
-          </div>
-      </div> */}
         <div className='flex flex-col items-center justify-center bg-black overflow-hidden'>
           <div className='bg-linear-to-b from-transparent via-white/90 to-transparent w-px h-48'>
           </div>
@@ -385,13 +359,8 @@ function page() {
         />
       </div>
 
-      {/* <Testimonials title="More Feedback From People Like You" data={testimonials2} light={true} /> */}
-      {/* <FeaturesGrid />
-        {/* <Testimonials title="More Feedback From People Like You" data={testimonials2} light={true} /> */}
-      {/* <FeaturesGrid />
-      <Pricing plans={pricingPlans} /> */}
-      {/* <FAQ items={faqItems} /> */}
       <BlogScrollSection />
+      <QuestPDFView />
       <FaqSection />
       <Footer />
 
