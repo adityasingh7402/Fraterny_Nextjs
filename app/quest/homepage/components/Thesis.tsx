@@ -94,13 +94,22 @@ export const Thesis: React.FC = () => {
       </section>
 
       {/* PDF Preview Section */}
-      <div className='container mx-auto max-w-7xl px-6 pt-16 pb-8'>
+      {/* <div className='container mx-auto max-w-7xl px-6 pt-16 pb-8'>
         <h2 className="text-3xl md:text-5xl font-bold leading-tight text-center font-gilroy-semibold text-gray-900">
-          Your Personalized <span className="gradient-text">Quest Report</span>
+          Quest Sample <span className="gradient-text">Artifact</span>
         </h2>
+      </div> */}
+      <div className='container mx-auto max-w-7xl px-6'>
+      <h2 className="text-left sm:text-center leading-tight pt-16">
+          <div className='text-neutral-500 font-gilroy-medium text-xl md:text-4xl lg:text-5xl'> <span className='text-neutral-800 font-gilroy-bold
+          text-4xl md:text-5xl lg:text-6xl'>Quest Sample Artifact</span></div>
+        </h2>
+        <p className="text-left sm:text-center text-gray-700 text-[15px] md:text-xl mb-8 md:mb-12 font-gilroy-semibold">
+          Unique. Accurate. Secure
+        </p>
       </div>
 
-      <div className='container mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-8 sm:gap-24 pt-0'>
+      <div className='container mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-8 sm:gap-24 pt-0 px-4'>
         {/* Carousel Slider */}
         <div
           className='relative w-full max-w-sm md:max-w-lg h-auto group border-2 border-gray-200 rounded-2xl shadow-2xl bg-white p-2'
@@ -108,7 +117,7 @@ export const Thesis: React.FC = () => {
           onMouseLeave={() => setIsPaused(false)}
         >
           {/* Images Container */}
-          <div className="relative w-full aspect-[3/4] overflow-hidden rounded-xl bg-gray-50">
+          <div className="relative w-full aspect-[2/3] overflow-hidden rounded-xl bg-gray-50">
             {images.map((img, index) => {
               // First 3 images: Load immediately with priority
               // Remaining images: Lazy load as needed
@@ -197,9 +206,9 @@ export const Thesis: React.FC = () => {
             </li>
           ))}
 
-          <div className='pt-20'>
+          <div className='pt-20 flex justify-center sm:justify-start'>
             <Link href='/quest/quest-mode'>
-              <div className="text-2xl md:text-3xl font-bold text-neutral-900 sm:text-neutral-400 hover:text-neutral-900  transition-colors duration-300 flex flex-row items-center gap-4 cursor-pointer underline">
+              <div className=" text-center sm:text-left text-2xl md:text-3xl font-bold text-neutral-900 sm:text-neutral-400 hover:text-neutral-900  transition-colors duration-300 flex flex-row items-center gap-4 cursor-pointer underline">
                 Enter Quest Mode.
                 <ArrowRight />
               </div>
