@@ -3,6 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { FileText } from 'lucide-react';
+import Image from 'next/image';
 // import { DualGatewayPricingData } from '../../../../../components/pricing/DualGatewayPricingData';
 
 
@@ -30,42 +31,107 @@ interface PDFImageViewerProps {
 
 export const PDFImageViewer: React.FC<PDFImageViewerProps> = ({ paymentSuccess, onUnlockClick, paymentStatus, onPDFDownload, pricing, isCheckingPayment = false }) => {
   const [zoom, setZoom] = useState(1);
-  const [dragStart, setDragStart] = useState<{ x: number; y: number } | null>(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [scrollStart, setScrollStart] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const images = ['sample1.png', 'sample4.jpg', 'sample5.png'];
+  // Generate array of 24 image paths
+  // First page: front.webp
+  // Rest: page-1.webp, page-2.webp, ... page-23.webp
+  const images = Array.from({ length: 24 }, (_, i) => {
+    if (i === 0) return `/pdf/front.webp`; // First page is the front cover
+    return `/pdf/page-${i}.webp`; // Rest are page-1, page-2, etc.
+  });
+
+  // Number of images to load immediately (priority load)
+  const PRIORITY_LOAD_COUNT = 3;
 
   const handleZoomIn = () => {
-    setZoom(prev => Math.min(prev + 0.2, 3)); // Max zoom 3x
+    if (containerRef.current) {
+      const container = containerRef.current;
+      const scrollTop = container.scrollTop;
+      const scrollHeight = container.scrollHeight;
+      const clientHeight = container.clientHeight;
+
+      setZoom(prev => {
+        const newZoom = Math.min(prev + 0.2, 3);
+
+        // Maintain scroll position relative to zoom
+        setTimeout(() => {
+          if (container) {
+            const ratio = newZoom / (newZoom - 0.2);
+            container.scrollTop = scrollTop * ratio;
+          }
+        }, 0);
+
+        return newZoom;
+      });
+    } else {
+      setZoom(prev => Math.min(prev + 0.2, 3));
+    }
   };
 
   const handleZoomOut = () => {
-    setZoom(prev => Math.max(prev - 0.2, 1.0)); // Min zoom 1.0x (100%)
+    if (containerRef.current) {
+      const container = containerRef.current;
+      const scrollTop = container.scrollTop;
+
+      setZoom(prev => {
+        const newZoom = Math.max(prev - 0.2, 1.0);
+
+        // Maintain scroll position relative to zoom
+        setTimeout(() => {
+          if (container) {
+            const ratio = newZoom / (newZoom + 0.2);
+            container.scrollTop = scrollTop * ratio;
+          }
+        }, 0);
+
+        return newZoom;
+      });
+    } else {
+      setZoom(prev => Math.max(prev - 0.2, 1.0));
+    }
   };
 
   const handleReset = () => {
     setZoom(1);
-    setPosition({ x: 0, y: 0 });
+    if (containerRef.current) {
+      containerRef.current.scrollTop = 0;
+      containerRef.current.scrollLeft = 0;
+    }
   };
 
+  // Mouse drag handlers for panning when zoomed
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (zoom > 1) {
-      setDragStart({ x: e.clientX - position.x, y: e.clientY - position.y });
+    if (zoom > 1 && containerRef.current) {
+      setIsDragging(true);
+      setDragStart({ x: e.clientX, y: e.clientY });
+      setScrollStart({
+        x: containerRef.current.scrollLeft,
+        y: containerRef.current.scrollTop
+      });
+      e.preventDefault();
     }
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (dragStart && zoom > 1) {
-      setPosition({
-        x: e.clientX - dragStart.x,
-        y: e.clientY - dragStart.y
-      });
+    if (isDragging && containerRef.current && zoom > 1) {
+      const deltaX = dragStart.x - e.clientX;
+      const deltaY = dragStart.y - e.clientY;
+
+      containerRef.current.scrollLeft = scrollStart.x + deltaX;
+      containerRef.current.scrollTop = scrollStart.y + deltaY;
     }
   };
 
   const handleMouseUp = () => {
-    setDragStart(null);
+    setIsDragging(false);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
   };
 
   return (
@@ -79,32 +145,46 @@ export const PDFImageViewer: React.FC<PDFImageViewerProps> = ({ paymentSuccess, 
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
+          onMouseLeave={handleMouseLeave}
           style={{
-            cursor: zoom > 1 ? (dragStart ? 'grabbing' : 'grab') : 'default'
+            cursor: zoom > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default'
           }}
         >
           <div
-            className="flex flex-col items-center transition-transform duration-200"
+            className="flex flex-col items-center"
             style={{
-              transform: `translate(${position.x}px, ${position.y}px) scale(${zoom})`,
-              transformOrigin: '0 0'
+              transform: `scale(${zoom})`,
+              transformOrigin: 'left top',
+              transition: 'transform 0.2s ease-out'
             }}
           >
-            {images.map((image, index) => (
-              <img
-                key={index}
-                src={`/${image}`}
-                alt={`PDF Page ${index + 1}`}
-                className="w-full pb-1 max-w-full h-auto select-none"
-                draggable={false}
-                onError={(e) => {
-                  console.error(`Failed to load ${image}`);
-                  const target = e.target as HTMLImageElement;
-                  target.src = '/placeholder-page.jpg'; // Fallback image
-                }}
-              />
-            ))}
+            {images.map((image, index) => {
+              // First 3 images: Load immediately with priority
+              // Remaining images: Lazy load as user scrolls
+              const isPriority = index < PRIORITY_LOAD_COUNT;
+
+              return (
+                <div key={index} className="w-full pb-1">
+                  <Image
+                    src={image}
+                    alt={`PDF Page ${index + 1}`}
+                    width={1200}
+                    height={1600}
+                    className="w-full h-auto select-none"
+                    draggable={false}
+                    priority={isPriority}
+                    loading={isPriority ? 'eager' : 'lazy'}
+                    quality={90}
+                    unoptimized={false}
+                    onError={(e) => {
+                      console.error(`Failed to load ${image}`);
+                    }}
+                    placeholder="blur"
+                    blurDataURL="data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoBAAEAAwA0JaQAA3AA/vuUAAA="
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -235,7 +315,7 @@ export const PDFImageViewer: React.FC<PDFImageViewerProps> = ({ paymentSuccess, 
 
       {/* Page Indicator */}
       <div className="mt-4 text-center">
-        <p className="text-gray-600 text-sm font-gilroy-regular">Sample PDF Report Preview</p>
+        <p className="text-gray-600 text-sm font-gilroy-regular">Sample PDF Report Preview (24 Pages)</p>
       </div>
     </div>
   );
