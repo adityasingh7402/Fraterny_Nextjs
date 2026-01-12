@@ -310,7 +310,7 @@ const QuestPaymentDashboard: React.FC<QuestPaymentDashboardProps> = ({ className
   }
 
   return (
-    <div className="relative bg-gray-50 font-gilroy-regular">
+    <div className="relative bg-gray-50 font-gilroy-regular p-2">
       {/* Header */}
       {!hideHeader && (
         <header className="bg-gradient-to-br from-cyan-600 to-blue-800 rounded-xl shadow-sm sticky top-0 z-10 mx-4 md:mx-0">
@@ -324,7 +324,7 @@ const QuestPaymentDashboard: React.FC<QuestPaymentDashboardProps> = ({ className
       )}
 
       {/* Main Content */}
-      <main className="p-4 pb-24">
+      <main className="">
         {payments.length === 0 ? (
           // Empty state
           <div className="text-center py-16">
