@@ -102,6 +102,7 @@ export function QuestResultClient({
   const [hasTriggeredFeedback, setHasTriggeredFeedback] = useState(false);
   const [showFeedbackStar, setShowFeedbackStar] = useState(false);
   const [hasFeedbackSubmitted, setHasFeedbackSubmitted] = useState(false);
+  const [showThankYouInProcess, setShowThankYouInProcess] = useState(false);
   const [tip, setTip] = useState<string | null>(null);
   const [selectedInsight, setSelectedInsight] = useState<{ index: number; text: string } | null>(null);
   const [selectedFilm, setSelectedFilm] = useState<Film | null>(null);
@@ -428,13 +429,6 @@ export function QuestResultClient({
       });
 
       setActiveIndex(currentIndex);
-      // Show feedback popup after 2 seconds when user reaches subjects section (index 3)
-      if (currentIndex >= 3 && !hasTriggeredFeedback) {
-        setHasTriggeredFeedback(true);
-        setTimeout(() => {
-          setFeedbackPopupOpen(true);
-        }, 2000);
-      }
     };
 
     container.addEventListener('scroll', handleScroll);
@@ -1151,21 +1145,28 @@ export function QuestResultClient({
         onClose={handleCloseSuccessPopup}
       />
 
-      {!hasFeedbackSubmitted && (
-        <FeedbackPopup
-          open={feedbackPopupOpen}
-          onClose={() => setFeedbackPopupOpen(false)}
-          onDismiss={(hasInteracted) => setShowFeedbackStar(hasInteracted)}
-          onFeedbackSubmit={() => {
+      <FeedbackPopup
+        open={feedbackPopupOpen}
+        onClose={() => {
+          setFeedbackPopupOpen(false);
+          // If we just finished a submission, mark it as done so the floating star doesn't return
+          if (showThankYouInProcess) {
             setHasFeedbackSubmitted(true);
-            setShowFeedbackStar(false);
-            setFeedbackPopupOpen(false);
-          }}
-          sessionId={sessionId}
-          testId={testId}
-          userId={userId}
-        />
-      )}
+          }
+        }}
+        onDismiss={(hasInteracted) => setShowFeedbackStar(hasInteracted)}
+        onFeedbackSubmit={() => {
+          // We don't setHasFeedbackSubmitted(true) immediately anymore
+          // because it would unmount the component before the "Thank You" view finishes.
+          // Instead, we let the FeedbackPopup handle its own timeout and call onClose.
+          setShowFeedbackStar(false);
+          setShowThankYouInProcess(true);
+        }}
+        sessionId={sessionId}
+        testId={testId}
+        userId={userId}
+        accentColor={activeCardColor}
+      />
 
       {/* Sticky Feedback Star */}
       {!hasFeedbackSubmitted && (
@@ -1176,7 +1177,8 @@ export function QuestResultClient({
                 setShowFeedbackStar(false);
                 setFeedbackPopupOpen(true);
               }}
-              className="fixed right-5 bottom-20 z-[60] flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-cyan-400 to-cyan-500 shadow-lg"
+              className="fixed right-5 bottom-20 z-60 flex items-center justify-center w-12 h-12 rounded-full shadow-lg"
+              style={{ backgroundColor: activeCardColor }}
               initial={{ opacity: 0, scale: 0, rotate: -180 }}
               animate={{
                 opacity: 1,

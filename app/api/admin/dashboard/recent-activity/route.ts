@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
             // Overall Feedback
             supabaseAdmin
                 .from('summary_overall_feedback')
-                .select('*, user_data(user_name)')
+                .select('*, user_data(*)')
                 .gte('created_at', tenDaysAgo.toISOString())
                 .order('created_at', { ascending: false })
         ]);
