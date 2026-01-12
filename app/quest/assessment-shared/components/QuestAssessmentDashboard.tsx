@@ -877,7 +877,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
   };
 
   return (
-    <div className="relative bg-gray-50 font-gilroy-regular">
+    <div className="relative font-gilroy-regular">
       <div className="relative z-10">
 
         {!hideArchetype && renderArchetypeSection()}
@@ -897,7 +897,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
         {/* Main Content */}
         <main className="">
 
-          <div className="w-full py-4">
+          <div className="w-full">
             {data.length === 0 ? (
               // Empty state
               <div className="text-center py-16">
@@ -906,7 +906,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
                 <p className="text-gray-600 font-gilroy-regular mb-6">You haven't completed any Results yet.</p>
                 <button
                   onClick={() => router.push('/quest/begin')}
-                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-gilroy-semibold"
+                  className="px-6 py-3 bg-blue-600 text-white rounded-lg transition-colors font-gilroy-semibold"
                 >
                   Take Your First Assessment
                 </button>
@@ -924,7 +924,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className="bg-neutral-100 rounded-lg shadow-xl p-4 hover:shadow-md transition-shadow cursor-pointer"
+                      className="rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow cursor-pointer"
                       onClick={() => handleAssessmentClick(assessment)}
                     >
                       <div className="flex items-center justify-between">

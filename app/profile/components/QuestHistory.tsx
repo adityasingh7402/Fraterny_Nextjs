@@ -209,7 +209,7 @@ export function QuestHistory({ className = '' }: QuestHistoryProps) {
 
   const renderHomeTab = () => {
     return (
-      <div className="px-4 md:px-0">
+      <div>
         {renderArchetypeSection()}
 
         {/* Sub-tabs */}
