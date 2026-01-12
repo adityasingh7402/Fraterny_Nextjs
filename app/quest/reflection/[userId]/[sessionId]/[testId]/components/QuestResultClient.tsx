@@ -1165,6 +1165,7 @@ export function QuestResultClient({
         sessionId={sessionId}
         testId={testId}
         userId={userId}
+        accentColor={activeCardColor}
       />
 
       {/* Sticky Feedback Star */}
@@ -1176,7 +1177,8 @@ export function QuestResultClient({
                 setShowFeedbackStar(false);
                 setFeedbackPopupOpen(true);
               }}
-              className="fixed right-5 bottom-20 z-[60] flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-cyan-400 to-cyan-500 shadow-lg"
+              className="fixed right-5 bottom-20 z-60 flex items-center justify-center w-12 h-12 rounded-full shadow-lg"
+              style={{ backgroundColor: activeCardColor }}
               initial={{ opacity: 0, scale: 0, rotate: -180 }}
               animate={{
                 opacity: 1,

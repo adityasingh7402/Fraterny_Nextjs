@@ -2,9 +2,10 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Frown, Meh, Smile, Laugh, CheckCircle2, Angry } from 'lucide-react';
+import { X, Star, CheckCircle2, Users } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
+import Image from 'next/image';
 
 interface FeedbackPopupProps {
   open: boolean;
@@ -14,15 +15,8 @@ interface FeedbackPopupProps {
   sessionId?: string;
   testId?: string;
   userId?: string;
+  accentColor?: string;
 }
-
-const ratings = [
-  { value: 1, label: 'Terrible', icon: Angry },
-  { value: 2, label: 'Bad', icon: Frown },
-  { value: 3, label: 'Okay', icon: Meh },
-  { value: 4, label: 'Good', icon: Smile },
-  { value: 5, label: 'Amazing', icon: Laugh },
-];
 
 export const FeedbackPopup: React.FC<FeedbackPopupProps> = ({
   open,
@@ -31,14 +25,13 @@ export const FeedbackPopup: React.FC<FeedbackPopupProps> = ({
   onFeedbackSubmit,
   sessionId,
   testId,
-  userId
+  userId,
+  accentColor = '#0A1A2F'
 }) => {
   const [rating, setRating] = useState<number | null>(4);
   const [feedback, setFeedback] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
-  const [contactConsent, setContactConsent] = useState(true);
-  const [researchConsent, setResearchConsent] = useState(false);
 
   const handleSubmit = async () => {
     if (rating === null) {
@@ -53,10 +46,6 @@ export const FeedbackPopup: React.FC<FeedbackPopupProps> = ({
         testId: testId || null,
         feedback: feedback.trim() || null,
         rating: rating,
-        metadata: {
-          contactConsent,
-          researchConsent
-        }
       };
 
       const response = await axios.post('/api/feedback/submit', requestData);
@@ -64,13 +53,6 @@ export const FeedbackPopup: React.FC<FeedbackPopupProps> = ({
       if (response.status >= 200 && response.status < 300) {
         setShowThankYou(true);
         if (onFeedbackSubmit) onFeedbackSubmit();
-
-        setTimeout(() => {
-          setShowThankYou(false);
-          setRating(4);
-          setFeedback("");
-          onClose();
-        }, 2500);
       } else {
         toast.error(response.data?.message || 'Failed to submit feedback');
       }
@@ -86,88 +68,127 @@ export const FeedbackPopup: React.FC<FeedbackPopupProps> = ({
     if (onDismiss) onDismiss(true);
     setRating(4);
     setFeedback("");
+    setShowThankYou(false);
     onClose();
   };
 
   return (
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 bg-slate-900/20 backdrop-blur-[2px] flex items-center justify-center z-[100] p-4 font-gilroy-regular">
+        <div className="fixed inset-0 bg-[#0A1A2F]/40 backdrop-blur-md flex items-center justify-center z-[100] p-4 font-gilroy-regular">
           <motion.div
-            initial={{ opacity: 0, scale: 0.98, y: 10 }}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.98, y: 10 }}
-            className="bg-white rounded-[1.2rem] p-6 max-w-[560px] w-full relative shadow-[0_10px_40px_rgba(0,0,0,0.08)] border border-slate-100"
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            className="bg-white rounded-[2rem] md:p-10 p-8 max-w-[440px] w-full relative shadow-[0_30px_60px_-15px_rgba(10,26,47,0.3)] text-left"
           >
+            {/* Close Button */}
+            <button
+              onClick={handleClose}
+              className="absolute top-6 right-6 p-2 text-slate-400 hover:text-[#0A1A2F] hover:bg-slate-100 rounded-full transition-all"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
             {showThankYou ? (
-              <div className="flex flex-col items-center justify-center py-12">
-                <CheckCircle2 className="h-16 w-16 text-emerald-500 mb-6" />
-                <h3 className="text-2xl font-gilroy-bold text-slate-900 mb-2 text-center">
-                  Feedback Received!
+              <div className="flex flex-col items-center py-2">
+                <div className="mb-4 w-full flex justify-center">
+                  <div className="relative w-44 h-44">
+                    <Image
+                      src="/feedback-thank-you2.png"
+                      alt="Feedback Thank You"
+                      fill
+                      priority
+                      className="object-contain"
+                    />
+                  </div>
+                </div>
+
+                <div className="bg-slate-100 px-6 py-2 rounded-full text-slate-500 text-sm font-gilroy-medium mb-6">
+                  You selected {rating} out of 5
+                </div>
+
+                <h3 className="text-3xl font-gilroy-bold text-[#0A1A2F] mb-4 text-center">
+                  Thank You
                 </h3>
-                <p className="text-slate-500 text-center text-lg">
-                  Thank you for helping us grow.
+
+                <p className="text-slate-500 text-center text-base leading-relaxed mb-4 px-2">
+                  We appreciate you taking the time to give a rating. If you ever need more support, don&apos;t hesitate to get in touch.
                 </p>
+
+                <button
+                  onClick={handleClose}
+                  className="w-full mt-6 py-4 text-white rounded-2xl font-gilroy-bold text-lg hover:opacity-90 transition-all shadow-lg"
+                  style={{ backgroundColor: accentColor }}
+                >
+                  Close
+                </button>
               </div>
             ) : (
               <>
-
-                <p className="text-slate-700 text-lg mb-8 leading-relaxed">
-                  Did we expand your perspective?
-                </p>
-
-                {/* Rating Grid */}
-                <div className="grid grid-cols-5 gap-2 mb-10">
-                  {ratings.map((item) => {
-                    const Icon = item.icon;
-                    const isSelected = rating === item.value;
-                    return (
-                      <button
-                        key={item.value}
-                        onClick={() => setRating(item.value)}
-                        className={`flex flex-col items-center justify-center py-2.5 px-1 transition-all duration-200 border rounded-lg group min-w-0 ${isSelected
-                          ? 'bg-white border-blue-500 shadow-[0_4px_12px_rgba(59,130,246,0.15)] ring-2 ring-blue-500/10'
-                          : 'bg-white border-slate-200 hover:border-slate-300'
-                          }`}
-                      >
-                        <Icon className={`h-7 w-7 mb-2 transition-colors ${isSelected ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-500'
-                          }`} />
-                        <span className={`text-xs font-gilroy-medium truncate w-full px-1 ${isSelected ? 'text-slate-900' : 'text-slate-400 group-hover:text-slate-500'
-                          }`}>
-                          {item.label}
-                        </span>
-                      </button>
-                    );
-                  })}
+                {/* Star Icon Card */}
+                <div className="flex justify-start mb-5">
+                  <div className="w-12 h-12 bg-slate-50 border border-slate-100 rounded-full flex items-center justify-center shadow-sm">
+                    <Star className="h-6 w-6" style={{ color: accentColor, fill: accentColor }} />
+                  </div>
                 </div>
 
-                {/* Feedback Input */}
-                <div className="mb-6">
-                  <label className="block text-[15px] font-gilroy-semibold text-slate-900 mb-3">
-                    What are the main reasons for your rating?
-                  </label>
+                <h2 className="text-3xl font-gilroy-bold text-[#0A1A2F] mb-5">
+                  Did we expand your perspective?
+                </h2>
+
+
+                {/* Rating Circles */}
+                <div className="flex justify-between items-center mb-5 gap-2">
+                  {[1, 2, 3, 4, 5].map((val) => (
+                    <button
+                      key={val}
+                      onClick={() => setRating(val)}
+                      className={`w-12 h-12 rounded-full flex items-center justify-center text-lg font-gilroy-bold transition-all ${rating === val
+                        ? 'text-white shadow-xl scale-110'
+                        : 'bg-slate-50 text-slate-400 hover:bg-slate-100 hover:text-slate-600'
+                        }`}
+                      style={rating === val ? {
+                        backgroundColor: accentColor,
+                        boxShadow: `0 10px 15px -3px ${accentColor}33` // Subtle shadow with accent color
+                      } : {}}
+                    >
+                      {val}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="mb-5">
                   <textarea
                     value={feedback}
                     onChange={(e) => setFeedback(e.target.value)}
-                    className="w-full h-32 p-4 bg-white border border-slate-200 rounded-lg resize-none font-gilroy-regular text-[15px] focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500/50 transition-all text-slate-800"
+                    placeholder="Tell us what you liked or how we can improve..."
+                    className="w-full h-32 p-4 bg-slate-50 border border-slate-100 rounded-2xl text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:border-opacity-20 transition-all resize-none text-sm font-gilroy-regular"
+                    style={{
+                      '--tw-ring-color': `${accentColor}1A`, // 10% opacity for ring
+                      borderColor: `${accentColor}33` // 20% opacity for border
+                    } as React.CSSProperties}
                   />
                 </div>
 
-                {/* Footer Buttons */}
-                <div className="flex justify-between items-center mt-8 px-0 md:px-6">
-                  <button
-                    onClick={handleSubmit}
-                    disabled={isSubmitting}
-                    className="px-10 py-3.5 bg-blue-400 hover:bg-blue-500 text-white rounded-[0.5rem] font-gilroy-bold text-lg transition-all active:scale-[0.98] disabled:opacity-50 min-w-[140px]"
-                  >
-                    {isSubmitting ? 'Sending...' : 'Submit'}
-                  </button>
-                  <button
-                    onClick={handleClose}
-                    className="px-10 py-3.5 bg-gray-50 hover:bg-slate-50 text-slate-500 rounded-[0.5rem] font-gilroy-semibold text-lg transition-all border border-transparent"
-                  >
-                    Cancel
-                  </button>
+                <button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  className="w-full py-4 text-white rounded-2xl font-gilroy-bold text-lg transition-all active:scale-[0.98] disabled:opacity-50 shadow-lg hover:opacity-90"
+                  style={{ backgroundColor: accentColor }}
+                >
+                  {isSubmitting ? 'Sending...' : 'Submit'}
+                </button>
+
+                {/* Hidden preloader for the thank you image */}
+                <div className="absolute opacity-0 pointer-events-none h-0 w-0 overflow-hidden">
+                  <Image
+                    src="/feedback-thank-you2.png"
+                    alt="preloader"
+                    width={1}
+                    height={1}
+                    priority
+                  />
                 </div>
               </>
             )}
