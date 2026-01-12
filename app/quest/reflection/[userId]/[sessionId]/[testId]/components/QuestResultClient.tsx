@@ -428,13 +428,6 @@ export function QuestResultClient({
       });
 
       setActiveIndex(currentIndex);
-      // Show feedback popup after 2 seconds when user reaches subjects section (index 3)
-      if (currentIndex >= 3 && !hasTriggeredFeedback) {
-        setHasTriggeredFeedback(true);
-        setTimeout(() => {
-          setFeedbackPopupOpen(true);
-        }, 2000);
-      }
     };
 
     container.addEventListener('scroll', handleScroll);

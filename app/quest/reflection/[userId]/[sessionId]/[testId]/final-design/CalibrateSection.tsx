@@ -127,38 +127,6 @@ export default function CalibrateSection({
         }
     }, [existingLikertData, sliderValues, initialDepthScore, depthScore, touchedSliders]);
 
-    // Trigger feedback popup when section comes into view
-    useEffect(() => {
-        if (!onFeedbackTrigger || hasAutoTriggered || hasTriggeredRef.current) return;
-
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting && !hasTriggeredRef.current && !hasAutoTriggered) {
-                        // Wait 2 seconds after section is in view
-                        setTimeout(() => {
-                            if (onFeedbackTrigger && !hasTriggeredRef.current && !hasAutoTriggered) {
-                                hasTriggeredRef.current = true;
-                                onFeedbackTrigger();
-                            }
-                        }, 2000);
-                    }
-                });
-            },
-            { threshold: 0.3 } // Trigger when 30% of section is visible
-        );
-
-        if (sectionRef.current) {
-            observer.observe(sectionRef.current);
-        }
-
-        return () => {
-            if (sectionRef.current) {
-                observer.unobserve(sectionRef.current);
-            }
-        };
-    }, [onFeedbackTrigger, hasAutoTriggered]);
-
     const handleSubmitCalibration = async () => {
         if (!testId) {
             toast.error('Test ID not found', { position: "top-right" });
@@ -166,6 +134,8 @@ export default function CalibrateSection({
         }
 
         setIsSubmitting(true);
+        let shouldTriggerFeedback = false;
+
         try {
             console.log('Submitting calibration:', sliderValues, testId);
             const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/likert/`, {
@@ -182,18 +152,32 @@ export default function CalibrateSection({
                 toast.success(response.data.Message || 'Psych File successfully updated', {
                     position: "top-right"
                 });
+                shouldTriggerFeedback = true;
             } else {
                 toast.error(response.data.Message || 'Failed to update', {
                     position: "top-right"
                 });
+                shouldTriggerFeedback = true;
             }
         } catch (error: any) {
             console.error('Calibration submission error:', error);
             toast.error(error?.response?.data?.Message || 'Failed to update calibration', {
                 position: "top-right"
             });
+            shouldTriggerFeedback = true;
         } finally {
             setIsSubmitting(false);
+
+            // Trigger feedback popup after 2 seconds regardless of success or failure
+            if (shouldTriggerFeedback && onFeedbackTrigger && !hasTriggeredRef.current && !hasAutoTriggered) {
+                setTimeout(() => {
+                    if (onFeedbackTrigger && !hasTriggeredRef.current && !hasAutoTriggered) {
+                        hasTriggeredRef.current = true;
+                        onFeedbackTrigger();
+                        console.log('✅ Feedback popup triggered after compilation attempt');
+                    }
+                }, 2000);
+            }
         }
     };
 
