@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Users, DollarSign, FileText, CreditCard, BarChart3, Menu, X, MessageCircle, TrendingUp, AlertCircle, Image, Mail, PieChart, Settings, UserCheck, Calendar, Shield, RefreshCw, Send, Layout, Copy, CheckCircle, Clock, Search, ExternalLink } from 'lucide-react';
+import { Users, DollarSign, FileText, CreditCard, BarChart3, Menu, X, MessageCircle, TrendingUp, AlertCircle, Image, Mail, PieChart, Settings, UserCheck, Calendar, Shield, RefreshCw, Send, Layout, Copy, CheckCircle, Clock, Search, ExternalLink, Star } from 'lucide-react';
 // Import placeholder components (these will be replaced with real migrations)
 import {
   AdminUserManagement,
@@ -234,9 +234,27 @@ const RecentActivityTabs: React.FC = () => {
       <div className="overflow-y-auto max-h-[400px] pr-2 space-y-4 pt-4">
         {items.map((item: any) => {
           const id = item.id || item.application_id;
-          const name = item.user_name || (item.first_name ? `${item.first_name} ${item.last_name}` : 'Unknown User');
+
+          // Improved user data extraction
+          let name = 'Unknown User';
+          let email = '';
+
+          // Logic for different data types
+          if (activeTab === 'feedback' && item.user_data) {
+            // For feedback items with joined user_data
+            name = item.user_data.user_name ||
+              (item.user_data.first_name ? `${item.user_data.first_name} ${item.user_data.last_name}` : 'Unknown User');
+            email = item.user_data.email || '';
+          } else {
+            // Fallback or for other types where data might be flat or different
+            name = item.user_name || (item.first_name ? `${item.first_name} ${item.last_name}` : 'Unknown User');
+            // If email is available in the root item (e.g. some tables might have it)
+            email = item.email || '';
+          }
+
           const comment = item.user_query || item.feedback || `Villa App: ${item.purpose_of_visit || 'No purpose'}`;
           const date = new Date(item.created_at || item.submitted_at).toLocaleDateString();
+          const rating = item.rating ? parseInt(item.rating) : 0;
 
           // Collect all IDs to display
           const displayIds = [
@@ -254,6 +272,19 @@ const RecentActivityTabs: React.FC = () => {
                     {name}
                     <span className="text-xs font-normal text-gray-500 bg-gray-200 px-2 py-0.5 rounded-full">{date}</span>
                   </h4>
+                  {email && <p className="text-xs text-gray-500 mb-1">{email}</p>}
+
+                  {activeTab === 'feedback' && rating > 0 && (
+                    <div className="flex items-center gap-0.5 mb-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star
+                          key={star}
+                          className={`h-3 w-3 ${star <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                        />
+                      ))}
+                    </div>
+                  )}
+
                   <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1">
                     {displayIds.map((idItem, idx) => (
                       <div key={idx} className="flex items-center gap-1.5 bg-white border border-gray-100 px-2 py-0.5 rounded-md shadow-sm">
@@ -712,7 +743,7 @@ const AdminDashboard: React.FC = () => {
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
-      <div className={`${sidebarOpen ? 'w-72' : 'w-20'} bg-white border-r border-gray-200 transition-all duration-300 flex flex-col shadow-sm flex-shrink-0`}>
+      <div className={`${sidebarOpen ? 'w-72' : 'w-20'} bg-white border-r border-gray-200 transition-all duration-300 flex flex-col shadow-sm shrink-0`}>
         {/* Sidebar Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <h2 className={`text-xl font-bold text-gray-900 transition-all duration-300 overflow-hidden whitespace-nowrap ${sidebarOpen ? 'opacity-100 max-w-xs' : 'opacity-0 max-w-0'
@@ -742,7 +773,7 @@ const AdminDashboard: React.FC = () => {
                       }`}
                     title={sidebarOpen ? '' : item.label}
                   >
-                    <Icon className={`h-5 w-5 flex-shrink-0 ${isActive ? 'text-blue-600' : 'text-gray-500'}`} />
+                    <Icon className={`h-5 w-5 shrink-0 ${isActive ? 'text-blue-600' : 'text-gray-500'}`} />
                     <span className={`font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${isActive ? 'text-blue-700' : 'text-gray-700'} ${sidebarOpen ? 'opacity-100 max-w-xs' : 'opacity-0 max-w-0'
                       }`}>
                       {item.label}
@@ -757,7 +788,7 @@ const AdminDashboard: React.FC = () => {
         {/* Sidebar Footer */}
         <div className="p-4 border-t border-gray-200">
           <div className={`flex items-center gap-3 ${!sidebarOpen && 'justify-center'}`}>
-            <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
+            <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center shrink-0">
               <span className="text-white text-sm font-semibold">A</span>
             </div>
             <div className={`transition-all duration-300 overflow-hidden ${sidebarOpen ? 'opacity-100 max-w-xs' : 'opacity-0 max-w-0'
