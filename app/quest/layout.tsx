@@ -4,7 +4,7 @@ import Script from 'next/script';
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
+  maximumScale: 1,f
   userScalable: false,
   viewportFit: 'cover',
   interactiveWidget: 'resizes-content',
@@ -12,7 +12,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: 'Quest | Fraterny',
-  description: 'Unlock your true potential with Quest by Fraterny. A private, aesthetic psychological file built from your words. Preview a fragment free; keep your full copy if it feels true.',
+  description: 'Unique. Accurate. Secure. Quest decodes the deeper psychological insights hidden in your words to reveal the patterns that quietly drive your life.',
   keywords: ['psychological file',
     'personal dossier',
     'identity blueprint',
@@ -44,21 +44,21 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://fraterny.com/quest',
     title: 'Quest | Fraterny',
-    description: 'Unlock your true potential with Quest by Fraterny. A private, aesthetic psychological file built from your words. Preview a fragment free; keep your full copy if it feels true.',
+    description: 'Unique. Accurate. Secure. Quest decodes the deeper psychological insights hidden in your words to reveal the patterns that quietly drive your life.',
     siteName: 'Fraterny',
     images: [
       {
         url: 'https://fraterny.com/Questfavicon.ico',
         width: 1200,
         height: 630,
-        alt: 'Quest — Unlock Your True Potential with Fraterny',
+        alt: 'Quest — Own Your Psychology',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Quest | Fraterny',
-    description: 'Unlock your true potential with Quest by Fraterny. A private, aesthetic psychological file built from your words. Preview a fragment free; keep your full copy if it feels true.',
+    description: 'Unique. Accurate. Secure. Quest decodes the deeper psychological insights hidden in your words to reveal the patterns that quietly drive your life.',
     images: ['https://fraterny.com/Questfavicon.ico'],
     creator: '@frat_erny',
   },
@@ -77,7 +77,7 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'Fraterny — Quest',
-  description: 'Quest composes confidential psychological files from user-written answers. Preview a fragment; access your full edition when ready.',
+  description: 'Unique. Accurate. Secure. Quest decodes the deeper psychological insights hidden in your words to reveal the patterns that quietly drive your life.',
   url: 'https://fraterny.com',
   potentialAction: {
     '@type': 'SearchAction',
