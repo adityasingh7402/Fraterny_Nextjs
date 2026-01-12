@@ -147,28 +147,28 @@ class GoogleAnalyticsService {
   //   })
   // }
 
-  // trackQuestComplete(params: {
-  //   session_id: string
-  //   user_state: 'anonymous' | 'logged_in'
-  //   total_duration: number
-  //   questions_completed: number
-  // }): void {
-  //   this.sendEvent('quest_complete', {
-  //     event_category: 'Quest',
-  //     event_label: 'Quest Completed',
-  //     session_id: params.session_id,
-  //     user_state: params.user_state,
-  //     total_duration: Math.round(params.total_duration),
-  //     questions_completed: params.questions_completed
-  //   })
+  trackQuestComplete(params: {
+    session_id: string
+    user_state: 'anonymous' | 'logged_in'
+    total_duration: number
+    questions_completed: number
+  }): void {
+    this.sendEvent('quest_complete', {
+      event_category: 'Quest',
+      event_label: 'Quest Completed',
+      session_id: params.session_id,
+      user_state: params.user_state,
+      total_duration: Math.round(params.total_duration),
+      questions_completed: params.questions_completed
+    })
 
-  //   this.sendEvent('quest_conversion', {
-  //     event_category: 'Conversion',
-  //     event_label: 'Quest Completed',
-  //     value: params.questions_completed,
-  //     currency: 'points'
-  //   })
-  // }
+    // this.sendEvent('quest_conversion', {
+    //   event_category: 'Conversion',
+    //   event_label: 'Quest Completed',
+    //   value: params.questions_completed,
+    //   currency: 'points'
+    // })
+  }
 
   trackQuestAbandon(params: {
     session_id: string

@@ -319,13 +319,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
     response: string,
     tags?: HonestyTag[]
   ): Promise<void> => {
-    console.log('💾 [DESKTOP-DEBUG] submitResponse called:', {
-      questionId,
-      responsePreview: response.substring(0, 100) + (response.length > 100 ? '...' : ''),
-      responseLength: response.length,
-      hasTags: !!tags,
-      tagsCount: tags?.length || 0
-    });
+    
     if (!session) return;
 
     try {
@@ -672,12 +666,12 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
       const totalDuration = (Date.now() - startTime) / 1000; // in seconds
       const questionsCompleted = session?.responses ? Object.keys(session.responses).length : 0;
 
-      // googleAnalytics.trackQuestComplete({
-      //   session_id: sessionId,
-      //   user_state: userState,
-      //   total_duration: totalDuration,
-      //   questions_completed: questionsCompleted
-      // });
+      googleAnalytics.trackQuestComplete({
+        session_id: sessionId,
+        user_state: userState,
+        total_duration: totalDuration,
+        questions_completed: questionsCompleted
+      });
 
       // Track affiliate questionnaire completion
       const referredBy = submissionData.referred_by;
