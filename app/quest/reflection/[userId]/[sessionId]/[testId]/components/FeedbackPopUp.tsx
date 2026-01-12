@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Frown, Meh, Smile, Laugh, CheckCircle2 } from 'lucide-react';
+import { X, Frown, Meh, Smile, Laugh, CheckCircle2, Angry } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
 
@@ -17,7 +17,7 @@ interface FeedbackPopupProps {
 }
 
 const ratings = [
-  { value: 1, label: 'Terrible', icon: Frown },
+  { value: 1, label: 'Terrible', icon: Angry },
   { value: 2, label: 'Bad', icon: Frown },
   { value: 3, label: 'Okay', icon: Meh },
   { value: 4, label: 'Good', icon: Smile },
@@ -111,16 +111,13 @@ export const FeedbackPopup: React.FC<FeedbackPopupProps> = ({
               </div>
             ) : (
               <>
-                <h2 className="text-[28px] font-gilroy-bold text-slate-900 mb-4 tracking-tight">
-                  Give feedback
-                </h2>
 
                 <p className="text-slate-700 text-lg mb-8 leading-relaxed">
                   Did we expand your perspective?
                 </p>
 
                 {/* Rating Grid */}
-                <div className="grid grid-cols-5 gap-3 mb-10">
+                <div className="grid grid-cols-5 gap-2 mb-10">
                   {ratings.map((item) => {
                     const Icon = item.icon;
                     const isSelected = rating === item.value;
@@ -128,14 +125,14 @@ export const FeedbackPopup: React.FC<FeedbackPopupProps> = ({
                       <button
                         key={item.value}
                         onClick={() => setRating(item.value)}
-                        className={`flex flex-col items-center justify-center py-5 transition-all duration-200 border rounded-lg group ${isSelected
+                        className={`flex flex-col items-center justify-center py-2.5 px-1 transition-all duration-200 border rounded-lg group min-w-0 ${isSelected
                           ? 'bg-white border-blue-500 shadow-[0_4px_12px_rgba(59,130,246,0.15)] ring-2 ring-blue-500/10'
                           : 'bg-white border-slate-200 hover:border-slate-300'
                           }`}
                       >
-                        <Icon className={`h-8 w-8 mb-3 transition-colors ${isSelected ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-500'
+                        <Icon className={`h-7 w-7 mb-2 transition-colors ${isSelected ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-500'
                           }`} />
-                        <span className={`text-sm font-gilroy-medium ${isSelected ? 'text-slate-900' : 'text-slate-400 group-hover:text-slate-500'
+                        <span className={`text-xs font-gilroy-medium truncate w-full px-1 ${isSelected ? 'text-slate-900' : 'text-slate-400 group-hover:text-slate-500'
                           }`}>
                           {item.label}
                         </span>
@@ -157,7 +154,7 @@ export const FeedbackPopup: React.FC<FeedbackPopupProps> = ({
                 </div>
 
                 {/* Footer Buttons */}
-                <div className="flex justify-between items-center mt-8">
+                <div className="flex justify-between items-center mt-8 px-0 md:px-6">
                   <button
                     onClick={handleSubmit}
                     disabled={isSubmitting}

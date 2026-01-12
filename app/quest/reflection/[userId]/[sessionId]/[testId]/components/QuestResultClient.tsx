@@ -102,6 +102,7 @@ export function QuestResultClient({
   const [hasTriggeredFeedback, setHasTriggeredFeedback] = useState(false);
   const [showFeedbackStar, setShowFeedbackStar] = useState(false);
   const [hasFeedbackSubmitted, setHasFeedbackSubmitted] = useState(false);
+  const [showThankYouInProcess, setShowThankYouInProcess] = useState(false);
   const [tip, setTip] = useState<string | null>(null);
   const [selectedInsight, setSelectedInsight] = useState<{ index: number; text: string } | null>(null);
   const [selectedFilm, setSelectedFilm] = useState<Film | null>(null);
@@ -1144,21 +1145,27 @@ export function QuestResultClient({
         onClose={handleCloseSuccessPopup}
       />
 
-      {!hasFeedbackSubmitted && (
-        <FeedbackPopup
-          open={feedbackPopupOpen}
-          onClose={() => setFeedbackPopupOpen(false)}
-          onDismiss={(hasInteracted) => setShowFeedbackStar(hasInteracted)}
-          onFeedbackSubmit={() => {
+      <FeedbackPopup
+        open={feedbackPopupOpen}
+        onClose={() => {
+          setFeedbackPopupOpen(false);
+          // If we just finished a submission, mark it as done so the floating star doesn't return
+          if (showThankYouInProcess) {
             setHasFeedbackSubmitted(true);
-            setShowFeedbackStar(false);
-            setFeedbackPopupOpen(false);
-          }}
-          sessionId={sessionId}
-          testId={testId}
-          userId={userId}
-        />
-      )}
+          }
+        }}
+        onDismiss={(hasInteracted) => setShowFeedbackStar(hasInteracted)}
+        onFeedbackSubmit={() => {
+          // We don't setHasFeedbackSubmitted(true) immediately anymore
+          // because it would unmount the component before the "Thank You" view finishes.
+          // Instead, we let the FeedbackPopup handle its own timeout and call onClose.
+          setShowFeedbackStar(false);
+          setShowThankYouInProcess(true);
+        }}
+        sessionId={sessionId}
+        testId={testId}
+        userId={userId}
+      />
 
       {/* Sticky Feedback Star */}
       {!hasFeedbackSubmitted && (
