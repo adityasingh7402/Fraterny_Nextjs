@@ -500,13 +500,76 @@ export function QuestResultClient({
       return { success: false, message: 'Invalid coupon code' };
     }
 
+    // try {
+    //   const response = await axios.post('/api/tracking/affiliate/validate-coupon', {
+    //     code,
+    //     userId: user?.id || userId,
+    //     // Send original amounts to calculate discount on
+    //     original_amount_inr: pricing.razorpay.amount, // pricing.razorpay.amount is in INR (e.g. 1000) based on user report of getting '9' from '10' when divided by 100
+    //     original_amount_usd: pricing.paypal.amount
+    //   });
+
+    //   // The response.data contains { success: true, valid: true, data: { ... } }
+    //   const result = response.data;
+
+    //   if (result.valid && result.data) {
+    //     setCouponCode(code);
+    //     setCouponApplied(true);
+    //     setDiscountDetails(result.data);
+
+    //     // Update pricing with discounted values
+    //     const discountedData = result.data.discounted;
+
+    //     setPricing(prev => ({
+    //       ...prev,
+    //       razorpay: {
+    //         ...prev.razorpay,
+    //         main: `₹${discountedData.inr}`,
+    //         amount: discountedData.inr * 100 // Convert back to paise for consistency if needed, checking payment flow next
+    //       },
+    //       paypal: {
+    //         ...prev.paypal,
+    //         main: `$${discountedData.usd}`,
+    //         amount: discountedData.usd
+    //       }
+    //     }));
+
+    //     toast.success(`Coupon applied! ${result.data.discount_percentage}% off`);
+    //     return { success: true };
+    //   } else {
+    //     return { success: false, message: result.message || 'Invalid coupon' };
+    //   }
+    // } catch (error: any) {
+    //   console.error('Coupon validation error:', error);
+    //   return { success: false, message: error?.response?.data?.message || 'Failed to apply coupon' };
+    // }
+
     try {
+      // Determine correct amounts based on user location
+      // If user is in India, Razorpay uses INR and we need to calculate USD from PayPal
+      // If user is outside India, Razorpay uses USD and we need to calculate INR
+      const isIndia = pricing.razorpay.isIndia;
+
+      let original_amount_inr: number;
+      let original_amount_usd: number;
+
+      if (isIndia) {
+        // User in India: Razorpay has INR amount, PayPal has USD
+        original_amount_inr = Math.round(pricing.razorpay.amount / 100); // Convert paise to rupees
+        original_amount_usd = pricing.paypal.amount;
+      } else {
+        // User outside India: Both gateways use USD, need to convert to INR for discount calculation
+        original_amount_usd = pricing.paypal.amount;
+        // Note: We'll send USD amount as INR param since Razorpay uses USD for international
+        // The backend will calculate discount percentage on both anyway
+        original_amount_inr = Math.round(pricing.razorpay.amount / 100); // USD amount
+      }
+
       const response = await axios.post('/api/tracking/affiliate/validate-coupon', {
         code,
         userId: user?.id || userId,
-        // Send original amounts to calculate discount on
-        original_amount_inr: pricing.razorpay.amount, // pricing.razorpay.amount is in INR (e.g. 1000) based on user report of getting '9' from '10' when divided by 100
-        original_amount_usd: pricing.paypal.amount
+        original_amount_inr,
+        original_amount_usd
       });
 
       // The response.data contains { success: true, valid: true, data: { ... } }
@@ -520,12 +583,22 @@ export function QuestResultClient({
         // Update pricing with discounted values
         const discountedData = result.data.discounted;
 
+        // Respect the user's location-based currency for Razorpay
+        // If user is outside India, Razorpay should show USD, not INR
+        const razorpayIsIndia = pricing.razorpay.isIndia;
+        const razorpayCurrency = pricing.razorpay.currency;
+        const razorpaySymbol = pricing.razorpay.symbol;
+
         setPricing(prev => ({
           ...prev,
           razorpay: {
             ...prev.razorpay,
-            main: `₹${discountedData.inr}`,
-            amount: discountedData.inr * 100 // Convert back to paise for consistency if needed, checking payment flow next
+            main: razorpayIsIndia
+              ? `${razorpaySymbol}${discountedData.inr}`
+              : `${razorpaySymbol}${discountedData.usd}`,
+            amount: razorpayIsIndia
+              ? discountedData.inr * 100  // INR in paise
+              : discountedData.usd * 100  // USD in cents
           },
           paypal: {
             ...prev.paypal,
@@ -544,6 +617,7 @@ export function QuestResultClient({
       return { success: false, message: error?.response?.data?.message || 'Failed to apply coupon' };
     }
   };
+
 
   const handlePayment = async (
     gateway: 'razorpay' | 'paypal',
