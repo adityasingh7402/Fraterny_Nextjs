@@ -241,12 +241,20 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
           };
           setSession(resumedSession);
           console.log('✅ Session restored:', resumedSession);
-          // setCurrentSectionId(parsedSession.sectionId || currentSectionId);
-          // setSectionQuestions(getQuestionsBySection(parsedSession.sectionId || currentSectionId));
-          // return parsedSession;
           setCurrentSectionId(parsedSession.sectionId || currentSectionId);
           setSectionQuestions(getQuestionsBySection(parsedSession.sectionId || currentSectionId));
           setIsLoading(false);
+
+          if (window.location.pathname === '/quest/introspect') {
+            const userState = auth.user ? 'logged_in' : 'anonymous';
+            googleAnalytics.trackQuestSessionResume({
+              session_id: resumedSession.id,
+              user_state: userState,
+              total_questions: allQuestions.length
+            });
+          }
+
+
           return resumedSession;
         } catch (error) {
           localStorage.removeItem('fraterny_quest_session');
@@ -273,7 +281,6 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
         currentQuestionIndex: 0,
         responses: {},
         sectionId: sectionId || currentSectionId,
-        // NEW PROPERTIES
         allowSkip: true,
         visitedQuestions: [],
         questionProgress: {}
