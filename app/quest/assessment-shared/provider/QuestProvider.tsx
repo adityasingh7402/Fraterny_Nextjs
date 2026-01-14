@@ -218,6 +218,8 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
 
 
   const startQuest = async (sectionId?: string): Promise<QuestSession | null> => {
+    console.log('🚀 Starting quest session...');
+    
     try {
       setIsLoading(true);
       setError(null);
@@ -299,12 +301,24 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
       const userState = auth.user ? 'logged_in' : 'anonymous';
       const isResumedSession = !!savedSession;
 
-      googleAnalytics.trackQuestStart({
-        session_id: newSession.id,
-        user_state: userState,
-        total_questions: allQuestions.length,
-        is_resumed_session: isResumedSession
-      });
+      // googleAnalytics.trackQuestStart({
+      //   session_id: newSession.id,
+      //   user_state: userState,
+      //   total_questions: allQuestions.length,
+      //   is_resumed_session: isResumedSession
+      // });
+      console.log('location.pathname:', window.location.pathname);
+      
+      if(window.location.pathname === '/quest/introspect'){
+        googleAnalytics.trackQuestStart({
+          session_id: newSession.id,
+          user_state: userState,
+          total_questions: allQuestions.length,
+          is_resumed_session: isResumedSession
+        });
+      } else {
+        console.log('⏭️ Skipping analytics - not on /introspect route');
+      }
       return newSession;
     } catch (err) {
       setError(err instanceof Error ? err : new Error(String(err)));
@@ -313,7 +327,8 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
       setIsLoading(false);
     }
   };
-
+ 
+ 
   const submitResponse = async (
     questionId: string,
     response: string,
