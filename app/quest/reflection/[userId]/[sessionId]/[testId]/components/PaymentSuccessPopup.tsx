@@ -19,7 +19,7 @@ export const PaymentSuccessPopup: React.FC<PaymentSuccessPopupProps> = ({ open, 
     if (userId) {
       router.push(`/profile?tab=history`);
     } else {
-      router.push('/profile?tab=overview');
+      router.push('/profile?tab=history');
     }
     onClose();
   };
