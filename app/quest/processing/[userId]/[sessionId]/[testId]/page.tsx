@@ -403,7 +403,7 @@ export function QuestProcessing({ className = '', gifSrc = '/analysis1.gif' }: Q
 
     // Redirect to quest root (which handles new sessions)
     // Using window.location to ensure full state reset
-    window.location.href = '/quest';
+    window.location.href = '/quest/begin';
   };
 
   // Recovery function - attempt to find recent submissions
@@ -484,7 +484,7 @@ export function QuestProcessing({ className = '', gifSrc = '/analysis1.gif' }: Q
             Something went wrong
           </h2> */}
           <p className="text-lg text-gray-700 mb-6">
-            Analysis took longer than expected. Please check again if your results are ready.
+            {isPolling ? 'Checking...' : (retryCount >= 2 ? 'Something went wrong. Reset and start over to try again.' : 'Analysis took longer than expected. Please check again if your results are ready.')}
           </p>
           <button
             onClick={() => {
