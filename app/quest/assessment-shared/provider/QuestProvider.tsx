@@ -334,7 +334,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
     response: string,
     tags?: HonestyTag[]
   ): Promise<void> => {
-    
+
     if (!session) return;
 
     try {
@@ -594,7 +594,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
       const cachedTestId = localStorage.getItem('testid');
       if (cachedSessionId && cachedTestId) {
         const navigationData = {
-          targetUrl: `/quest-result/processing/${submissionData.user_data.user_id}/${cachedSessionId}/${cachedTestId}`,
+          targetUrl: `/quest/processing/${submissionData.user_data.user_id}/${cachedSessionId}/${cachedTestId}`,
           userId: submissionData.user_data.user_id,
           sessionId: cachedSessionId,
           testid: cachedTestId

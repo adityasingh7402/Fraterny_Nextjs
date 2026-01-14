@@ -1057,7 +1057,7 @@ export function QuestNavigation({
 
       // Navigate directly to processing page without calling API
       setTimeout(() => {
-        const processingUrl = `/quest-result/processing/${userId}/${existingSessionId}/${existingTestId}`;
+        const processingUrl = `/quest/processing/${userId}/${existingSessionId}/${existingTestId}`;
         console.log('ðŸ§­ Navigating to existing processing:', processingUrl);
         router.push(processingUrl);
       }, 1000);
