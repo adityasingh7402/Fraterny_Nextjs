@@ -105,6 +105,19 @@ class GoogleAnalyticsService {
     })
   }
 
+  trackQuestSessionResume(params: {
+  session_id: string;
+  user_state: 'logged_in' | 'anonymous';
+  total_questions: number;
+  }) {
+    this.sendEvent('quest_session_resume', {
+      session_id: params.session_id,
+      user_state: params.user_state,
+      total_questions: params.total_questions,
+      is_resumed_session: true
+    });
+  }
+
   // trackQuestionView(params: {
   //   session_id: string
   //   question_id: string
