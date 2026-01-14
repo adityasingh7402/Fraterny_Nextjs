@@ -15,11 +15,11 @@ interface CalibrateSectionProps {
     onFeedbackTrigger?: () => void;
     testId?: string;
     existingLikertData?: {
-        q1?: number;
-        q2?: number;
-        q3?: number;
-        q4?: number;
-        q5?: number;
+        q1?: number | null;
+        q2?: number | null;
+        q3?: number | null;
+        q4?: number | null;
+        q5?: number | null;
     };
 }
 
@@ -63,16 +63,16 @@ export default function CalibrateSection({
             // Add +2 for each slider that has a value different from 5 in DB
             let bonusCount = 0;
 
-            if (existingLikertData.q1 !== undefined && existingLikertData.q1 !== 5) {
+            if (existingLikertData.q1 !== undefined && existingLikertData.q1 !== null && existingLikertData.q1 !== 5) {
                 bonusCount++;
             }
-            if (existingLikertData.q2 !== undefined && existingLikertData.q2 !== 5) {
+            if (existingLikertData.q2 !== undefined && existingLikertData.q2 !== null && existingLikertData.q2 !== 5) {
                 bonusCount++;
             }
-            if (existingLikertData.q3 !== undefined && existingLikertData.q3 !== 5) {
+            if (existingLikertData.q3 !== undefined && existingLikertData.q3 !== null && existingLikertData.q3 !== 5) {
                 bonusCount++;
             }
-            if (existingLikertData.q4 !== undefined && existingLikertData.q4 !== 5) {
+            if (existingLikertData.q4 !== undefined && existingLikertData.q4 !== null && existingLikertData.q4 !== 5) {
                 bonusCount++;
             }
 
@@ -93,16 +93,16 @@ export default function CalibrateSection({
         const touched = new Set<string>();
 
         if (existingLikertData) {
-            if (existingLikertData.q1 !== undefined && existingLikertData.q1 !== 5) {
+            if (existingLikertData.q1 !== undefined && existingLikertData.q1 !== null && existingLikertData.q1 !== 5) {
                 touched.add('q1');
             }
-            if (existingLikertData.q2 !== undefined && existingLikertData.q2 !== 5) {
+            if (existingLikertData.q2 !== undefined && existingLikertData.q2 !== null && existingLikertData.q2 !== 5) {
                 touched.add('q2');
             }
-            if (existingLikertData.q3 !== undefined && existingLikertData.q3 !== 5) {
+            if (existingLikertData.q3 !== undefined && existingLikertData.q3 !== null && existingLikertData.q3 !== 5) {
                 touched.add('q3');
             }
-            if (existingLikertData.q4 !== undefined && existingLikertData.q4 !== 5) {
+            if (existingLikertData.q4 !== undefined && existingLikertData.q4 !== null && existingLikertData.q4 !== 5) {
                 touched.add('q4');
             }
         }
