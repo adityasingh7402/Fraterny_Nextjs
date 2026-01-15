@@ -79,7 +79,7 @@ const getSectionProgress = (sectionId: string) => {
                 className="flex items-center justify-center p-8"
               >
                 <div className="loader w-8 h-8 border-4 border-gray-200 border-t-terracotta rounded-full animate-spin"></div>
-                <span className="ml-3 text-gray-600">Loading your assessment...</span>
+                <span className="ml-3 text-gray-600">Loading your Quest...</span>
               </motion.div>
             )}
             
