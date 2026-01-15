@@ -92,6 +92,7 @@ export type ResultData = {
     q4?: number;
     q5?: number;
   };
+  paymentStatus?: AssessmentPaymentStatus;
 };
 
 export interface User {
