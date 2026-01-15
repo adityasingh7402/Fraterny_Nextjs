@@ -92,15 +92,24 @@ export async function DELETE(request: NextRequest) {
 export async function PATCH(request: NextRequest) {
     try {
         const body = await request.json();
-        const { id, is_active } = body;
+        const { id, is_active, discount_percentage, expires_at } = body;
 
-        if (!id || is_active === undefined) {
-            return NextResponse.json({ success: false, error: 'Missing required fields' }, { status: 400 });
+        if (!id) {
+            return NextResponse.json({ success: false, error: 'ID is required' }, { status: 400 });
+        }
+
+        const updates: any = {};
+        if (is_active !== undefined) updates.is_active = is_active;
+        if (discount_percentage !== undefined) updates.discount_percentage = discount_percentage;
+        if (expires_at !== undefined) updates.expires_at = expires_at;
+
+        if (Object.keys(updates).length === 0) {
+            return NextResponse.json({ success: false, error: 'No fields to update' }, { status: 400 });
         }
 
         const { data, error } = await supabaseAdmin
             .from('discount_codes')
-            .update({ is_active })
+            .update(updates)
             .eq('id', id)
             .select()
             .single();

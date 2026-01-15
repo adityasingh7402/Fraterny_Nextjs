@@ -108,6 +108,12 @@ const ViewInfluencerPopup: React.FC<ViewInfluencerPopupProps> = ({ isOpen, influ
   const [showDeleteDiscountPopup, setShowDeleteDiscountPopup] = useState(false);
   const [discountToDelete, setDiscountToDelete] = useState<{ id: string; code: string } | null>(null);
 
+  // Edit Discount state
+  const [editingDiscountId, setEditingDiscountId] = useState<string | null>(null);
+  const [editDiscountPercent, setEditDiscountPercent] = useState('');
+  const [editDiscountExpiry, setEditDiscountExpiry] = useState('');
+  const [savingDiscount, setSavingDiscount] = useState(false);
+
   const [hasImageFailed, setHasImageFailed] = useState(false);
 
   // Form states
@@ -350,7 +356,7 @@ const ViewInfluencerPopup: React.FC<ViewInfluencerPopupProps> = ({ isOpen, influ
 
   const handleAddDiscount = async () => {
     if (!newCode.trim()) return toast.error("Code is required");
-    const percent = parseInt(newDiscountPercent);
+    const percent = parseFloat(newDiscountPercent);
     if (isNaN(percent) || percent < 0 || percent > 100) return toast.error("Invalid percentage (0-100)");
 
     setAddingDiscount(true);
@@ -404,6 +410,51 @@ const ViewInfluencerPopup: React.FC<ViewInfluencerPopupProps> = ({ isOpen, influ
       }
     } catch (error) {
       toast.error("An error occurred");
+    }
+  };
+
+  const startEditingDiscount = (discount: DiscountCode) => {
+    setEditingDiscountId(discount.id);
+    setEditDiscountPercent(discount.discount_percentage.toString());
+    setEditDiscountExpiry(discount.expires_at ? new Date(discount.expires_at).toISOString().split('T')[0] : '');
+  };
+
+  const cancelEditingDiscount = () => {
+    setEditingDiscountId(null);
+    setEditDiscountPercent('');
+    setEditDiscountExpiry('');
+  };
+
+  const handleUpdateDiscount = async () => {
+    if (!editingDiscountId) return;
+
+    const percent = parseFloat(editDiscountPercent);
+    if (isNaN(percent) || percent < 0 || percent > 100) return toast.error("Invalid percentage (0-100)");
+
+    setSavingDiscount(true);
+    try {
+      const response = await fetch('/api/admin/discounts', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: editingDiscountId,
+          discount_percentage: percent,
+          expires_at: editDiscountExpiry || null
+        })
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        toast.success("Discount updated!");
+        setEditingDiscountId(null);
+        fetchDiscounts();
+      } else {
+        toast.error(result.error || "Failed to update discount");
+      }
+    } catch (error) {
+      toast.error("An error occurred");
+    } finally {
+      setSavingDiscount(false);
     }
   };
 
@@ -956,23 +1007,76 @@ const ViewInfluencerPopup: React.FC<ViewInfluencerPopupProps> = ({ isOpen, influ
                       discounts.map((discount) => (
                         <tr key={discount.id} className="hover:bg-gray-50">
                           <td className="px-4 py-3 font-mono font-medium text-blue-600">{discount.code}</td>
-                          <td className="px-4 py-3 text-sm">{discount.discount_percentage}%</td>
+                          <td className="px-4 py-3 text-sm">
+                            {editingDiscountId === discount.id ? (
+                              <div className="flex items-center gap-1">
+                                <input
+                                  type="number"
+                                  value={editDiscountPercent}
+                                  onChange={(e) => setEditDiscountPercent(e.target.value)}
+                                  className="w-20 rounded border-gray-300 px-2 py-1 text-sm"
+                                  placeholder="%"
+                                />
+                                <span>%</span>
+                              </div>
+                            ) : (
+                              `${discount.discount_percentage}%`
+                            )}
+                          </td>
                           <td className="px-4 py-3">
                             <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${discount.is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
                               {discount.is_active ? 'Active' : 'Inactive'}
                             </span>
                           </td>
                           <td className="px-4 py-3 text-sm text-gray-600">
-                            {discount.expires_at ? new Date(discount.expires_at).toLocaleDateString() : 'Never'}
+                            {editingDiscountId === discount.id ? (
+                              <input
+                                type="date"
+                                value={editDiscountExpiry}
+                                onChange={(e) => setEditDiscountExpiry(e.target.value)}
+                                className="rounded border-gray-300 px-2 py-1 text-sm"
+                              />
+                            ) : (
+                              discount.expires_at ? new Date(discount.expires_at).toLocaleDateString() : 'Never'
+                            )}
                           </td>
                           <td className="px-4 py-3 text-right">
-                            <button
-                              onClick={() => handleDeleteDiscount(discount.id, discount.code)}
-                              className="text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-50"
-                              title="Delete Code"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
+                            {editingDiscountId === discount.id ? (
+                              <div className="flex justify-end gap-2">
+                                <button
+                                  onClick={handleUpdateDiscount}
+                                  disabled={savingDiscount}
+                                  className="text-green-600 hover:text-green-800 p-1 rounded hover:bg-green-50"
+                                  title="Save Changes"
+                                >
+                                  <CheckCircle className="h-4 w-4" />
+                                </button>
+                                <button
+                                  onClick={cancelEditingDiscount}
+                                  className="text-gray-500 hover:text-gray-700 p-1 rounded hover:bg-gray-100"
+                                  title="Cancel Edit"
+                                >
+                                  <XCircle className="h-4 w-4" />
+                                </button>
+                              </div>
+                            ) : (
+                              <div className="flex justify-end gap-2">
+                                <button
+                                  onClick={() => startEditingDiscount(discount)}
+                                  className="text-blue-600 hover:text-blue-800 p-1 rounded hover:bg-blue-50"
+                                  title="Edit Code"
+                                >
+                                  <Edit2 className="h-4 w-4" />
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteDiscount(discount.id, discount.code)}
+                                  className="text-red-500 hover:text-red-700 p-1 rounded hover:bg-red-50"
+                                  title="Delete Code"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </button>
+                              </div>
+                            )}
                           </td>
                         </tr>
                       ))
