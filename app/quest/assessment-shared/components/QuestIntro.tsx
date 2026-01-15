@@ -255,7 +255,7 @@ export function QuestIntro({
         <div className='w-full pr-3 pb-5'>
           <button
             onClick={handleStart}
-            className="w-full h-14 mix-blend-luminosity bg-gradient-to-br from-white/20 to-white/20 rounded-[30px] border-2 border-white flex items-center justify-center leading-[1px]">
+            className="w-full h-14 mix-blend-luminosity bg-linear-to-br from-white/20 to-white/20 rounded-[30px] border-2 border-white flex items-center justify-center leading-px">
             <div className='flex gap-2 items-center'>
               <div className="w-full text-white text-2xl font-normal font-gilroy-bold tracking-tighter">{buttonText}</div>
               <motion.div

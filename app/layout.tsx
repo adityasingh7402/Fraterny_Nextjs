@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google"; // Keeping this if it was there, though localFont is used below
 import "./globals.css";
 import { AuthProvider } from "./auth/cotexts/AuthContext";
 import localFont from 'next/font/local'
@@ -7,6 +7,7 @@ import Script from 'next/script'
 import { Toaster } from '@/components/ui/sonner';
 import { GoogleTagManager } from '@next/third-parties/google'
 import SmoothScrolling from "@/components/SmoothScrolling";
+import GlobalErrorBoundary from "@/components/GlobalErrorBoundary";
 
 const gilroyRegular = localFont({
   src: '../public/fonts/gillroy/Gilroy-Regular.ttf',
@@ -228,8 +229,10 @@ export default function RootLayout({
         <div className="">
           <SmoothScrolling>
             <AuthProvider>
-              <Toaster position="top-right" />
-              {children}
+              <GlobalErrorBoundary context="Global">
+                <Toaster position="top-right" />
+                {children}
+              </GlobalErrorBoundary>
             </AuthProvider>
           </SmoothScrolling>
         </div>
