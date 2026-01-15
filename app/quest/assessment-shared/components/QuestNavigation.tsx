@@ -1197,7 +1197,7 @@ export function QuestNavigation({
             {!isSubmitting && !isSubmitted && !submissionError && (
               <>
                 <div className="text-gray-600 text-xl leading-6 font-gilroy-regular mb-4">
-                  Satisfied with your answers? Press the confirm button to submit your response.
+                  Satisfied with your introspection? Press the confirm button to decode it.
                 </div>
 
                 <div className="flex justify-start space-x-3">
@@ -1227,7 +1227,7 @@ export function QuestNavigation({
                     Submitting...
                   </h3>
                   <p className="text-gray-600 font-gilroy-regular text-xl">
-                    We are submitting your responses. Please do not close this window.
+                    We are processing your thoughts. Please do not close this window.
                   </p>
                 </div>
               </>
@@ -1238,10 +1238,10 @@ export function QuestNavigation({
               <>
                 <div className="text-center py-8">
                   <h3 className="text-2xl font-gilroy-bold text-green-600 mb-2">
-                    Submitted Successfully!
+                    Processed Successfully!
                   </h3>
                   <p className="text-gray-600 font-gilroy-regular">
-                    Our AI is reviewing your responses. You will be redirected shortly.
+                    We are reviewing your thoughts. Just give us a sec.
                   </p>
                 </div>
               </>
@@ -1252,7 +1252,7 @@ export function QuestNavigation({
               <>
                 <div className="text-left py-4">
                   <div className="text-black font-gilroy-regular text-xl mb-4 p-3 rounded-lg">
-                    Due to slow network your submission was not successful last time. Please try again.
+                    Due to slow connection, we could not process properly. Press try again.
                   </div>
 
                   <div className="flex justify-start space-x-3">
