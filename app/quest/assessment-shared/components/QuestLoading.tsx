@@ -15,7 +15,7 @@ interface QuestLoadingProps {
  * Displays while data is being loaded
  */
 export function QuestLoading({ 
-  message = 'Preparing your assessment...', 
+  message = 'Preparing your Quest...', 
   className = '' 
 }: QuestLoadingProps) {
   // Dot animation
