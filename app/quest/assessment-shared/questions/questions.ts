@@ -25,6 +25,7 @@ export const questSections: QuestionSection[] = [
         isInfo: true,
         infoText: 'Share your preferred name so I can address you properly. Press the toggle button below to stay Anonymous.'
       },
+      /*
       {
         id: 'q1_2',
         text: "What's your email?",
@@ -37,6 +38,7 @@ export const questSections: QuestionSection[] = [
         isInfo: true,
         infoText: 'I require your email id to share your detailed report. You can choose to remain anonymous if you prefer. But it is not recommended.'
       },
+      */
       {
         id: 'q1_3',
         text: "Your Age?",

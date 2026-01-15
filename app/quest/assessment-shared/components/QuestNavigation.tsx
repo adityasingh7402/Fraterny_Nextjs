@@ -111,7 +111,7 @@ export function QuestNavigation({
       name: auth.user.user_metadata?.first_name
         ? `${auth.user.user_metadata.first_name} ${auth.user.user_metadata.last_name || ''}`
         : 'User',
-      email: auth.user.email || 'user@example.com',
+      email: 'anonymous', // Hidden q1_2, send anonymous for all users
       "mobile no": auth.user.user_metadata?.phone || "",
       city: cityFromQuest || auth.user.user_metadata?.city || "",
       DOB: auth.user.user_metadata?.dob || undefined,
@@ -119,12 +119,14 @@ export function QuestNavigation({
     } : {
       user_id: `${workingSession?.userId || 'unknown'}`,
       name: 'Anonymous User',
-      email: '',
+      email: 'anonymous',
       "mobile no": '',
       city: cityFromQuest || "",
       DOB: undefined,
       "testid": testid
     };
+
+    console.log('ðŸ§  [DEBUG] Generated userData:', userData); // Debug log to verify email field
 
     const startTime = workingSession?.startedAt;
     const completionTime = new Date().toISOString();
@@ -170,6 +172,34 @@ export function QuestNavigation({
         };
       }
     }) || [];
+
+    // Inject hidden q1_2 response right after q1_1 (position 1)
+    if (!responses.some(r => r.question_id === 'q1_2')) {
+      const q1_2Response = {
+        qno: 2,
+        question_id: 'q1_2',
+        question_text: "What's your email?",
+        answer: JSON.stringify({
+          selectedCity: "",
+          email: "anonymous",
+          isAnonymous: true
+        }),
+        section_id: 'section_1',
+        section_name: 'Self',
+        metadata: {
+          tags: [],
+          time_taken: '0s'
+        }
+      };
+
+      // Insert at position 1 (after q1_1)
+      responses.splice(1, 0, q1_2Response);
+
+      // Re-number all questions after q1_2 to fix qno sequence
+      for (let i = 2; i < responses.length; i++) {
+        responses[i].qno = i + 1;
+      }
+    }
 
 
     const tagCounts: Record<string, number> = {};
