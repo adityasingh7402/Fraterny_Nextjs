@@ -677,6 +677,8 @@ const AdminQuestPayment: React.FC = () => {
                               <div className="font-medium text-blue-600">{transaction.influencers.name}</div>
                               <div className="text-xs font-mono text-gray-500">{transaction.influencers.affiliate_code}</div>
                             </div>
+                          ) : transaction.coupon ? (
+                            <span className="text-xs font-mono text-gray-500">{transaction.coupon}</span>
                           ) : (
                             <span className="text-xs text-gray-400">Direct</span>
                           )}
@@ -1001,7 +1003,7 @@ const AdminQuestPayment: React.FC = () => {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-600">Discount</p>
-                    <p className="text-sm text-gray-900">{formatCurrency(selectedTransactionDetails.total_discount || 0, selectedTransactionDetails.gateway, selectedTransactionDetails.IsIndia)}</p>
+                    <p className="text-sm text-gray-900">{selectedTransactionDetails.total_discount ? `${selectedTransactionDetails.total_discount}%` : '0%'}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-600">Coupon</p>

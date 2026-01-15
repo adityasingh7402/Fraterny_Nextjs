@@ -18,7 +18,7 @@ import {
   LogOut
 } from 'lucide-react';
 import Image from 'next/image';
-import { ResultData, Film, Book, DualGatewayPricingData } from '../utils/types';
+import { ResultData, Film, Book, DualGatewayPricingData, AssessmentPaymentStatus } from '../utils/types';
 // import { tokens, CTA_HEIGHT } from '../utils/constants';
 import { sectionIds } from '../utils/sectionHelpers';
 import { ProgressRail } from './ProgressRail';
@@ -92,7 +92,7 @@ export function QuestResultClient({
   const [activeIndex, setActiveIndex] = useState(0);
   const [upsellOpen, setUpsellOpen] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [paymentSuccess, setPaymentSuccess] = useState(initialData?.paymentStatus?.ispaymentdone === 'success');
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [findingModalOpen, setFindingModalOpen] = useState(false);
   const [selectedFindingIndex, setSelectedFindingIndex] = useState<number | null>(null);
@@ -115,16 +115,12 @@ export function QuestResultClient({
   const [couponApplied, setCouponApplied] = useState<boolean>(false);
   const [discountDetails, setDiscountDetails] = useState<any>(null);
   const archetype: Record<string, string> = mockData.archetype;
-  const [isCheckingPayment, setIsCheckingPayment] = useState(true);
+  const [isCheckingPayment, setIsCheckingPayment] = useState(initialData?.paymentStatus?.ispaymentdone !== 'success');
   const router = useRouter();
   const getEffectiveUserId = () => {
     return userId;
   };
-  const [assessmentPaymentStatus, setAssessmentPaymentStatus] = useState<{
-    ispaymentdone: "success" | null;
-    quest_pdf: string;
-    quest_status: "generated" | "working" | null;
-  } | null>(null);
+  const [assessmentPaymentStatus, setAssessmentPaymentStatus] = useState<AssessmentPaymentStatus | null>(initialData?.paymentStatus || null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   //cast the user to User type
@@ -278,7 +274,9 @@ export function QuestResultClient({
   // Check for existing payment status on mount
   useEffect(() => {
     const checkPaymentStatus = async () => {
-      setIsCheckingPayment(true);
+      if (initialData?.paymentStatus?.ispaymentdone !== 'success') {
+        setIsCheckingPayment(true);
+      }
       try {
         const existingStatus = await checkExistingPaymentStatus(sessionId, testId);
 
@@ -555,14 +553,14 @@ export function QuestResultClient({
 
       if (isIndia) {
         // User in India: Razorpay has INR amount, PayPal has USD
-        original_amount_inr = Math.round(pricing.razorpay.amount / 100); // Convert paise to rupees
+        original_amount_inr = pricing.razorpay.amount; // Already in Rupees
         original_amount_usd = pricing.paypal.amount;
       } else {
         // User outside India: Both gateways use USD, need to convert to INR for discount calculation
         original_amount_usd = pricing.paypal.amount;
         // Note: We'll send USD amount as INR param since Razorpay uses USD for international
         // The backend will calculate discount percentage on both anyway
-        original_amount_inr = Math.round(pricing.razorpay.amount / 100); // USD amount
+        original_amount_inr = pricing.razorpay.amount; // USD amount
       }
 
       const response = await axios.post('/api/tracking/affiliate/validate-coupon', {

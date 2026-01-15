@@ -75,11 +75,12 @@ async function getResultData(userId: string, sessionId: string, testId: string) 
 
       // Fetch likert data directly from DB to ensure we have it
       let likertData = undefined;
+      let paymentStatusData: any = undefined;
 
       try {
         const { data: dbLikert, error: dbError } = await supabase
           .from('summary_generation')
-          .select('likertq1, likertq2, likertq3, likertq4')
+          .select('likertq1, likertq2, likertq3, likertq4, payment_status, quest_pdf, quest_status')
           .eq('testid', testId)
           .single();
 
@@ -91,6 +92,12 @@ async function getResultData(userId: string, sessionId: string, testId: string) 
             q3: dbLikert.likertq3,
             q4: dbLikert.likertq4,
             q5: 5 // Default q5 as we don't track it in calibration sometimes
+          };
+
+          paymentStatusData = {
+            ispaymentdone: dbLikert.payment_status === 'success' ? 'success' : null,
+            quest_pdf: dbLikert.quest_pdf || '',
+            quest_status: dbLikert.quest_status === 'generated' || dbLikert.quest_status === 'working' ? dbLikert.quest_status : null
           };
         } else {
           // Fallback to response data if DB fetch fails
@@ -120,7 +127,8 @@ async function getResultData(userId: string, sessionId: string, testId: string) 
       // Return with likert data included
       return {
         ...processedData,
-        likert: likertData
+        likert: likertData,
+        paymentStatus: paymentStatusData
       };
     } else {
       console.log('⚠️ No valid archetype in parsed results, falling back to mockData');
