@@ -377,13 +377,13 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
       if (response.data.status === 200 || response.status === 200) {
         // Remove the deleted assessment from the local state
         setData(prevData => prevData.filter(item => item.testid !== assessmentToDelete.testid));
-        toast.success('Assessment deleted successfully!');
+        toast.success('Quest deleted successfully!');
       } else {
         throw new Error('Delete failed');
       }
     } catch (error: any) {
       console.error('Delete assessment error:', error);
-      let errorMessage = 'Failed to delete assessment. Please try again.';
+      let errorMessage = 'Failed to delete your quest. Please try again.';
       if (error.response?.status === 404) {
         errorMessage = 'Assessment not found.';
       } else if (error.response?.status === 401) {
@@ -415,18 +415,18 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
         link.click();
         document.body.removeChild(link);
 
-        toast.success('Downloading your PDF report!');
+        toast.success('Downloading your Psyche File!');
       } catch (error) {
         console.error('PDF download error:', error);
         window.open(testData.quest_pdf, '_blank');
-        toast.success('Opening your PDF report!');
+        toast.success('Opening your Psyche File!');
       }
       return;
     }
 
     // If payment is done but PDF still generating, show appropriate message
     if (testData.ispaymentdone === "success" && testData.quest_status === "working") {
-      toast.info('Your PDF is still being generated. Please check back in 15 minutes.');
+      toast.info('Your Psyche File is still being crafted. Kindly check in 5 minutes.');
       return;
     }
 
@@ -621,7 +621,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
         <div className="bg-white rounded-xl shadow-md p-6 text-center mb-6">
           <Brain className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <p className="text-gray-600 font-gilroy-regular mb-4">
-            Complete an assessment to discover your archetype
+            Complete a Quest to discover the Mask you're wearing.
           </p>
           <button
             onClick={() => router.push('/quest/begin')}
@@ -908,7 +908,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
                   onClick={() => router.push('/quest/begin')}
                   className="px-6 py-3 bg-blue-600 text-white rounded-lg transition-colors font-gilroy-semibold"
                 >
-                  Take Your First Assessment
+                  Begin Your First Quest
                 </button>
               </div>
             ) : (
@@ -963,7 +963,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
                                   ) : (
                                     <>
                                       <Lock className="w-3 h-3 mr-1" />
-                                      Unlock Full Report
+                                      Unlock Psyche File
                                     </>
                                   )}
                                 </button>
@@ -971,7 +971,7 @@ const QuestAssessmentDashboard: React.FC<QuestAssessmentDashboardProps> = ({ cla
                                 // State 2: Payment done but PDF still generating
                                 <div className="inline-flex items-center px-3 py-1 text-xs font-gilroy-regular text-orange-600 bg-orange-50 rounded-full">
                                   <Clock className="w-3 h-3 mr-1" />
-                                  <span>PDF generating</span>
+                                  <span>Building Artifact</span>
                                 </div>
                               ) : assessment.quest_status === "generated" ? (
                                 // State 3: Payment done and PDF ready
@@ -1353,12 +1353,12 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
 
         {/* Title */}
         <h3 className="text-lg font-gilroy-bold text-gray-900 text-center mb-2">
-          Delete Assessment?
+          Delete Quest?
         </h3>
 
         {/* Description */}
         <p className="text-sm font-gilroy-regular text-gray-600 text-center mb-6">
-          Are you sure you want to delete the assessment from <span className="font-gilroy-semibold text-gray-800">{assessmentName}</span>? This action cannot be undone.
+          Are you sure you want to delete your quest from <span className="font-gilroy-semibold text-gray-800">{assessmentName}</span>? This action cannot be undone.
         </p>
 
         {/* Buttons */}
