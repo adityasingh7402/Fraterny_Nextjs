@@ -19,11 +19,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Sanitize user_id to avoid Foreign Key violations
+    // If user is anonymous, store NULL instead of "anonymous" string
+    const dbUserId = (user_id && user_id !== 'anonymous' && user_id !== 'null') ? user_id : null;
+
     // Insert feedback into database
     const { data, error } = await supabaseAdmin
       .from('summary_overall_feedback')
       .insert({
-        user_id: user_id || null,
+        user_id: dbUserId,
         testid: testId || null,
         feedback: feedback?.trim() || null,
         rating: rating ? rating.toString() : null, // Convert to string as per table schema
