@@ -47,7 +47,7 @@ export function QuestIntro({
       try {
         JSON.parse(savedSession); // Validate JSON
         setHasUnfinishedQuest(true);
-        toast.info("You have an unfinished quest. Resume the test to finish it", {
+        toast.info("You have an unfinished quest. Resume to finish it.", {
           position: "top-right"
         });
       } catch (error) {
@@ -62,7 +62,7 @@ export function QuestIntro({
 
   const handleStart = async () => {
     if (!isTermsAccepted) {
-      toast.error("Hey, You'll have to accept the terms and conditions to start the test", {
+      toast.error("Hey, You'll have to accept the terms and conditions to start your quest.", {
         position: "top-right"
       });
       return;
