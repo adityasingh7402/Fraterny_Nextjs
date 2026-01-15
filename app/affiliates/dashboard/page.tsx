@@ -452,7 +452,7 @@ export default function AffiliateDashboard() {
 
                   <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="aff-stat-card">
                     <div className="aff-stat-header">
-                      <span>Total Signups</span>
+                      <span>Total Users</span>
                       <div className="aff-stat-icon aff-stat-icon-success"><Users size={20} /></div>
                     </div>
                     <p className="aff-stat-value">{stats.totalSignups.toLocaleString()}</p>
@@ -502,13 +502,13 @@ export default function AffiliateDashboard() {
                         <YAxis stroke="#9ca3af" fontSize={12} tickLine={false} axisLine={false} />
                         <Tooltip contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px' }} />
                         <Area type="monotone" dataKey="clicks" stroke="#3b82f6" fill="url(#clicksGrad)" strokeWidth={2} />
-                        <Area type="monotone" dataKey="signups" stroke="#10b981" fill="url(#signupsGrad)" strokeWidth={2} />
+                        <Area type="monotone" dataKey="signups" name="Users" stroke="#10b981" fill="url(#signupsGrad)" strokeWidth={2} />
                         <Line type="monotone" dataKey="purchases" stroke="#f59e0b" strokeWidth={2} dot={{ fill: '#f59e0b', r: 3 }} />
                       </AreaChart>
                     </ResponsiveContainer>
                     <div className="aff-chart-legend">
                       <div><span className="aff-legend-dot aff-bg-info" /> Clicks</div>
-                      <div><span className="aff-legend-dot aff-bg-success" /> Signups</div>
+                      <div><span className="aff-legend-dot aff-bg-success" /> Users</div>
                       <div><span className="aff-legend-dot aff-bg-warning" /> Purchases</div>
                     </div>
                   </motion.div>
@@ -519,7 +519,7 @@ export default function AffiliateDashboard() {
                       <div className="aff-funnel">
                         <FunnelStep label="Clicks" value={funnel.clicks} pct={100} color="aff-bg-info" />
                         <FunnelArrow rate={funnel.clickToSignupRate} />
-                        <FunnelStep label="Signups" value={funnel.signups} pct={funnel.clicks > 0 ? (funnel.signups / funnel.clicks) * 100 : 0} color="aff-bg-success" />
+                        <FunnelStep label="Users" value={funnel.signups} pct={funnel.clicks > 0 ? (funnel.signups / funnel.clicks) * 100 : 0} color="aff-bg-success" />
                         <FunnelArrow rate={funnel.signupToQuestionnaireRate} />
                         <FunnelStep label="Questionnaires" value={funnel.questionnairesCompleted} pct={funnel.clicks > 0 ? (funnel.questionnairesCompleted / funnel.clicks) * 100 : 0} color="aff-bg-warning" />
                         <FunnelArrow rate={funnel.questionnaireToPurchaseRate} />
@@ -742,7 +742,7 @@ export default function AffiliateDashboard() {
                       </div>
                       <div className="aff-quick-stat">
                         <div className="aff-quick-stat-header">
-                          <span>Total Signups</span>
+                          <span>Total users</span>
                           <Users size={16} className="aff-text-success" />
                         </div>
                         <strong>{stats.totalSignups.toLocaleString()}</strong>

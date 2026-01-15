@@ -23,7 +23,6 @@ interface InfluencerData {
   total_signups: number;
   total_questionnaires: number;
   total_purchases: number;
-  total_commission_earned: number;
   total_earnings: number;
   remaining_balance: number;
   total_paid: number;
@@ -673,7 +672,7 @@ export default function AdminInfluencerManagement() {
                       </td>
 
                       <td className="py-4 px-4">
-                        <span className="text-sm font-medium text-gray-900">{formatCurrency(influencer.total_commission_earned)}</span>
+                        <span className="text-sm font-medium text-gray-900">{formatCurrency(influencer.total_earnings)}</span>
                       </td>
 
                       <td className="py-4 px-4">
