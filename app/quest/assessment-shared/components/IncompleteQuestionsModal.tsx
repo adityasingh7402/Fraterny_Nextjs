@@ -56,7 +56,7 @@ export function IncompleteQuestionsModal({
             <div className={`border-b border-gray-100 ${isDesktop ? 'px-8 py-8' : 'px-6 py-6'}`}>
               <div className="flex items-center space-x-3">
                   <h3 className={`font-bold text-gray-900 font-gilroy-bold ${isDesktop ? 'text-3xl lg:text-4xl' : 'text-xl'}`}>
-                    Assessment Incomplete
+                    Introspection Incomplete
                   </h3>
               </div>
             </div>
@@ -65,11 +65,11 @@ export function IncompleteQuestionsModal({
             <div className={`${isDesktop ? 'px-8 pb-8 pt-4' : 'px-6 pb-6'}`}>
               <div className={`${isDesktop ? 'space-y-6' : 'space-y-4'}`}>
                 <p className={`text-gray-700 font-gilroy-regular ${isDesktop ? 'text-2xl lg:text-3xl' : 'text-xl'}`}>
-                  You have <span className="font-bold text-amber-600 font-gilroy-bold">{incompleteCount}</span> unanswered questions.
+                  You have <span className="font-bold text-amber-600 font-gilroy-bold">{incompleteCount}</span> unfinished thoughts.
                 </p>
 
                 <div className={`text-gray-600 leading-6 font-gilroy-regular ${isDesktop ? 'text-2xl lg:text-3xl mb-8' : 'text-xl mb-4'}`}>
-                  To get the most accurate analysis, please answer all questions before submitting your assessment.
+                  To get a holistic understanding of your mind, we request you to complete your self introspection.
                 </div>
               </div>
             </div>
@@ -96,7 +96,7 @@ export function IncompleteQuestionsModal({
                       : 'px-4 py-2 text-xl hover:opacity-90'
                   }`}
                 >
-                  Go to Question
+                  Go Back
                 </button>
               </div>
             </div>
