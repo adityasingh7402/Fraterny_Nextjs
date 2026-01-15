@@ -58,14 +58,14 @@ const BrowserPopup: React.FC<BrowserPopupProps> = ({ onClose }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998]"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-9998"
             onClick={handleClose}
           />
 
           {/* Popup Modal */}
-          <div 
-            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 pointer-events-none"
-            style={{ 
+          <div
+            className="fixed inset-0 z-9999 flex items-center justify-center p-4 pointer-events-none"
+            style={{
               position: 'fixed',
               top: 0,
               left: 0,
@@ -87,10 +87,10 @@ const BrowserPopup: React.FC<BrowserPopupProps> = ({ onClose }) => {
               <div className="relative overflow-hidden rounded-3xl">
                 {/* Gradient background effect */}
                 <div className="absolute inset-0 bg-linear-to-br from-blue-500/20 via-cyan-400/20 to-blue-600/20" />
-                
+
                 {/* Glassmorphism container */}
                 <div className="relative bg-white/10 backdrop-blur-xl border border-white/20 p-8">
-                  
+
                   {/* Close button */}
                   <button
                     onClick={handleClose}

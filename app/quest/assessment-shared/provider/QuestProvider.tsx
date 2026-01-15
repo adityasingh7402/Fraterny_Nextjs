@@ -219,7 +219,7 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
 
   const startQuest = async (sectionId?: string): Promise<QuestSession | null> => {
     console.log('🚀 Starting quest session...');
-    
+
     try {
       setIsLoading(true);
       setError(null);
@@ -294,12 +294,16 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
       getDeviceIdentifier().then(identifier => {
         setDeviceIdentifier(identifier);
         // Store in localStorage as additional backup info
-        localStorage.setItem('fraterny_device_backup', JSON.stringify({
-          ip: identifier.ip,
-          deviceHash: identifier.deviceHash,
-          sessionId: newSession.id,
-          timestamp: new Date().toISOString()
-        }));
+        try {
+          localStorage.setItem('fraterny_device_backup', JSON.stringify({
+            ip: identifier.ip,
+            deviceHash: identifier.deviceHash,
+            sessionId: newSession.id,
+            timestamp: new Date().toISOString()
+          }));
+        } catch (e) {
+          console.warn('Failed to save device backup:', e);
+        }
       }).catch(err => {
         console.log('Device identifier capture failed (non-critical):', err);
       });
@@ -315,8 +319,8 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
       //   is_resumed_session: isResumedSession
       // });
       console.log('location.pathname:', window.location.pathname);
-      
-      if(window.location.pathname === '/quest/introspect'){
+
+      if (window.location.pathname === '/quest/introspect') {
         googleAnalytics.trackQuestStart({
           session_id: newSession.id,
           user_state: userState,
@@ -334,8 +338,8 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
       setIsLoading(false);
     }
   };
- 
- 
+
+
   const submitResponse = async (
     questionId: string,
     response: string,
@@ -597,8 +601,12 @@ export function QuestProvider({ children, initialSectionId }: QuestProviderProps
     if (hasSubmittedToAPI) {
       console.log('⚠️ Submission already sent, preventing duplicate');
       // Try to return cached result if available
-      const cachedSessionId = localStorage.getItem('questSessionId');
-      const cachedTestId = localStorage.getItem('testid');
+      let cachedSessionId: string | null = null;
+      let cachedTestId: string | null = null;
+      try {
+        cachedSessionId = localStorage.getItem('questSessionId');
+        cachedTestId = localStorage.getItem('testid');
+      } catch (e) { }
       if (cachedSessionId && cachedTestId) {
         const navigationData = {
           targetUrl: `/quest/processing/${submissionData.user_data.user_id}/${cachedSessionId}/${cachedTestId}`,
