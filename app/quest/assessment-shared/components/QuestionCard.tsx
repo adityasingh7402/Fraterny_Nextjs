@@ -535,7 +535,7 @@ const handleSubmit = (submittedResponse: string) => {
 
                 {question.allowTags && showTags && (
                   <div className={`mb-3 ${isDesktop ? 'mt-8 mb-6' : 'mt-4'}`}>
-                    <p className={`font-gilroy-medium text-gray-600 pb-2 ${isDesktop ? 'text-xl lg:text-2xl pb-4' : ''}`}> Want to tag your answer? </p>
+                    <p className={`font-gilroy-medium text-gray-600 pb-2 ${isDesktop ? 'text-xl lg:text-2xl pb-4' : ''}`}> Wish to tag your thoughts? </p>
                     <div className={isDesktop ? 'transform scale-110 origin-left' : ''}>
                       <AuthenticityTags 
                         selectedTags={selectedTags}
