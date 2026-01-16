@@ -21,8 +21,8 @@ import {
   Users,
   Globe,
   CheckCircle2,
-  Loader2,
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import Navigation from '../website-navigation/components/Navigation'
 import Footer from '../website-navigation/components/Footer'
@@ -60,6 +60,14 @@ export default function AffiliatesPage() {
   const router = useRouter();
   const [checking, setChecking] = useState(false);
   const [isSigningIn, setIsSigningIn] = useState(false);
+  const [minLoading, setMinLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMinLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     // If user is logged in, check if they're an influencer
@@ -186,11 +194,32 @@ export default function AffiliatesPage() {
     "Exclusive brand partnerships",
   ];
 
-  if (authLoading || checking) {
+  if (authLoading || checking || minLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white">
-        <Loader2 className="w-12 h-12 animate-spin text-emerald-500 mb-4" />
-        <p className="text-xl font-gilroy-medium animate-pulse">Verifying credentials...</p>
+      <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white">
+        <div className="flex flex-col items-center">
+          <motion.img
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            alt="Quest Logo"
+            className="w-24 md:w-32 h-auto mb-8"
+            src="/Vector.svg"
+          />
+
+          <div className="w-48 h-1 bg-gray-100 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-[#0A0A0A]"
+              initial={{ width: "0%" }}
+              animate={{ width: "100%" }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+          </div>
+        </div>
       </div>
     );
   }
@@ -206,9 +235,14 @@ export default function AffiliatesPage() {
           <div className='pt-16 sm:pt-32 flex flex-col items-center justify-center'>
             {/* Logo/Badge */}
             <div className="flex flex-col items-center mb-8">
-              <div className="p-3 bg-white rounded-full shadow-lg mb-6 border border-gray-100">
-                <Star className="w-10 h-10 text-yellow-500 fill-yellow-500" />
-              </div>
+              <motion.img
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+                src="/Vector.svg"
+                alt="Quest Logo"
+                className="w-24 md:w-32 h-auto mb-4"
+              />
               <div className="bg-neutral-800 text-white text-[10px] md:text-xs font-gilroy-bold tracking-[0.2em] uppercase px-4 py-1.5 rounded-full mb-8">
                 Join 10,000+ Affiliates
               </div>
@@ -323,7 +357,7 @@ export default function AffiliatesPage() {
         {/* ============ FEATURES SECTION ============ */}
         <section id="features" className="py-32 px-4 bg-[#f7f7f7]">
           <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 gap-8">
               <div className="max-w-2xl">
                 <div className="text-emerald-600 font-gilroy-bold uppercase tracking-widest text-sm mb-4">The Platform</div>
                 <h2 className="text-4xl md:text-7xl font-gilroy-bold tracking-tighter leading-[0.95] text-neutral-900">
