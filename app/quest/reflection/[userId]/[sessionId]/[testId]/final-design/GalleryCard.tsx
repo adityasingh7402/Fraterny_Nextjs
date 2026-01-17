@@ -146,8 +146,7 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                 {/* Mobile: Only show on active card. Desktop:Always show unless expanded & active */}
                 <motion.div layout
                     layoutId={`card-header-${cardId}`} className={`w-full text-center mb-4 md:mb-6 
-                    ${!isActive ? 'hidden' : ''} 
-                    ${isExpanded && isActive ? 'md:hidden' : 'md:block'}`}>
+                    ${isExpanded && isActive ? 'md:hidden' : 'block'}`}>
                     {/* Category Heading (e.g., "ASPIRATION") */}
                     {categoryHeading && (
                         <motion.h1
@@ -188,19 +187,21 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                 {/* White Card - Contains ONLY the image */}
                 <motion.div layout
                     layoutId={`card-image-${cardId}`} className={`clean-card overflow-hidden ${getCardSizeClasses()} ${isExpanded && isActive ? 'md:shrink-0' : ''}`}>
-                    <motion.div layout className={`relative w-full h-full py-2 bg-white rounded-3xl ${isExpanded && isActive ? '' : 'py-2'}`}>
-                        <motion.img
-                            layout
-                            layoutId={`card-img-${cardId}`}
-                            src={image}
-                            alt={title}
-                            className={`w-full h-full object-contain ${isExpanded && isActive ? 'p-1' : 'p-2 md:p-3'}`}
-                            initial={false}
-                            animate={{
-                                scale: isExpanded && isActive ? 1 : 1.05,
-                            }}
-                            transition={{ duration: 0.6 }}
-                        />
+                    <motion.div layout className={`relative w-full h-full py-2 ${title.toUpperCase() === "UNKNOWN" ? "bg-gray-100 border-[0.7rem] border-white rounded-4xl" : "bg-white"} rounded-3xl ${isExpanded && isActive ? '' : 'py-2'}`}>
+                        {title.toUpperCase() !== "UNKNOWN" && (
+                            <motion.img
+                                layout
+                                layoutId={`card-img-${cardId}`}
+                                src={image}
+                                alt={title}
+                                className={`w-full h-full object-contain ${isExpanded && isActive ? 'p-1' : 'p-2 md:p-3'}`}
+                                initial={false}
+                                animate={{
+                                    scale: isExpanded && isActive ? 1 : 1.05,
+                                }}
+                                transition={{ duration: 0.6 }}
+                            />
+                        )}
 
                         {/* "Know more" text overlay on image */}
                         {/* <div className={`absolute bottom-6 left-0 right-0 text-center ${!isActive ? 'hidden md:block' : ''}`}>
@@ -222,12 +223,12 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
 
                 {/* Title Section - OUTSIDE and BELOW the white card (or to the right on desktop when expanded) */}
                 <motion.div layout layoutId={`card-title-section-${cardId}`} className={`w-full text-center mt-5 ${isExpanded && isActive ? 'md:flex-1 md:text-left md:bg-white md:rounded-3xl md:p-8 md:flex md:flex-col md:justify-start md:shadow-lg md:mt-0 md:w-auto' : 'md:mt-8'}`}>
-                    <div className={`${!isActive ? 'hidden md:block' : ''}`}>
+                    <div className="w-full">
                         <motion.h2
                             layout
                             layoutId={`card-title-${cardId}`}
                             className="font-gilroy-bold uppercase"
-                            style={{ color: color }}
+                            style={{ color: title.toUpperCase() === "UNKNOWN" ? "#FFFFFF" : color }}
                             initial={false}
                             animate={{
                                 fontSize: isExpanded && isActive
@@ -306,7 +307,7 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                     </AnimatePresence>
 
                     {/* Click hint for non-expanded state */}
-                    {!isExpanded && isActive && (
+                    {!isExpanded && isActive && title.toUpperCase() !== "UNKNOWN" && (
                         <motion.p
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
