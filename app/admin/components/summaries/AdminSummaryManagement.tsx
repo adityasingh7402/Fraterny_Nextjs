@@ -875,10 +875,13 @@ const AdminSummaryManagement: React.FC = () => {
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Test ID, User ID, Session..."
+              placeholder="Email, Mobile, ID, Name..."
               className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
             />
           </label>
+
+
+
 
           {/* Payment Status */}
           <label className="flex flex-col">

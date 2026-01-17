@@ -1050,12 +1050,14 @@ export function QuestResultClient({
             />
           </div>
         ) : (
-          <div id="gallery-3d-mobile" className="relative overflow-hidden"
+          <div id="gallery-3d-mobile" className="relative overflow-hidden bg-[#4A90A4]"
             style={{
               width: '100vw',
               height: `${dimensions.viewport.height}px`,
               marginLeft: 'calc(50% - 50vw)',
-              marginRight: 'calc(50% - 50vw)'
+              marginRight: 'calc(50% - 50vw)',
+              backgroundColor: activeCardColor,
+              transition: 'background-color 0.5s ease'
             }}>
             {isLoading ? (
               <div className="relative w-full h-full flex items-center justify-center">

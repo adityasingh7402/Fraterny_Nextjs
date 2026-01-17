@@ -188,6 +188,11 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim
                 backgroundImage: `url("${cardData.bgGradient}")`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
+                backgroundColor: (() => {
+                  const match = cardData.buttonbg.match(/#[0-9A-Fa-f]{6}/);
+                  const color = match ? match[0] : '#4A90A4';
+                  return (color === '#545454' || color === '#000000') ? '#043974' : color;
+                })(),
                 left: -virtualIndex * viewportDim.width - 1,
                 willChange: 'transform'
               }}
