@@ -185,7 +185,7 @@ const CardCarousel: React.FC<CardCarouselProps> = ({ cards, cardDim, viewportDim
               style={{
                 width: viewportDim.width + 2,
                 height: viewportDim.height,
-                backgroundImage: `url("${cardData.bgGradient}")`,
+                backgroundImage: cardData.bgGradient && cardData.bgGradient !== "" ? `url("${cardData.bgGradient}")` : 'none',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 backgroundColor: (() => {

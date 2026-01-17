@@ -22,16 +22,15 @@ interface GalleryCardProps {
 const GalleryCard = ({ cardId, image, subtitle, title, description, included, color, categoryText, categoryHeading, isActive, isExpanded, onClick, position }: GalleryCardProps) => {
     const [isMobile, setIsMobile] = useState(false);
 
-    // Check if this card should use black text (card id 6)
-    const useBlackText = cardId === 6 && isActive;
+    // Check active theme based on center card's color
+    const isFreeSpiritActive = color === '#545454';
+    const isStrategistActive = color === '#000000';
+    const isUnknownActive = color === '#4A90A4';
 
-    // Check if this is The Free Spirit card (#545454) - should use card color instead of white
-    const useFreeSpirit = color === '#545454';
-
-    // Determine heading text color
+    // Determine heading text color (applied to all cards for consistency)
     const getHeadingColor = () => {
-        if (useBlackText) return 'text-black';
-        if (useFreeSpirit) return 'text-[#545454]';
+        if (isStrategistActive) return 'text-black';
+        if (isFreeSpiritActive) return 'text-[#545454]';
         return 'text-white';
     };
 
@@ -168,8 +167,8 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                     <motion.p
                         layout
                         layoutId={`card-subheading-${cardId}`}
-                        className={`font-gilroy-regular tracking-[0.2rem] -mt-3 uppercase ${useBlackText ? 'text-black/80' :
-                            useFreeSpirit ? 'text-[#545454]/80' :
+                        className={`font-gilroy-regular tracking-[0.2rem] -mt-3 uppercase ${isStrategistActive ? 'text-black/80' :
+                            isFreeSpiritActive ? 'text-[#545454]/80' :
                                 'text-white/80'
                             }`}
                         initial={false}
@@ -228,7 +227,7 @@ const GalleryCard = ({ cardId, image, subtitle, title, description, included, co
                             layout
                             layoutId={`card-title-${cardId}`}
                             className="font-gilroy-bold uppercase"
-                            style={{ color: title.toUpperCase() === "UNKNOWN" ? "#FFFFFF" : color }}
+                            style={{ color: isUnknownActive ? "#FFFFFF" : color }}
                             initial={false}
                             animate={{
                                 fontSize: isExpanded && isActive

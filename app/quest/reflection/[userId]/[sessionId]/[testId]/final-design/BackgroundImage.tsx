@@ -34,11 +34,13 @@ const BackgroundImage = ({ image, imageKey }: BackgroundImageProps) => {
                 >
                     {/* Top half - Clear image without blur */}
                     <div className="absolute inset-0">
-                        <img
-                            src={image}
-                            alt="Background"
-                            className="w-full h-full object-cover"
-                        />
+                        {image && image !== "" && image !== "undefined" && (
+                            <img
+                                src={image}
+                                alt="Background"
+                                className="w-full h-full object-cover"
+                            />
+                        )}
                     </div>
 
                     {/* Gradient blur overlay - only bottom half */}

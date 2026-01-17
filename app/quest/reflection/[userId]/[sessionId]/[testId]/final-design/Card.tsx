@@ -69,8 +69,8 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
       >
         <motion.div
           {...(isExpanded && { layoutId: `card-title-${data.id}` })}
-          className={`${data.title?.toString().toUpperCase().includes('UNKNOWN') ? 'text-white' : data.textcolor} text-4xl font-gilroy-bold uppercase tracking-tight`}
-          style={data.title?.toString().toUpperCase().includes('UNKNOWN') ? { color: 'white' } : (data.color ? { color: data.color } : undefined)}
+          className={`${data.textcolor} text-4xl font-gilroy-bold uppercase tracking-tight`}
+          style={data.color ? { color: data.color } : undefined}
         >
           {data.title}
         </motion.div>
