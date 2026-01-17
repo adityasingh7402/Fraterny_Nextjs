@@ -844,7 +844,7 @@ const ViewInfluencerPopup: React.FC<ViewInfluencerPopupProps> = ({ isOpen, influ
 
                 <div className="bg-green-50 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-600">Signups</span>
+                    <span className="text-sm text-gray-600">Users</span>
                     <Users className="h-4 w-4 text-green-600" />
                   </div>
                   {statsLoading ? (

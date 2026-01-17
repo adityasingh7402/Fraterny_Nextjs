@@ -514,7 +514,7 @@ export default function AdminInfluencerManagement() {
             <p className="text-gray-900 text-2xl font-bold">{stats.totalQuestionnaires.toLocaleString()}</p>
           </div>
           <div className="flex flex-col gap-2 rounded-xl p-6 border border-gray-200 bg-white">
-            <p className="text-gray-600 text-sm font-medium">Total Signups</p>
+            <p className="text-gray-600 text-sm font-medium">Total Users</p>
             <p className="text-gray-900 text-2xl font-bold">{stats.totalSignups.toLocaleString()}</p>
           </div>
           <div className="flex flex-col gap-2 rounded-xl p-6 border border-gray-200 bg-white">
@@ -605,7 +605,7 @@ export default function AdminInfluencerManagement() {
                   <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Commission %</th>
                   <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Status</th>
                   <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Earnings</th>
-                  <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Questionnaires/Signups/Paid</th>
+                  <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Questionnaires/Users/Paid</th>
                   <th className="py-3 px-4 text-xs font-semibold text-gray-500 uppercase text-right">Actions</th>
                 </tr>
               </thead>
