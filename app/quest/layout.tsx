@@ -11,7 +11,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: 'Quest | Fraterny',
+  title: 'Quest by Fraterny | Understand Your Mind | Own Your Psychology',
   description: 'Unique. Accurate. Secure. Quest decodes the deeper psychological insights hidden in your words to reveal the patterns that quietly drive your life.',
   keywords: ['psychological file',
     'personal dossier',
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://fraterny.com/quest',
-    title: 'Quest | Fraterny',
+    title: 'Quest by Fraterny | Understand Your Mind | Own Your Psychology',
     description: 'Unique. Accurate. Secure. Quest decodes the deeper psychological insights hidden in your words to reveal the patterns that quietly drive your life.',
     siteName: 'Fraterny',
     images: [
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Quest | Fraterny',
+    title: 'Quest by Fraterny | Understand Your Mind | Own Your Psychology',
     description: 'Unique. Accurate. Secure. Quest decodes the deeper psychological insights hidden in your words to reveal the patterns that quietly drive your life.',
     images: ['https://fraterny.com/Questfavicon.ico'],
     creator: '@frat_erny',
@@ -76,7 +76,7 @@ export const metadata: Metadata = {
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'Fraterny — Quest',
+  name: 'Quest by Fraterny | Understand Your Mind | Own Your Psychology',
   description: 'Unique. Accurate. Secure. Quest decodes the deeper psychological insights hidden in your words to reveal the patterns that quietly drive your life.',
   url: 'https://fraterny.com',
   potentialAction: {
@@ -98,7 +98,7 @@ const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'Fraterny',
-  description: 'Fraterny — Quest',
+  description:'Quest by Fraterny | Understand Your Mind | Own Your Psychology',
   url: 'https://fraterny.com',
   logo: 'https://www.fraterny.com/og-image2.png',
   contactPoint: {
