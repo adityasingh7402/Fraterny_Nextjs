@@ -138,6 +138,8 @@ const Gallery3D = ({ onColorChange, cards }: Gallery3DProps) => {
 
     const handleCardClick = (index: number) => {
         if (index === currentIndex) {
+            const cardTitle = reactNodeToString(cards[index].title).toUpperCase();
+            if (cardTitle === "UNKNOWN") return;
             setIsExpanded(!isExpanded);
         } else {
             setCurrentIndex(index);

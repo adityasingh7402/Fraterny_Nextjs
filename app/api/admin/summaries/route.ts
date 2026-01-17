@@ -99,28 +99,28 @@ async function getSummaryStats(): Promise<SummaryStats> {
 
     const totalSummaries = data?.length || 0;
     // Check for actual payment status values in your database
-    const paidSummaries = data?.filter(s => 
-      s.payment_status === 'success' || 
+    const paidSummaries = data?.filter(s =>
+      s.payment_status === 'success' ||
       s.payment_status === 'completed'
     ).length || 0;
     // Check for failed/error payment status
-    const failedPayments = data?.filter(s => 
+    const failedPayments = data?.filter(s =>
       s.payment_status && (
         s.payment_status.toLowerCase().includes('failed') ||
         s.payment_status.toLowerCase().includes('error')
       )
     ).length || 0;
     // Check for actual status values in your database  
-    const completedSummaries = data?.filter(s => 
-      s.status === 'Complete' || 
+    const completedSummaries = data?.filter(s =>
+      s.status === 'Complete' ||
       s.status === 'completed'
     ).length || 0;
-    
+
     // Calculate average quality score
     const qualityScores = data
       ?.map(s => parseFloat(s.qualityscore || '0'))
       .filter(score => !isNaN(score) && score > 0) || [];
-    
+
     const averageQualityScore = qualityScores.length > 0
       ? Math.round(qualityScores.reduce((sum, score) => sum + score, 0) / qualityScores.length)
       : 0;
@@ -150,7 +150,7 @@ async function getSummaryStats(): Promise<SummaryStats> {
 async function deleteSummary(summaryId: number): Promise<DeleteSummaryResponse> {
   try {
     console.log('🗑️ Starting cascade delete for summary:', summaryId);
-    
+
     // First, get the testid to delete related records
     const { data: summaryData, error: fetchError } = await supabaseAdmin
       .from('summary_generation')
@@ -242,14 +242,14 @@ async function getSingleSummary(summaryId: number): Promise<{
       `)
       .eq('id', summaryId)
       .single();
-      
+
     if (error) {
       return {
         success: false,
         error: error.message
       };
     }
-    
+
     return {
       success: true,
       data: data as SummaryGeneration
@@ -274,7 +274,7 @@ async function getSpecialOperationData(operation: string, params?: { id?: string
           success: true,
           data: stats
         };
-      
+
       case 'single':
         if (!params?.id) {
           return {
@@ -291,7 +291,7 @@ async function getSpecialOperationData(operation: string, params?: { id?: string
         }
         const result = await getSingleSummary(summaryId);
         return result;
-      
+
       default:
         return {
           success: false,
@@ -382,13 +382,51 @@ async function calculateFilteredStats(filters: SummaryFilters): Promise<SummaryS
       .from('summary_generation')
       .select('payment_status, status, qualityscore');
 
-    // Apply the same filters as the main query
+    // Apply the same filters as the main query with smart email/mobile lookup
     if (filters.searchTerm && filters.searchTerm.trim()) {
       const searchTerm = filters.searchTerm.trim();
-      statsQuery = statsQuery.or(
-        `testid.ilike.%${searchTerm}%,user_id.ilike.%${searchTerm}%,session_id.ilike.%${searchTerm}%,ip_address.ilike.%${searchTerm}%`
-      );
+
+      // Check if search term looks like an email (contains @) or mobile (all digits)
+      const isEmail = searchTerm.includes('@');
+      const isMobile = /^\d+$/.test(searchTerm);
+
+      let userIdsToSearch: string[] = [];
+
+      // If searching by email or mobile, look up user_ids from user_data table
+      if (isEmail || isMobile) {
+        try {
+          let userDataQuery = supabaseAdmin.from('user_data').select('user_id');
+
+          if (isEmail) {
+            userDataQuery = userDataQuery.ilike('email', `%${searchTerm}%`);
+          } else if (isMobile) {
+            userDataQuery = userDataQuery.ilike('mobile_number', `%${searchTerm}%`);
+          }
+
+          const { data: userData } = await userDataQuery;
+
+          if (userData && userData.length > 0) {
+            userIdsToSearch = userData.map(u => u.user_id).filter(Boolean) as string[];
+          }
+        } catch (err) {
+          console.error('Error looking up user_data in stats:', err);
+        }
+      }
+
+      // Build the search query
+      if (userIdsToSearch.length > 0) {
+        statsQuery = statsQuery.or(
+          `testid.ilike.%${searchTerm}%,user_id.ilike.%${searchTerm}%,session_id.ilike.%${searchTerm}%,ip_address.ilike.%${searchTerm}%,user_id.in.(${userIdsToSearch.join(',')})`
+        );
+      } else {
+        statsQuery = statsQuery.or(
+          `testid.ilike.%${searchTerm}%,user_id.ilike.%${searchTerm}%,session_id.ilike.%${searchTerm}%,ip_address.ilike.%${searchTerm}%`
+        );
+      }
     }
+
+
+
 
     if (filters.dateFrom) {
       statsQuery = statsQuery.gte('starting_time', filters.dateFrom);
@@ -421,29 +459,29 @@ async function calculateFilteredStats(filters: SummaryFilters): Promise<SummaryS
     }
 
     const { data: allFilteredData } = await statsQuery;
-    
+
     if (allFilteredData) {
       const totalSummaries = allFilteredData.length;
-      const paidSummaries = allFilteredData.filter(s => 
-        s.payment_status === 'success' || 
+      const paidSummaries = allFilteredData.filter(s =>
+        s.payment_status === 'success' ||
         s.payment_status === 'completed'
       ).length;
-      const failedPayments = allFilteredData.filter(s => 
+      const failedPayments = allFilteredData.filter(s =>
         s.payment_status && (
           s.payment_status.toLowerCase().includes('failed') ||
           s.payment_status.toLowerCase().includes('error')
         )
       ).length;
-      const completedSummaries = allFilteredData.filter(s => 
-        s.status === 'Complete' || 
+      const completedSummaries = allFilteredData.filter(s =>
+        s.status === 'Complete' ||
         s.status === 'completed'
       ).length;
-      
+
       // Calculate average quality score
       const qualityScores = allFilteredData
         .map(s => parseFloat(s.qualityscore || '0'))
         .filter(score => !isNaN(score) && score > 0);
-      
+
       const averageQualityScore = qualityScores.length > 0
         ? Math.round(qualityScores.reduce((sum, score) => sum + score, 0) / qualityScores.length)
         : 0;
@@ -456,7 +494,7 @@ async function calculateFilteredStats(filters: SummaryFilters): Promise<SummaryS
         failedPayments,
       };
     }
-    
+
     return null;
   } catch (error) {
     console.error('Error calculating filtered stats:', error);
@@ -468,19 +506,19 @@ async function calculateFilteredStats(filters: SummaryFilters): Promise<SummaryS
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    
+
     // Check for special operations
     const operation = searchParams.get('operation');
-    
+
     // Handle special operations using the unified handler
     if (operation) {
       const params: { id?: string } = {};
       if (searchParams.get('id')) {
         params.id = searchParams.get('id')!;
       }
-      
+
       const result = await getSpecialOperationData(operation, params);
-      
+
       if (result.success) {
         return NextResponse.json(result);
       } else {
@@ -490,7 +528,7 @@ export async function GET(request: NextRequest) {
         );
       }
     }
-    
+
     const page = parseInt(searchParams.get('page') || '1');
     const pageSize = parseInt(searchParams.get('pageSize') || '20');
     const from = (page - 1) * pageSize;
@@ -524,13 +562,53 @@ export async function GET(request: NextRequest) {
         )
       `, { count: 'exact' });
 
-    // Apply search filter (global search across multiple fields)
+    // Apply search filter with smart email/mobile lookup
     if (filters.searchTerm && filters.searchTerm.trim()) {
       const searchTerm = filters.searchTerm.trim();
-      query = query.or(
-        `testid.ilike.%${searchTerm}%,user_id.ilike.%${searchTerm}%,session_id.ilike.%${searchTerm}%,ip_address.ilike.%${searchTerm}%`
-      );
+
+      // Check if search term looks like an email (contains @) or mobile (all digits)
+      const isEmail = searchTerm.includes('@');
+      const isMobile = /^\d+$/.test(searchTerm);
+
+      let userIdsToSearch: string[] = [];
+
+      // If searching by email or mobile, look up user_ids from user_data table
+      if (isEmail || isMobile) {
+        try {
+          let userDataQuery = supabaseAdmin.from('user_data').select('user_id');
+
+          if (isEmail) {
+            userDataQuery = userDataQuery.ilike('email', `%${searchTerm}%`);
+          } else if (isMobile) {
+            userDataQuery = userDataQuery.ilike('mobile_number', `%${searchTerm}%`);
+          }
+
+          const { data: userData } = await userDataQuery;
+
+          if (userData && userData.length > 0) {
+            userIdsToSearch = userData.map(u => u.user_id).filter(Boolean) as string[];
+          }
+        } catch (err) {
+          console.error('Error looking up user_data:', err);
+        }
+      }
+
+      // Build the search query
+      if (userIdsToSearch.length > 0) {
+        // If we found user_ids from email/mobile search, include them in the OR clause
+        query = query.or(
+          `testid.ilike.%${searchTerm}%,user_id.ilike.%${searchTerm}%,session_id.ilike.%${searchTerm}%,ip_address.ilike.%${searchTerm}%,user_id.in.(${userIdsToSearch.join(',')})`
+        );
+      } else {
+        // Normal search in main table fields only
+        query = query.or(
+          `testid.ilike.%${searchTerm}%,user_id.ilike.%${searchTerm}%,session_id.ilike.%${searchTerm}%,ip_address.ilike.%${searchTerm}%`
+        );
+      }
     }
+
+
+
 
     // Apply date range filters (starting_time)
     if (filters.dateFrom) {
@@ -602,11 +680,11 @@ export async function GET(request: NextRequest) {
 
     // Calculate filtered statistics from ALL filtered data (not just current page)
     let filteredStats: SummaryStats | null = null;
-    
-    const hasFilters = filters.searchTerm || filters.dateFrom || filters.dateTo || 
-                       filters.paymentStatus || filters.questStatus || filters.status || 
-                       filters.minQualityScore || filters.maxQualityScore;
-    
+
+    const hasFilters = filters.searchTerm || filters.dateFrom || filters.dateTo ||
+      filters.paymentStatus || filters.questStatus || filters.status ||
+      filters.minQualityScore || filters.maxQualityScore;
+
     if (hasFilters) {
       filteredStats = await calculateFilteredStats(filters);
     }
@@ -634,7 +712,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const result = await handlePostOperation(body);
-    
+
     if (result.success) {
       return NextResponse.json(result);
     } else {
@@ -656,14 +734,14 @@ export async function DELETE(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const summaryId = searchParams.get('id');
-    
+
     if (!summaryId) {
       return NextResponse.json(
         { success: false, error: 'Summary ID is required' },
         { status: 400 }
       );
     }
-    
+
     const id = parseInt(summaryId);
     if (isNaN(id)) {
       return NextResponse.json(
@@ -671,9 +749,9 @@ export async function DELETE(request: NextRequest) {
         { status: 400 }
       );
     }
-    
+
     const result = await deleteSummary(id);
-    
+
     if (result.success) {
       return NextResponse.json(result);
     } else {

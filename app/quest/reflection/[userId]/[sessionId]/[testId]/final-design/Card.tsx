@@ -10,9 +10,9 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
   // Center image horizontally: (CardWidth - ImageWidth) / 2
   const sidePadding = (dimensions.width - dimensions.imageWidth) / 2;
   const [isExpanded, setIsExpanded] = React.useState(false);
-  
-  
-  
+
+
+
   // The reference implies the image is somewhat top-aligned with padding
   const topPadding = sidePadding;
   const imagepadding = (28 - topPadding);
@@ -50,13 +50,17 @@ const Card: React.FC<CardProps> = ({ data, dimensions, active }) => {
           overflow: 'hidden',
         }}
       >
-        <img
-          src={data.imageUrl}
-          alt="Card Visual"
-          className="w-full h-full object-cover block"
-          draggable={false}
-        />
-        <div onClick={() => setIsExpanded(true)} className="absolute bottom-0 right-0 text-white font-gilroy-regular text-sm pr-4 pb-2 mix-blend-overlay"> Know More...</div>
+        {data.title?.toString().toUpperCase().includes('UNKNOWN') ? null : (
+          <>
+            <img
+              src={data.imageUrl}
+              alt="Card Visual"
+              className="w-full h-full object-cover block"
+              draggable={false}
+            />
+            <div onClick={() => setIsExpanded(true)} className="absolute bottom-0 right-0 text-white font-gilroy-regular text-sm pr-4 pb-2 mix-blend-overlay"> Know More...</div>
+          </>
+        )}
       </div>
 
       <motion.div
