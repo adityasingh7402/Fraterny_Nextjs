@@ -38,7 +38,7 @@ export default function Error({
         </h2>
 
         <p className="text-gray-600 font-gilroy-regular mb-6">
-          We couldn't load your results. This might be a temporary issue.
+          We couldn't build your file. This might be a temporary issue.
         </p>
 
         <div className="space-y-3">
