@@ -11,8 +11,8 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
-    title: 'Your Quest Results | Personality Assessment',
-    description: 'View your personalized Quest assessment results with detailed insights into your personality, strengths, and recommendations.',
+    title: 'Psyche File Preview | Quest Psychological File',
+    description: 'View your Psyche Intelligence File uniquely designed for clarity and self understanding.',
 
     icons: {
     icon: [
@@ -27,8 +27,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     // Social media preview images
     openGraph: {
-      title: 'Quest Assessment Results',
-      description: 'Discover your personalized personality insights',
+      title: 'Psyche File Preview',
+      description: 'View your Psyche Intelligence File',
       type: 'website',
       images: [
         {
@@ -41,8 +41,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'Quest Assessment Results',
-      description: 'Discover your personalized personality insights',
+      title: 'Psyche File Preview',
+      description: 'View your Psyche Intelligence File',
       images: ['/twitter-image.png'], // Can be same as og-image.png
     },
     robots: {
