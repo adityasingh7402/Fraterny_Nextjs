@@ -85,7 +85,7 @@ function QuestFooter({ backgroundColor = '#004A7F' }: QuestFooterProps) {
           </div>
 
           <div className="w-full mb-6 text-gray-100 text-base sm:text-lg font-normal font-gilroy-regular leading-relaxed">
-            AI-powered psychoanalysis tool that generates a personalized mindset and personality report based on your responses. Built to go beyond traditional personality tests, Quest reveals emotional patterns, blind spots, and growth pathways unique to you.
+            Designed to allow you to own your psychology as a tangible asset. It deep-dive breakdown of your internal psychological architecture. Quest reveals emotional patterns, blind spots and growth pathways unique to you.
           </div>
 
           {/* Social Media Icons */}
