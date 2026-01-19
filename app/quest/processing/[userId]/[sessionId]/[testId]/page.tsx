@@ -24,19 +24,19 @@ interface RecoveryApiResponse {
 
 //Entire Process to display during processing
 const psychologicalFacts = [
-  "Processing your answers securely...",
-  "Cleaning and organising your responses...",
-  "Calibrating weights so no single answer dominates...",
+  "Processing your thoughts securely...",
+  "Cleaning and organising your thoughts...",
+  "Calibrating weights so no single thought dominates...",
   "Balancing literal text with implied meaning...",
-  "Reviewing the quality and depth of your responses...",
-  "Quantifying uncertainty where answers are ambiguous...",
+  "Reviewing the quality and depth of your thoughts...",
+  "Quantifying uncertainty where thoughts are ambiguous...",
   "Searching the knowledge database for in-depth analysis...",
-  "Analysing the emotional tone of the answers...",
+  "Analysing the emotional tone of the words...",
   "Mapping shifts in mood across topics...",
   "Measuring emphasis vs understatement in phrasing...",
   "Detecting recurring themes and motifs...",
   "Looking for quiet signals you might underplay...",
-  "Understanding your thought patterns based on answer combinations...",
+  "Understanding your thought patterns based on word combinations...",
   "Estimating confidence vs hesitation in wording...",
   "Measuring intensity behind key statements...",
   "Testing multiple interpretations for each signal...",
@@ -484,7 +484,7 @@ export function QuestProcessing({ className = '', gifSrc = '/analysis1.gif' }: Q
             Something went wrong
           </h2> */}
           <p className="text-lg text-gray-700 mb-6">
-            {isPolling ? 'Checking...' : (retryCount >= 2 ? 'Something went wrong. Reset and start over to try again.' : 'Analysis took longer than expected. Please check again if your results are ready.')}
+            {isPolling ? 'Checking...' : (retryCount >= 2 ? 'Something went wrong. Reset and start over to try again.' : 'Analysis is taking too long. Kindly check again if your file preview is ready.')}
           </p>
           <button
             onClick={() => {
@@ -512,7 +512,7 @@ export function QuestProcessing({ className = '', gifSrc = '/analysis1.gif' }: Q
       <div className='min-h-screen bg-[#004A7F] max-h-screen relative overflow-hidden flex items-center justify-center'>
         <div className="text-center px-4">
           <h2 className="text-4xl font-gilroy-bold text-white mb-4">
-            Your Results are Ready!
+            Your Psyche File is Ready!
           </h2>
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
