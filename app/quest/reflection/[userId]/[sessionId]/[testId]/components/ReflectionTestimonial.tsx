@@ -107,7 +107,7 @@ export const ReflectionTestimonial: React.FC = () => {
                         x: {
                             repeat: Infinity,
                             repeatType: "loop",
-                            duration: 40,
+                            duration: 18,
                             ease: "linear",
                         },
                     }}
@@ -156,7 +156,7 @@ export const ReflectionTestimonial: React.FC = () => {
                         x: {
                             repeat: Infinity,
                             repeatType: "loop",
-                            duration: 40,
+                            duration: 15,
                             ease: "linear",
                         },
                     }}
