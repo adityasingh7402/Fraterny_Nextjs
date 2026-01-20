@@ -66,7 +66,7 @@ const AnimatedCounter: React.FC<CounterProps> = ({
         }}
         className="inline-block"
       >
-        {prefix}{count}{suffix}
+        {count}
       </motion.span>
     </AnimatePresence>
   </span>
