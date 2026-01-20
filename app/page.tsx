@@ -8,6 +8,7 @@ import TransformationJourney from './home/TransformationJourney';
 import { QuestJourney } from './home/QuestJourney';
 import HomeBlogSection from './home/HomeBlogSection';
 import EndCTAsection from './home/EndCTAsection';
+import VillaGallerySection from './home/VillaGallerySection';
 
 // Lazy load below-the-fold sections for better performance
 const NavalQuoteSection = dynamic(() => import('./home/NavalQuoteSection'), {
@@ -41,6 +42,7 @@ export default function Home() {
       <VillaLabSection />
       <OurValuesSection />
       <VillaTestimonials />
+      <VillaGallerySection />
       <AboutQuest />
       <QuestJourney />
       <HomeBlogSection />

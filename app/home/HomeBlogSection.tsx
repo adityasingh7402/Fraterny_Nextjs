@@ -28,8 +28,8 @@ function HomeBlogSection() {
                 if (response.ok) {
                     const { posts } = await response.json();
                     if (posts && posts.length > 0) {
-                        // Limit to 4 posts for the layout (1 featured + 3 smaller)
-                        setPosts(posts.slice(0, 4));
+                        // Limit to 6 posts for the layout (1 featured + 5 smaller)
+                        setPosts(posts.slice(0, 6));
                     }
                 } else {
                     console.error('Failed to fetch blogs:', response.statusText);
@@ -80,7 +80,7 @@ function HomeBlogSection() {
                 </h2>
                 <Link
                     href="/blog"
-                    className="group flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-full font-gilroy-bold transition-all shadow-lg"
+                    className='flex flex-row gap-5 items-center justify-center px-7 py-3 mt-8 bg-neutral-800 hover:bg-neutral-900 shadow-3xl transition-colors duration-200 text-white rounded-md font-gilroy-semibold tracking-tighter sm:text-2xl'
                 >
                     View All Posts
                     <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">

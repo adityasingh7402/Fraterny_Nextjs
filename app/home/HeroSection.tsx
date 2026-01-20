@@ -15,10 +15,10 @@ const HeroSection = () => {
       {/* Enhanced parallax background with scroll effects */}
       <motion.div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ y: backgroundY }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
+        // style={{ y: backgroundY }}
+        // initial={{ opacity: 0 }}
+        // animate={{ opacity: 1 }}
+        // transition={{ duration: 0.3, ease: "easeOut" }}
       >
         <picture>
           {/* Mobile image */}
@@ -110,7 +110,7 @@ const HeroSection = () => {
           </motion.div>
           
           {/* Countdown with instant fade animation */}
-          <motion.div
+          {/* <motion.div
             className="text-center sm:text-center md:text-center lg:text-center xl:text-left"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -125,13 +125,8 @@ const HeroSection = () => {
               >
                 Villa Registrations close in:
               </p>
-              {/* <div 
-                className="text-xl font-mono"
-              >
-                {renderDaysLeft()}
-              </div> */}
             </div>
-          </motion.div>
+          </motion.div> */}
         </div>
       </div>
     </section>
