@@ -41,7 +41,6 @@ import { googleAnalytics } from '@/lib/services/googleAnalytics';
 import { fetchDynamicPricing, checkExistingPaymentStatus, startPaymentStatusPolling } from '../utils/paymentHelpers';
 // import Testimonials from '@/app/quest/quest-mode/sections/Testimonials';
 import { TextGenerateEffect } from '@/components/ui/text-generate-effect';
-import Testimonials from '@/app/quest/quest-mode/sections/Testimonials';
 import FAQ from '@/app/quest/reflection/[userId]/[sessionId]/[testId]/components/FAQ';
 
 
@@ -61,6 +60,7 @@ import { CTA_HEIGHT } from "../../[testId]/utils/constants";
 import FAQIntrospection from "../final-design/FAQIntrospection";
 import Testimonial from "../final-design/Testimonial";
 import QuestFooter from "../../../../../quest-mode/sections/QuestFooter";
+import ReflectionTestimonial from "./ReflectionTestimonial";
 import { CardData } from '../final-design/types'
 
 
@@ -1124,7 +1124,7 @@ export function QuestResultClient({
           />
         </div>
 
-        <div id="pdf-report" className="relative w-full mx-auto pt-24 pb-8 max-w-7xl">
+        <div id="pdf-report" className="relative w-full mx-auto pt-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -1143,57 +1143,59 @@ export function QuestResultClient({
           {/* Mobile: PDF, then Testimonials, then FAQ */}
 
           {/* Desktop layout */}
-          <div className="hidden lg:flex flex-row justify-center items-start gap-10 lg:gap-12">
-            <div className="w-full lg:w-auto mt-6 max-w-xl px-6 sm:px-0">
-              <PDFImageViewer
-                paymentSuccess={paymentSuccess}
-                paymentStatus={assessmentPaymentStatus}
-                onPDFDownload={handlePDFDownload}
-                onUnlockClick={() => {
-                  if (!paymentSuccess) {
-                    setUpsellOpen(true);
-                  }
-                }}
-                pricing={pricing}
-                isCheckingPayment={isCheckingPayment}
-              />
+          <div className="max-w-7xl mx-auto">
+            <div className="hidden lg:flex flex-row justify-center items-start gap-10 lg:gap-12">
+              <div className="w-full lg:w-auto mt-6 max-w-xl px-6 sm:px-0">
+                <PDFImageViewer
+                  paymentSuccess={paymentSuccess}
+                  paymentStatus={assessmentPaymentStatus}
+                  onPDFDownload={handlePDFDownload}
+                  onUnlockClick={() => {
+                    if (!paymentSuccess) {
+                      setUpsellOpen(true);
+                    }
+                  }}
+                  pricing={pricing}
+                  isCheckingPayment={isCheckingPayment}
+                />
+              </div>
+              <div className="w-full lg:w-auto lg:flex-1 lg:max-w-2xl">
+                <FAQIntrospection />
+              </div>
             </div>
-            <div className="w-full lg:w-auto lg:flex-1 lg:max-w-2xl">
-              <FAQIntrospection />
+
+            {/* Mobile layout - PDF, then Testimonials, then FAQ */}
+            <div className="flex lg:hidden flex-col gap-10">
+              <div className="w-full mt-6 max-w-xl px-6 sm:px-0 mx-auto">
+                <PDFImageViewer
+                  paymentSuccess={paymentSuccess}
+                  paymentStatus={assessmentPaymentStatus}
+                  onPDFDownload={handlePDFDownload}
+                  onUnlockClick={() => {
+                    if (!paymentSuccess) {
+                      setUpsellOpen(true);
+                    }
+                  }}
+                  pricing={pricing}
+                  isCheckingPayment={isCheckingPayment}
+                />
+              </div>
             </div>
           </div>
 
-          {/* Mobile layout - PDF, then Testimonials, then FAQ */}
-          <div className="flex lg:hidden flex-col gap-10">
-            <div className="w-full mt-6 max-w-xl px-6 sm:px-0 mx-auto">
-              <PDFImageViewer
-                paymentSuccess={paymentSuccess}
-                paymentStatus={assessmentPaymentStatus}
-                onPDFDownload={handlePDFDownload}
-                onUnlockClick={() => {
-                  if (!paymentSuccess) {
-                    setUpsellOpen(true);
-                  }
-                }}
-                pricing={pricing}
-                isCheckingPayment={isCheckingPayment}
-              />
-            </div>
+          <div className="lg:hidden block w-full">
+            <ReflectionTestimonial />
+          </div>
 
-            {/* Testimonials on mobile - appears before FAQ */}
-            <div className="w-full">
-              <Testimonials headerText="" />
-            </div>
-
-            {/* FAQ on mobile - appears after Testimonials */}
-            <div className="w-full max-w-2xl px-6 mx-auto">
+          <div className="max-w-7xl mx-auto lg:hidden block">
+            <div className="w-full max-w-2xl px-6 mx-auto mb-10">
               <FAQIntrospection />
             </div>
           </div>
 
           {/* Testimonials for desktop only - shown below the flex-row */}
           <div className="hidden lg:block mt-0">
-            <Testimonials headerText="" />
+            <ReflectionTestimonial />
           </div>
         </div>
 
