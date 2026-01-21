@@ -265,7 +265,7 @@ import type React from "react"
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Home, User, FolderOpen } from "lucide-react"
+import { Home, User, FolderOpen, MoveRight } from "lucide-react"
 import Link from "next/link"
 
 interface Step {
@@ -417,8 +417,11 @@ export function QuestJourney() {
         </motion.div>
       </AnimatePresence>
 
-        <Link href="/quest/quest-mode">
-            <button className='px-7 py-3 mt-8 bg-neutral-800 hover:bg-neutral-900 shadow-3xl transition-colors duration-200 text-white rounded-md font-gilroy-semibold tracking-tighter sm:text-2xl'>Enter Quest Mode</button>
+        <Link href="/quest">
+            <button className='px-7 py-3 flex flex-row items-center justify-center bg-neutral-800 hover:bg-neutral-900 shadow-3xl transition-colors duration-200 text-white rounded-md font-gilroy-semibold tracking-tighter sm:text-2xl'>
+              Quest Mode
+              <span className=' rounded-sm px-3 py-2'><MoveRight className='' /></span>
+            </button>
         </Link>
 
       <div className="mt-16 flex gap-2 justify-center">
