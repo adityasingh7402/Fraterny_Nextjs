@@ -273,6 +273,7 @@ import Image from 'next/image';
 import { useIsMobile } from '@/app/admin/hooks/use-mobile';
 import { cn } from "@/lib/utils";
 import Link from 'next/link';
+import {MoveRight} from 'lucide-react';
 
 interface AboutQuestProps {
   className?: string;
@@ -390,7 +391,10 @@ export const AboutQuest = ({ className }: AboutQuestProps) => {
             </p>
             <div className="mb-8">
                 <Link href="/quest">
-                    <button className='px-7 py-3 bg-neutral-800 hover:bg-neutral-900 shadow-3xl transition-colors duration-200 text-white rounded-md font-gilroy-semibold tracking-tighter sm:text-2xl'>Enter Quest Mode</button>
+                    <button className='px-7 py-3 flex flex-row items-center justify-center bg-neutral-800 hover:bg-neutral-900 shadow-3xl transition-colors duration-200 text-white rounded-md font-gilroy-semibold tracking-tighter sm:text-2xl'>
+                      Quest Mode
+                      <span className=' rounded-sm px-3 py-2'><MoveRight className='' /></span>
+                    </button>
                 </Link>
             </div>
           </motion.div>

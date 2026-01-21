@@ -7,6 +7,10 @@ import { cn } from "@/lib/utils";
 import img from '@/public/img1HeroDesktop.png'
 import ResponsiveImage from '@/components/ui/ResponsiveImage';
 import Link from 'next/link';
+import HomeIcon from '@/components/ui/home-icon';
+import { useRef } from 'react';
+import type { AnimatedIconHandle } from '../../components/ui/types';
+
 
 interface AboutProjectGalleryProps {
   className?: string;
@@ -14,6 +18,7 @@ interface AboutProjectGalleryProps {
 
 export const AboutFratVilla = ({ className }: AboutProjectGalleryProps) => {
   const isMobile = useIsMobile();
+  const iconRef = useRef<AnimatedIconHandle>(null);
 
   // Animation variants for images
   const imageVariants = {
@@ -72,7 +77,13 @@ export const AboutFratVilla = ({ className }: AboutProjectGalleryProps) => {
             </p>
             <div className="mb-8">
                 <Link href="/experience">
-                    <button className='px-7 py-3 bg-neutral-800 hover:bg-neutral-900 shadow-3xl transition-colors duration-200 text-white rounded-md font-gilroy-semibold tracking-tighter sm:text-2xl'>Explore our Villa</button>
+                    <button
+                    onMouseEnter={() => iconRef.current?.startAnimation()}
+                    onMouseLeave={() => iconRef.current?.stopAnimation()}
+                    className='flex items-center justify-center px-7 py-3 shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-neutral-800 hover:bg-neutral-900 shadow-3xl transition-colors duration-200 text-white rounded-md font-gilroy-semibold tracking-tighter sm:text-2xl'>
+                      <HomeIcon ref={iconRef} />
+                      <span className="ml-2 mt-1">Explore our Villa</span>
+                    </button>
                 </Link>
             </div>
           </motion.div>
